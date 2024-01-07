@@ -40,6 +40,9 @@ public class Member {
     @Column(nullable = false, length = 10)
     private UserRoleEnum role;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
     @OneToMany(mappedBy = "member")
     private List<Post> postList;
 

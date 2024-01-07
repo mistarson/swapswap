@@ -49,6 +49,9 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private Long upCnt;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
