@@ -1,0 +1,146 @@
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+body{
+  font-family: 'S-CoreDream-3Light';
+}
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px #E5E5E5 solid;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 10px 50px;
+}
+.header-logo {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.header-logo img {
+  height: 70px;
+  width: 140px;
+}
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0 10px; /* 조정된 여백 */
+}
+.nav-container a,
+.nav-container .search-container {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-container a:hover {
+  color: #00AADC;
+}
+.search-container {
+  width: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-input {
+  width: 100%; /* 수정: 입력란이 컨테이너 크기에 맞게 조정됩니다. */
+  padding: 10px 40px 10px 15px; /* 오른쪽 패딩을 버튼 너비만큼 늘립니다. */
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #EBEBEB;
+  height: 20px; /* 입력란의 높이를 버튼과 동일하게 조정 */
+}
+.search-input:focus {
+  border-color: #00AADC; /* 포커스 상태일 때의 테두리 색상 */
+  outline: none; /* 기본 브라우저 아웃라인 제거 */
+}
+.search-button {
+  position: absolute;
+  right: 0; /* 수정: 오른쪽 패딩에 맞게 조정 */
+  border: 0;
+  border-radius: 20px; /* 오른쪽 모서리만 둥글게 설정 */
+  height: 35px; /* 버튼의 높이를 입력란과 동일하게 설정 */
+  width: 40px; /* 너비를 40px로 설정하여 정사각형으로 만듭니다. */
+  cursor: pointer;
+  background: #00AADC;
+  margin-right: 4%;
+  color: white;
+  text-align: center;
+  line-height: 50%; /* 버튼 안의 내용을 수직 정렬 */
+}
+.header-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.login-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+  margin-left: auto;
+}
+.category-bar {
+  margin-top: 100px; /* 상단 여백 */
+  background-color: #ffffff;
+  border-bottom: 1px solid #E5E5E5; /* 하단 경계선 */
+  padding: 10px 0; /* 상하 패딩 */
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 가로축 중앙 정렬 */
+  align-items: center; /* 세로축 중앙 정렬 */
+  overflow: auto;
+}
+
+.category-bar a {
+  padding: 8px 16px; /* 링크 패딩 */
+  border-radius: 20px; /* 둥근 모서리 */
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  transition: background-color 0.3s;
+  margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+.category-bar a:hover {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.grid-container {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.grid-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+.text-muted {
+  color: #666;
+  font-size: 0.8em;
+}
