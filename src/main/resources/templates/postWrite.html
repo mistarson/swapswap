@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+
+<body>
+<div layout:fragment="content">
+  <script>
+    function selectCategory(category) {
+      document.getElementById('categoryInput').value = category;
+    }
+  </script>
+  <form action="#" th:action="@{/posts/write}" th:object="${PostCreateRequestDto}" method="post" enctype="multipart/form-data">
+    <div class="write-bar-container">
+      <div class="write-bar">
+        <div class="write-bar-explain"> 이미지 </div>
+        <input type="file" class="write-bar-image-input" accept="image/*" multiple max="10" th:field="*{imageUrlList}">
+      </div>
+      <div class="write-bar">
+        <div class="write-bar-explain"> 제목 </div>
+        <input class="write-bar-title-input" th:field="*{title}">
+      </div>
+      <div class="write-bar">
+        <div class="write-bar-explain"> 카테고리 </div>
+        <input type="hidden" th:field="*{category}" id="categoryInput">
+        <div class="category-button-container">
+          <button type="button" class="category-button" onclick="selectCategory('HOME_ELECTRONICS')">가전제품</button>
+          <button type="button" class="category-button" onclick="selectCategory('ELECTRONICS')">전자제품</button>
+          <button type="button" class="category-button" onclick="selectCategory('FASHION_MISCELLANEOUS')">패션의류/잡화</button>
+          <button type="button" class="category-button" onclick="selectCategory('BEAUTY')">뷰티/미용</button>
+          <button type="button" class="category-button" onclick="selectCategory('INFANT_CHILDCARE')">출산/유아동</button>
+          <button type="button" class="category-button" onclick="selectCategory('FOOD')">식품</button>
+          <button type="button" class="category-button" onclick="selectCategory('KITCHEN')">주방용품</button>
+          <button type="button" class="category-button" onclick="selectCategory('HOUSEHOLD')">생활용품</button>
+          <button type="button" class="category-button" onclick="selectCategory('FURNITURE_INTERIOR')">가구/인테리어</button>
+          <button type="button" class="category-button" onclick="selectCategory('SPORT_LEISURE')">스포츠/레저</button>
+          <button type="button" class="category-button" onclick="selectCategory('CAR')">자동차용품</button>
+          <button type="button" class="category-button" onclick="selectCategory('HOBBY_GAME_BOOK_ALBUM_DVD')">취미/게임/도서/음반/DVD</button>
+          <button type="button" class="category-button" onclick="selectCategory('OFFICE_SUPPLIES')">문구/오피스</button>
+          <button type="button" class="category-button" onclick="selectCategory('PET')">반려동물용품</button>
+          <button type="button" class="category-button" onclick="selectCategory('ETC')">기타중고물품</button>
+        </div>
+      </div>
+    </div>
+    <div class="write-content-container">
+      <input class="write-content-input" th:field="*{content}">
+      <button type="submit" class="write-complete-button">글 등록</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
