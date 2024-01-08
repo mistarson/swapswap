@@ -8,6 +8,12 @@
   <script>
     function selectCategory(category) {
       document.getElementById('categoryInput').value = category;
+
+      document.querySelectorAll('.category-button').forEach(button => {
+        button.classList.remove('active')
+      });
+
+      event.target.classList.add('active')
     }
   </script>
   <form action="#" th:action="@{/posts/write}" th:object="${PostCreateRequestDto}" method="post" enctype="multipart/form-data">

@@ -36,6 +36,6 @@ public class PostController {
     @GetMapping
     public String test(Model model) {
         model.addAttribute("PostCreateRequestDto", new PostCreateRequestDto(null, null, null, null));
-        return "postWrite";
+        return "post/postWrite";
     }
 }

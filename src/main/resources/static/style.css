@@ -227,7 +227,7 @@ img {
   cursor: pointer;
 }
 
-.category-button:hover {
+.category-button.active, .category-button:hover {
   background-color: #00AADC;
   color: #ffffff;
 }
