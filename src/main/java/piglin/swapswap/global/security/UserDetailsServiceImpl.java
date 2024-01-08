@@ -21,14 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.memberRepository = memberRepository;
     }
 
-    public UserDetails loadUserByUserId(long userId) throws NoSuchElementException {
-        Member user = memberRepository.findById(userId)
-                .orElseThrow(
-                        () -> new NoSuchElementException("user id : " + userId + " not exist"));
-
-        return new UserDetailsImpl(user);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email)
