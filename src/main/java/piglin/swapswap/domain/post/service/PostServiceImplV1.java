@@ -46,10 +46,10 @@ public class PostServiceImplV1 implements PostService {
     }
 
     private void imageUrlListSizeCheck(PostCreateRequestDto requestDto) {
-        if (requestDto.imageUrlList().get(0).isEmpty()) {
+        if (requestDto.imageUrlList().size() < PostConstant.IMAGE_MIN_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
         }
-        if (requestDto.imageUrlList().size() < PostConstant.IMAGE_MIN_SIZE) {
+        if (requestDto.imageUrlList().get(0).isEmpty()) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
         }
         if (requestDto.imageUrlList().size() > PostConstant.IMAGE_MAX_SIZE) {
