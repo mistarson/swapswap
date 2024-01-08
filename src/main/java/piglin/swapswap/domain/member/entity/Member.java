@@ -13,16 +13,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import piglin.swapswap.domain.member.constant.UserRoleEnum;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
+@Builder
 @Getter
-@Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
