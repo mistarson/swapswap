@@ -4,6 +4,7 @@ package piglin.swapswap.global.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import piglin.swapswap.global.security.UserDetailsImpl;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
@@ -26,24 +28,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtUtil = jwtUtil;
         this.memberRepository = memberRepository;
         // 필터를 적용할 경로 설정
-        setFilterProcessesUrl("/api/auth/login");
+        setFilterProcessesUrl("/login/kakao/callback");
+        setFilterProcessesUrl("/login/google/callback");
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request,
+            HttpServletResponse response) throws AuthenticationException {
         log.info("로그인 시도");
         try {
-            var inputStream = request.getInputStream();
-            MemberRequestDto requestDto = new ObjectMapper().readValue(inputStream, MemberRequestDto.class);
+            ServletInputStream inputStream = request.getInputStream();
+            MemberRequestDto requestDto = new ObjectMapper().readValue(inputStream,
+                    MemberRequestDto.class);
             log.info("------" + requestDto.toString());
 
-
             return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            requestDto.getNickname(),
-                            null
-                    )
-            );
+                    new UsernamePasswordAuthenticationToken(requestDto.getNickname(), null));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
@@ -51,17 +51,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-      log.info("로그인 성공 및 JWT 생성");
-      String username = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
-      MemberRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+    protected void successfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response, FilterChain chain, Authentication authResult)
+            throws IOException, ServletException {
+        log.info("로그인 성공 및 JWT 생성");
+        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getEmail();
+        MemberRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-      String token = jwtUtil.createToken(username, role);
-      jwtUtil.addJwtToCookie(token, response);
+        String token = jwtUtil.createToken(username, role);
+        jwtUtil.addJwtToCookie(token, response);
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+            HttpServletResponse response, AuthenticationException failed)
+            throws IOException, ServletException {
         log.info("로그인 실패");
         response.setStatus(401);
     }
