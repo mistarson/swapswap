@@ -57,7 +57,6 @@ public class JwtUtil {
 
     // 토큰 생성
     public String createToken(String email, MemberRoleEnum role) {
-        Date date = new Date();
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
