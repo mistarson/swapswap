@@ -33,8 +33,8 @@ public class PostController {
         return "redirect:/posts/" + postService.createPost(memberId, requestDto).toString();
     }
 
-    @GetMapping
-    public String test(Model model) {
+    @GetMapping("/write")
+    public String getPostWriteForm(Model model) {
         model.addAttribute("PostCreateRequestDto", new PostCreateRequestDto(null, null, null, null));
         return "post/postWrite";
     }
