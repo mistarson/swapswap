@@ -27,6 +27,6 @@ public class PostController {
             return "redirect:/posts/write";
         }
 
-        return "redirect:/posts/" + postService.createPost(userDetails.getUser().getMemberId(), requestDto).toString();
+        return "redirect:/posts/" + postService.createPost(userDetails.getUser().getId(), requestDto).toString();
     }
 }
