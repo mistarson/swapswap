@@ -1,4 +1,4 @@
-package piglin.swapswap.domain.coupon.entity;
+package piglin.swapswap.domain.membercoupon.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,13 +17,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.coupon.constant.CouponType;
+import piglin.swapswap.domain.member.entity.Member;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Coupon extends BaseTime {
+public class MemberCoupon extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +43,8 @@ public class Coupon extends BaseTime {
     @Column(nullable = false)
     private LocalDateTime expiredTime;
 
-    @Column(nullable = false)
-    private int count;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
 }
