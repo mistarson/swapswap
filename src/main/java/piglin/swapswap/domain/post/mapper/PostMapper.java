@@ -17,6 +17,7 @@ public class PostMapper {
                    .member(member)
                    .upCnt(0L)
                    .viewCnt(0L)
+                   .isDeleted(false)
                    .build();
     }
 }

@@ -11,5 +11,5 @@ public interface PostService {
      * @param requestDto Post 를 생성하기 위해서 받는 Request Dto 입니다. Category, Title, Content, ImageUrlList
      *                   로 이루어져 있으며, ImageUrlList는 다중 업로드가 가능합니다.
      */
-    void createPost(Long memberId, PostCreateRequestDto requestDto);
+    Long createPost(Long memberId, PostCreateRequestDto requestDto);
 }

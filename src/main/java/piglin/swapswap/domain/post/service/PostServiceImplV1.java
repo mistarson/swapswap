@@ -25,7 +25,7 @@ public class PostServiceImplV1 implements PostService {
     private final S3ImageServiceImplV1 s3ImageServiceImplV1;
 
     @Override
-    public void createPost(Long memberId, PostCreateRequestDto requestDto) {
+    public Long createPost(Long memberId, PostCreateRequestDto requestDto) {
 
         Member member = getMember(memberId);
 
@@ -41,6 +41,8 @@ public class PostServiceImplV1 implements PostService {
         Post post = PostMapper.createPost(requestDto, imageUrlMap, member);
 
         postRepository.save(post);
+
+        return post.getId();
     }
 
     private void imageUrlListSizeCheck(PostCreateRequestDto requestDto) {
