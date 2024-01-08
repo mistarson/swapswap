@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="category-bar">
+    <!-- 카테고리 링크 -->
+    <a href="#category1">가전제품</a>
+    <a href="#category2">전자제품</a>
+    <a href="#category3">패션의류/잡화</a>
+    <a href="#category4">뷰티/미용</a>
+    <a href="#category5">출산/유아동</a>
+    <a href="#category6">식품</a>
+    <a href="#category7">주방용품</a>
+    <a href="#category8">생활용품</a>
+  </div>
+
+  <div class="grid-container">
+    <!-- 반복되는 그리드 아이템 -->
+    <div class="grid-item">
+      <img src="chair-image-1.jpg" alt="스툴/체 트릴레브">
+      <div>스툴/체 트릴레브</div>
+      <div class="text-muted">조회수 100편 5</div>
+    </div>
+    <!-- 다른 그리드 아이템들을 이와 같이 추가하세요 -->
+  </div>
+</div>
+</body>
+</html>
