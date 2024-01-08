@@ -41,7 +41,7 @@ public class MemberCoupon extends BaseTime {
     private int discountPercentage;
 
     @Column(nullable = false)
-    private LocalDateTime expired_time;
+    private LocalDateTime expiredTime;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "member_id", nullable = false)

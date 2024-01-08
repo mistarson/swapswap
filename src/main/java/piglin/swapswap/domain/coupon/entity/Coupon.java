@@ -38,7 +38,7 @@ public class Coupon extends BaseTime {
     private int discountPercentage;
 
     @Column(nullable = false)
-    private LocalDateTime expired_time;
+    private LocalDateTime expiredTime;
 
     @Column(nullable = false)
     private int count;
