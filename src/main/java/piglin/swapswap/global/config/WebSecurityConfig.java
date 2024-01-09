@@ -63,15 +63,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .requestMatchers("/api/login/**").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/api/login/**").permitAll()
+                        .requestMatchers("/", "/posts/{postId}").permitAll()
                         .anyRequest().authenticated()
         );
 
@@ -80,15 +79,10 @@ public class WebSecurityConfig {
         );
 
         http
-                // 로그아웃 설정
                 .logout(logout -> logout
-                        // 로그아웃 요청을 처리할 URL 설정
-                        .logoutUrl("/logout")
-                        // 로그아웃 성공 시 리다이렉트할 URL 설정
-                        // 로그아웃 성공 핸들러 추가 (리다이렉션 처리)
+                        .logoutUrl("/api/logout")
                         .logoutSuccessHandler((request, response, authentication) ->
                                 response.sendRedirect("/"))
-                        // 로그아웃 시 쿠키 삭제 설정
                         .deleteCookies("Authorization")
                 );
 

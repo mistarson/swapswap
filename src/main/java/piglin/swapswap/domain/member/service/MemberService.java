@@ -1,8 +1,12 @@
 package piglin.swapswap.domain.member.service;
 
-import piglin.swapswap.domain.member.dto.MemberResponseDto;
+import piglin.swapswap.domain.member.dto.MemberNicknameDto;
+import piglin.swapswap.domain.member.entity.Member;
 
 public interface MemberService {
 
-    MemberResponseDto getUser(String identifier);
+    void updateNickname(Member member, MemberNicknameDto requestDto);
+
+    void deleteMember(Member loginMember);
+
 }

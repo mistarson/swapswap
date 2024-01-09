@@ -29,23 +29,21 @@ public class KakaoServiceImpl implements MemberService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
-    public String kakaoLogin(String code) throws JsonProcessingException {
-        // 1. "인가 코드"로 "액세스 토큰" 요청
+    public String kakaoLogin(String code) throws Exception {
+
         String accessToken = getToken(code);
 
-        log.info("토큰 : " + accessToken);
-        // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-        MemberResponseDto kakaoUserInfo = getUser(accessToken);
-        // 3.필요시 회원가입
-        Member kakaoMember = registerKakaoUserIfNeeded(kakaoUserInfo);
-        // 4.jwt토큰 발급
-        String createdToken = jwtUtil.createToken(kakaoMember.getEmail(), kakaoMember.getRole());
-        return createdToken;
+        log.info("카카오 전용 액세스 토큰 : " + accessToken);
 
+        SocialUserInfo kakaoUserInfo = getUser(accessToken);
+        Member kakaoMember = registerUserIfNeeded(kakaoUserInfo);
+
+        return jwtUtil.createToken(kakaoMember.getEmail(), kakaoMember.getRole());
     }
 
-    private String getToken(String code) throws JsonProcessingException {
-        // 요청 URL 만들기
+    @Override
+    public String getToken(String code) throws JsonProcessingException {
+
         URI uri = UriComponentsBuilder
                 .fromUriString("https://kauth.kakao.com")
                 .path("/oauth/token")
@@ -53,11 +51,9 @@ public class KakaoServiceImpl implements MemberService {
                 .build()
                 .toUri();
 
-        // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "a304535271497a06332e50e9eec191ab");
@@ -69,13 +65,11 @@ public class KakaoServiceImpl implements MemberService {
                 .headers(headers)
                 .body(body);
 
-        // HTTP 요청 보내기
         ResponseEntity<String> response = restTemplate.exchange(
                 requestEntity,
                 String.class
         );
 
-        // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
         return jsonNode.get("access_token").asText();
     }
@@ -89,7 +83,6 @@ public class KakaoServiceImpl implements MemberService {
                 .build()
                 .toUri();
 
-        // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + identifier);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -99,7 +92,6 @@ public class KakaoServiceImpl implements MemberService {
                 .headers(headers)
                 .body(new LinkedMultiValueMap<>());
 
-        // HTTP 요청 보내기
         ResponseEntity<String> response = restTemplate.exchange(
                 requestEntity,
                 String.class
@@ -127,34 +119,19 @@ public class KakaoServiceImpl implements MemberService {
     }
 
 
-    private Member registerKakaoUserIfNeeded(MemberResponseDto kakaoUserInfo) {
+    @Override
+    public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
 
-        // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long Id = kakaoUserInfo.id();
-        Member kakaoMember = memberRepository.findById(Id).orElse(null);
+        String kakaoEmail = kakaoUserInfo.email();
+        Member member = memberRepository.findByEmail(kakaoEmail)
+                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo)));
 
-        if (kakaoMember == null) {
-            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
-            String kakaoEmail = kakaoUserInfo.email();
-            Member sameEmailMember = memberRepository.findByEmail(kakaoEmail).orElse(null);
-            if (sameEmailMember != null) {
-                kakaoMember = sameEmailMember;
-                // 기존 회원정보에 카카오 Id 추가
-                //kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
-            } else {
-                // 신규 회원가입
-
-
-                // email: kakao email
-                String email = kakaoUserInfo.email();
-                String nickname = kakaoUserInfo.nickname();
-
-                kakaoMember = new Member(email, nickname, MemberRoleEnum.USER);
-            }
-
-            memberRepository.save(kakaoMember);
+        if (isWithdrawnMember(member)) {
+            // TODO 복구시킬 때, 지갑도 복구시키기
+            member.reregisterMember();
         }
-        return kakaoMember;
+
+        return member;
     }
 
 }

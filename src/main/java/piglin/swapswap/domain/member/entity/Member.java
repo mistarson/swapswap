@@ -12,6 +12,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +24,9 @@ import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -39,7 +43,7 @@ public class Member {
     @Column(nullable = false, length = 10)
     private MemberRoleEnum role;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @OneToMany(mappedBy = "member")

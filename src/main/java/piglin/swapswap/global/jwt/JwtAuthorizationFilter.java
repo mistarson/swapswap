@@ -35,7 +35,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
-            // JWT 토큰 substring
             tokenValue = jwtUtil.substringToken(tokenValue);
             log.info(tokenValue);
 
@@ -58,7 +57,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(req, res);
     }
 
-    // 인증 처리
     public void setAuthentication(String email) {
         log.info("setAuthentication");
         SecurityContext context = SecurityContextHolder.createEmptyContext();
@@ -68,7 +66,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    // 인증 객체 생성
     private Authentication createAuthentication(String email) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
