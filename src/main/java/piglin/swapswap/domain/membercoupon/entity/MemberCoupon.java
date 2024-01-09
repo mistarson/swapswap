@@ -1,6 +1,5 @@
-package piglin.swapswap.domain.post.entity;
+package piglin.swapswap.domain.membercoupon.entity;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,54 +9,42 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.Map;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 import piglin.swapswap.domain.common.BaseTime;
+import piglin.swapswap.domain.coupon.constant.CouponType;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.post.constant.Category;
-
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseTime {
+public class MemberCoupon extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String title;
-
-    @Column(nullable = false, length = 1000)
-    private String content;
-
-    @Type(JsonType.class)
-    @Column(nullable = false, columnDefinition = "json")
-    private Map<Integer, Object> imageUrl;
+    @Column(length = 60, nullable = false)
+    private String name;
 
     @Column(nullable = false)
-    private Long viewCnt;
-
-    @Column(nullable = false)
-    private Long upCnt;
-
-    @Column(nullable = false)
-    private Boolean isDeleted;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     @Enumerated(EnumType.STRING)
+    private CouponType couponType;
+
     @Column(nullable = false)
-    private Category category;
+    private int discountPercentage;
+
+    @Column(nullable = false)
+    private LocalDateTime expiredTime;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
 }

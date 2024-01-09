@@ -2,6 +2,8 @@ package piglin.swapswap.domain.coupon.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,15 +31,16 @@ public class Coupon extends BaseTime {
     private String name;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private CouponType couponType;
 
     @Column(nullable = false)
     private int discountPercentage;
 
     @Column(nullable = false)
-    private LocalDateTime expired_time;
+    private LocalDateTime expiredTime;
 
-    @Column
-    private Long userId;
+    @Column(nullable = false)
+    private int count;
 
 }
