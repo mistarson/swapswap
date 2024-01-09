@@ -60,7 +60,7 @@ public class Member {
         isDeleted = true;
     }
 
-    public void reregisterMember() {
+    public void reRegisterMember() {
         isDeleted = false;
     }
 }
