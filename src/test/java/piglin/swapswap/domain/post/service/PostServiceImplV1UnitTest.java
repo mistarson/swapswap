@@ -1,12 +1,16 @@
 package piglin.swapswap.domain.post.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,14 +22,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
+import piglin.swapswap.domain.favorite.service.FavoriteServiceImplV1;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.repository.PostRepository;
-import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 import piglin.swapswap.global.s3.S3ImageServiceImplV1;
 
@@ -41,6 +46,9 @@ class PostServiceImplV1UnitTest {
     @Mock
     private PostRepository postRepository;
 
+    @Mock
+    private FavoriteServiceImplV1 favoriteService;
+
     @InjectMocks
     private PostServiceImplV1 postService;
 
@@ -49,7 +57,10 @@ class PostServiceImplV1UnitTest {
 
     @BeforeEach
     void setUp() {
-        member = Member.builder().id(1L).build();
+        member = Member.builder()
+                .id(1L)
+                .nickname("nickname")
+                .build();
     }
 
     @Nested
@@ -128,6 +139,74 @@ class PostServiceImplV1UnitTest {
             assertThatThrownBy(() -> postService.createPost(invalidMemberId, requestDto))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessageContaining(ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("게시글 단 건 조회 테스트 모음")
+    class GetPostTestList {
+
+        @Mock
+        private Post post;
+        private String title = "제목";
+        private String content = "내용";
+
+        private Map<Integer, Object> imageUrl;
+
+        @Nested
+        @DisplayName("게시글 단 건 조회 테스트 성공 모음")
+        class getPostTestList_SuccessList {
+
+            @BeforeEach
+            void setUp() {
+                // Map 초기화
+                imageUrl = new HashMap<>();
+                imageUrl.put(0, "testImageServer.com");
+
+                // Post 스터빙
+                when(post.getMember()).thenReturn(member);
+                when(post.getTitle()).thenReturn(title);
+                when(post.getContent()).thenReturn(content);
+                when(post.getCategory()).thenReturn(Category.ELECTRONICS);
+                when(post.getViewCnt()).thenReturn(0L);
+                when(post.getUpCnt()).thenReturn(0L);
+                when(post.getModifiedTime()).thenReturn(LocalDateTime.now());
+                when(post.getImageUrl()).thenReturn(imageUrl);
+            }
+
+            @Test
+            @DisplayName("게시글 단 건 조회 - 성공")
+            void getPost_Success() {
+                // Given
+                Long postId = 1L;
+                when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(
+                        Optional.of(post));
+                when(favoriteService.getPostFavoriteCnt(post)).thenReturn(1L);
+                when(favoriteService.findFavorite(post, member)).thenReturn(false);
+                // When
+                PostGetResponseDto result = postService.getPost(postId, member);
+                // Then
+                assertThat(result).isNotNull();
+                assertThat(result.author()).isEqualTo(member.getNickname());
+                assertThat(result.title()).isEqualTo(title);
+                assertThat(result.content()).isEqualTo(content);
+                assertThat(result.category()).isEqualTo(Category.ELECTRONICS.getName());
+                assertThat(result.favoriteCnt()).isEqualTo(1L);
+                assertThat(result.favoriteStatus()).isEqualTo(false);
+            }
+        }
+
+        @Test
+        @DisplayName("게시글 단 건 조회 - 실패 / 존재하지 않는 게시글")
+        void getPost_Fail_Not_Found_Post() {
+            // Given
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.empty());
+
+            // When - Then
+            assertThatThrownBy(() -> postService.getPost(postId, member))
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining(ErrorCode.NOT_FOUND_POST_EXCEPTION.getMessage());
         }
     }
 
