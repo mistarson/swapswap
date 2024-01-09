@@ -23,10 +23,10 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostGetResponseDto postToGetResponseDto(String author, Post post,
+    public static PostGetResponseDto postToGetResponseDto(Post post,
             Long favoriteCnt, boolean favoriteStatus) {
 
-        return new PostGetResponseDto(author, post.getTitle(), post.getContent(),
+        return new PostGetResponseDto(post.getMember().getNickname(), post.getTitle(), post.getContent(),
                 post.getCategory().getName(), post.getImageUrl(), post.getViewCnt(),
                 post.getUpCnt(), favoriteCnt,
                 post.getModifiedTime().format(DateTimeFormatter.ISO_DATE_TIME), favoriteStatus);

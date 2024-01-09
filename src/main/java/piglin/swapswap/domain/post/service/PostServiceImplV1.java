@@ -61,10 +61,9 @@ public class PostServiceImplV1 implements PostService {
             favoriteStatus = favoriteService.findFavorite(post, member);
         }
 
-        String author = post.getMember().getNickname();
         post.upViewCnt();
 
-        return PostMapper.postToGetResponseDto(author, post, favoriteCnt, favoriteStatus);
+        return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
     }
 
     private Post findPost(Long postId) {
