@@ -277,3 +277,71 @@ img {
 .post-next-button {
   right: 10px;
 }
+
+.post-content-details {
+  margin-top: 10px;
+  border: #333333 1px solid;
+  border-radius: 20px;
+}
+
+.post-author-favorite-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+}
+
+.author-details .author-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.favorite-action button {
+  padding: 5px 15px;
+  background-color: #00AADC;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.favorite-action button:hover {
+  background-color: #007bff;
+}
+
+.post-title-meta-section {
+  padding: 20px;
+}
+
+.post-title-meta-section .post-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.post-meta {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.post-content-body {
+  padding: 0 20px 20px;
+  line-height: 1.6;
+}
+
+.post-content-stats {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 20px;
+}
+
+.post-content-actions button:hover {
+  background-color: #007BFF;
+}
+
+.post-content-actions div {
+  font-size: 0.9em;
+  color: #666;
+}
