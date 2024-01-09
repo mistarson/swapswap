@@ -86,7 +86,8 @@ class PostServiceImplV1UnitTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             // When - Then
             assertThatThrownBy(() -> postService.createPost(memberId, requestDto))
-                    .isInstanceOf(BusinessException.class);
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
         }
 
         @Test
@@ -106,7 +107,8 @@ class PostServiceImplV1UnitTest {
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             // When - Then
             assertThatThrownBy(() -> postService.createPost(memberId, requestDto))
-                    .isInstanceOf(BusinessException.class);
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining(ErrorCode.POST_IMAGE_MAX_SIZE.getMessage());
         }
 
         @Test
@@ -121,11 +123,11 @@ class PostServiceImplV1UnitTest {
                     "내용",
                     imageUrlList);
 
-            when(memberRepository.findById(invalidMemberId)).thenThrow(
-                    new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+            when(memberRepository.findById(invalidMemberId)).thenReturn(Optional.empty());
             // When - Then
             assertThatThrownBy(() -> postService.createPost(invalidMemberId, requestDto))
-                    .isInstanceOf(BusinessException.class);
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining(ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage());
         }
     }
 

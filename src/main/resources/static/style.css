@@ -7,7 +7,6 @@
 body{
   font-family: 'S-CoreDream-3Light';
 }
-
 .header {
   background-color: #ffffff;
   border-bottom: 1px #E5E5E5 solid;
@@ -159,7 +158,6 @@ img {
 .write-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   border-bottom: 1px solid #E5E5E5;
   height: 33%;
 }
@@ -215,7 +213,7 @@ img {
   margin-top: 20px;
 }
 
-.category-button {
+.category-button, .couponType-button {
   padding: 8px 16px;
   border-radius: 20px;
   text-decoration: none;
@@ -228,7 +226,7 @@ img {
   cursor: pointer;
 }
 
-.category-button.active, .category-button:hover {
+.active, .category-button:hover {
   background-color: #00AADC;
   color: #ffffff;
 }
