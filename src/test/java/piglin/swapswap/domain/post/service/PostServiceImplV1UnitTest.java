@@ -58,7 +58,7 @@ class PostServiceImplV1UnitTest {
     @BeforeEach
     void setUp() {
         member = Member.builder()
-                .id(1L)
+                .id(memberId)
                 .nickname("nickname")
                 .build();
     }
@@ -77,10 +77,9 @@ class PostServiceImplV1UnitTest {
                     "내용",
                     imageUrlList);
 
-            when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             when(s3ImageServiceImplV1.saveImageUrlList(any())).thenReturn(new ArrayList<>());
             // When
-            postService.createPost(memberId, requestDto);
+            postService.createPost(member, requestDto);
             // Then
             verify(postRepository).save(any(Post.class));
         }
@@ -94,9 +93,8 @@ class PostServiceImplV1UnitTest {
                     "내용",
                     imageUrlList);
 
-            when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             // When - Then
-            assertThatThrownBy(() -> postService.createPost(memberId, requestDto))
+            assertThatThrownBy(() -> postService.createPost(member, requestDto))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
         }
@@ -115,30 +113,10 @@ class PostServiceImplV1UnitTest {
                     "내용",
                     imageUrlList);
 
-            when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             // When - Then
-            assertThatThrownBy(() -> postService.createPost(memberId, requestDto))
+            assertThatThrownBy(() -> postService.createPost(member, requestDto))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessageContaining(ErrorCode.POST_IMAGE_MAX_SIZE.getMessage());
-        }
-
-        @Test
-        @DisplayName("게시글 저장 - 실패 / 유저를 찾을 수 없습니다.")
-        void createPost_Fail_User_Not_Found() {
-            // Given
-            Long invalidMemberId = 999L;
-            List<MultipartFile> imageUrlList = new ArrayList<>();
-            imageUrlList.add(Mockito.mock(MultipartFile.class));
-
-            PostCreateRequestDto requestDto = new PostCreateRequestDto(Category.ELECTRONICS, "제목",
-                    "내용",
-                    imageUrlList);
-
-            when(memberRepository.findById(invalidMemberId)).thenReturn(Optional.empty());
-            // When - Then
-            assertThatThrownBy(() -> postService.createPost(invalidMemberId, requestDto))
-                    .isInstanceOf(RuntimeException.class)
-                    .hasMessageContaining(ErrorCode.NOT_FOUND_USER_EXCEPTION.getMessage());
         }
     }
 

@@ -29,9 +29,7 @@ public class PostServiceImplV1 implements PostService {
     private final S3ImageServiceImplV1 s3ImageServiceImplV1;
 
     @Override
-    public Long createPost(Long memberId, PostCreateRequestDto requestDto) {
-
-        Member member = getMember(memberId);
+    public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
         imageUrlListSizeCheck(requestDto);
 
@@ -73,6 +71,7 @@ public class PostServiceImplV1 implements PostService {
     }
 
     private void imageUrlListSizeCheck(PostCreateRequestDto requestDto) {
+
         if (requestDto.imageUrlList().size() < PostConstant.IMAGE_MIN_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
         }
@@ -82,11 +81,5 @@ public class PostServiceImplV1 implements PostService {
         if (requestDto.imageUrlList().size() > PostConstant.IMAGE_MAX_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MAX_SIZE);
         }
-    }
-
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
-        );
     }
 }
