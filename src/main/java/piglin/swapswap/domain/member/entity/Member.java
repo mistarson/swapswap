@@ -12,18 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import piglin.swapswap.domain.member.constant.UserRoleEnum;
 import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member {
 
     @Id
@@ -38,16 +37,22 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private UserRoleEnum role;
+    private MemberRoleEnum role;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean isDeleted;
 
     @OneToMany(mappedBy = "member")
     private List<Post> postList;
 
     @JoinColumn(name = "wallet_id")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Wallet wallet;
+
+    public Member(String email, String nickname, MemberRoleEnum memberRoleEnum) {
+        this.nickname = nickname;
+        this.email = email;
+        this.role = memberRoleEnum;
+    }
 
 }

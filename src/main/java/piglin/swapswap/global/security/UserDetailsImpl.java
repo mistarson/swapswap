@@ -12,59 +12,55 @@ import piglin.swapswap.domain.member.entity.Member;
 @Getter
 public class UserDetailsImpl implements UserDetails {
 
-	private final Member member;
+    private final Member member;
 
-	public UserDetailsImpl( Member member) {
-		this.member = member;
-	}
+    public UserDetailsImpl(Member member) {
+        this.member = member;
+    }
 
-	@Override
-	public String getPassword() {
-		return null;
-	}
+    @Override
+    public String getPassword() {
+        return null;
+    }
 
-	@Override
-	public String getUsername() {
-		return member.getNickname();
-	}
+    @Override
+    public String getUsername() {
+        return member.getNickname();
+    }
 
-	public Long getUserId() {
-		return this.member.getId();
-	}
+    public Member getUser() {
+        return this.member;
+    }
 
-	public Member getUser() {
-		return this.member;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        MemberRoleEnum role = member.getRole();
+        String authority = role.getAuthority();
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		MemberRoleEnum role = member.getRole();
-		String authority = role.getAuthority();
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(simpleGrantedAuthority);
 
-		SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
-		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(simpleGrantedAuthority);
+        return authorities;
+    }
 
-		return authorities;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
