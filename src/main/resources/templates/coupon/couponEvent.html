@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <p>남은 쿠폰 개수: <span th:text="${couponCount}"></span></p>
+  <button th:if="${couponCount > 0}" th:onclick="claimCoupon()">선착순 쿠폰 받기</button>
+  <div th:unless="${couponCount > 0}">
+    <p>쿠폰이 모두 소진되었습니다.</p>
+  </div>
+</div>
+</body>
+</html>

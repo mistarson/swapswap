@@ -37,6 +37,7 @@ public enum ErrorCode {
     NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다."),
   
     // 쿠폰
+    NOT_FOUND_COUPON_EXCEPTION(401, "해당 쿠폰은 찾을 수 없습니다."),
     INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
 
     // S3

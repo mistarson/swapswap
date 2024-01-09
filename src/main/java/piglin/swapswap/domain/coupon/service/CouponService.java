@@ -6,4 +6,5 @@ public interface CouponService {
 
     Long createCoupon(CouponCreateRequestDto couponCreateRequestDto);
 
+    int getCouponCount(Long couponId);
 }
