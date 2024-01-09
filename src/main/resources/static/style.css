@@ -174,10 +174,10 @@ img {
   font-size: 80px;
 }
 
-/*.write-content-container {*/
-/*  height: 500px;*/
-/*  background-color: aqua;*/
-/*}*/
+.write-content-container {
+  height: 500px;
+  background-color: aqua;
+}
 
 .write-content-input {
   flex-grow: 1;
@@ -230,3 +230,4 @@ img {
   background-color: #00AADC;
   color: #ffffff;
 }
+

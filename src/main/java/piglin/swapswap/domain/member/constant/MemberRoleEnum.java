@@ -3,13 +3,13 @@ package piglin.swapswap.domain.member.constant;
 import lombok.Getter;
 
 @Getter
-public enum UserRoleEnum {
+public enum MemberRoleEnum {
     USER(Authority.USER),
     ADMIN(Authority.ADMIN);
 
     private final String authority;
 
-    UserRoleEnum(String authority) {
+    MemberRoleEnum(String authority) {
         if (authority == null) {
             authority = Authority.USER;
         }
