@@ -41,7 +41,7 @@ public class Post extends BaseTime {
 
     @Type(JsonType.class)
     @Column(nullable = false, columnDefinition = "json")
-    private Map<String, Object> imageUrl;
+    private Map<Integer, Object> imageUrl;
 
     @Column(nullable = false)
     private Long viewCnt;

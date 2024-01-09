@@ -34,7 +34,13 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT_EXCEPTION(401, "해당 댓글을 찾을 수 없습니다."),
 
     // 게시글
-    NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다.");
+    NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다."),
+
+    // S3
+    IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),
+    FAIL_UPLOAD(400, "이미지 업로드에 실패했습니다."),
+    POST_IMAGE_MAX_SIZE(400, "이미지는 최대 10장만 업로드 할 수 있습니다."),
+    POST_IMAGE_MIN_SIZE(400, "이미지를 최소 1장 업로드 해야합니다.");
 
     private final int status;
 

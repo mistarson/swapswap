@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
@@ -21,6 +22,20 @@ import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException e) {
+
+        log.error("ValidationException", e);
+
+        BindingResult bindingResult = e.getBindingResult();
+        String msg = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+
+        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, msg);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
     @ExceptionHandler(NoJwtException.class)
     protected ResponseEntity<ErrorResponse> handleNoJwtException(NoJwtException e) {
