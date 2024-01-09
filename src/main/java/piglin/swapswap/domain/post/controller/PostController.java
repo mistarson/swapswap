@@ -21,7 +21,7 @@ public class PostController {
 
     @PostMapping("/write")
     public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
-            , @AuthUser Member member) {
+            , @AuthMember Member member) {
 
         return "redirect:/posts/" + postService.createPost(member, requestDto)
                 .toString();
