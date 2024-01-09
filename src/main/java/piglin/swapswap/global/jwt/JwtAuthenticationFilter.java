@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             log.info("------" + requestDto.toString());
 
             return getAuthenticationManager().authenticate(
-                    new UsernamePasswordAuthenticationToken(requestDto.getNickname(), null));
+                    new UsernamePasswordAuthenticationToken(requestDto.nickname(), null));
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
