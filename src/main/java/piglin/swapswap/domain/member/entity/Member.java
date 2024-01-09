@@ -17,14 +17,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
-@Getter
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
