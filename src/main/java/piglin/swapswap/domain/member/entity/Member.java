@@ -53,10 +53,15 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Wallet wallet;
 
-    public Member(String email, String nickname, MemberRoleEnum memberRoleEnum) {
+    public void updateMember(String nickname) {
         this.nickname = nickname;
-        this.email = email;
-        this.role = memberRoleEnum;
     }
 
+    public void deleteMember() {
+        isDeleted = true;
+    }
+
+    public void reregisterMember() {
+        isDeleted = false;
+    }
 }

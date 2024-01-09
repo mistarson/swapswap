@@ -15,15 +15,16 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import piglin.swapswap.domain.member.constant.MemberRoleEnum;
-import piglin.swapswap.domain.member.dto.MemberResponseDto;
+import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class KakaoServiceImpl implements MemberService {
+public class KakaoServiceImpl implements SocialService {
 
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
@@ -71,11 +72,13 @@ public class KakaoServiceImpl implements MemberService {
         );
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
+
         return jsonNode.get("access_token").asText();
     }
 
-    public MemberResponseDto getUser(String identifier) {
-        // 요청 URL 만들기
+    @Override
+    public SocialUserInfo getUser(String identifier) {
+
         URI uri = UriComponentsBuilder
                 .fromUriString("https://kapi.kakao.com")
                 .path("/v2/user/me")
@@ -111,11 +114,7 @@ public class KakaoServiceImpl implements MemberService {
 
         log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
 
-        return MemberResponseDto.builder()
-                .id(id)
-                .nickname(nickname)
-                .email(email)
-                .build();
+        return SocialUserInfo.createSocialUserInfo(id, nickname, email);
     }
 
 
@@ -127,11 +126,15 @@ public class KakaoServiceImpl implements MemberService {
                 .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo)));
 
         if (isWithdrawnMember(member)) {
-            // TODO 복구시킬 때, 지갑도 복구시키기
+            // 복구시킬 때, 지갑도 복구시키기
             member.reregisterMember();
         }
 
         return member;
+    }
+
+    public boolean isWithdrawnMember(Member member) {
+        return member.getIsDeleted();
     }
 
 }

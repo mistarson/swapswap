@@ -13,7 +13,7 @@ public class MemberMapper {
                 .nickname(socialUserInfo.nickname())
                 .role(MemberRoleEnum.USER)
                 .isDeleted(false)
-                // TODO wallet 넣어줘야 함 1:1이라 무조건 있어야 함
+                //  wallet 넣어줘야 함 1:1이라 무조건 있어야 함
                 .build();
     }
 
