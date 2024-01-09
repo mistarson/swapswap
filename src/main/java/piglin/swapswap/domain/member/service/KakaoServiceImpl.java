@@ -19,6 +19,7 @@ import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
@@ -122,8 +123,11 @@ public class KakaoServiceImpl implements SocialService {
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
 
         String kakaoEmail = kakaoUserInfo.email();
+
+        Wallet wallet = Wallet.builder().money(0L).build();
+
         Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo)));
+                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, wallet)));
 
         if (isWithdrawnMember(member)) {
 
