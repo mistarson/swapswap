@@ -60,4 +60,7 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private Category category;
 
+    public void upViewCnt() {
+        this.viewCnt++;
+    }
 }
