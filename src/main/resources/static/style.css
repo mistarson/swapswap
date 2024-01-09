@@ -250,7 +250,6 @@ img {
 
 .post-content-image {
   height: 400px;
-  /*width: 100%; !* 각 이미지가 슬라이더 너비와 동일하게 설정 *!*/
   flex: 0 0 auto;
   justify-content: center; /* 이미지를 가운데 정렬합니다 */
   align-items: center; /* 이미지를 세로 방향으로 가운데 정렬합니다 */
