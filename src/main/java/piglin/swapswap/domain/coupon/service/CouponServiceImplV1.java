@@ -6,6 +6,7 @@ import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
 import piglin.swapswap.domain.coupon.entity.Coupon;
 import piglin.swapswap.domain.coupon.mapper.CouponMapper;
 import piglin.swapswap.domain.coupon.repository.CouponRepository;
+import piglin.swapswap.domain.coupon.validator.CouponValidator;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,8 @@ public class CouponServiceImplV1 implements CouponService {
 
     @Override
     public Long createCoupon(CouponCreateRequestDto couponCreateRequestDto) {
+
+        CouponValidator.validateExpiredTime(couponCreateRequestDto.expiredTime());
 
         // TODO 추후에 어드민 검증해야함.
         Coupon coupon = CouponMapper.createCoupon(couponCreateRequestDto);

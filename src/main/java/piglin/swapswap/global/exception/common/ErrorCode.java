@@ -34,7 +34,10 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT_EXCEPTION(401, "해당 댓글을 찾을 수 없습니다."),
 
     // 게시글
-    NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다.");
+    NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다."),
+
+    // 쿠폰
+    INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다.");
 
     private final int status;
 
