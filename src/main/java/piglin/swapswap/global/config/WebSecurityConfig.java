@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import piglin.swapswap.domain.member.repository.MemberRepository;
-import piglin.swapswap.global.jwt.JwtAuthenticationFilter;
 import piglin.swapswap.global.jwt.JwtAuthorizationFilter;
 import piglin.swapswap.global.jwt.JwtUtil;
 import piglin.swapswap.global.security.UserDetailsServiceImpl;
@@ -43,14 +42,6 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, memberRepository);
-        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-
-        return filter;
-    }
-
-    @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
@@ -63,15 +54,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .requestMatchers("/api/login/**").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/api/login/**").permitAll()
+                        .requestMatchers("/", "/posts/{postId}").permitAll()
                         .anyRequest().authenticated()
         );
 
@@ -80,20 +70,14 @@ public class WebSecurityConfig {
         );
 
         http
-                // 로그아웃 설정
                 .logout(logout -> logout
-                        // 로그아웃 요청을 처리할 URL 설정
-                        .logoutUrl("/logout")
-                        // 로그아웃 성공 시 리다이렉트할 URL 설정
-                        // 로그아웃 성공 핸들러 추가 (리다이렉션 처리)
+                        .logoutUrl("/api/logout")
                         .logoutSuccessHandler((request, response, authentication) ->
                                 response.sendRedirect("/"))
-                        // 로그아웃 시 쿠키 삭제 설정
                         .deleteCookies("Authorization")
                 );
 
-        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -17,8 +17,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import piglin.swapswap.domain.member.constant.UserRoleEnum;
 import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
@@ -40,7 +40,7 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private UserRoleEnum role;
+    private MemberRoleEnum role;
 
     @Column(nullable = false)
     private Boolean isDeleted;
@@ -49,7 +49,18 @@ public class Member {
     private List<Post> postList;
 
     @JoinColumn(name = "wallet_id")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Wallet wallet;
 
+    public void updateMember(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void deleteMember() {
+        isDeleted = true;
+    }
+
+    public void reregisterMember() {
+        isDeleted = false;
+    }
 }

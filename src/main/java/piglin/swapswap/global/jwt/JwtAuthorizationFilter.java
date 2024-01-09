@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import piglin.swapswap.global.security.UserDetailsServiceImpl;
@@ -21,7 +22,7 @@ import piglin.swapswap.global.security.UserDetailsServiceImpl;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
@@ -31,11 +32,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
             FilterChain filterChain) throws ServletException, IOException {
-        log.info("doFilterInternal");
+        log.info("JwtAuthorizationFilter-doFilterInternal");
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
-            // JWT 토큰 substring
             tokenValue = jwtUtil.substringToken(tokenValue);
             log.info(tokenValue);
 
@@ -45,10 +45,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
             Claims claims = jwtUtil.getUserInfoFromToken(tokenValue);
-            String username = String.valueOf(claims.get(JwtUtil.CLAIM_USER_EMAIL));
+            String email = String.valueOf(claims.get(JwtUtil.CLAIM_USER_EMAIL));
 
             try {
-                setAuthentication(username);
+                setAuthentication(email);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 return;
@@ -58,9 +58,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(req, res);
     }
 
-    // 인증 처리
     public void setAuthentication(String email) {
-        log.info("setAuthentication");
+        log.info("JwtAuthorizationFilter-setAuthentication");
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(email);
         context.setAuthentication(authentication);
@@ -68,9 +67,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    // 인증 객체 생성
     private Authentication createAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(
+                email);
 
         return new UsernamePasswordAuthenticationToken(userDetails, null,
                 userDetails.getAuthorities());

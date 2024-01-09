@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
-import piglin.swapswap.global.security.UserDetailsImpl;
 
 @Controller
 @RequestMapping("/posts")
@@ -21,16 +21,18 @@ public class PostController {
 
     @PostMapping("/write")
     public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
-            , @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            , @AuthMember Member member) {
 
-        return "redirect:/posts/" + postService.createPost(userDetails.getUserId(), requestDto)
+        return "redirect:/posts/" + postService.createPost(member, requestDto)
                 .toString();
     }
 
     @GetMapping("/write")
     public String getPostWriteForm(Model model) {
+
         model.addAttribute("PostCreateRequestDto",
                 new PostCreateRequestDto(null, null, null, null));
+
         return "post/postWrite";
     }
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devlind</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300&family=Nanum+Gothic:wght@400;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="icon" href="./favicon.png">
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/signup.css">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script defer src="./js/common.js"></script>
+    <script defer src="./js/signup.js"></script>
+</head>
+
+<body>
+<!-- HEADER -->
+<header>
+    <div class="inner">
+        <a href="./index.html" class="logo">
+            <img src="./images/스프링르탄이 복사본.png" alt="LOGO">
+        </a>
+
+        <div class="main-menu">
+            <ul class="menu">
+                <li>
+                    <a href="javascript:void(0)">Sign In</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">자유 게시판</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">토론 게시판</a>
+                </li>
+            </ul>
+            <div class="search">
+                <input type="text" />
+                <div class="material-icons">search</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="signin">
+    <h1>회원가입</h1>
+    <div class="signin__card">
+        <h2>
+            <strong>Welcome!</strong>
+        </h2>
+        <form onsubmit="return false">
+            <input class="username" type="text" placeholder="아이디를 입력하세요."/>
+            <input class="password" type="password" placeholder="비밀번호를 입력하세요"/>
+            <input class="email" type="email" placeholder="이메일을 입력하세요"/>
+            <input class="nickname" type="text" placeholder="사용할 닉네임을 입력하세요"/>
+            <input class="signup-btn" type="submit" value="회원가입">
+            <p>
+            </p>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>
