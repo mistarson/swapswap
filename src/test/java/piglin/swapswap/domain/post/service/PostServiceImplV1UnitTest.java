@@ -41,9 +41,6 @@ class PostServiceImplV1UnitTest {
     private S3ImageServiceImplV1 s3ImageServiceImplV1;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private PostRepository postRepository;
 
     @Mock
