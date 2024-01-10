@@ -10,7 +10,7 @@ import piglin.swapswap.domain.post.entity.Post;
 
 @Service
 @RequiredArgsConstructor
-public class FavoriteServiceImplV1 implements FavoriteService{
+public class FavoriteServiceImplV1 implements FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
 

@@ -1,7 +1,10 @@
 package piglin.swapswap.domain.post.service;
 
+import java.util.Map;
+import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
 public interface PostService {
@@ -11,7 +14,7 @@ public interface PostService {
      *
      * @param member   Post 생성 시 연관 관계에 들어갈 member 입니다.
      * @param requestDto Post 를 생성하기 위해서 받는 Request Dto 입니다. Category, Title, Content, ImageUrlList
-     *                   로 이루어져 있으며, ImageUrlList는 다중 업로드가 가능합니다.
+     *                   로 이루어져 있으며, ImageUrlList 는 다중 업로드가 가능합니다.
      */
     Long createPost(Member member, PostCreateRequestDto requestDto);
 
@@ -19,8 +22,14 @@ public interface PostService {
      * 게시글 단 건 조회 메소드입니다.
      * @param postId Post를 검색할 때 쓰이는 PostId 입니다. 이 PostId를 이용하여 예외 처리를 합니다.
      * @param member 익명사용자와 로그인 사용자의 화면을 나누기 위한 member 매개변수 입니다.
-     * @return PostGetResponseDto 를 반환하여 Model로 화면에 그려줍니다.
+     * @return PostGetResponseDto 를 반환하여 Model 로 화면에 그려줍니다.
      */
     PostGetResponseDto getPost(Long postId, Member member);
 
+    /**
+     * 게시글 목록 조회 메소드입니다.
+     * @param member favorite 상태를 나타내기 위한 member 매개변수 입니다.
+     * @return Map 형식으로 이루어져 있으며 Key 에는 Post Id가, Value 에는 PostGetListResponseDto 가 들어갑니다.
+     */
+    Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable);
 }
