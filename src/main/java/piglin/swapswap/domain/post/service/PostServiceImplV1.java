@@ -10,6 +10,7 @@ import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.mapper.PostMapper;
@@ -53,13 +54,36 @@ public class PostServiceImplV1 implements PostService {
         Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
 
         boolean favoriteStatus = false;
-        if (member.getId() != null) {
+        if (member != null) {
             favoriteStatus = favoriteService.findFavorite(post, member);
         }
 
         post.upViewCnt();
 
         return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
+    }
+
+    @Override
+    public Map<Long, PostGetListResponseDto> getPostList(Member member) {
+
+        List<Post> postList = postRepository.findAllByIsDeletedIsFalseOrderByModifiedTime();
+
+        Map<Long, PostGetListResponseDto> responseDtoMap = new HashMap<>();
+
+        for(Post post : postList) {
+            Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
+            boolean favoriteStatus = false;
+
+            if (member != null) {
+                favoriteStatus = favoriteService.findFavorite(post, member);
+            }
+
+            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus);
+
+            responseDtoMap.put(post.getId(), dto);
+        }
+
+        return responseDtoMap;
     }
 
     private Post findPost(Long postId) {
