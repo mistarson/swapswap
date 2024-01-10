@@ -14,11 +14,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.global.jwt.JwtUtil;
 
@@ -28,6 +28,7 @@ import piglin.swapswap.global.jwt.JwtUtil;
 public class KakaoServiceImpl implements SocialService {
 
     private final MemberRepository memberRepository;
+    private final WalletRepository walletRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
@@ -125,9 +126,10 @@ public class KakaoServiceImpl implements SocialService {
         String kakaoEmail = kakaoUserInfo.email();
 
         Wallet wallet = Wallet.builder().money(0L).build();
+        Wallet savedWallet = walletRepository.save(wallet);
 
         Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, wallet)));
+                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet)));
 
         if (isWithdrawnMember(member)) {
 
