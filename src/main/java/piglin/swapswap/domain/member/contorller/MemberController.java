@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.member.service.GoogleServiceImpl;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
 import piglin.swapswap.domain.member.service.MemberServiceImpl;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.jwt.JwtCookieManager;
+import piglin.swapswap.global.jwt.JwtUtil;
 
 @Slf4j
 @Controller
@@ -24,7 +26,9 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 @RequestMapping("/api")
 public class MemberController {
 
+    private final JwtUtil jwtUtil;
     private final KakaoServiceImpl kakaoServiceImpl;
+    private final GoogleServiceImpl googleService;
     private final MemberServiceImpl memberService;
 
     @GetMapping("/login/kakao/callback")
@@ -33,7 +37,8 @@ public class MemberController {
 
         try {
             String accessToken = kakaoServiceImpl.kakaoLogin(code);
-            JwtCookieManager.addJwtToCookie(accessToken, response);
+            JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
+            jwtCookieManager.addJwtToCookie(accessToken, response);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -43,8 +48,8 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
-
-        JwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
+        jwtCookieManager.deleteJwtCookies(response);
 
         return "redirect:/";
     }
@@ -61,6 +66,7 @@ public class MemberController {
     public void unregister(@AuthMember Member member, HttpServletResponse response) {
 
         memberService.deleteMember(member);
-        JwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
+        jwtCookieManager.deleteJwtCookies(response);
     }
 }

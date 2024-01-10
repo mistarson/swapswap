@@ -41,6 +41,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
+
+                jwtUtil.expireTokenCookie(res);
+                res.sendRedirect("/login");
+
                 return;
             }
 

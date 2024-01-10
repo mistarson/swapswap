@@ -18,8 +18,8 @@ import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
-import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.domain.wallet.entity.Wallet;
+import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
@@ -27,8 +27,8 @@ import piglin.swapswap.global.jwt.JwtUtil;
 @Log4j2
 public class KakaoServiceImpl implements SocialService {
 
-    private final MemberRepository memberRepository;
     private final WalletRepository walletRepository;
+    private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
@@ -79,7 +79,7 @@ public class KakaoServiceImpl implements SocialService {
     }
 
     @Override
-    public SocialUserInfo getUser(String identifier) {
+    public SocialUserInfo getUser(String accessToken) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString("https://kapi.kakao.com")
@@ -89,7 +89,7 @@ public class KakaoServiceImpl implements SocialService {
                 .toUri();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + identifier);
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -126,10 +126,10 @@ public class KakaoServiceImpl implements SocialService {
         String kakaoEmail = kakaoUserInfo.email();
 
         Wallet wallet = Wallet.builder().money(0L).build();
-        Wallet savedWallet = walletRepository.save(wallet);
-
+        walletRepository.save(wallet);
         Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet)));
+                .orElseGet(() -> memberRepository.save(
+                        MemberMapper.createMember(kakaoUserInfo, wallet)));
 
         if (isWithdrawnMember(member)) {
 
