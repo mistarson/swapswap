@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.post.mapper;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import piglin.swapswap.domain.member.entity.Member;
@@ -20,6 +21,7 @@ public class PostMapper {
                 .upCnt(0L)
                 .viewCnt(0L)
                 .isDeleted(false)
+                .modifiedUpTime(LocalDateTime.now())
                 .build();
     }
 

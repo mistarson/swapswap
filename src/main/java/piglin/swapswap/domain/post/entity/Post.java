@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -59,6 +60,9 @@ public class Post extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
+
+    @Column(nullable = false)
+    private LocalDateTime modifiedUpTime;
 
     public void upViewCnt() {
         this.viewCnt++;
