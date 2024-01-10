@@ -29,7 +29,7 @@ public class PostController {
             , @AuthMember Member member) {
 
         return "redirect:/posts/" + postService.createPost(member, requestDto)
-                .toString();
+                                               .toString();
     }
 
     @GetMapping("/posts/write")
