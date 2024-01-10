@@ -13,34 +13,47 @@ public class PostMapper {
 
     public static Post createPost(PostCreateRequestDto requestDto, Map<Integer, Object> imageUrlMap,
             Member member) {
+
         return Post.builder()
-                .category(requestDto.category())
-                .title(requestDto.title())
-                .content(requestDto.content())
-                .imageUrl(imageUrlMap)
-                .member(member)
-                .upCnt(0L)
-                .viewCnt(0L)
-                .isDeleted(false)
-                .modifiedUpTime(LocalDateTime.now())
-                .build();
+                   .category(requestDto.category())
+                   .title(requestDto.title())
+                   .content(requestDto.content())
+                   .imageUrl(imageUrlMap)
+                   .member(member)
+                   .upCnt(0L)
+                   .viewCnt(0L)
+                   .isDeleted(false)
+                   .modifiedUpTime(LocalDateTime.now())
+                   .build();
     }
 
     public static PostGetResponseDto postToGetResponseDto(Post post,
             Long favoriteCnt, boolean favoriteStatus) {
 
-        return new PostGetResponseDto(post.getMember().getNickname(), post.getTitle(),
-                post.getContent(),
-                post.getCategory().getName(), post.getImageUrl(), post.getViewCnt(),
-                post.getUpCnt(), favoriteCnt,
-                post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME), favoriteStatus);
+        return PostGetResponseDto.builder()
+                                 .author(post.getMember().getNickname())
+                                 .title(post.getTitle())
+                                 .content(post.getContent())
+                                 .category(post.getCategory().getName())
+                                 .imageUrl(post.getImageUrl())
+                                 .viewCnt(post.getViewCnt())
+                                 .upCnt(post.getUpCnt())
+                                 .favoriteCnt(favoriteCnt)
+                                 .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
+                                 .favoriteStatus(favoriteStatus)
+                                 .build();
     }
 
     public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
             boolean favoriteStatus) {
 
-        return new PostGetListResponseDto(post.getTitle(), post.getImageUrl().get(0).toString(),
-                post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME), post.getViewCnt(),
-                favoriteCnt, favoriteStatus);
+        return PostGetListResponseDto.builder()
+                                     .title(post.getTitle())
+                                     .thumbnailUrl(post.getImageUrl().get(0).toString())
+                                     .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
+                                     .viewCnt(post.getViewCnt())
+                                     .favoriteCnt(favoriteCnt)
+                                     .favoriteStatus(favoriteStatus)
+                                     .build();
     }
 }
