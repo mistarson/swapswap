@@ -1,7 +1,9 @@
 package piglin.swapswap.domain.post.dto.response;
 
 import java.util.Map;
+import lombok.Builder;
 
+@Builder
 public record PostGetResponseDto(
         String author,
         String title,
@@ -11,7 +13,7 @@ public record PostGetResponseDto(
         Long viewCnt,
         Long upCnt,
         Long favoriteCnt,
-        String modifiedTime,
+        String modifiedUpTime,
         boolean favoriteStatus
 ) {
 

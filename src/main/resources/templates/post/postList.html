@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="category-bar">
+    <!-- 카테고리 링크 -->
+    <a href="#category1">가전제품</a>
+    <a href="#category2">전자제품</a>
+    <a href="#category3">패션의류/잡화</a>
+    <a href="#category4">뷰티/미용</a>
+    <a href="#category5">출산/유아동</a>
+    <a href="#category6">식품</a>
+    <a href="#category7">주방용품</a>
+    <a href="#category8">생활용품</a>
+  </div>
+
+  <div class="post-container">
+    <div th:each="entry:${PostGetListResponseDtoMap.entrySet}" class="post-card">
+      <a th:href="@{/posts/{postId}(postId=${entry.key})}">
+        <div class="post-image-container">
+          <img th:src="${entry.value.thumbnailUrl}" alt="Post Image" class="post-image">
+        </div>
+        <h2 th:text="${entry.value.title}" class="post-title"></h2>
+        <div class="post-stats">
+          <span class="view-count">조회수 <span th:text="${entry.value.viewCnt}"></span></span>
+          <span class="favorite-count">찜 <span th:text="${entry.value.favoriteCnt}"></span></span>
+          <span class="modified-date">올린 날짜 <span
+              th:text="${entry.value.modifiedUpTime}"></span></span>
+        </div>
+      </a>
+      <button
+          th:data-post-id="${entry.key}"
+          onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+          th:text="${entry.value.favoriteStatus()} == true ? '💙' : '🤍'"
+          type="button"
+      ></button>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    function toggleFavorite(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/favorite',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function() {
+          location.reload()
+        }
+      });
+    }
+  </script>
+</div>
+</body>
+</html>

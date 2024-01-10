@@ -2,14 +2,18 @@ package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.mapper.PostMapper;
@@ -30,6 +34,10 @@ public class PostServiceImplV1 implements PostService {
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
         imageUrlListSizeCheck(requestDto);
+
+        if (member == null) {
+            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
+        }
 
         List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
                 requestDto.imageUrlList());
@@ -64,6 +72,38 @@ public class PostServiceImplV1 implements PostService {
 
     private boolean isMemberLoggedIn(Member member) {
         return member != null;
+    }
+
+    @Override
+    public Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
+
+        Page<Post> postList = postRepository.findAllByIsDeletedIsFalse(pageable);
+
+        Map<Long, PostGetListResponseDto> responseDtoMap = new LinkedHashMap<>();
+
+        for (Post post : postList) {
+            Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
+            boolean favoriteStatus = false;
+
+            if (member != null) {
+                favoriteStatus = favoriteService.isFavorite(post, member);
+            }
+
+            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt,
+                    favoriteStatus);
+
+            responseDtoMap.put(post.getId(), dto);
+        }
+
+        return responseDtoMap;
+    }
+
+    @Override
+    public void updatePostFavorite(Member member, Long postId) {
+
+        Post post = findPost(postId);
+
+        favoriteService.updateFavorite(member, post);
     }
 
     private Post findPost(Long postId) {
