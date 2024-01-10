@@ -26,9 +26,7 @@ import piglin.swapswap.global.jwt.JwtUtil;
 @RequestMapping("/api")
 public class MemberController {
 
-    private final JwtUtil jwtUtil;
     private final KakaoServiceImpl kakaoServiceImpl;
-    private final GoogleServiceImpl googleService;
     private final MemberServiceImpl memberService;
 
     @GetMapping("/login/kakao/callback")
@@ -37,8 +35,8 @@ public class MemberController {
 
         try {
             String accessToken = kakaoServiceImpl.kakaoLogin(code);
-            JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
-            jwtCookieManager.addJwtToCookie(accessToken, response);
+            JwtCookieManager.addJwtToCookie(accessToken, response);
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -48,8 +46,7 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
-        JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
-        jwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager.deleteJwtCookies(response);
 
         return "redirect:/";
     }
@@ -66,7 +63,7 @@ public class MemberController {
     public void unregister(@AuthMember Member member, HttpServletResponse response) {
 
         memberService.deleteMember(member);
-        JwtCookieManager jwtCookieManager = new JwtCookieManager(jwtUtil);
-        jwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager.deleteJwtCookies(response);
+
     }
 }
