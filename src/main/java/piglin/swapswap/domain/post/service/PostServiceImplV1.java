@@ -31,6 +31,10 @@ public class PostServiceImplV1 implements PostService {
 
         imageUrlListSizeCheck(requestDto);
 
+        if (member == null) {
+           throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
+        }
+
         List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
                 requestDto.imageUrlList());
         Map<Integer, Object> imageUrlMap = new HashMap<>();
