@@ -98,7 +98,6 @@ body{
   margin-left: auto;
 }
 .category-bar {
-  margin-top: 100px; /* 상단 여백 */
   background-color: #ffffff;
   border-bottom: 1px solid #E5E5E5; /* 하단 경계선 */
   padding: 10px 0; /* 상하 패딩 */
@@ -373,14 +372,15 @@ img {
 
 .favorite-action button {
   padding: 5px 15px;
-  background-color: #00AADC;
+  border-radius: 20px;
+  border: 1px solid #333333;
   color: white;
-  border: none;
   cursor: pointer;
+  transition: border 0.3s;
 }
 
 .favorite-action button:hover {
-  background-color: #007bff;
+  border: 1px solid #00AADC;
 }
 
 .post-title-meta-section {

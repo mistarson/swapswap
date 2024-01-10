@@ -41,7 +41,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
     function toggleFavorite(postId) {
-      console.log("테스트" + postId);
       $.ajax({
         url: '/posts/' + postId + '/favorite',
         type: 'PATCH',
