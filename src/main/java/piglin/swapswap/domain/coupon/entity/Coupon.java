@@ -43,4 +43,7 @@ public class Coupon extends BaseTime {
     @Column(nullable = false)
     private int count;
 
+    public void issueCoupon() {
+        count -= 1;
+    }
 }
