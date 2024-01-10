@@ -160,7 +160,7 @@ class PostServiceImplV1UnitTest {
                 when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(
                         Optional.of(post));
                 when(favoriteService.getPostFavoriteCnt(post)).thenReturn(1L);
-                when(favoriteService.findFavorite(post, member)).thenReturn(false);
+                when(favoriteService.isFavorite(post, member)).thenReturn(false);
                 // When
                 PostGetResponseDto result = postService.getPost(postId, member);
                 // Then
