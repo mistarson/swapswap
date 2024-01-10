@@ -2,7 +2,6 @@ package piglin.swapswap.domain.post.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,8 +17,6 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
-import piglin.swapswap.global.exception.common.BusinessException;
-import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Controller
 @RequiredArgsConstructor
