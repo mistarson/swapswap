@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -80,5 +82,28 @@ public class PostController {
         postService.updatePostFavorite(member, postId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/posts/{postId}/write")
+    public String updatePost(@Valid @ModelAttribute PostUpdateRequestDto requestDto
+            , @AuthMember Member member, @PathVariable Long postId) {
+
+        postService.updatePost(postId, member, requestDto);
+
+        return "redirect:/posts/" + postId.toString();
+    }
+
+    @GetMapping("/posts/{postId}/write")
+    public String getPostUpdateWriteForm(Model model, @AuthMember Member member,
+            @PathVariable Long postId) {
+
+        if (member == null) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("PostCreateRequestDto",
+                new PostCreateRequestDto(null, null, null, null));
+
+        return "post/postWrite";
     }
 }

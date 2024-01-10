@@ -9,10 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
@@ -33,7 +35,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
-        imageUrlListSizeCheck(requestDto);
+        imageUrlListSizeCheck(requestDto.imageUrlList());
 
         if (member == null) {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
@@ -99,6 +101,30 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
+    @Transactional
+    public void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto) {
+
+        Post post = findPost(postId);
+
+        if (member == null) {
+            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
+        }
+
+        imageUrlListSizeCheck(requestDto.imageUrlList());
+
+        s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
+
+        List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
+                requestDto.imageUrlList());
+        Map<Integer, Object> imageUrlMap = new HashMap<>();
+        for (int i = 0; i < imageUrlList.size(); i++) {
+            imageUrlMap.put(i, imageUrlList.get(i));
+        }
+
+        PostMapper.updatePost(post, requestDto, imageUrlMap);
+    }
+
+    @Override
     public void updatePostFavorite(Member member, Long postId) {
 
         Post post = findPost(postId);
@@ -112,15 +138,15 @@ public class PostServiceImplV1 implements PostService {
         );
     }
 
-    private void imageUrlListSizeCheck(PostCreateRequestDto requestDto) {
+    private void imageUrlListSizeCheck(List<MultipartFile> imageUrlList) {
 
-        if (requestDto.imageUrlList().size() < PostConstant.IMAGE_MIN_SIZE) {
+        if (imageUrlList.size() < PostConstant.IMAGE_MIN_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
         }
-        if (requestDto.imageUrlList().get(0).isEmpty()) {
+        if (imageUrlList.get(0).isEmpty()) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
         }
-        if (requestDto.imageUrlList().size() > PostConstant.IMAGE_MAX_SIZE) {
+        if (imageUrlList.size() > PostConstant.IMAGE_MAX_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MAX_SIZE);
         }
     }

@@ -4,6 +4,7 @@ import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -40,4 +41,6 @@ public interface PostService {
      * @param postId 위와 같은 맥락입니다.
      */
     void updatePostFavorite(Member member, Long postId);
+
+    void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto);
 }
