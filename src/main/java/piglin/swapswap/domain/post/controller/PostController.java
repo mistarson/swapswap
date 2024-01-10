@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
+import piglin.swapswap.global.annotation.AuthMember;
 
 @Controller
 @RequestMapping("/posts")
