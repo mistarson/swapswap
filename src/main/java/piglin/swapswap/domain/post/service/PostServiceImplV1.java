@@ -36,7 +36,7 @@ public class PostServiceImplV1 implements PostService {
         imageUrlListSizeCheck(requestDto);
 
         if (member == null) {
-           throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
+            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
         }
 
         List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
@@ -81,7 +81,7 @@ public class PostServiceImplV1 implements PostService {
 
         Map<Long, PostGetListResponseDto> responseDtoMap = new LinkedHashMap<>();
 
-        for(Post post : postList) {
+        for (Post post : postList) {
             Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
             boolean favoriteStatus = false;
 
@@ -89,12 +89,21 @@ public class PostServiceImplV1 implements PostService {
                 favoriteStatus = favoriteService.isFavorite(post, member);
             }
 
-            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus);
+            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt,
+                    favoriteStatus);
 
             responseDtoMap.put(post.getId(), dto);
         }
 
         return responseDtoMap;
+    }
+
+    @Override
+    public void updatePostFavorite(Member member, Long postId) {
+
+        Post post = findPost(postId);
+
+        favoriteService.updateFavorite(member, post);
     }
 
     private Post findPost(Long postId) {

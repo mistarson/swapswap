@@ -32,4 +32,12 @@ public interface PostService {
      * @return Map 형식으로 이루어져 있으며 Key 에는 Post Id가, Value 에는 PostGetListResponseDto 가 들어갑니다.
      */
     Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable);
+
+    /**
+     * 게시글 찜 기능입니다.
+     * favorite 은 토글로 작동합니다.
+     * @param member Favorite 은 Member 와 Post 다대다 관계로, Favorite 에 member 를 등록하기 위해 사용합니다.
+     * @param postId 위와 같은 맥락입니다.
+     */
+    void updatePostFavorite(Member member, Long postId);
 }
