@@ -33,6 +33,7 @@ class FavoriteServiceImplV1UnitTest {
 
     @Nested
     class IsFavoriteTestList {
+
         @Test
         @DisplayName("찜 되어 있는지 조회 - 성공 / 찜 안 함")
         void isFavorite_Success_No_Favorite() {
@@ -59,6 +60,7 @@ class FavoriteServiceImplV1UnitTest {
 
     @Nested
     class UpdateFavoriteTestList {
+
         @Test
         @DisplayName("찜 업데이트 - 성공 / 찜 함")
         void updateFavorite_Success_Favorite() {
