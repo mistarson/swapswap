@@ -75,7 +75,6 @@ class FavoriteServiceImplV1UnitTest {
         @DisplayName("찜 업데이트 - 성공 / 찜 안 함")
         void updateFavorite_Success_No_Favorite() {
             // Given
-            Favorite favorite = Mockito.mock(Favorite.class);
             when(favoriteRepository.findByMemberAndPost(member, post)).thenReturn(Optional.empty());
             // When
             favoriteService.updateFavorite(member, post);
