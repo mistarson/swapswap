@@ -5,10 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 public class JwtCookieManager {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -38,9 +36,5 @@ public class JwtCookieManager {
         Cookie jwtCookie = createJwtCookie(null);
         jwtCookie.setMaxAge(0);
         response.addCookie(jwtCookie);
-    }
-
-    public static void deleteJwtCookies(HttpServletResponse res) {
-        expireTokenCookie(res);
     }
 }

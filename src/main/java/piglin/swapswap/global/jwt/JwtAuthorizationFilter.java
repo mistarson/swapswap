@@ -22,13 +22,10 @@ import piglin.swapswap.global.security.UserDetailsServiceImpl;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final JwtCookieManager jwtCookieManager;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, JwtCookieManager jwtCookieManager,
-            UserDetailsServiceImpl userDetailsService) {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
-        this.jwtCookieManager = jwtCookieManager;
         this.userDetailsService = userDetailsService;
     }
 
