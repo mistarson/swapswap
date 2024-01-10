@@ -123,17 +123,72 @@ body{
   color: #ffffff;
 }
 
-.grid-container {
-  padding: 10px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.post-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
 }
-.grid-item {
-  border: 1px solid #ddd;
-  padding: 10px;
+
+.post-card {
+  position: relative;
+  width: calc(33.333% - 40px);
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
+
+/* 게시글 카드 링크에 대한 스타일 */
+.post-card a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 텍스트 색상을 상속받음 */
+}
+
+.post-card a:hover {
+  text-decoration: none; /* 호버 상태에서도 밑줄이 나타나지 않도록 함 */
+  color: inherit; /* 호버 상태에서도 텍스트 색상을 상속받음 */
+}
+
+.post-card button {
+  position: absolute;
+  top: 10px; /* 버튼을 상단으로부터 10px 떨어지게 위치 */
+  right: 10px; /* 버튼을 우측으로부터 10px 떨어지게 위치 */
+  background: none; /* 기본 배경 제거 */
+  border: none; /* 기본 테두리 제거 */
+  font-size: 1.5em; /* 아이콘 크기 */
+  cursor: pointer; /* 마우스 오버시 커서 변경 */
+}
+
+.post-image-container {
+  height: 300px; /* 이미지 컨테이너의 고정 높이 설정 */
+  width: 100%; /* 이미지가 전체 너비를 차지하도록 설정 */
+  overflow: hidden; /* 이미지가 컨테이너를 벗어나지 않도록 설정 */
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.post-title {
+  font-size: 1.5em; /* 제목 크기 */
+  color: #333; /* 제목 색상 */
+  margin: 16px 0; /* 상하 여백 */
+}
+
+.post-details {
+  font-size: 1em; /* 상세정보 크기 */
+  color: #666; /* 상세정보 색상 */
+  margin-bottom: 16px; /* 하단 여백 */
+}
+
 img {
   width: 100%;
   max-width: 100%;
@@ -143,6 +198,27 @@ img {
 .text-muted {
   color: #666;
   font-size: 0.8em;
+}
+
+
+.post-stats {
+  display: flex;
+  justify-content: space-around; /* 내용을 공간에 균등하게 분배 */
+  align-items: center;
+  padding: 10px;
+  font-size: 0.9em; /* 글꼴 크기 축소 */
+  color: #666; /* 회색 글꼴 */
+}
+
+.view-count,
+.favorite-count,
+.modified-date {
+  margin: 5px 0;
+}
+
+.modified-date:before {
+  content: ''; /* 날짜 앞에는 점을 추가하지 않음 */
+  margin-right: 0;
 }
 
 /**
