@@ -74,7 +74,7 @@ public class PostController {
     public ResponseEntity<?> updatePostFavorite(@AuthMember Member member, @PathVariable Long postId) {
 
         if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         postService.updatePostFavorite(member, postId);
