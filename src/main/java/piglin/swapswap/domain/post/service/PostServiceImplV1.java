@@ -2,9 +2,12 @@ package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
@@ -72,18 +75,18 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Map<Long, PostGetListResponseDto> getPostList(Member member) {
+    public Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
 
-        List<Post> postList = postRepository.findAllByIsDeletedIsFalseOrderByModifiedTime();
+        Page<Post> postList = postRepository.findAllByIsDeletedIsFalse(pageable);
 
-        Map<Long, PostGetListResponseDto> responseDtoMap = new HashMap<>();
+        Map<Long, PostGetListResponseDto> responseDtoMap = new LinkedHashMap<>();
 
         for(Post post : postList) {
             Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
             boolean favoriteStatus = false;
 
             if (member != null) {
-                favoriteStatus = favoriteService.findFavorite(post, member);
+                favoriteStatus = favoriteService.isFavorite(post, member);
             }
 
             PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus);
