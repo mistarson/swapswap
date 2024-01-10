@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import piglin.swapswap.domain.member.entity.Member;
@@ -35,5 +36,13 @@ public class PostController {
                 new PostCreateRequestDto(null, null, null, null));
 
         return "post/postWrite";
+    }
+
+    @GetMapping("/{postId}")
+    public String getPost(@PathVariable Long postId, Model model, @AuthMember Member member) {
+
+        model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
+
+        return "post/post";
     }
 }
