@@ -58,13 +58,17 @@ public class PostServiceImplV1 implements PostService {
         Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
 
         boolean favoriteStatus = false;
-        if (member != null) {
-            favoriteStatus = favoriteService.findFavorite(post, member);
+        if (isMemberLoggedIn(member)) {
+            favoriteStatus = favoriteService.isFavorite(post, member);
         }
 
         post.upViewCnt();
 
         return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
+    }
+
+    private boolean isMemberLoggedIn(Member member) {
+        return member != null;
     }
 
     @Override

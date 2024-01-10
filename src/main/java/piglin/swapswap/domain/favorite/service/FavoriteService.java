@@ -5,7 +5,7 @@ import piglin.swapswap.domain.post.entity.Post;
 
 public interface FavoriteService {
 
-    boolean findFavorite(Post post, Member member);
+    boolean isFavorite(Post post, Member member);
 
     Long getPostFavoriteCnt(Post post);
 }

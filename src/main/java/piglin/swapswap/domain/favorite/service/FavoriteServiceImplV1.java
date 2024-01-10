@@ -15,7 +15,7 @@ public class FavoriteServiceImplV1 implements FavoriteService{
     private final FavoriteRepository favoriteRepository;
 
     @Override
-    public boolean findFavorite(Post post, Member member) {
+    public boolean isFavorite(Post post, Member member) {
         Optional<Favorite> favorite = favoriteRepository.findByMemberAndPost(member, post);
 
         return favorite.isPresent();
