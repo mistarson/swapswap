@@ -153,7 +153,7 @@ class PostServiceImplV1UnitTest {
             }
 
             @Test
-            @DisplayName("게시글 단 건 조회 - 성공")
+            @DisplayName("게시글 단 건 조회 - 성공 / 로그인 한 사용자")
             void getPost_Success() {
                 // Given
                 Long postId = 1L;
@@ -163,6 +163,27 @@ class PostServiceImplV1UnitTest {
                 when(favoriteService.findFavorite(post, member)).thenReturn(false);
                 // When
                 PostGetResponseDto result = postService.getPost(postId, member);
+                // Then
+                assertThat(result).isNotNull();
+                assertThat(result.author()).isEqualTo(member.getNickname());
+                assertThat(result.title()).isEqualTo(title);
+                assertThat(result.content()).isEqualTo(content);
+                assertThat(result.category()).isEqualTo(Category.ELECTRONICS.getName());
+                assertThat(result.favoriteCnt()).isEqualTo(1L);
+                assertThat(result.favoriteStatus()).isEqualTo(false);
+            }
+
+            @Test
+            @DisplayName("게시글 단 건 조회 - 성공 / 로그인 안 한 사용자")
+            void getPost_Success_Not_Login() {
+                // Given
+                Member notLoginMember = null;
+                Long postId = 1L;
+                when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(
+                        Optional.of(post));
+                when(favoriteService.getPostFavoriteCnt(post)).thenReturn(1L);
+                // When
+                PostGetResponseDto result = postService.getPost(postId, notLoginMember);
                 // Then
                 assertThat(result).isNotNull();
                 assertThat(result.author()).isEqualTo(member.getNickname());
