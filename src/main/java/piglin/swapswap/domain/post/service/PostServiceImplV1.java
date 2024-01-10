@@ -53,7 +53,7 @@ public class PostServiceImplV1 implements PostService {
         Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
 
         boolean favoriteStatus = false;
-        if (member.getId() != null) {
+        if (member != null) {
             favoriteStatus = favoriteService.findFavorite(post, member);
         }
 
