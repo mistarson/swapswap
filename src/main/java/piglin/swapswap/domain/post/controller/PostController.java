@@ -12,6 +12,8 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +30,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/write")
-    public String getPostWriteForm(Model model) {
+    public String getPostWriteForm(Model model, @AuthMember Member member) {
+
+        if (member == null) {
+            return "redirect:/";
+        }
 
         model.addAttribute("PostCreateRequestDto",
                 new PostCreateRequestDto(null, null, null, null));
