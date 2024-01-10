@@ -55,6 +55,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/login", "/api/login/**").permitAll()
                         .requestMatchers("/", "/posts/{postId}").permitAll()
+                        .requestMatchers("/posts/{postId}/favorite").permitAll()
                         .requestMatchers("/posts/write").authenticated()
                         .anyRequest().authenticated()
         );

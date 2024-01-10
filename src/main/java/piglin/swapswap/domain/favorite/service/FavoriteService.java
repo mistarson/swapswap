@@ -8,4 +8,6 @@ public interface FavoriteService {
     boolean isFavorite(Post post, Member member);
 
     Long getPostFavoriteCnt(Post post);
+
+    void updateFavorite(Member member, Post post);
 }
