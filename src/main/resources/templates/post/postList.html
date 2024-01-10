@@ -31,9 +31,27 @@
         </div>
       </a>
       <button
-          th:text="${entry.value.favoriteStatus()} == true ? '💙' : '🤍'"></button>
+          th:data-post-id="${entry.key}"
+          onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+          th:text="${entry.value.favoriteStatus()} == true ? '💙' : '🤍'"
+          type="button"
+      ></button>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    function toggleFavorite(postId) {
+      console.log("테스트" + postId);
+      $.ajax({
+        url: '/posts/' + postId + '/favorite',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function() {
+          location.reload()
+        }
+      });
+    }
+  </script>
 </div>
 </body>
 </html>

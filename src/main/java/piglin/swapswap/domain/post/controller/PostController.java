@@ -6,6 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,8 +71,14 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}/favorite")
-    public void updatePostFavorite(@AuthMember Member member, @PathVariable Long postId) {
+    public ResponseEntity<?> updatePostFavorite(@AuthMember Member member, @PathVariable Long postId) {
+
+        if (member == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         postService.updatePostFavorite(member, postId);
+
+        return ResponseEntity.ok().build();
     }
 }
