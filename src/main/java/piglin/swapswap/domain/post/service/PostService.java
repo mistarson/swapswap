@@ -1,7 +1,9 @@
 package piglin.swapswap.domain.post.service;
 
+import java.util.Map;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
 public interface PostService {
@@ -23,4 +25,11 @@ public interface PostService {
      */
     PostGetResponseDto getPost(Long postId, Member member);
 
+    /**
+     * 게시글 목록 조회 메소드입니다.
+     * Map 형식으로 이루어져 있으며 Key에는 Post Id가 들어갑니다.
+     * @param member favorite 상태를 나타내기 위한 member 매개변수 입니다.
+     * @return
+     */
+    Map<Long, PostGetListResponseDto> getPostList(Member member);
 }
