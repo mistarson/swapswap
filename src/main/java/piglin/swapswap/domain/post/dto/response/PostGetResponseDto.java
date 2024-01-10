@@ -11,7 +11,7 @@ public record PostGetResponseDto(
         Long viewCnt,
         Long upCnt,
         Long favoriteCnt,
-        String modifiedTime,
+        String modifiedUpTime,
         boolean favoriteStatus
 ) {
 

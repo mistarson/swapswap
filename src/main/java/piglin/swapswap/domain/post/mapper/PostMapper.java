@@ -33,14 +33,14 @@ public class PostMapper {
                 post.getContent(),
                 post.getCategory().getName(), post.getImageUrl(), post.getViewCnt(),
                 post.getUpCnt(), favoriteCnt,
-                post.getModifiedTime().format(DateTimeFormatter.ISO_DATE_TIME), favoriteStatus);
+                post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME), favoriteStatus);
     }
 
     public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
             boolean favoriteStatus) {
 
         return new PostGetListResponseDto(post.getTitle(), post.getImageUrl().get(0).toString(),
-                post.getModifiedTime().format(DateTimeFormatter.ISO_DATE_TIME), post.getViewCnt(),
+                post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME), post.getViewCnt(),
                 favoriteCnt, favoriteStatus);
     }
 }
