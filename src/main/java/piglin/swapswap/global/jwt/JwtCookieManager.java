@@ -28,6 +28,11 @@ public class JwtCookieManager {
 
     public static void deleteJwtCookies(HttpServletResponse res) {
 
+        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, ""); // Name-Value
+        cookie.setPath("/");
+
+        // Response 객체에 Cookie 추가
+        res.addCookie(cookie);
     }
 
 }
