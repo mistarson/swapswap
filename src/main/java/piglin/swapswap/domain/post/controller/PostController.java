@@ -33,8 +33,7 @@ public class PostController {
     public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
             , @AuthMember Member member) {
 
-        return "redirect:/posts/" + postService.createPost(member, requestDto)
-                                               .toString();
+        return "redirect:/posts/" + postService.createPost(member, requestDto);
     }
 
     @GetMapping("/posts/write")
@@ -90,7 +89,7 @@ public class PostController {
 
         postService.updatePost(postId, member, requestDto);
 
-        return "redirect:/posts/" + postId.toString();
+        return "redirect:/posts/" + postId;
     }
 
     @GetMapping("/posts/{postId}/write")
@@ -101,9 +100,11 @@ public class PostController {
             return "redirect:/";
         }
 
-        model.addAttribute("PostCreateRequestDto",
-                new PostCreateRequestDto(null, null, null, null));
+        model.addAttribute("PostUpdateRequestDto",
+                new PostUpdateRequestDto(null, null, null, null));
 
-        return "post/postWrite";
+        model.addAttribute("PostId", postId);
+
+        return "post/postUpdateWrite";
     }
 }
