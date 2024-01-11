@@ -114,10 +114,10 @@ public class PostController {
     }
 
     @DeleteMapping("/posts/{postId}")
-    public String deletePost(@AuthMember Member member, @PathVariable Long postId) {
+    public ResponseEntity<?> deletePost(@AuthMember Member member, @PathVariable Long postId) {
 
         postService.deletePost(member, postId);
 
-        return "redirect:/";
+        return ResponseEntity.ok().build();
     }
 }
