@@ -110,6 +110,10 @@ public class PostServiceImplV1 implements PostService {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
         }
 
+        if (post.getMember() != member) {
+            throw new BusinessException(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION);
+        }
+
         imageUrlListSizeCheck(requestDto.imageUrlList());
 
         s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
