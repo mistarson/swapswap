@@ -151,6 +151,8 @@ public class PostServiceImplV1 implements PostService {
 
         checkPostWriter(member, post);
 
+        s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
+
         post.deletePost();
     }
 
