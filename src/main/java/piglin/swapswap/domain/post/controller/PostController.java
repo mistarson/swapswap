@@ -98,6 +98,8 @@ public class PostController {
     public String getPostUpdateWriteForm(Model model, @AuthMember Member member,
             @PathVariable Long postId) {
 
+        postService.getPostUpdateWriteForm(member, postId);
+
         if (member == null) {
             return "redirect:/";
         }

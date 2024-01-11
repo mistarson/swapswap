@@ -136,6 +136,16 @@ public class PostServiceImplV1 implements PostService {
         favoriteService.updateFavorite(member, post);
     }
 
+    @Override
+    public void getPostUpdateWriteForm(Member member, Long postId) {
+
+        Post post = findPost(postId);
+
+        if (post.getMember() != member) {
+            throw new BusinessException(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION);
+        }
+    }
+
     private Post findPost(Long postId) {
         return postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION)

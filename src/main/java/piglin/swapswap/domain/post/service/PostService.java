@@ -43,4 +43,6 @@ public interface PostService {
     void updatePostFavorite(Member member, Long postId);
 
     void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto);
+
+    void getPostUpdateWriteForm(Member member, Long postId);
 }
