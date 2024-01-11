@@ -54,6 +54,8 @@ public class PostController {
 
         model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
 
+        model.addAttribute("PostId", postId);
+
         return "post/post";
     }
 
