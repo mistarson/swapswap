@@ -35,7 +35,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
-        imageUrlListSizeCheck(requestDto.imageUrlList());
+        checkImageUrlListSize(requestDto.imageUrlList());
 
         if (member == null) {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
@@ -58,6 +58,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
+
         Post post = findPost(postId);
 
         Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
@@ -120,7 +121,7 @@ public class PostServiceImplV1 implements PostService {
 
         checkPostWriter(member, post);
 
-        imageUrlListSizeCheck(requestDto.imageUrlList());
+        checkImageUrlListSize(requestDto.imageUrlList());
 
         s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
 
@@ -145,18 +146,20 @@ public class PostServiceImplV1 implements PostService {
 
 
     private void checkPostWriter(Member member, Post post) {
+
         if (!post.getMember().getId().equals(member.getId())) {
             throw new BusinessException(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION);
         }
     }
 
     private Post findPost(Long postId) {
+
         return postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION)
         );
     }
 
-    private void imageUrlListSizeCheck(List<MultipartFile> imageUrlList) {
+    private void checkImageUrlListSize(List<MultipartFile> imageUrlList) {
 
         if (imageUrlList.size() < PostConstant.IMAGE_MIN_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MIN_SIZE);
