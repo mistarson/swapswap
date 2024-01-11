@@ -143,7 +143,16 @@ public class PostServiceImplV1 implements PostService {
         favoriteService.updateFavorite(member, post);
     }
 
+    @Override
+    @Transactional
+    public void deletePost(Member member, Long postId) {
 
+        Post post = findPost(postId);
+
+        checkPostWriter(member, post);
+
+        post.deletePost();
+    }
 
     private void checkPostWriter(Member member, Post post) {
 

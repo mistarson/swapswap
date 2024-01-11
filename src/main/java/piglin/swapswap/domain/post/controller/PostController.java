@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -110,5 +111,13 @@ public class PostController {
         model.addAttribute("PostId", postId);
 
         return "post/postUpdateWrite";
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public String deletePost(@AuthMember Member member, @PathVariable Long postId) {
+
+        postService.deletePost(member, postId);
+
+        return "redirect:/";
     }
 }
