@@ -60,7 +60,10 @@ public class S3ImageServiceImplV1 implements S3ImageService {
             String[] urlSplit = originalImageUrl.get(i).toString().split("/");
             String objectName = urlSplit[urlSplit.length - 1];
 
-            amazonS3.deleteObject(bucket, objectName);
+            if(amazonS3.doesObjectExist(bucket, objectName)) {
+                amazonS3.deleteObject(bucket, objectName);
+            }
+
         }
     }
 }

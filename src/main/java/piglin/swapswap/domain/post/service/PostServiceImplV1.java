@@ -101,6 +101,14 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
+    public void getPostUpdateWriteForm(Member member, Long postId) {
+
+        Post post = findPost(postId);
+
+        checkPostWriter(member, post);
+    }
+
+    @Override
     @Transactional
     public void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto) {
 
@@ -110,9 +118,7 @@ public class PostServiceImplV1 implements PostService {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
         }
 
-        if (post.getMember() != member) {
-            throw new BusinessException(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION);
-        }
+        checkPostWriter(member, post);
 
         imageUrlListSizeCheck(requestDto.imageUrlList());
 
@@ -136,12 +142,10 @@ public class PostServiceImplV1 implements PostService {
         favoriteService.updateFavorite(member, post);
     }
 
-    @Override
-    public void getPostUpdateWriteForm(Member member, Long postId) {
 
-        Post post = findPost(postId);
 
-        if (post.getMember() != member) {
+    private void checkPostWriter(Member member, Post post) {
+        if (!post.getMember().getId().equals(member.getId())) {
             throw new BusinessException(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION);
         }
     }
