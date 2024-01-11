@@ -20,6 +20,7 @@
           <div class="author-details">
             <span class="author-name" th:text="${PostGetResponseDto.author()}"></span>
           </div>
+          <div class="post-update-button"> <a th:href= "@{/posts/{PostId}/write(PostId=${PostId})}">수정하기</a> </div>
           <div class="favorite-action">
             <button
                 onclick="toggleFavorite(this.getAttribute('data-post-id'))"

@@ -6,6 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +30,11 @@ import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.repository.PostRepository;
+import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 import piglin.swapswap.global.s3.S3ImageServiceImplV1;
 
@@ -203,6 +207,111 @@ class PostServiceImplV1UnitTest {
             assertThatThrownBy(() -> postService.getPost(postId, member))
                     .isInstanceOf(RuntimeException.class)
                     .hasMessageContaining(ErrorCode.NOT_FOUND_POST_EXCEPTION.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("게시글 수정 테스트 목록")
+    class updatePostTestList {
+
+        @Mock
+        private Post post;
+
+        @Test
+        @DisplayName("게시글 수정 - 실패 / 이미지는 최소 n장 업로드 해야합니다.")
+        void updatePost_Fail_Not_Upload_Image() {
+            // Given
+            List<MultipartFile> imageUrlList = new ArrayList<>();
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+                    "내용",
+                    imageUrlList);
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
+            // When - Then
+            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
+                                               .isInstanceOf(BusinessException.class)
+                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
+        }
+        @Test
+        @DisplayName("게시글 수정 - 실패 / 이미지는 최소 n장 업로드 해야합니다.")
+        void updatePost_Fail_Image_Min() {
+            // Given
+            List<MultipartFile> imageUrlList = new ArrayList<>();
+
+            for(int i = 0; i < PostConstant.IMAGE_MIN_SIZE-1; i++) {
+                imageUrlList.add(Mockito.mock(MultipartFile.class));
+            }
+
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+                    "내용",
+                    imageUrlList);
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
+            // When - Then
+            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
+                                               .isInstanceOf(BusinessException.class)
+                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
+        }
+
+        @Test
+        @DisplayName("게시글 수정 - 실패 / 이미지는 최대 n장 업로드 해야합니다.")
+        void updatePost_Fail_Image_Max() {
+            // Given
+            List<MultipartFile> imageUrlList = new ArrayList<>();
+
+            for(int i = 0; i < PostConstant.IMAGE_MAX_SIZE+1; i++) {
+                imageUrlList.add(Mockito.mock(MultipartFile.class));
+            }
+
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+                    "내용",
+                    imageUrlList);
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
+            // When - Then
+            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
+                                               .isInstanceOf(BusinessException.class)
+                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MAX_SIZE.getMessage());
+        }
+
+        @Test
+        @DisplayName("게시글 수정 - 실패 / 로그인 한 사용자만 수정할 수 있습니다")
+        void updatePost_Fail_Image_Not_Logged_In_Member() {
+            // Given
+            member = null;
+            List<MultipartFile> imageUrlList = new ArrayList<>();
+            imageUrlList.add(Mockito.mock(MultipartFile.class));
+
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+                    "내용",
+                    imageUrlList);
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
+            // When - Then
+            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.WRITE_ONLY_USER.getMessage());
+        }
+
+        @Test
+        @DisplayName("게시글 수정 - 실패 / 자신의 게시글만 수정할 수 있습니다")
+        void updatePost_Fail_Your_Not_Host() {
+            // Given
+            post = Post.builder().member(member).build();
+            Member anotherMember = Member.builder().id(2L).build();
+
+            List<MultipartFile> imageUrlList = new ArrayList<>();
+            imageUrlList.add(Mockito.mock(MultipartFile.class));
+
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+                    "내용",
+                    imageUrlList);
+            Long postId = 1L;
+            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
+            // When - Then
+            assertThatThrownBy(()-> postService.updatePost(postId, anotherMember, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION.getMessage());
         }
     }
 
