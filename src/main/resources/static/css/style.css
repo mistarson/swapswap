@@ -370,17 +370,6 @@ img {
   color: #333;
 }
 
-.post-update-button {
-  border-radius: 20px;
-  border: #333333 1px solid;
-  cursor: pointer;
-  transition: border 0.3s;
-}
-
-.post-update-button :hover {
-  border: #00AADC 1px solid;
-}
-
 .favorite-action button {
   padding: 5px 15px;
   border-radius: 20px;
@@ -393,6 +382,40 @@ img {
 .favorite-action button:hover {
   border: 1px solid #00AADC;
 }
+
+.post-update-button a, .post-delete-button a {
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  border: 1px solid #333333;
+  display: inline-block;
+}
+
+/* 수정 버튼 스타일 */
+.post-update-button a {
+  background-color: #ffffff; /* 녹색 배경 */
+}
+
+.post-update-button a:hover {
+  color: white;
+  background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+/* 삭제 버튼 스타일 */
+.post-delete-button a {
+  background-color: #ffffff;
+}
+
+.post-delete-button a:hover {
+  color: white;
+  background-color: #da190b; /* 호버 시 색상 변경 */
+}
+
 
 .post-title-meta-section {
   padding: 20px;
