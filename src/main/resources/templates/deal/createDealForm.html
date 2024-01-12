@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
       layout:decorate="~{common/layout/layout}">
+<link rel="stylesheet" type="text/css" href="your-stylesheet.css">
 <body>
 <div layout:fragment="content">
   <form th:action="@{/deals/2}" th:object="${dealCreateRequestDto}" method="post"
@@ -9,24 +10,22 @@
     <div class="write-bar-container">
       <div class="write-bar">
         <div class="write-bar-explain">거래 추가 요금</div>
-        <input class="write-bar-title-input" type="number" th:field="*{firstExtraFee}"
-               required>
+        <input class="write-bar-title-input" type="number" th:field="*{firstExtraFee}" required>
       </div>
 
       <div class="write-bar">
         <div class="write-bar-explain">두번 째 거래 추가요금</div>
-        <input class="write-bar-title-input" type="number" th:field="*{secondExtraFee}"
-               required>
+        <input class="write-bar-title-input" type="number" th:field="*{secondExtraFee}" required>
       </div>
 
       <div class="write-bar">
         <div class="write-bar-explain">내 게시글 ID</div>
-        <input class="write-bar-title-input" type="number" th:field="*{firstPostIdList}" required>
+        <input class="write-bar-title-input" type="text" th:field="*{secondPostIdList}" required>
       </div>
 
       <div class="write-bar">
         <div class="write-bar-explain">상대 게시글 ID</div>
-        <input class="write-bar-title-input" type="number" th:field="*{secondPostIdList}" required>
+        <input class="write-bar-title-input" type="text" th:field="*{secondPostIdList}" required>
       </div>
       <button type="submit" class="write-complete-button">거래 요청하기</button>
     </div>
