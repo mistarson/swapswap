@@ -74,4 +74,9 @@ public class Post extends BaseTime {
         this.imageUrl = imageUrl;
         this.category = category;
     }
+
+    public void deletePost() {
+
+        this.isDeleted = true;
+    }
 }

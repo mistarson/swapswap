@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.post.event.DeleteImageUrlEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
@@ -31,6 +33,7 @@ public class PostServiceImplV1 implements PostService {
     private final FavoriteService favoriteService;
     private final PostRepository postRepository;
     private final S3ImageServiceImplV1 s3ImageServiceImplV1;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
@@ -143,7 +146,17 @@ public class PostServiceImplV1 implements PostService {
         favoriteService.updateFavorite(member, post);
     }
 
+    @Override
+    @Transactional
+    public void deletePost(Member member, Long postId) {
 
+        Post post = findPost(postId);
+        checkPostWriter(member, post);
+
+        post.deletePost();
+
+        applicationEventPublisher.publishEvent(new DeleteImageUrlEvent(post.getImageUrl()));
+    }
 
     private void checkPostWriter(Member member, Post post) {
 
