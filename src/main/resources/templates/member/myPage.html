@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwapSwap</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+      href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300&family=Nanum+Gothic:wght@400;700&display=swap"
+      rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <link rel="icon" href="/images/logo/swapswaphomepagelogo.png">
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="myPage_profile">
+    <div class="myPage_profile_title">
+      <p>프로필</p>
+    </div>
+    <div class="profile_userinfo">
+      <div class="myPage_nickname">
+        <div class="nick">
+          닉네임 :
+        </div>
+        <div class="name">
+          <span class="user_name" th:text="${#authentication.principal.nickname}"></span>
+        </div>
+      </div>
+      <div class="myPage_email">
+        <div class="e">
+          이메일 :
+        </div>
+        <div class="mail">
+          <span class="user_email" th:text="${#authentication.name}"></span>
+        </div>
+      </div>
+    </div>
+    <div class="check_list">
+      <div class="transaction_history">
+        거래내역 확인
+      </div>
+      <div class="my_wallet">
+        내 지갑 확인
+      </div>
+      <div class="coupon">
+        쿠폰함 확인
+      </div>
+      <div class="favorite">
+        찜 목록 확인
+      </div>
+      <div class="myPage_edit_profile">
+        <a href="/editProfile">프로필 수정</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
