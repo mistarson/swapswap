@@ -376,6 +376,17 @@ img {
   color: #333;
 }
 
+.post-update-button {
+  border-radius: 20px;
+  border: #333333 1px solid;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.post-update-button :hover {
+  border: #00AADC 1px solid;
+}
+
 .favorite-action button {
   padding: 5px 15px;
   border-radius: 20px;

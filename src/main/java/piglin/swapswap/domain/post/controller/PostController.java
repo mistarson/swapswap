@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
+import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -31,8 +33,7 @@ public class PostController {
     public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
             , @AuthMember Member member) {
 
-        return "redirect:/posts/" + postService.createPost(member, requestDto)
-                                               .toString();
+        return "redirect:/posts/" + postService.createPost(member, requestDto);
     }
 
     @GetMapping("/posts/write")
@@ -52,6 +53,8 @@ public class PostController {
     public String getPost(@PathVariable Long postId, Model model, @AuthMember Member member) {
 
         model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
+
+        model.addAttribute("PostId", postId);
 
         return "post/post";
     }
@@ -80,5 +83,32 @@ public class PostController {
         postService.updatePostFavorite(member, postId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/posts/{postId}/write")
+    public String updatePost(@Valid @ModelAttribute PostUpdateRequestDto requestDto
+            , @AuthMember Member member, @PathVariable Long postId) {
+
+        postService.updatePost(postId, member, requestDto);
+
+        return "redirect:/posts/" + postId;
+    }
+
+    @GetMapping("/posts/{postId}/write")
+    public String getPostUpdateWriteForm(Model model, @AuthMember Member member,
+            @PathVariable Long postId) {
+
+        postService.getPostUpdateWriteForm(member, postId);
+
+        if (member == null) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("PostUpdateRequestDto",
+                new PostUpdateRequestDto(null, null, null, null));
+
+        model.addAttribute("PostId", postId);
+
+        return "post/postUpdateWrite";
     }
 }

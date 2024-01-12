@@ -34,6 +34,10 @@ public class Post extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
     @Column(nullable = false, length = 50)
     private String title;
 
@@ -57,14 +61,17 @@ public class Post extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category;
-
     @Column(nullable = false)
     private LocalDateTime modifiedUpTime;
 
     public void upViewCnt() {
         this.viewCnt++;
+    }
+
+    public void updatePost(String title, String content, Map<Integer, Object> imageUrl, Category category) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.category = category;
     }
 }
