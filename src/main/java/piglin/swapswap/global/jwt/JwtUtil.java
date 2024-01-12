@@ -11,10 +11,8 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.Key;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -31,22 +29,18 @@ import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 @Component
 public class JwtUtil {
 
-    // Header KEY 값
+
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String CLAIM_USER_EMAIL = "email";
-    // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
-    private final int TOKEN_TIME = 60; // 60분
+    private final int TOKEN_TIME = 60;
 
-    @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
+    @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-    // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
 
     @PostConstruct
@@ -55,7 +49,6 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    // 토큰 생성
     public String createToken(String email, MemberRoleEnum role) {
 
         Map<String, Object> headers = new HashMap<>();
@@ -66,31 +59,14 @@ public class JwtUtil {
                 Jwts.builder()
                         .setHeader(headers)
                         .claim(CLAIM_USER_EMAIL, email)
-                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                        .setIssuedAt(Date.from(ZonedDateTime.now().toInstant())) // 발급일
+                        .claim(AUTHORIZATION_KEY, role)
+                        .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                         .setExpiration(Date.from(
-                                ZonedDateTime.now().plusMinutes(TOKEN_TIME).toInstant())) // 만료 시간
-                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘
+                                ZonedDateTime.now().plusMinutes(TOKEN_TIME).toInstant()))
+                        .signWith(key, signatureAlgorithm)
                         .compact();
     }
 
-    // JWT Cookie 에 저장
-    public void addJwtToCookie(String token, HttpServletResponse res) {
-        try {
-            token = URLEncoder.encode(token, "utf-8")
-                    .replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value
-            cookie.setPath("/");
-
-            // Response 객체에 Cookie 추가
-            res.addCookie(cookie);
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    // JWT 토큰 substring
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(BEARER_PREFIX.length());
@@ -99,7 +75,6 @@ public class JwtUtil {
         throw new NullPointerException("Not Found Token");
     }
 
-    // 토큰 검증
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -116,12 +91,10 @@ public class JwtUtil {
         return false;
     }
 
-    // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    // HttpServletRequest 에서 Cookie Value : JWT 가져오기
     public String getTokenFromRequest(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
@@ -129,7 +102,7 @@ public class JwtUtil {
                 if (cookie.getName().equals(AUTHORIZATION_HEADER)) {
                     try {
                         return URLDecoder.decode(cookie.getValue(),
-                                "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
+                                "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         return null;
                     }

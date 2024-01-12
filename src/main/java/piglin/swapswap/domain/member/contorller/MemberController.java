@@ -34,6 +34,7 @@ public class MemberController {
         try {
             String accessToken = kakaoServiceImpl.kakaoLogin(code);
             JwtCookieManager.addJwtToCookie(accessToken, response);
+
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -43,24 +44,26 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
-
-        JwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager.expireTokenCookie(response);
 
         return "redirect:/";
     }
 
 
     @PatchMapping("/members/nickname")
-    public void updateNickname(@AuthMember Member member,
+    public String  updateNickname(@AuthMember Member member,
             @Valid @RequestBody MemberNicknameDto requestDto) {
 
         memberService.updateNickname(member, requestDto);
+        return "redirect:/";
     }
 
     @DeleteMapping("/members")
-    public void unregister(@AuthMember Member member, HttpServletResponse response) {
+    public String unregister(@AuthMember Member member, HttpServletResponse response) {
 
         memberService.deleteMember(member);
-        JwtCookieManager.deleteJwtCookies(response);
+        JwtCookieManager.expireTokenCookie(response);
+
+        return "redirect:/";
     }
 }

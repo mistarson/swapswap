@@ -8,8 +8,10 @@ public interface SocialService {
 
     String getToken(String code) throws JsonProcessingException;
 
-    SocialUserInfo getUser(String identifier);
+    SocialUserInfo getUser(String accessToken);
 
     Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo);
+
+    boolean isWithdrawnMember(Member member);
 
 }

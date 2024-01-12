@@ -14,25 +14,27 @@ public class JwtCookieManager {
     public static void addJwtToCookie(String token, HttpServletResponse res) {
         try {
             token = URLEncoder.encode(token, "utf-8")
-                    .replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value
+                    .replaceAll("\\+", "%20");
+            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token);
             cookie.setPath("/");
 
-            // Response 객체에 Cookie 추가
             res.addCookie(cookie);
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage());
         }
     }
 
-    public static void deleteJwtCookies(HttpServletResponse res) {
+    private static Cookie createJwtCookie(String token) {
+        Cookie jwtCookie = new Cookie(AUTHORIZATION_HEADER, token);
+        jwtCookie.setPath("/");
 
-        Cookie cookie = new Cookie(AUTHORIZATION_HEADER, ""); // Name-Value
-        cookie.setPath("/");
-
-        // Response 객체에 Cookie 추가
-        res.addCookie(cookie);
+        return jwtCookie;
     }
 
+    public static void expireTokenCookie(HttpServletResponse response) {
+
+        Cookie jwtCookie = createJwtCookie(null);
+        jwtCookie.setMaxAge(0);
+        response.addCookie(jwtCookie);
+    }
 }
