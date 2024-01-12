@@ -14,7 +14,9 @@ body{
   width: 100%;
   top: 0;
   z-index: 1000;
+  height: 100px;
 }
+
 .header-content {
   display: flex;
   align-items: center;
@@ -87,6 +89,10 @@ body{
   align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
+}
+.header-nav a {
+  text-decoration: none;
+  color: black;
 }
 .login-link {
   padding: 8px 16px;
@@ -418,4 +424,298 @@ img {
 .post-content-actions div {
   font-size: 0.9em;
   color: #666;
+}
+
+
+
+
+
+
+
+/*-----login-----*/
+.signin {
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.signin .signin__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.signin__card h2{
+  padding: 30px;
+  text-align: center;
+}
+
+.signin__card .actions {
+  display: flex;
+  border-top: 1px solid #ddd;
+  height: 400px;
+}
+
+.signin__card .actions img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 20px;
+  float: left;
+  vertical-align: middle;
+}
+.signin__card .actions p{
+  font-size: 18px;
+  margin-top: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 50px;
+  font-weight: 900;
+}
+.signin__card .actions a {
+  padding: 5px;
+  margin: 20px 20px;
+  height: 70px;
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #fddc3a;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+.signin__card .actions a:last-child{
+  border-right: none;
+}
+.signin__card .actions a:hover{
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions a {
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
+
+/*------myPage 중 유저정보-------*/
+.myPage_profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.myPage_profile .myPage_profile_title {
+  width: 500px;
+  margin-bottom: 40px;
+  font-size: 25px;
+  font-weight: 900;
+  border-bottom: 1px solid #ccc;
+}
+
+.myPage_profile .profile_userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  font-size: 20px;
+}
+
+.profile_userinfo .myPage_nickname,
+.profile_userinfo .myPage_email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.profile_userinfo .myPage_nickname .nick{
+  width: 100px;
+  text-align: left;
+  margin-left: 20px;
+}
+.profile_userinfo .myPage_email .e {
+  margin-left: 20px;
+  width: 180px;
+  text-align: left;
+}
+.profile_userinfo .myPage_nickname .name,
+.profile_userinfo .myPage_email .mail {
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .nickname .name,
+.profile_userinfo .myPage_email .mail {
+  text-align: left;
+  margin-left: auto;
+}
+
+
+
+/*---------myPage 중 확인내역--------------*/
+.check_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.check_list > div {
+  margin: 10px 0;
+}
+.check_list div {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 250px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+}
+
+.check_list .myPage_edit_profile {
+  margin-top: 50px;
+}
+
+.check_list a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+
+/*----------editProfile-------------*/
+.edit_profile .edit p.label {
+  display: inline-block;
+  margin: 0;
+}
+
+.edit_profile {
+  margin-top: 120px;
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.edit_profile__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.edit_profile__card h2{
+  padding: 30px;
+  text-align: center;
+  margin: 0 30px 0 30px;
+
+}
+.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.edit .label {
+  display: flex;
+  align-items: center;
+  border-top: 2px #555 solid;
+  width: 400px;
+}
+
+.edit h2 {
+  margin-right: 10px;
+}
+
+.edit span.edit_nickname {
+  font-weight: bold;
+  width: 150px;
+  text-align: center;
+  color: #808080;
+  cursor: pointer;
+  border-bottom: 2px solid #808080;
+
+
+}
+.edit .buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.buttons .editbutton {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+.edit .buttons .editbutton a:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .cancelbutton {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+.edit .buttons .cancelbutton a:hover {
+  background-color: #b0b0b0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a {
+  margin: 10px;
+}
+
+.buttons a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
 }

@@ -10,16 +10,23 @@ public class MainMvcController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/member/login";
     }
-    @GetMapping("/home")
+    @GetMapping("/main")
     public String mainPage() {
-        return "index";
+        return "main";
     }
-
     @GetMapping("/userinfo")
     public String userinfo() {
-        return "userinfo";
+        return "/member/userinfo";
     }
 
+    @GetMapping("/myPage")
+    public String myPage() {
+        return "/member/myPage";
+    }
+    @GetMapping("/editProfile")
+    public String editProfile() {
+        return "/member/editProfile";
+    }
 }

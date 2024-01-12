@@ -55,7 +55,7 @@ public class MemberController {
             @Valid @RequestBody MemberNicknameDto requestDto) {
 
         memberService.updateNickname(member, requestDto);
-        return "redirect:/userinfo";
+        return "redirect:/";
     }
 
     @DeleteMapping("/members")
