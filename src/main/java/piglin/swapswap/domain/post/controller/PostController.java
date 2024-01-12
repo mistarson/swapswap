@@ -69,7 +69,7 @@ public class PostController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
 
-        model.addAttribute("PostGetListResponseDtoMap", postService.getPostList(member, pageable));
+        model.addAttribute("PostGetListResponseDtoPage", postService.getPostList(member, pageable));
 
         return "post/postList";
     }

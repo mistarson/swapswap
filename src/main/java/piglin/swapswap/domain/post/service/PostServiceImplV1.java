@@ -1,8 +1,8 @@
 package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -81,13 +81,13 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
+    public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
 
-        Page<Post> postList = postRepository.findAllByIsDeletedIsFalse(pageable);
+        Page<Post> postPage = postRepository.findAllByIsDeletedIsFalse(pageable);
 
-        Map<Long, PostGetListResponseDto> responseDtoMap = new LinkedHashMap<>();
+        List<PostGetListResponseDto> responseDtoList = new ArrayList<>();
 
-        for (Post post : postList) {
+        for (Post post : postPage) {
             Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
             boolean favoriteStatus = false;
 
@@ -95,13 +95,10 @@ public class PostServiceImplV1 implements PostService {
                 favoriteStatus = favoriteService.isFavorite(post, member);
             }
 
-            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt,
-                    favoriteStatus);
-
-            responseDtoMap.put(post.getId(), dto);
+            responseDtoList.add(PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus));
         }
 
-        return responseDtoMap;
+        return PostMapper.toDtoList(responseDtoList, pageable, postPage.getTotalElements());
     }
 
     @Override

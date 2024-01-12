@@ -4,6 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record PostGetListResponseDto(
+        Long postId,
+        Long memberId,
         String title,
         String thumbnailUrl,
         String modifiedUpTime,
