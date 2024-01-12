@@ -149,7 +149,7 @@ class PostServiceImplV1UnitTest {
                 when(post.getCategory()).thenReturn(Category.ELECTRONICS);
                 when(post.getViewCnt()).thenReturn(0L);
                 when(post.getUpCnt()).thenReturn(0L);
-                when(post.getModifiedTime()).thenReturn(LocalDateTime.now());
+                when(post.getModifiedUpTime()).thenReturn(LocalDateTime.now());
                 when(post.getImageUrl()).thenReturn(imageUrl);
             }
 
@@ -216,6 +216,11 @@ class PostServiceImplV1UnitTest {
 
         @Mock
         private Post post;
+
+        @BeforeEach
+        void setUp() {
+            post = Post.builder().member(member).build();
+        }
 
         @Test
         @DisplayName("게시글 수정 - 실패 / 이미지는 최소 n장 업로드 해야합니다.")
