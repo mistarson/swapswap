@@ -45,4 +45,6 @@ public interface PostService {
     void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto);
 
     void getPostUpdateWriteForm(Member member, Long postId);
+
+    void deletePost(Member member, Long postId);
 }
