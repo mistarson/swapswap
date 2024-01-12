@@ -11,10 +11,8 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.Key;
 import java.time.ZonedDateTime;
 import java.util.Base64;
@@ -67,32 +65,6 @@ public class JwtUtil {
                                 ZonedDateTime.now().plusMinutes(TOKEN_TIME).toInstant()))
                         .signWith(key, signatureAlgorithm)
                         .compact();
-    }
-    public void expireTokenCookie(HttpServletResponse response) {
-
-        Cookie jwtCookie = createJwtCookie(null);
-        jwtCookie.setMaxAge(0);
-        response.addCookie(jwtCookie);
-    }
-
-    private Cookie createJwtCookie(String token) {
-        Cookie jwtCookie = new Cookie(AUTHORIZATION_HEADER, token);
-        jwtCookie.setPath("/");
-
-        return jwtCookie;
-    }
-    public void addJwtToCookie(String token, HttpServletResponse res) {
-        try {
-            token = URLEncoder.encode(token, "utf-8")
-                    .replaceAll("\\+", "%20");
-
-            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token);
-            cookie.setPath("/");
-
-            res.addCookie(cookie);
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
-        }
     }
 
     public String substringToken(String tokenValue) {

@@ -1,25 +1,45 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<head>
+  <title>SwapSwap</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="/js/nav.js"></script>
+</head>
+<body>
 <header class="header" th:fragment="nav">
-<div class="header-content">
-  <div class="header-logo">
-    <a href="/">
-      <img th:src="@{/images/logo/swapswaphomepagelogo.png}" alt="스왑스왑 로고">
-    </a>
-  </div>
-  <div class="nav-container">
-    <a href="#chatroom">채팅방</a>
-    <a href="#cs">고객센터</a>
-    <div class="swapswap-search-container">
-      <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
-      <button class="swapswap-search-button">검색</button>
+  <div class="header-content">
+    <div class="header-logo">
+      <a href="/">
+        <img th:src="@{/images/logo/swapswaphomepagelogo.png}" alt="스왑스왑 로고">
+      </a>
+    </div>
+    <div class="nav-container">
+      <a href="#chatroom">채팅방</a>
+      <a href="#cs">고객센터</a>
+      <div class="swapswap-search-container">
+        <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
+        <button class="swapswap-search-button">검색</button>
+      </div>
+    </div>
+    <div class="header-nav">
+        <span sec:authorize="isAuthenticated()">
+          <a href="/">글쓰기</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/" class="login-link">스왑목록</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/myPage" class="login-link">마이페이지</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/api/logout}" id="logoutButton" >로그아웃</a>
+          </span>
+        <span sec:authorize="isAnonymous()">
+            <a href="/templates/member/login.html" class="login-link">로그인</a>
+          </span>
     </div>
   </div>
-  <div class="header-nav">
-    <a href="#login" class="login-link"> 로그인</a>
-  </div>
-</div>
 </header>
+</body>
 </html>

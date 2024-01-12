@@ -35,9 +35,6 @@ public class KakaoServiceImpl implements SocialService {
     public String kakaoLogin(String code) throws Exception {
 
         String accessToken = getToken(code);
-
-        log.info("카카오 전용 액세스 토큰 : " + accessToken);
-
         SocialUserInfo kakaoUserInfo = getUser(accessToken);
         Member kakaoMember = registerUserIfNeeded(kakaoUserInfo);
 
@@ -126,10 +123,11 @@ public class KakaoServiceImpl implements SocialService {
         String kakaoEmail = kakaoUserInfo.email();
 
         Wallet wallet = Wallet.builder().money(0L).build();
-        walletRepository.save(wallet);
+        Wallet savedWallet = walletRepository.save(wallet);
+
         Member member = memberRepository.findByEmail(kakaoEmail)
                 .orElseGet(() -> memberRepository.save(
-                        MemberMapper.createMember(kakaoUserInfo, wallet)));
+                        MemberMapper.createMember(kakaoUserInfo, savedWallet)));
 
         if (isWithdrawnMember(member)) {
 
