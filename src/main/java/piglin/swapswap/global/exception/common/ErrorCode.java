@@ -35,6 +35,10 @@ public enum ErrorCode {
 
     // 게시글
     NOT_FOUND_POST_EXCEPTION(401, "게시글을 찾을 수 없습니다."),
+    WRITE_ONLY_USER(401, "로그인 한 유저만 게시글을 작성할 수 있습니다"),
+  
+    // 쿠폰
+    INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
 
     // S3
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),

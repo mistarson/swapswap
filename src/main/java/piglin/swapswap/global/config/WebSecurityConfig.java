@@ -1,6 +1,6 @@
 package piglin.swapswap.global.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,44 +10,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import piglin.swapswap.domain.member.repository.MemberRepository;
-import piglin.swapswap.global.jwt.JwtAuthenticationFilter;
 import piglin.swapswap.global.jwt.JwtAuthorizationFilter;
 import piglin.swapswap.global.jwt.JwtUtil;
 import piglin.swapswap.global.security.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final AuthenticationConfiguration authenticationConfiguration;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
-    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService,
-            AuthenticationConfiguration authenticationConfiguration) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-        this.authenticationConfiguration = authenticationConfiguration;
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, memberRepository);
-        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-
-        return filter;
     }
 
     @Bean
@@ -63,37 +44,28 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정
+
         http.csrf(AbstractHttpConfigurer::disable);
+
+        http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS) );
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                        .permitAll()
-                        .requestMatchers("/api/login/**").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/home").permitAll()
+                        .requestMatchers("/login", "/api/login/**").permitAll()
+                        .requestMatchers("/", "/posts/{postId}").permitAll()
+                        .requestMatchers("/posts/{postId}/favorite").permitAll()
+                        .requestMatchers("/posts/write").authenticated()
                         .anyRequest().authenticated()
         );
 
+        // TODO 인증안된 사용자일시 "/login"으로 리다이렉트하는 다른 방법을 찾아봅시다.
         http.formLogin(form -> form
                 .loginPage("/login")
         );
 
-        http
-                // 로그아웃 설정
-                .logout(logout -> logout
-                        // 로그아웃 요청을 처리할 URL 설정
-                        .logoutUrl("/logout")
-                        // 로그아웃 성공 시 리다이렉트할 URL 설정
-                        // 로그아웃 성공 핸들러 추가 (리다이렉션 처리)
-                        .logoutSuccessHandler((request, response, authentication) ->
-                                response.sendRedirect("/"))
-                        // 로그아웃 시 쿠키 삭제 설정
-                        .deleteCookies("Authorization")
-                );
-
-        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
