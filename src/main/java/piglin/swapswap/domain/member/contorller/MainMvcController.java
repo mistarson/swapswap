@@ -12,7 +12,7 @@ public class MainMvcController {
     public String login() {
         return "login";
     }
-    @GetMapping("/")
+    @GetMapping("/home")
     public String mainPage() {
         return "index";
     }

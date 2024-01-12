@@ -20,16 +20,18 @@
           <div class="author-details">
             <span class="author-name" th:text="${PostGetResponseDto.author()}"></span>
           </div>
+          <div class="post-update-button"> <a th:href= "@{/posts/{PostId}/write(PostId=${PostId})}">수정하기</a> </div>
           <div class="favorite-action">
             <button
-                th:text="${PostGetResponseDto.favoriteStatus()} == true ? '즐겨찾기 해제' : '즐겨찾기'"></button>
+                onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+                th:text="${PostGetResponseDto.favoriteStatus()} == true ? '💙' : '🤍'"></button>
           </div>
         </div>
         <div class="post-title-meta-section">
           <h1 class="post-title" th:text="${PostGetResponseDto.title()}"></h1>
           <div class="post-meta">
             <span th:text="${PostGetResponseDto.category()}"></span> ・
-            <span th:text="${PostGetResponseDto.modifiedTime()}"></span>
+            <span th:text="${PostGetResponseDto.modifiedUpTime()}"></span>
           </div>
         </div>
         <div class="post-content-body">
@@ -48,6 +50,14 @@
     var totalSlides = [[${PostGetResponseDto.imageUrl.size()}]];
 
     window.addEventListener('DOMContentLoaded', (event) => {
+      var postId = window.location.pathname.split('/').pop();
+
+      // postId를 'data-post-id' 속성으로 버튼에 설정
+      var favoriteButton = document.querySelector('.favorite-action button');
+      if (favoriteButton) {
+        favoriteButton.setAttribute('data-post-id', postId);
+      }
+
       const slidesContainer = document.querySelector('.post-content-image-slider');
       const images = document.querySelectorAll('.post-content-image')
 
@@ -78,6 +88,19 @@
       updateSlidePosition();
     });
     /*]]>*/
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    function toggleFavorite(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/favorite',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function() {
+          location.reload()
+        }
+      });
+    }
   </script>
 </div>
 </body>
