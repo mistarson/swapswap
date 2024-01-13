@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,9 @@ public class Coupon extends BaseTime {
 
     @Column(nullable = false)
     private int count;
+
+    @Version
+    private Long version;
 
     public void issueCoupon() {
         count -= 1;
