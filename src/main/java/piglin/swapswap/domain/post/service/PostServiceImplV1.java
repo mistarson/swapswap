@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -171,8 +172,15 @@ public class PostServiceImplV1 implements PostService {
 
         Post post = findPost(postId);
         checkPostWriter(member, post);
+        checkPostUpValid(post);
 
         post.upPost();
+    }
+
+    private void checkPostUpValid(Post post) {
+        if(post.getCreatedTime().plusDays(1).isAfter(LocalDateTime.now()) || post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
+            throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
+        }
     }
 
     private void checkPostWriter(Member member, Post post) {

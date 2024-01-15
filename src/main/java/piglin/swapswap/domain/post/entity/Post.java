@@ -82,6 +82,7 @@ public class Post extends BaseTime {
 
     public void upPost() {
 
+        this.upCnt++;
         this.modifiedUpTime = LocalDateTime.now();
     }
 }
