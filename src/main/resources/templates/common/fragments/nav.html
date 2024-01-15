@@ -41,5 +41,30 @@
     </div>
   </div>
 </header>
+<script th:fragment="search">
+  document.addEventListener('DOMContentLoaded', function() {
+    var searchButton = document.querySelector('.swapswap-search-button');
+    var searchInput = document.querySelector('.swapswap-search-input');
+
+    // 검색 버튼 클릭 이벤트 핸들러
+    searchButton.addEventListener('click', function() {
+      performSearch();
+    });
+
+    // 엔터 키 이벤트 핸들러
+    searchInput.addEventListener('keyup', function(event) {
+      // 엔터 키 코드는 13
+      if (event.keyCode === 13) {
+        performSearch();
+      }
+    });
+
+    // 검색 수행 함수
+    function performSearch() {
+      var searchValue = searchInput.value;
+      window.location.href = '/search/posts?title=' + encodeURIComponent(searchValue);
+    }
+  });
+</script>
 </body>
 </html>
