@@ -79,4 +79,9 @@ public class Post extends BaseTime {
 
         this.isDeleted = true;
     }
+
+    public void upPost() {
+
+        this.modifiedUpTime = LocalDateTime.now();
+    }
 }

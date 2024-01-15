@@ -138,4 +138,12 @@ public class PostController {
 
         return "post/postList";
     }
+
+    @PatchMapping("/posts/{postId}/up")
+    public ResponseEntity<?> upPost(@PathVariable Long postId, @AuthMember Member member) {
+
+        postService.upPost(postId, member);
+
+        return ResponseEntity.ok().build();
+    }
 }

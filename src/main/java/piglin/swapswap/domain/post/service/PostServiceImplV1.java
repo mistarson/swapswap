@@ -165,6 +165,16 @@ public class PostServiceImplV1 implements PostService {
         return PostMapper.toPageDtoList(postListResponseDto, pageable, postPage.getTotalElements());
     }
 
+    @Override
+    @Transactional
+    public void upPost(Long postId, Member member) {
+
+        Post post = findPost(postId);
+        checkPostWriter(member, post);
+
+        post.upPost();
+    }
+
     private void checkPostWriter(Member member, Post post) {
 
         if (!post.getMember().getId().equals(member.getId())) {
