@@ -75,7 +75,8 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}/favorite")
-    public ResponseEntity<?> updatePostFavorite(@AuthMember Member member, @PathVariable Long postId) {
+    public ResponseEntity<?> updatePostFavorite(@AuthMember Member member,
+            @PathVariable Long postId) {
 
         if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -119,5 +120,22 @@ public class PostController {
         postService.deletePost(member, postId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search/posts")
+    public String searchPost(@RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @AuthMember Member member,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "modifiedUpTime") String sort,
+            Model model
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
+
+        model.addAttribute("PostGetListResponseDtoPage", postService.searchPost(title, category, member, pageable));
+
+        return "post/postList";
     }
 }
