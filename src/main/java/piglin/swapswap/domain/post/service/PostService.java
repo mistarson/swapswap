@@ -48,4 +48,6 @@ public interface PostService {
     void getPostUpdateWriteForm(Member member, Long postId);
 
     void deletePost(Member member, Long postId);
+
+    Page<PostGetListResponseDto> searchPost(String title, String category, Member member, Pageable pageable);
 }

@@ -117,6 +117,7 @@ body{
   padding: 8px 16px; /* 링크 패딩 */
   border-radius: 20px; /* 둥근 모서리 */
   text-decoration: none;
+  font-size: 13px;
   color: #333;
   text-align: center;
   transition: background-color 0.3s;
@@ -124,6 +125,11 @@ body{
 }
 
 .category-bar a:hover {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.category-bar a.active {
   background-color: #00AADC; /* 호버 효과 */
   color: #ffffff;
 }
