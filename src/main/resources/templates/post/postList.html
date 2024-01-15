@@ -17,23 +17,23 @@
   </div>
 
   <div class="post-container">
-    <div th:each="entry:${PostGetListResponseDtoMap.entrySet}" class="post-card">
-      <a th:href="@{/posts/{postId}(postId=${entry.key})}">
+    <div th:each="postDto : ${PostGetListResponseDtoPage.content}" class="post-card">
+      <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
-          <img th:src="${entry.value.thumbnailUrl}" alt="Post Image" class="post-image">
+          <img th:src="${postDto.thumbnailUrl}" alt="Post Image" class="post-image">
         </div>
-        <h2 th:text="${entry.value.title}" class="post-title"></h2>
+        <h2 th:text="${postDto.title}" class="post-title"></h2>
         <div class="post-stats">
-          <span class="view-count">조회수 <span th:text="${entry.value.viewCnt}"></span></span>
-          <span class="favorite-count">찜 <span th:text="${entry.value.favoriteCnt}"></span></span>
+          <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
+          <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
           <span class="modified-date">올린 날짜 <span
-              th:text="${entry.value.modifiedUpTime}"></span></span>
+              th:text="${postDto.modifiedUpTime}"></span></span>
         </div>
       </a>
       <button
-          th:data-post-id="${entry.key}"
+          th:data-post-id="${postDto.postId}"
           onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-          th:text="${entry.value.favoriteStatus()} == true ? '💙' : '🤍'"
+          th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
           type="button"
       ></button>
     </div>
