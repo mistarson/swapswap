@@ -153,12 +153,7 @@ public class PostServiceImplV1 implements PostService {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        Page<Post> postPage = postRepository.searchPost(title, categoryCond, pageable);
-
-        List<PostGetListResponseDto> postListResponseDto = getPostListResponseDtoWithFavoriteStatus(
-                member, postPage);
-
-        return PostMapper.toPageDtoList(postListResponseDto, pageable, postPage.getTotalElements());
+        return postRepository.searchPost(title, categoryCond, member, pageable);
     }
 
     @Override

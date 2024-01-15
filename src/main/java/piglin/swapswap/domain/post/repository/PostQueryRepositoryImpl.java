@@ -69,14 +69,26 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public Page<Post> searchPost(String title, Category categoryCond,
+    public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond, Member member,
             Pageable pageable) {
 
-        List<Post> content = queryFactory.select(post)
+        List<PostGetListResponseDto> content = queryFactory.select(post)
+                .select(Projections.fields(PostGetListResponseDto.class,
+                        post.id.as("postId"),
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.imageUrl,
+                        post.modifiedUpTime,
+                        post.viewCnt,
+                        favorite.post.count().as("favoriteCnt"),
+                        memberEq(member).as("favoriteStatus")))
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), post.isDeleted.eq(false))
-                .offset(pageable.getOffset())
+                .where(titleContains(title), categoryEq(categoryCond))
+                .leftJoin(favorite)
+                .on(favorite.post.eq(post))
+                .groupBy(post.id, favorite.member.id)
                 .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
 
         Long count = queryFactory.select(post.count())
@@ -99,7 +111,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     private BooleanExpression memberEq(Member member) {
 
-        Long memberId = null;
+        Long memberId;
 
         if(member == null) {
             memberId = 0L;

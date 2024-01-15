@@ -9,7 +9,7 @@ import piglin.swapswap.domain.post.entity.Post;
 
 public interface PostQueryRepository {
 
-    Page<Post> searchPost(String title, Category categoryCond, Pageable pageable);
+    Page<PostGetListResponseDto> searchPost(String title, Category categoryCond, Member member, Pageable pageable);
 
     Page<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(Pageable pageable, Member member);
 }
