@@ -178,7 +178,7 @@ public class PostServiceImplV1 implements PostService {
     }
 
     private void checkPostUpValid(Post post) {
-        if(post.getCreatedTime().plusDays(1).isAfter(LocalDateTime.now()) || post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
+        if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
     }
