@@ -1,6 +1,8 @@
 package piglin.swapswap.domain.member.repository;
 
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import piglin.swapswap.domain.member.entity.Member;
@@ -16,4 +18,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNicknameAndIsDeletedIsFalse(String nickname);
 
+    List<Member> findByIsDeletedAndDeletedDateBefore(boolean b, LocalDateTime fourTeenDaysAgo);
 }

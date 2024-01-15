@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -52,15 +53,20 @@ public class Member {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Wallet wallet;
 
+    @Column
+    private LocalDateTime deletedDate;
+
     public void updateMember(String nickname) {
         this.nickname = nickname;
     }
 
     public void deleteMember() {
         isDeleted = true;
+        deletedDate = LocalDateTime.now();
     }
 
     public void reRegisterMember() {
         isDeleted = false;
+        deletedDate = null;
     }
 }
