@@ -32,6 +32,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     @Override
     public Page<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(Pageable pageable,
             Member member) {
+
         List<PostGetListResponseDto> content = queryFactory
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
@@ -52,10 +53,10 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .fetch();
 
         Long count = queryFactory.select(post.count())
-                .from(post)
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .fetchOne();
+                                 .from(post)
+                                 .limit(pageable.getPageSize())
+                                 .offset(pageable.getOffset())
+                                 .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
     }
@@ -64,7 +65,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond,
             Member member,
             Pageable pageable) {
-//        NumberTemplate.ONE.when(favorite.member.id.eq(member.getId())) .then(1).otherwise(0);
+
         List<PostGetListResponseDto> content = queryFactory.select(post)
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
@@ -86,11 +87,11 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .fetch();
 
         Long count = queryFactory.select(post.count())
-                .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), post.isDeleted.eq(false))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchOne();
+                                 .from(post)
+                                 .where(titleContains(title), categoryEq(categoryCond), post.isDeleted.eq(false))
+                                 .offset(pageable.getOffset())
+                                 .limit(pageable.getPageSize())
+                                 .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
     }
