@@ -98,7 +98,7 @@ public class PostServiceImplV1 implements PostService {
             responseDtoList.add(PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus));
         }
 
-        return PostMapper.toDtoList(responseDtoList, pageable, postPage.getTotalElements());
+        return PostMapper.toPageDtoList(responseDtoList, pageable, postPage.getTotalElements());
     }
 
     @Override

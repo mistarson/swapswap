@@ -70,7 +70,7 @@ public class PostMapper {
         post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category());
     }
 
-    public static Page<PostGetListResponseDto> toDtoList(List<PostGetListResponseDto> responseDtoList, Pageable pageable, Long totalElements) {
+    public static Page<PostGetListResponseDto> toPageDtoList(List<PostGetListResponseDto> responseDtoList, Pageable pageable, Long totalElements) {
 
         return new PageImpl<>(responseDtoList, pageable, totalElements);
     }
