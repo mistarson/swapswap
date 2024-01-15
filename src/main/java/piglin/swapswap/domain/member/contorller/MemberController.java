@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,19 +52,19 @@ public class MemberController {
 
 
     @PatchMapping("/members/nickname")
-    public String  updateNickname(@AuthMember Member member,
+    public ResponseEntity<?> updateNickname(@AuthMember Member member,
             @Valid @RequestBody MemberNicknameDto requestDto) {
 
         memberService.updateNickname(member, requestDto);
-        return "redirect:/";
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members")
-    public String unregister(@AuthMember Member member, HttpServletResponse response) {
-        JwtCookieManager.expireTokenCookie(response);
+    public ResponseEntity<?> unregister(@AuthMember Member member, HttpServletResponse response) {
+
         memberService.deleteMember(member);
+        JwtCookieManager.expireTokenCookie(response);
 
-
-        return "redirect:/";
+        return ResponseEntity.ok().build();
     }
 }

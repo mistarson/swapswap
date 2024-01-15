@@ -3,8 +3,8 @@ package piglin.swapswap.domain.member.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import java.net.URI;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +33,7 @@ public class KakaoServiceImpl implements SocialService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public String kakaoLogin(String code) throws Exception {
 
         String accessToken = getToken(code);
@@ -117,29 +118,20 @@ public class KakaoServiceImpl implements SocialService {
         return SocialUserInfo.createSocialUserInfo(id, nickname, email);
     }
 
-
-    @Override
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
         String kakaoEmail = kakaoUserInfo.email();
 
-        Optional<Member> existingMemberOptional = memberRepository.findByEmail(kakaoEmail);
+        Wallet wallet = Wallet.builder().money(0L).build();
+        Wallet savedWallet = walletRepository.save(wallet);
 
-        if (existingMemberOptional.isPresent()) {
-            Member existingMember = existingMemberOptional.get();
+        Member member = memberRepository.findByEmail(kakaoEmail)
+                .orElseGet(() -> memberRepository.save(
+                        MemberMapper.createMember(kakaoUserInfo, savedWallet)));
 
-            if (isWithdrawnMember(existingMember)) {
-                existingMember.reRegisterMember();
-                memberRepository.save(existingMember);
-            }
-
-            return existingMember;
-        } else {
-            Wallet wallet = Wallet.builder().money(0L).build();
-            Wallet savedWallet = walletRepository.save(wallet);
-
-            Member newMember = memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet));
-            return newMember;
+        if (isWithdrawnMember(member)) {
+            member.reRegisterMember();
         }
+        return member;
     }
 
     public boolean isWithdrawnMember(Member member) {

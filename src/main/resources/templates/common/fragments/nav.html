@@ -35,8 +35,8 @@
         <span sec:authorize="isAuthenticated()">
             <a th:href="@{/api/logout}" id="logoutButton" >로그아웃</a>
           </span>
-        <span sec:authorize="isAnonymous()">
-            <a href="/templates/member/login.html" class="login-link">로그인</a>
+        <span sec:authorize="!isAuthenticated()">
+            <a href="/login" class="login-link">로그인</a>
           </span>
     </div>
   </div>
