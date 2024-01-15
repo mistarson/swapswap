@@ -1,30 +1,21 @@
 package piglin.swapswap.domain.post.repository;
 
-import static piglin.swapswap.domain.favorite.entity.QFavorite.*;
-import static piglin.swapswap.domain.post.entity.QPost.*;
+import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
+import static piglin.swapswap.domain.post.entity.QPost.post;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import piglin.swapswap.domain.favorite.entity.QFavorite;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
-import piglin.swapswap.domain.post.entity.Post;
-import piglin.swapswap.domain.post.entity.QPost;
 
 @Repository
 public class PostQueryRepositoryImpl implements PostQueryRepository {
@@ -50,28 +41,30 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.modifiedUpTime,
                         post.viewCnt,
                         favorite.post.count().as("favoriteCnt"),
-                        memberEq(member).as("favoriteStatus")))
+                        favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
+                .distinct()
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
-                .groupBy(post.id, favorite.member.id)
+                .groupBy(post.id)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
 
         Long count = queryFactory.select(post.count())
-                                 .from(post)
-                                 .limit(pageable.getPageSize())
-                                 .offset(pageable.getOffset())
-                                 .fetchOne();
+                .from(post)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetchOne();
 
         return new PageImpl<>(content, pageable, count);
     }
 
     @Override
-    public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond, Member member,
+    public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond,
+            Member member,
             Pageable pageable) {
-
+//        NumberTemplate.ONE.when(favorite.member.id.eq(member.getId())) .then(1).otherwise(0);
         List<PostGetListResponseDto> content = queryFactory.select(post)
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
@@ -81,12 +74,13 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.modifiedUpTime,
                         post.viewCnt,
                         favorite.post.count().as("favoriteCnt"),
-                        memberEq(member).as("favoriteStatus")))
+                        favoriteStatus(member).as("favoriteStatus")))
+                .distinct()
                 .from(post)
                 .where(titleContains(title), categoryEq(categoryCond))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
-                .groupBy(post.id, favorite.member.id)
+                .groupBy(post.id)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
@@ -109,18 +103,16 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return category != null ? post.category.eq(category) : null;
     }
 
-    private BooleanExpression memberEq(Member member) {
-
-        Long memberId;
-
-        if(member == null) {
-            memberId = 0L;
-        } else {
-            memberId = member.getId();
+    private BooleanExpression favoriteStatus(Member member) {
+        if (member == null) {
+            return Expressions.asBoolean(false);
         }
 
-        return new CaseBuilder().when(favorite.member.id.eq(memberId))
-                                .then(true)
-                                .otherwise(false);
+        return new JPAQueryFactory(em).selectOne()
+                                      .from(favorite)
+                                      .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
+                                      .exists();
     }
+
+
 }
