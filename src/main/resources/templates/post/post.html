@@ -22,6 +22,9 @@
           </div>
           <div class="post-update-button"><a th:href="@{/posts/{PostId}/write(PostId=${PostId})}">수정하기</a>
           </div>
+          <div class="post-up-button"
+               th:data-post-id="${PostId}"
+               th:onclick="upPost(this.getAttribute('data-post-id'))"><a>업하기</a></div>
           <div class="post-delete-button"
                th:data-post-id="${PostId}"
                th:onclick="deletePost(this.getAttribute('data-post-id'))">
@@ -57,13 +60,6 @@
     var totalSlides = [[${PostGetResponseDto.imageUrl.size()}]];
 
     window.addEventListener('DOMContentLoaded', (event) => {
-      // var postId = window.location.pathname.split('/').pop();
-      //
-      // // postId를 'data-post-id' 속성으로 버튼에 설정
-      // var favoriteButton = document.querySelector('.favorite-action button');
-      // if (favoriteButton) {
-      //   favoriteButton.setAttribute('data-post-id', postId);
-      // }
 
       const slidesContainer = document.querySelector('.post-content-image-slider');
       const images = document.querySelectorAll('.post-content-image')
@@ -115,7 +111,18 @@
         type: 'DELETE',
         contentType: 'application/json; charset=utf-8',
         success: function () {
-          location.href='/'
+          location.href = '/'
+        }
+      });
+    }
+
+    function upPost(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/up',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function () {
+          location.reload()
         }
       });
     }
