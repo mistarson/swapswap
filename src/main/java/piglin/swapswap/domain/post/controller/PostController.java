@@ -64,10 +64,9 @@ public class PostController {
     public String getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sort", defaultValue = "modifiedUpTime") String sort,
             Model model, @AuthMember Member member) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
+        Pageable pageable = PageRequest.of(page, size);
 
         model.addAttribute("PostGetListResponseDtoPage", postService.getPostList(member, pageable));
 
@@ -128,11 +127,10 @@ public class PostController {
             @AuthMember Member member,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sort", defaultValue = "modifiedUpTime") String sort,
             Model model
     ) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
+        Pageable pageable = PageRequest.of(page, size);
 
         model.addAttribute("PostGetListResponseDtoPage", postService.searchPost(title, category, member, pageable));
 

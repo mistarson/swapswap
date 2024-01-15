@@ -3,19 +3,25 @@ package piglin.swapswap.domain.post.repository;
 import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
 import static piglin.swapswap.domain.post.entity.QPost.post;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.entity.Post;
 
 @Repository
 public class PostQueryRepositoryImpl implements PostQueryRepository {
@@ -48,6 +54,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc(), post.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
@@ -82,6 +89,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc(), post.id.desc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
@@ -114,6 +122,4 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                                       .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
                                       .exists();
     }
-
-
 }
