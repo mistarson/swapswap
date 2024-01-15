@@ -41,5 +41,83 @@
     </div>
   </div>
 </header>
+<script th:fragment="search">
+  document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.querySelector('.header-logo a');
+    var searchInput = document.querySelector('.swapswap-search-input');
+    var categoryLinks = document.querySelectorAll('.category-bar a');
+
+    // URL에서 검색어와 카테고리 추출
+    var urlParams = new URLSearchParams(window.location.search);
+    var currentSearchValue = urlParams.get('title');
+    var currentCategory = urlParams.get('category');
+
+    // 검색란에 파라미터 title 추가
+    if (currentSearchValue) {
+      searchInput.value = currentSearchValue;
+    }
+
+    if (logo) {
+      logo.addEventListener('click', function() {
+        localStorage.removeItem('searchValue');
+        localStorage.removeItem('selectedCategory');
+      });
+    }
+
+
+    categoryLinks.forEach(function(link) {
+
+      if (link.getAttribute('href').slice(1) === currentCategory) {
+        link.classList.add('active');
+      }
+
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        localStorage.setItem('selectedCategory', this.getAttribute('href').slice(1));
+        updateSearch();
+      });
+    });
+
+    // 검색 입력 필드와 버튼
+    var searchInput = document.querySelector('.swapswap-search-input');
+    var searchButton = document.querySelector('.swapswap-search-button');
+
+    if (searchInput && searchButton) {
+      // 제목란에 입력할 때 카테고리 초기화
+      searchInput.addEventListener('input', function() {
+        localStorage.removeItem('selectedCategory');
+      });
+
+      // 검색 버튼 클릭 이벤트
+      searchButton.addEventListener('click', function() {
+        localStorage.setItem('searchValue', searchInput.value);
+        updateSearch();
+      });
+
+      // 검색 입력 필드의 엔터 키 이벤트
+      searchInput.addEventListener('keyup', function(event) {
+        if (event.keyCode === 13) {
+          localStorage.setItem('searchValue', searchInput.value);
+          updateSearch();
+        }
+      });
+    }
+
+    // 검색 실행 함수
+    function updateSearch() {
+      var searchValue = localStorage.getItem('searchValue') || '';
+      var selectedCategory = localStorage.getItem('selectedCategory') || '';
+
+      var searchQuery = '/search/posts?';
+      if (searchValue) {
+        searchQuery += 'title=' + encodeURIComponent(searchValue);
+      }
+      if (selectedCategory) {
+        searchQuery += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
+      window.location.href = searchQuery;
+    }
+  });
+</script>
 </body>
 </html>
