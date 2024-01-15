@@ -49,20 +49,20 @@ public class PostMapper {
                                  .build();
     }
 
-    public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
-            boolean favoriteStatus) {
-
-        return PostGetListResponseDto.builder()
-                                     .postId(post.getId())
-                                     .memberId(post.getMember().getId())
-                                     .title(post.getTitle())
-                                     .thumbnailUrl(post.getImageUrl().get(0).toString())
-                                     .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-                                     .viewCnt(post.getViewCnt())
-                                     .favoriteCnt(favoriteCnt)
-                                     .favoriteStatus(favoriteStatus)
-                                     .build();
-    }
+//    public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
+//            boolean favoriteStatus) {
+//
+//        return PostGetListResponseDto.builder()
+//                                     .postId(post.getId())
+//                                     .memberId(post.getMember().getId())
+//                                     .title(post.getTitle())
+//                                     .imageUrl(post.getImageUrl())
+//                                     .modifiedUpTime(post.getModifiedUpTime())
+//                                     .viewCnt(post.getViewCnt())
+//                                     .favoriteCnt(favoriteCnt)
+//                                     .favoriteStatus(favoriteStatus)
+//                                     .build();
+//    }
 
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {

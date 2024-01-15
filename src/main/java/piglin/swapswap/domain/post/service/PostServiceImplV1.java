@@ -86,12 +86,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
 
-        Page<Post> postPage = postRepository.findAllByIsDeletedIsFalse(pageable);
-
-        List<PostGetListResponseDto> responseDtoList = getPostListResponseDtoWithFavoriteStatus(
-                member, postPage);
-
-        return PostMapper.toPageDtoList(responseDtoList, pageable, postPage.getTotalElements());
+        return postRepository.findAllPostListWithFavoriteAndPaging(pageable, member);
     }
 
     @Override
@@ -222,8 +217,8 @@ public class PostServiceImplV1 implements PostService {
                 favoriteStatus = favoriteService.isFavorite(post, member);
             }
 
-            responseDtoList.add(
-                    PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus));
+//            responseDtoList.add(
+//                    PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus));
         }
         return responseDtoList;
     }
