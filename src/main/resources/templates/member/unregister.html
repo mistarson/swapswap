@@ -20,14 +20,16 @@
           $.ajax({
             type: "DELETE",
             url: "/api/members",
-            success: function(data) {
+            success: function (data) {
               console.log("성공적으로 탈퇴되었습니다");
-              window.location.href = "/login.html";
+              window.location.href = "/";
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
               console.error("회원 탈퇴 실패:", error);
             }
           });
+        } else {
+          event.preventDefault();
         }
       });
     });
