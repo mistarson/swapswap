@@ -50,6 +50,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
+                .where(isNotDeleted())
                 .distinct()
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
@@ -61,6 +62,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
         Long count = queryFactory.select(post.count())
                                  .from(post)
+                                 .where(isNotDeleted())
                                  .limit(pageable.getPageSize())
                                  .offset(pageable.getOffset())
                                  .fetchOne();
@@ -85,7 +87,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favoriteStatus(member).as("favoriteStatus")))
                 .distinct()
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond))
+                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
@@ -96,7 +98,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
         Long count = queryFactory.select(post.count())
                                  .from(post)
-                                 .where(titleContains(title), categoryEq(categoryCond), post.isDeleted.eq(false))
+                                 .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
                                  .offset(pageable.getOffset())
                                  .limit(pageable.getPageSize())
                                  .fetchOne();
@@ -110,6 +112,10 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     private BooleanExpression categoryEq(Category category) {
         return category != null ? post.category.eq(category) : null;
+    }
+
+    private BooleanExpression isNotDeleted() {
+        return post.isDeleted.isFalse();
     }
 
     private BooleanExpression favoriteStatus(Member member) {
