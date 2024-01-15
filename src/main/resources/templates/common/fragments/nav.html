@@ -43,6 +43,7 @@
 </header>
 <script th:fragment="search">
   document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.querySelector('.header-logo a');
     var searchInput = document.querySelector('.swapswap-search-input');
     var categoryLinks = document.querySelectorAll('.category-bar a');
 
@@ -55,6 +56,14 @@
     if (currentSearchValue) {
       searchInput.value = currentSearchValue;
     }
+
+    if (logo) {
+      logo.addEventListener('click', function() {
+        localStorage.removeItem('searchValue');
+        localStorage.removeItem('selectedCategory');
+      });
+    }
+
 
     categoryLinks.forEach(function(link) {
 
