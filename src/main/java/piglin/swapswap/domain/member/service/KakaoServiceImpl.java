@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -119,22 +120,26 @@ public class KakaoServiceImpl implements SocialService {
 
     @Override
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
-
         String kakaoEmail = kakaoUserInfo.email();
 
-        Wallet wallet = Wallet.builder().money(0L).build();
-        Wallet savedWallet = walletRepository.save(wallet);
+        Optional<Member> existingMemberOptional = memberRepository.findByEmail(kakaoEmail);
 
-        Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(
-                        MemberMapper.createMember(kakaoUserInfo, savedWallet)));
+        if (existingMemberOptional.isPresent()) {
+            Member existingMember = existingMemberOptional.get();
 
-        if (isWithdrawnMember(member)) {
+            if (isWithdrawnMember(existingMember)) {
+                existingMember.reRegisterMember();
+                memberRepository.save(existingMember);
+            }
 
-            member.reRegisterMember();
+            return existingMember;
+        } else {
+            Wallet wallet = Wallet.builder().money(0L).build();
+            Wallet savedWallet = walletRepository.save(wallet);
+
+            Member newMember = memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet));
+            return newMember;
         }
-
-        return member;
     }
 
     public boolean isWithdrawnMember(Member member) {

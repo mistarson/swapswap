@@ -60,9 +60,9 @@ public class MemberController {
 
     @DeleteMapping("/members")
     public String unregister(@AuthMember Member member, HttpServletResponse response) {
-
-        memberService.deleteMember(member);
         JwtCookieManager.expireTokenCookie(response);
+        memberService.deleteMember(member);
+
 
         return "redirect:/";
     }
