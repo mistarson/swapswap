@@ -4,6 +4,8 @@
       layout:decorate="~{common/layout/layout}">
 <body>
 <div layout:fragment="content">
+  <div class="loading" id="loading" style="display: none;">
+  </div>
   <div class="category-bar">
     <!-- 카테고리 링크 -->
     <a href="#HOME_ELECTRONICS">가전제품</a>
@@ -50,6 +52,7 @@
 
     let isLoading = false;
     let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
+    let isLast = false;
 
     window.addEventListener("scroll", function () {
 
@@ -74,22 +77,30 @@
     function loadMorePosts() {
       isLoading = true;
       let url = '/posts/more?cursorTime=' + lastModifiedTime;
+      $('#loading').show(); // 로딩 표시 보이기
 
-      $.ajax({
-        url: url,
-        type: 'GET',
-        success: function(htmlFragment) {
-          console.log(lastModifiedTime);
-          console.log("Received HTML fragment:", htmlFragment);
-          $('.post-container').append(htmlFragment);
-          updateLastModifiedTime(htmlFragment);
-          isLoading = false;
-        },
-        error: function() {
-          alert('더 이상 로드할 게시물이 없습니다.')
-          isLoading = false;
-        }
-      });
+      if(!isLast) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function(htmlFragment) {
+            console.log(lastModifiedTime);
+            console.log("Received HTML fragment:", htmlFragment);
+            $('.post-container').append(htmlFragment);
+            updateLastModifiedTime(htmlFragment);
+            isLoading = false;
+          },
+          error: function() {
+            alert('더 이상 로드할 게시물이 없습니다.')
+            isLast = true;
+            isLoading = false;
+          },
+          complete: function() {
+            $('#loading').hide(); // 로딩 표시 숨기기
+          }
+        });
+      }
+
     }
 
     function updateLastModifiedTime(htmlFragment) {

@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.controller;
 
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -79,7 +81,13 @@ public class PostController {
             @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime
     ) {
 
-        model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
+        List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
+
+        if (postList.isEmpty()) {
+            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
+        }
+
+        model.addAttribute("PostGetListResponseDto", postList);
 
         return "post/postListFragment";
     }
