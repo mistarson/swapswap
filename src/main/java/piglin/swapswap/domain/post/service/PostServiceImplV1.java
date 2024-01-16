@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -31,6 +32,7 @@ public class PostServiceImplV1 implements PostService {
     private final FavoriteService favoriteService;
     private final PostRepository postRepository;
     private final S3ImageServiceImplV1 s3ImageServiceImplV1;
+    private final MemberRepository memberRepository;
 
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
@@ -141,6 +143,13 @@ public class PostServiceImplV1 implements PostService {
         Post post = findPost(postId);
 
         favoriteService.updateFavorite(member, post);
+    }
+
+    @Override
+    public List<PostGetByMemberIdResponseDto> getPostIdList(Long memberId){
+        List<Post> postList = postRepository.findAllByMemberId(memberId);
+
+        return postList.stream().map(PostGetByMemberIdResponseDto::toDto).toList();
     }
 
 

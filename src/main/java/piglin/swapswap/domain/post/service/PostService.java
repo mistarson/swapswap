@@ -1,10 +1,12 @@
 package piglin.swapswap.domain.post.service;
 
+import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -45,4 +47,6 @@ public interface PostService {
     void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto);
 
     void getPostUpdateWriteForm(Member member, Long postId);
+
+    List<PostGetByMemberIdResponseDto> getPostIdList(Long memberId);
 }
