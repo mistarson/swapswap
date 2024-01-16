@@ -4,10 +4,6 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,14 +31,19 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts/write")
-    public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
-            , @AuthMember Member member) {
+    public String createPost(
+            @Valid @ModelAttribute PostCreateRequestDto requestDto,
+            @AuthMember Member member
+    ) {
 
         return "redirect:/posts/" + postService.createPost(member, requestDto);
     }
 
     @GetMapping("/posts/write")
-    public String getPostWriteForm(Model model, @AuthMember Member member) {
+    public String getPostWriteForm(
+            @AuthMember Member member,
+            Model model
+    ) {
 
         if (member == null) {
             return "redirect:/";
@@ -55,7 +56,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public String getPost(@PathVariable Long postId, Model model, @AuthMember Member member) {
+    public String getPost(
+            @PathVariable Long postId,
+            @AuthMember Member member,
+            Model model
+    ) {
 
         model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
 
@@ -66,8 +71,9 @@ public class PostController {
 
     @GetMapping("/")
     public String getPostList(
-            Model model, @AuthMember Member member,
-            @RequestParam(required = false) LocalDateTime cursorTime
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
+            Model model
     ) {
 
         model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
@@ -77,8 +83,9 @@ public class PostController {
 
     @GetMapping("/posts/more")
     public String getPostListMore(
-            Model model, @AuthMember Member member,
-            @RequestParam(required = false) LocalDateTime cursorTime
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
+            Model model
     ) {
 
         List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
@@ -94,8 +101,10 @@ public class PostController {
 
     @ResponseBody
     @PatchMapping("/posts/{postId}/favorite")
-    public ResponseEntity<?> updatePostFavorite(@AuthMember Member member,
-            @PathVariable Long postId) {
+    public ResponseEntity<?> updatePostFavorite(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -107,8 +116,11 @@ public class PostController {
     }
 
     @PutMapping("/posts/{postId}/write")
-    public String updatePost(@Valid @ModelAttribute PostUpdateRequestDto requestDto
-            , @AuthMember Member member, @PathVariable Long postId) {
+    public String updatePost(
+            @PathVariable Long postId,
+            @Valid @ModelAttribute PostUpdateRequestDto requestDto,
+            @AuthMember Member member
+    ) {
 
         postService.updatePost(postId, member, requestDto);
 
@@ -116,8 +128,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}/write")
-    public String getPostUpdateWriteForm(Model model, @AuthMember Member member,
-            @PathVariable Long postId) {
+    public String getPostUpdateWriteForm(
+            @PathVariable Long postId,
+            @AuthMember Member member,
+            Model model
+    ) {
 
         postService.getPostUpdateWriteForm(member, postId);
 
@@ -135,7 +150,10 @@ public class PostController {
 
     @ResponseBody
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> deletePost(@AuthMember Member member, @PathVariable Long postId) {
+    public ResponseEntity<?> deletePost(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         postService.deletePost(member, postId);
 
@@ -143,14 +161,16 @@ public class PostController {
     }
 
     @GetMapping("/search/posts")
-    public String searchPost(@RequestParam(required = false) String title,
+    public String searchPost(
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
-            @AuthMember Member member,
             @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
             Model model
     ) {
 
-        model.addAttribute("PostGetListResponseDto", postService.searchPost(title, category, member, cursorTime));
+        model.addAttribute("PostGetListResponseDto",
+                postService.searchPost(title, category, member, cursorTime));
 
         return "post/postSearchList";
     }
@@ -160,10 +180,12 @@ public class PostController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) LocalDateTime cursorTime,
-            Model model, @AuthMember Member member
+            @AuthMember Member member,
+            Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member, cursorTime);
+        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member,
+                cursorTime);
 
         if (postList.isEmpty()) {
             throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
@@ -176,7 +198,10 @@ public class PostController {
 
     @ResponseBody
     @PatchMapping("/posts/{postId}/up")
-    public ResponseEntity<?> upPost(@PathVariable Long postId, @AuthMember Member member) {
+    public ResponseEntity<?> upPost(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         postService.upPost(postId, member);
 
