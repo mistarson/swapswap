@@ -4,7 +4,6 @@
       layout:decorate="~{common/layout/layout}">
 <body>
 <div layout:fragment="content">
-  </div>
   <div class="category-bar">
     <!-- 카테고리 링크 -->
     <a href="#HOME_ELECTRONICS">가전제품</a>
@@ -76,6 +75,7 @@
     function loadMorePosts() {
       isLoading = true;
       let url = '/posts/more?cursorTime=' + lastModifiedTime;
+      $('#loading').show(); // 로딩 표시 보이기
 
       if(!isLast) {
         $.ajax({
