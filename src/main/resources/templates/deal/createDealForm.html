@@ -4,6 +4,7 @@
       layout:decorate="~{common/layout/layout}">
 <link rel="stylesheet" type="text/css" href="your-stylesheet.css">
 <body>
+
 <div layout:fragment="content">
   <form th:action="@{/deals/2}" th:object="${dealCreateRequestDto}" method="post"
         enctype="application/x-www-form-urlencoded">
@@ -20,16 +21,29 @@
 
       <div class="write-bar">
         <div class="write-bar-explain">내 게시글 ID</div>
-        <input class="write-bar-title-input" type="text" th:field="*{secondPostIdList}" required>
+        <input class="write-bar-title-input" type="text" th:field="*{firstPostIdList}" required>
       </div>
 
       <div class="write-bar">
         <div class="write-bar-explain">상대 게시글 ID</div>
         <input class="write-bar-title-input" type="text" th:field="*{secondPostIdList}" required>
       </div>
+
+
       <button type="submit" class="write-complete-button">거래 요청하기</button>
     </div>
   </form>
+  <script th:inline="javascript">
+    function openPopup() {
+      // 팝업 열기
+      document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+      // 팝업 닫기
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
 </div>
 </body>
 </html>
