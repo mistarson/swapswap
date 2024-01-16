@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.wallet.entity.Wallet;
@@ -54,19 +55,21 @@ public class Member {
     private Wallet wallet;
 
     @Column
-    private LocalDateTime deletedDate;
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
 
     public void updateMember(String nickname) {
         this.nickname = nickname;
+        this.modifiedDate = LocalDateTime.now();
     }
 
     public void deleteMember() {
         isDeleted = true;
-        deletedDate = LocalDateTime.now();
+        modifiedDate = LocalDateTime.now();
     }
 
     public void reRegisterMember() {
         isDeleted = false;
-        deletedDate = null;
+        modifiedDate = null;
     }
 }
