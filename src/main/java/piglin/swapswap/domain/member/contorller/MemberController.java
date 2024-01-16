@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
@@ -51,6 +52,7 @@ public class MemberController {
     }
 
 
+    @ResponseBody
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> updateNickname(@AuthMember Member member,
             @Valid @RequestBody MemberNicknameDto requestDto) {
@@ -58,7 +60,7 @@ public class MemberController {
         memberService.updateNickname(member, requestDto);
         return ResponseEntity.ok().build();
     }
-
+    @ResponseBody
     @DeleteMapping("/members")
     public ResponseEntity<?> unregister(@AuthMember Member member, HttpServletResponse response) {
 
