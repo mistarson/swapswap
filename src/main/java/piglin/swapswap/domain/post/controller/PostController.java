@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -64,16 +65,16 @@ public class PostController {
     public String getPostList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sort", defaultValue = "modifiedUpTime") String sort,
             Model model, @AuthMember Member member) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
+        Pageable pageable = PageRequest.of(page, size);
 
         model.addAttribute("PostGetListResponseDtoPage", postService.getPostList(member, pageable));
 
         return "post/postList";
     }
 
+    @ResponseBody
     @PatchMapping("/posts/{postId}/favorite")
     public ResponseEntity<?> updatePostFavorite(@AuthMember Member member,
             @PathVariable Long postId) {
@@ -114,6 +115,7 @@ public class PostController {
         return "post/postUpdateWrite";
     }
 
+    @ResponseBody
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<?> deletePost(@AuthMember Member member, @PathVariable Long postId) {
 
@@ -128,14 +130,22 @@ public class PostController {
             @AuthMember Member member,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sort", defaultValue = "modifiedUpTime") String sort,
             Model model
     ) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Direction.DESC, sort));
+        Pageable pageable = PageRequest.of(page, size);
 
         model.addAttribute("PostGetListResponseDtoPage", postService.searchPost(title, category, member, pageable));
 
         return "post/postList";
+    }
+
+    @ResponseBody
+    @PatchMapping("/posts/{postId}/up")
+    public ResponseEntity<?> upPost(@PathVariable Long postId, @AuthMember Member member) {
+
+        postService.upPost(postId, member);
+
+        return ResponseEntity.ok().build();
     }
 }

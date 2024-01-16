@@ -50,4 +50,6 @@ public interface PostService {
     void deletePost(Member member, Long postId);
 
     Page<PostGetListResponseDto> searchPost(String title, String category, Member member, Pageable pageable);
+
+    void upPost(Long postId, Member member);
 }

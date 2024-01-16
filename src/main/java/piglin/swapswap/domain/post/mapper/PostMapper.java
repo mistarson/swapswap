@@ -49,29 +49,10 @@ public class PostMapper {
                                  .build();
     }
 
-    public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
-            boolean favoriteStatus) {
-
-        return PostGetListResponseDto.builder()
-                                     .postId(post.getId())
-                                     .memberId(post.getMember().getId())
-                                     .title(post.getTitle())
-                                     .thumbnailUrl(post.getImageUrl().get(0).toString())
-                                     .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-                                     .viewCnt(post.getViewCnt())
-                                     .favoriteCnt(favoriteCnt)
-                                     .favoriteStatus(favoriteStatus)
-                                     .build();
-    }
 
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {
 
         post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category());
-    }
-
-    public static Page<PostGetListResponseDto> toPageDtoList(List<PostGetListResponseDto> responseDtoList, Pageable pageable, Long totalElements) {
-
-        return new PageImpl<>(responseDtoList, pageable, totalElements);
     }
 }

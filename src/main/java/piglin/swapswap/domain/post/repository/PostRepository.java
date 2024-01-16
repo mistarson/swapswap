@@ -11,6 +11,4 @@ import piglin.swapswap.domain.post.entity.Post;
 public interface PostRepository extends JpaRepository<Post, Long>, PostQueryRepository {
 
     Optional<Post> findByIdAndIsDeletedIsFalse(Long postId);
-
-    Page<Post> findAllByIsDeletedIsFalse(Pageable pageable);
 }
