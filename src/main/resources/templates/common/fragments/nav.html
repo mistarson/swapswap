@@ -1,25 +1,121 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<head>
+  <title>SwapSwap</title>
+</head>
+<body>
 <header class="header" th:fragment="nav">
-<div class="header-content">
-  <div class="header-logo">
-    <a href="/">
-      <img th:src="@{/images/logo/swapswaphomepagelogo.png}" alt="스왑스왑 로고">
-    </a>
-  </div>
-  <div class="nav-container">
-    <a href="#chatroom">채팅방</a>
-    <a href="#cs">고객센터</a>
-    <div class="swapswap-search-container">
-      <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
-      <button class="swapswap-search-button">검색</button>
+  <div class="header-content">
+    <div class="header-logo">
+      <a href="/">
+        <img th:src="@{/images/logo/swapswaphomepagelogo.png}" alt="스왑스왑 로고">
+      </a>
+    </div>
+    <div class="nav-container">
+      <a href="#chatroom">채팅방</a>
+      <a href="#cs">고객센터</a>
+      <div class="swapswap-search-container">
+        <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
+        <button class="swapswap-search-button">검색</button>
+      </div>
+    </div>
+    <div class="header-nav">
+        <span sec:authorize="isAuthenticated()">
+          <a href="/">글쓰기</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/" class="login-link">스왑목록</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/myPage" class="login-link">마이페이지</a>
+          </span>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/members/logout}" id="logoutButton" >로그아웃</a>
+          </span>
+        <span sec:authorize="!isAuthenticated()">
+            <a href="/login" class="login-link">로그인</a>
+          </span>
     </div>
   </div>
-  <div class="header-nav">
-    <a href="#login" class="login-link"> 로그인</a>
-  </div>
-</div>
 </header>
+<script th:fragment="search">
+  document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.querySelector('.header-logo a');
+    var searchInput = document.querySelector('.swapswap-search-input');
+    var categoryLinks = document.querySelectorAll('.category-bar a');
+
+    // URL에서 검색어와 카테고리 추출
+    var urlParams = new URLSearchParams(window.location.search);
+    var currentSearchValue = urlParams.get('title');
+    var currentCategory = urlParams.get('category');
+
+    // 검색란에 파라미터 title 추가
+    if (currentSearchValue) {
+      searchInput.value = currentSearchValue;
+    }
+
+    if (logo) {
+      logo.addEventListener('click', function() {
+        localStorage.removeItem('searchValue');
+        localStorage.removeItem('selectedCategory');
+      });
+    }
+
+
+    categoryLinks.forEach(function(link) {
+
+      if (link.getAttribute('href').slice(1) === currentCategory) {
+        link.classList.add('active');
+      }
+
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        localStorage.setItem('selectedCategory', this.getAttribute('href').slice(1));
+        updateSearch();
+      });
+    });
+
+    // 검색 입력 필드와 버튼
+    var searchInput = document.querySelector('.swapswap-search-input');
+    var searchButton = document.querySelector('.swapswap-search-button');
+
+    if (searchInput && searchButton) {
+      // 제목란에 입력할 때 카테고리 초기화
+      searchInput.addEventListener('input', function() {
+        localStorage.removeItem('selectedCategory');
+      });
+
+      // 검색 버튼 클릭 이벤트
+      searchButton.addEventListener('click', function() {
+        localStorage.setItem('searchValue', searchInput.value);
+        updateSearch();
+      });
+
+      // 검색 입력 필드의 엔터 키 이벤트
+      searchInput.addEventListener('keyup', function(event) {
+        if (event.keyCode === 13) {
+          localStorage.setItem('searchValue', searchInput.value);
+          updateSearch();
+        }
+      });
+    }
+
+    // 검색 실행 함수
+    function updateSearch() {
+      var searchValue = localStorage.getItem('searchValue') || '';
+      var selectedCategory = localStorage.getItem('selectedCategory') || '';
+
+      var searchQuery = '/search/posts?';
+      if (searchValue) {
+        searchQuery += 'title=' + encodeURIComponent(searchValue);
+      }
+      if (selectedCategory) {
+        searchQuery += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
+      window.location.href = searchQuery;
+    }
+  });
+</script>
+</body>
 </html>

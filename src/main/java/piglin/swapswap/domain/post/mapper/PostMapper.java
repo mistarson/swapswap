@@ -2,7 +2,11 @@ package piglin.swapswap.domain.post.mapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -46,18 +50,6 @@ public class PostMapper {
                                  .build();
     }
 
-    public static PostGetListResponseDto postToGetListResponseDto(Post post, Long favoriteCnt,
-            boolean favoriteStatus) {
-
-        return PostGetListResponseDto.builder()
-                                     .title(post.getTitle())
-                                     .thumbnailUrl(post.getImageUrl().get(0).toString())
-                                     .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-                                     .viewCnt(post.getViewCnt())
-                                     .favoriteCnt(favoriteCnt)
-                                     .favoriteStatus(favoriteStatus)
-                                     .build();
-    }
 
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {

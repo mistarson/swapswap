@@ -1,25 +1,26 @@
 package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.post.event.DeleteImageUrlEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
@@ -33,7 +34,7 @@ public class PostServiceImplV1 implements PostService {
     private final FavoriteService favoriteService;
     private final PostRepository postRepository;
     private final S3ImageServiceImplV1 s3ImageServiceImplV1;
-    private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
@@ -81,27 +82,9 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
+    public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
 
-        Page<Post> postList = postRepository.findAllByIsDeletedIsFalse(pageable);
-
-        Map<Long, PostGetListResponseDto> responseDtoMap = new LinkedHashMap<>();
-
-        for (Post post : postList) {
-            Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
-            boolean favoriteStatus = false;
-
-            if (member != null) {
-                favoriteStatus = favoriteService.isFavorite(post, member);
-            }
-
-            PostGetListResponseDto dto = PostMapper.postToGetListResponseDto(post, favoriteCnt,
-                    favoriteStatus);
-
-            responseDtoMap.put(post.getId(), dto);
-        }
-
-        return responseDtoMap;
+        return postRepository.findAllPostListWithFavoriteAndPaging(pageable, member);
     }
 
     @Override
@@ -147,13 +130,46 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetByMemberIdResponseDto> getPostIdList(Long memberId){
-        List<Post> postList = postRepository.findAllByMemberId(memberId);
+    @Transactional
+    public void deletePost(Member member, Long postId) {
 
-        return postList.stream().map(PostGetByMemberIdResponseDto::toDto).toList();
+        Post post = findPost(postId);
+        checkPostWriter(member, post);
+
+        post.deletePost();
+
+        applicationEventPublisher.publishEvent(new DeleteImageUrlEvent(post.getImageUrl()));
     }
 
+    @Override
+    public Page<PostGetListResponseDto> searchPost(String title, String category, Member member,
+            Pageable pageable) {
 
+        Category categoryCond = null;
+
+        if(category != null) {
+            categoryCond = Enum.valueOf(Category.class, category);
+        }
+
+        return postRepository.searchPost(title, categoryCond, member, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void upPost(Long postId, Member member) {
+
+        Post post = findPost(postId);
+        checkPostWriter(member, post);
+        checkPostUpValid(post);
+
+        post.upPost();
+    }
+
+    private void checkPostUpValid(Post post) {
+        if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
+            throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
+        }
+    }
 
     private void checkPostWriter(Member member, Post post) {
 

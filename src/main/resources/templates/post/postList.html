@@ -1,39 +1,46 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{common/layout/layout}">
 <body>
 <div layout:fragment="content">
   <div class="category-bar">
     <!-- 카테고리 링크 -->
-    <a href="#category1">가전제품</a>
-    <a href="#category2">전자제품</a>
-    <a href="#category3">패션의류/잡화</a>
-    <a href="#category4">뷰티/미용</a>
-    <a href="#category5">출산/유아동</a>
-    <a href="#category6">식품</a>
-    <a href="#category7">주방용품</a>
-    <a href="#category8">생활용품</a>
+    <a href="#HOME_ELECTRONICS">가전제품</a>
+    <a href="#ELECTRONICS">전자제품</a>
+    <a href="#FASHION_MISCELLANEOUS">패션의류/잡화</a>
+    <a href="#BEAUTY">뷰티/미용</a>
+    <a href="#INFANT_CHILDCARE">출산/유아동</a>
+    <a href="#FOOD">식품</a>
+    <a href="#KITCHEN">주방용품</a>
+    <a href="#HOUSEHOLD">생활용품</a>
+    <a href="#FURNITURE_INTERIOR">가구/인테리어</a>
+    <a href="#SPORT_LEISURE">스포츠/레저</a>
+    <a href="#CAR">자동차용품</a>
+    <a href="#HOBBY_GAME_BOOK_ALBUM_DVD">취미/게임/도서/음반/DVD</a>
+    <a href="#OFFICE_SUPPLIES">문구/오피스</a>
+    <a href="#PET">반려동물용품</a>
+    <a href="#ETC">기타중고물품</a>
   </div>
 
   <div class="post-container">
-    <div th:each="entry:${PostGetListResponseDtoMap.entrySet}" class="post-card">
-      <a th:href="@{/posts/{postId}(postId=${entry.key})}">
+    <div th:each="postDto : ${PostGetListResponseDtoPage.content}" class="post-card">
+      <a th:href="@{/posts/{postId}(postId=${postDto.getPostId})}">
         <div class="post-image-container">
-          <img th:src="${entry.value.thumbnailUrl}" alt="Post Image" class="post-image">
+          <img th:src="${postDto.getImageUrl.get(0).toString}" alt="Post Image" class="post-image">
         </div>
-        <h2 th:text="${entry.value.title}" class="post-title"></h2>
+        <h2 th:text="${postDto.getTitle}" class="post-title"></h2>
         <div class="post-stats">
-          <span class="view-count">조회수 <span th:text="${entry.value.viewCnt}"></span></span>
-          <span class="favorite-count">찜 <span th:text="${entry.value.favoriteCnt}"></span></span>
+          <span class="view-count">조회수 <span th:text="${postDto.getViewCnt}"></span></span>
+          <span class="favorite-count">찜 <span th:text="${postDto.getFavoriteCnt}"></span></span>
           <span class="modified-date">올린 날짜 <span
-              th:text="${entry.value.modifiedUpTime}"></span></span>
+              th:text="${postDto.getModifiedUpTime}"></span></span>
         </div>
       </a>
       <button
-          th:data-post-id="${entry.key}"
+          th:data-post-id="${postDto.getPostId}"
           onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-          th:text="${entry.value.favoriteStatus()} == true ? '💙' : '🤍'"
+          th:text="${postDto.isFavoriteStatus} == true ? '💙' : '🤍'"
           type="button"
       ></button>
     </div>

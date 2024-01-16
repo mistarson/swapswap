@@ -48,14 +48,15 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS) );
+                SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/login", "/api/login/**").permitAll()
+                        .requestMatchers("/login", "/login/**").permitAll()
                         .requestMatchers("/", "/posts/{postId}").permitAll()
                         .requestMatchers("/posts/{postId}/favorite").permitAll()
+                        .requestMatchers("/search/**").permitAll()
                         .requestMatchers("/posts/write").authenticated()
                         .anyRequest().authenticated()
         );

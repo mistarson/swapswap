@@ -32,7 +32,7 @@ public class DealController {
         Long dealId = dealService.createDeal(member, requestDto, secondMemberId);
         redirectAttributes.addAttribute("dealId", dealId);
         System.out.println("dealId = " + dealId);
-        return "redirect:/test" /*+ secondMemberId*/;
+        return "redirect:/test" + secondMemberId;
     }
 
     @GetMapping("/request")

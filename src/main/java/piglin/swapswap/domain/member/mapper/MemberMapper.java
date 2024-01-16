@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.member.mapper;
 
+import java.time.LocalDateTime;
 import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;

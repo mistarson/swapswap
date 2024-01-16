@@ -3,6 +3,7 @@ package piglin.swapswap.domain.member.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,8 +19,8 @@ import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
-import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.domain.wallet.entity.Wallet;
+import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
@@ -27,17 +28,15 @@ import piglin.swapswap.global.jwt.JwtUtil;
 @Log4j2
 public class KakaoServiceImpl implements SocialService {
 
-    private final MemberRepository memberRepository;
     private final WalletRepository walletRepository;
+    private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public String kakaoLogin(String code) throws Exception {
 
         String accessToken = getToken(code);
-
-        log.info("카카오 전용 액세스 토큰 : " + accessToken);
-
         SocialUserInfo kakaoUserInfo = getUser(accessToken);
         Member kakaoMember = registerUserIfNeeded(kakaoUserInfo);
 
@@ -60,7 +59,7 @@ public class KakaoServiceImpl implements SocialService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "a304535271497a06332e50e9eec191ab");
-        body.add("redirect_uri", "http://localhost:8080/api/login/kakao/callback");
+        body.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -79,7 +78,7 @@ public class KakaoServiceImpl implements SocialService {
     }
 
     @Override
-    public SocialUserInfo getUser(String identifier) {
+    public SocialUserInfo getUser(String accessToken) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString("https://kapi.kakao.com")
@@ -89,7 +88,7 @@ public class KakaoServiceImpl implements SocialService {
                 .toUri();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + identifier);
+        headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -119,24 +118,21 @@ public class KakaoServiceImpl implements SocialService {
         return SocialUserInfo.createSocialUserInfo(id, nickname, email);
     }
 
-
-    @Override
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
-
         String kakaoEmail = kakaoUserInfo.email();
 
-        Wallet wallet = Wallet.builder().money(0L).build();
-        Wallet savedWallet = walletRepository.save(wallet);
-
-        Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet)));
-
-        if (isWithdrawnMember(member)) {
-
-            member.reRegisterMember();
-        }
-
-        return member;
+        return memberRepository.findByEmail(kakaoEmail)
+                .map(existingMember -> {
+                    if (isWithdrawnMember(existingMember)) {
+                        existingMember.reRegisterMember();
+                    }
+                    return existingMember;
+                })
+                .orElseGet(() -> {
+                    Wallet savedWallet = walletRepository.save(Wallet.builder().money(0L).build());
+                    return memberRepository.save(
+                            MemberMapper.createMember(kakaoUserInfo, savedWallet));
+                });
     }
 
     public boolean isWithdrawnMember(Member member) {

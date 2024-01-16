@@ -14,7 +14,9 @@ body{
   width: 100%;
   top: 0;
   z-index: 1000;
+  height: 100px;
 }
+
 .header-content {
   display: flex;
   align-items: center;
@@ -81,12 +83,22 @@ body{
   text-align: center;
   line-height: 50%; /* 버튼 안의 내용을 수직 정렬 */
 }
+.swapswap-search-button:hover {
+  background-color: #049cb3;
+}
 .header-nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
+}
+.header-nav a {
+  text-decoration: none;
+  color: black;
+}
+.header-nav a:hover {
+  font-weight: 700;
 }
 .login-link {
   padding: 8px 16px;
@@ -111,6 +123,7 @@ body{
   padding: 8px 16px; /* 링크 패딩 */
   border-radius: 20px; /* 둥근 모서리 */
   text-decoration: none;
+  font-size: 13px;
   color: #333;
   text-align: center;
   transition: background-color 0.3s;
@@ -118,6 +131,11 @@ body{
 }
 
 .category-bar a:hover {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.category-bar a.active {
   background-color: #00AADC; /* 호버 효과 */
   color: #ffffff;
 }
@@ -288,7 +306,7 @@ img {
   margin-top: 20px;
 }
 
-.category-button, .couponType-button, .post-select-button {
+.category-button, .couponType-button {
   padding: 8px 16px;
   border-radius: 20px;
   text-decoration: none;
@@ -370,17 +388,6 @@ img {
   color: #333;
 }
 
-.post-update-button {
-  border-radius: 20px;
-  border: #333333 1px solid;
-  cursor: pointer;
-  transition: border 0.3s;
-}
-
-.post-update-button :hover {
-  border: #00AADC 1px solid;
-}
-
 .favorite-action button {
   padding: 5px 15px;
   border-radius: 20px;
@@ -393,6 +400,40 @@ img {
 .favorite-action button:hover {
   border: 1px solid #00AADC;
 }
+
+.post-up-button a, .post-update-button a, .post-delete-button a {
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  border: 1px solid #333333;
+  display: inline-block;
+}
+
+/* 수정 버튼 스타일 */
+.post-update-button a {
+  background-color: #ffffff; /* 녹색 배경 */
+}
+
+.post-update-button a:hover {
+  color: white;
+  background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+/* 삭제 버튼 스타일 */
+.post-delete-button a {
+  background-color: #ffffff;
+}
+
+.post-delete-button a:hover {
+  color: white;
+  background-color: #da190b; /* 호버 시 색상 변경 */
+}
+
 
 .post-title-meta-section {
   padding: 20px;
@@ -431,37 +472,410 @@ img {
   color: #666;
 }
 
-.popup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  background-color: white;
-  border: 1px solid #ccc;
-  z-index: 1000;
+
+
+
+
+
+
+/*-----login-----*/
+.signin {
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
 }
 
-/* 닫기 버튼 스타일 */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.signin .signin__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.signin__card h2{
+  padding: 30px;
+  text-align: center;
+}
+
+.signin__card .actions {
+  display: flex;
+  border-top: 1px solid #ddd;
+  height: 400px;
+}
+
+.signin__card .actions img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 20px;
+  float: left;
+  vertical-align: middle;
+}
+.signin__card .actions p{
+  font-size: 18px;
+  margin-top: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 50px;
+  font-weight: 900;
+}
+.signin__card .actions a {
+  padding: 5px;
+  margin: 20px 20px;
+  height: 70px;
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #fddc3a;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+.signin__card .actions a:last-child{
+  border-right: none;
+}
+.signin__card .actions a:hover{
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions a {
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
   cursor: pointer;
 }
 
-.post-select-button.active {
-  background-color: #87CEEB; /* 선택된 상태의 배경색 */
-  color: white; /* 선택된 상태의 텍스트 색상 */
-  border: 2px solid #4682B4; /* 선택된 상태의 테두리 색상 */
-  /* 기타 스타일 변경 가능 */
+
+
+/*------myPage 중 유저정보-------*/
+.myPage_profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
-.post-select-button {
-  background-color: #87CEEB; /* 기본 배경색 */
-  color: white; /* 기본 텍스트 색상 */
-  border: 2px solid #87CEEB; /* 기본 테두리 색상 */
-  /* 기타 스타일 변경 가능 */
+.myPage_profile .myPage_profile_title {
+  width: 500px;
+  margin-bottom: 40px;
+  font-size: 25px;
+  font-weight: 900;
+  border-bottom: 1px solid #ccc;
+}
+
+.myPage_profile .profile_userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  font-size: 20px;
+}
+
+.profile_userinfo .myPage_nickname,
+.profile_userinfo .myPage_email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.profile_userinfo .myPage_nickname .nick{
+  width: 100px;
+  text-align: left;
+  margin-left: 20px;
+}
+.profile_userinfo .myPage_email .e {
+  margin-left: 20px;
+  width: 180px;
+  text-align: left;
+}
+.profile_userinfo .myPage_nickname .name,
+.profile_userinfo .myPage_email .mail {
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .nickname .name,
+.profile_userinfo .myPage_email .mail {
+  text-align: left;
+  margin-left: auto;
+}
+
+
+
+/*---------myPage 중 확인내역--------------*/
+.check_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.check_list > div {
+  margin: 10px 0;
+}
+.check_list div {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 250px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+}
+
+.check_list .myPage_edit_profile {
+  margin-top: 50px;
+
+}
+.transaction_history:hover {
+  background-color: #2980b9;
+}
+.my_wallet:hover {
+  background-color: #2980b9;
+}
+.coupon:hover {
+  background-color: #2980b9;
+}
+.favorite:hover {
+  background-color: #2980b9;
+}
+.myPage_edit_profile:hover {
+  background-color: #2980b9;
+}
+.check_list .unregister {
+  background-color: #5D676A;
+  text-align: center;
+}
+
+.check_list .unregister:hover {
+  background-color: #444;
+}
+
+.check_list a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+
+/*----------editProfile-------------*/
+.edit_profile .edit p.label {
+  display: inline-block;
+  margin: 0;
+}
+
+.edit_profile {
+  margin-top: 120px;
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.edit_profile__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.edit_profile__card h2{
+  padding: 30px;
+  text-align: center;
+  margin: 0 30px 0 30px;
+
+}
+.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.edit .label {
+  display: flex;
+  align-items: center;
+  border-top: 2px #555 solid;
+  width: 400px;
+}
+
+.edit h2 {
+  margin-right: 10px;
+}
+
+.edit span.edit_nickname {
+  font-weight: bold;
+  width: 150px;
+  text-align: center;
+  color: #808080;
+  cursor: pointer;
+  border-bottom: 2px solid #808080;
+
+
+}
+.edit .buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.buttons .editbutton {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+.edit .buttons a.editbutton:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+.edit .buttons a.cancelbutton:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .cancelbutton {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+.edit .buttons .cancelbutton a:hover {
+  background-color: #b0b0b0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a {
+  margin: 10px;
+}
+
+.buttons a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+/*-------------unregister--------------*/
+.unregister {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  margin-top: 100px;
+}
+
+.unregister-content {
+  max-width: 800px;
+}
+.unregister p {
+  border-bottom: 2px solid #ccc;
+  text-align: left;
+  width: 800px;
+  font-size: 30px;
+  font-weight: 900;
+}
+.unregister-content ul {
+  list-style-type: disc;
+  padding: 0;
+  margin-left: 50px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.unregister-buttons a {
+  margin-left: 10px;
+}
+
+.unregister-buttons .unregister-cancel {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-cancel:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister-buttons a:visited {
+  color: white;
+}
+
+.unregister-buttons .unregister-ok {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-ok:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister .unregister-buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.unregister-buttons a {
+  margin: 10px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
 }
 

@@ -1,12 +1,10 @@
 package piglin.swapswap.domain.post.service;
 
-import java.util.List;
-import java.util.Map;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -31,10 +29,11 @@ public interface PostService {
 
     /**
      * 게시글 목록 조회 메소드입니다.
+     *
      * @param member favorite 상태를 나타내기 위한 member 매개변수 입니다.
-     * @return Map 형식으로 이루어져 있으며 Key 에는 Post Id가, Value 에는 PostGetListResponseDto 가 들어갑니다.
+     * @return Paging 처리가 된 PostGetListResponseDto 가 들어갑니다.
      */
-    Map<Long, PostGetListResponseDto> getPostList(Member member, Pageable pageable);
+    Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable);
 
     /**
      * 게시글 찜 기능입니다.
@@ -48,5 +47,9 @@ public interface PostService {
 
     void getPostUpdateWriteForm(Member member, Long postId);
 
-    List<PostGetByMemberIdResponseDto> getPostIdList(Long memberId);
+    void deletePost(Member member, Long postId);
+
+    Page<PostGetListResponseDto> searchPost(String title, String category, Member member, Pageable pageable);
+
+    void upPost(Long postId, Member member);
 }
