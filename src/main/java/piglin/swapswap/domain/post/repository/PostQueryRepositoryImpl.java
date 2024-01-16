@@ -28,7 +28,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(
+    public List<PostGetListResponseDto> findPostListWithFavoriteByCursor(
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory
@@ -52,7 +52,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPost(String title, Category categoryCond,
+    public List<PostGetListResponseDto> searchPostListWithFavorite(String title,
+            Category categoryCond,
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory.select(post)
@@ -66,14 +67,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(), lessThanCursorTime(cursorTime))
+                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(),
+                        lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
                 .limit(12)
                 .fetch();
-
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {
@@ -104,8 +105,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         }
 
         return new JPAQueryFactory(em).selectOne()
-                                      .from(favorite)
-                                      .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
-                                      .exists();
+                .from(favorite)
+                .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
+                .exists();
     }
 }

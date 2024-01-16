@@ -83,7 +83,7 @@ public class PostServiceImplV1 implements PostService {
     public List<PostGetListResponseDto> getPostList(Member member,
             LocalDateTime cursorTime) {
 
-        return postRepository.findAllPostListWithFavoriteAndPaging(member, cursorTime);
+        return postRepository.findPostListWithFavoriteByCursor(member, cursorTime);
     }
 
     @Override
@@ -150,7 +150,7 @@ public class PostServiceImplV1 implements PostService {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        return postRepository.searchPost(title, categoryCond, member, cursorTime);
+        return postRepository.searchPostListWithFavorite(title, categoryCond, member, cursorTime);
     }
 
     @Override
@@ -165,6 +165,7 @@ public class PostServiceImplV1 implements PostService {
     }
 
     private void checkPostUpValid(Post post) {
+
         if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
