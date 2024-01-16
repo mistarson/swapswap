@@ -11,7 +11,6 @@
   <link rel="stylesheet" th:href="@{/css/style.css}">
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="/js/nav.js"></script>
   <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
       var nicknameSpan = document.querySelector('.edit_nickname');
@@ -23,10 +22,9 @@
         if (newNickname === originalNickname) {
           event.preventDefault();
           alert('변경하려는 닉네임이 현재 닉네임과 같습니다');
-        } else if (newNickname.length >= 2 && newNickname.length <= 10 && !/[^\w]/.test(
-            newNickname)) {
+        } else if (newNickname.length >= 2 && newNickname.length <= 10 && /^[a-zA-Z0-9가-힣]+$/.test(newNickname)) {
           var xhr = new XMLHttpRequest();
-          xhr.open('PATCH', '/api/members/nickname', true);
+          xhr.open('PATCH', '/members/nickname', true);
           xhr.setRequestHeader('Content-Type', 'application/json');
 
           alert('닉네임이 정상적으로 변경되었습니다');
@@ -83,7 +81,7 @@
             <a href="/myPage" class="login-link">마이페이지</a>
           </span>
       <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/api/logout}" id="logoutButton">로그아웃</a>
+            <a th:href="@{/members/logout}" id="logoutButton">로그아웃</a>
           </span>
       <span sec:authorize="isAnonymous()">
             <a href="/templates/member/login.html" class="login-link">로그인</a>

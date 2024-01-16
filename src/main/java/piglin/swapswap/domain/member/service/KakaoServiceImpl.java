@@ -59,7 +59,7 @@ public class KakaoServiceImpl implements SocialService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "a304535271497a06332e50e9eec191ab");
-        body.add("redirect_uri", "http://localhost:8080/api/login/kakao/callback");
+        body.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity

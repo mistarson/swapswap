@@ -23,7 +23,6 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class MemberController {
 
     private final KakaoServiceImpl kakaoServiceImpl;
@@ -44,7 +43,7 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/members/logout")
     public String logout(HttpServletResponse response) {
         JwtCookieManager.expireTokenCookie(response);
 
