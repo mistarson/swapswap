@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -73,6 +74,7 @@ public class PostController {
         return "post/postList";
     }
 
+    @ResponseBody
     @PatchMapping("/posts/{postId}/favorite")
     public ResponseEntity<?> updatePostFavorite(@AuthMember Member member,
             @PathVariable Long postId) {
@@ -113,6 +115,7 @@ public class PostController {
         return "post/postUpdateWrite";
     }
 
+    @ResponseBody
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<?> deletePost(@AuthMember Member member, @PathVariable Long postId) {
 
@@ -137,6 +140,7 @@ public class PostController {
         return "post/postList";
     }
 
+    @ResponseBody
     @PatchMapping("/posts/{postId}/up")
     public ResponseEntity<?> upPost(@PathVariable Long postId, @AuthMember Member member) {
 

@@ -3,25 +3,19 @@ package piglin.swapswap.domain.post.repository;
 import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
 import static piglin.swapswap.domain.post.entity.QPost.post;
 
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
-import piglin.swapswap.domain.post.entity.Post;
 
 @Repository
 public class PostQueryRepositoryImpl implements PostQueryRepository {
@@ -51,7 +45,6 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
                 .where(isNotDeleted())
-                .distinct()
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
@@ -85,7 +78,6 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         post.viewCnt,
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
-                .distinct()
                 .from(post)
                 .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
                 .leftJoin(favorite)
@@ -126,6 +118,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return new JPAQueryFactory(em).selectOne()
                                       .from(favorite)
                                       .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
+                                      .limit(1)
                                       .exists();
     }
 }
