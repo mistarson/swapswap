@@ -2,8 +2,6 @@ package piglin.swapswap.domain.post.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -53,7 +51,8 @@ public interface PostService {
 
     void deletePost(Member member, Long postId);
 
-    Page<PostGetListResponseDto> searchPost(String title, String category, Member member, Pageable pageable);
+    List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+            LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);
 }

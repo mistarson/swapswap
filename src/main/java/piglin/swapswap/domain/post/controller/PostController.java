@@ -146,16 +146,32 @@ public class PostController {
     public String searchPost(@RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
             @AuthMember Member member,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime,
             Model model
     ) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("PostGetListResponseDto", postService.searchPost(title, category, member, cursorTime));
 
-        model.addAttribute("PostGetListResponseDtoPage", postService.searchPost(title, category, member, pageable));
+        return "post/postSearchList";
+    }
 
-        return "post/postList";
+    @GetMapping("/search/posts/more")
+    public String searchPostMore(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime,
+            Model model, @AuthMember Member member
+    ) {
+
+        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member, cursorTime);
+
+        if (postList.isEmpty()) {
+            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
+        }
+
+        model.addAttribute("PostGetListResponseDto", postList);
+
+        return "post/postListFragment";
     }
 
     @ResponseBody

@@ -13,5 +13,5 @@ public interface PostQueryRepository {
     List<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(
             Member member, LocalDateTime cursorTime);
 
-    Page<PostGetListResponseDto> searchPost(String title, Category categoryCond, Member member, Pageable pageable);
+    List<PostGetListResponseDto> searchPost(String title, Category categoryCond, Member member, LocalDateTime cursorTime);
 }

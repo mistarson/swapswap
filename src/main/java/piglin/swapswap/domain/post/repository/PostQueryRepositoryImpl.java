@@ -10,7 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -34,7 +33,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     public List<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(
             Member member, LocalDateTime cursorTime) {
 
-        List<PostGetListResponseDto> content = queryFactory
+        return queryFactory
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
                         post.member.id.as("memberId"),
@@ -45,7 +44,31 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(isNotDeleted(), cursorTimeTest(cursorTime))
+                .where(isNotDeleted(), cursorTime(cursorTime))
+                .leftJoin(favorite)
+                .on(favorite.post.eq(post))
+                .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc(), post.id.desc())
+                .limit(12)
+                .fetch();
+    }
+
+    @Override
+    public List<PostGetListResponseDto> searchPost(String title, Category categoryCond,
+            Member member, LocalDateTime cursorTime) {
+
+        return queryFactory.select(post)
+                .select(Projections.fields(PostGetListResponseDto.class,
+                        post.id.as("postId"),
+                        post.member.id.as("memberId"),
+                        post.title,
+                        post.imageUrl,
+                        post.modifiedUpTime,
+                        post.viewCnt,
+                        favorite.post.count().as("favoriteCnt"),
+                        favoriteStatus(member).as("favoriteStatus")))
+                .from(post)
+                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(), cursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
@@ -53,45 +76,9 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .limit(12)
                 .fetch();
 
-        return content;
     }
 
-    @Override
-    public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond,
-            Member member,
-            Pageable pageable) {
-
-        List<PostGetListResponseDto> content = queryFactory.select(post)
-                .select(Projections.fields(PostGetListResponseDto.class,
-                        post.id.as("postId"),
-                        post.member.id.as("memberId"),
-                        post.title,
-                        post.imageUrl,
-                        post.modifiedUpTime,
-                        post.viewCnt,
-                        favorite.post.count().as("favoriteCnt"),
-                        favoriteStatus(member).as("favoriteStatus")))
-                .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
-                .leftJoin(favorite)
-                .on(favorite.post.eq(post))
-                .groupBy(post.id)
-                .orderBy(post.modifiedUpTime.desc(), post.id.desc())
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .fetch();
-
-        Long count = queryFactory.select(post.count())
-                                 .from(post)
-                                 .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
-                                 .offset(pageable.getOffset())
-                                 .limit(pageable.getPageSize())
-                                 .fetchOne();
-
-        return new PageImpl<>(content, pageable, count);
-    }
-
-    private BooleanExpression cursorTimeTest(LocalDateTime cursorTime) {
+    private BooleanExpression cursorTime(LocalDateTime cursorTime) {
 
         return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;
     }
