@@ -29,4 +29,9 @@ public class MainMvcController {
     public String editProfile() {
         return "/member/editProfile";
     }
+
+    @GetMapping("/unregister")
+    public String unregister() {
+        return "/member/unregister";
+    }
 }
