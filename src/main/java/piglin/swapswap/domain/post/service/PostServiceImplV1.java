@@ -2,7 +2,6 @@ package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
-import piglin.swapswap.domain.post.constant.Category.CategoryName;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -86,12 +84,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
 
-        Page<Post> postPage = postRepository.findAllByIsDeletedIsFalse(pageable);
-
-        List<PostGetListResponseDto> responseDtoList = getPostListResponseDtoWithFavoriteStatus(
-                member, postPage);
-
-        return PostMapper.toPageDtoList(responseDtoList, pageable, postPage.getTotalElements());
+        return postRepository.findAllPostListWithFavoriteAndPaging(pageable, member);
     }
 
     @Override
@@ -158,12 +151,7 @@ public class PostServiceImplV1 implements PostService {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        Page<Post> postPage = postRepository.searchPost(title, categoryCond, pageable);
-
-        List<PostGetListResponseDto> postListResponseDto = getPostListResponseDtoWithFavoriteStatus(
-                member, postPage);
-
-        return PostMapper.toPageDtoList(postListResponseDto, pageable, postPage.getTotalElements());
+        return postRepository.searchPost(title, categoryCond, member, pageable);
     }
 
     @Override
@@ -208,23 +196,5 @@ public class PostServiceImplV1 implements PostService {
         if (imageUrlList.size() > PostConstant.IMAGE_MAX_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MAX_SIZE);
         }
-    }
-
-    private List<PostGetListResponseDto> getPostListResponseDtoWithFavoriteStatus(Member member,
-            Page<Post> postPage) {
-        List<PostGetListResponseDto> responseDtoList = new ArrayList<>();
-
-        for (Post post : postPage) {
-            Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
-            boolean favoriteStatus = false;
-
-            if (member != null) {
-                favoriteStatus = favoriteService.isFavorite(post, member);
-            }
-
-            responseDtoList.add(
-                    PostMapper.postToGetListResponseDto(post, favoriteCnt, favoriteStatus));
-        }
-        return responseDtoList;
     }
 }
