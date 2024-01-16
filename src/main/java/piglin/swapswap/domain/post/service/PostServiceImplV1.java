@@ -159,12 +159,12 @@ public class PostServiceImplV1 implements PostService {
 
         Post post = findPost(postId);
         checkPostWriter(member, post);
-        checkPostUpValid(post);
+        checkModifiedUpTime(post);
 
         post.upPost();
     }
 
-    private void checkPostUpValid(Post post) {
+    private void checkModifiedUpTime(Post post) {
 
         if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
