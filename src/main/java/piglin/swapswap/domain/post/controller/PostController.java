@@ -1,11 +1,9 @@
 package piglin.swapswap.domain.post.controller;
 
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -32,14 +31,19 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts/write")
-    public String createPost(@Valid @ModelAttribute PostCreateRequestDto requestDto
-            , @AuthMember Member member) {
+    public String createPost(
+            @Valid @ModelAttribute PostCreateRequestDto requestDto,
+            @AuthMember Member member
+    ) {
 
         return "redirect:/posts/" + postService.createPost(member, requestDto);
     }
 
     @GetMapping("/posts/write")
-    public String getPostWriteForm(Model model, @AuthMember Member member) {
+    public String getPostWriteForm(
+            @AuthMember Member member,
+            Model model
+    ) {
 
         if (member == null) {
             return "redirect:/";
@@ -52,7 +56,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}")
-    public String getPost(@PathVariable Long postId, Model model, @AuthMember Member member) {
+    public String getPost(
+            @PathVariable Long postId,
+            @AuthMember Member member,
+            Model model
+    ) {
 
         model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
 
@@ -63,21 +71,40 @@ public class PostController {
 
     @GetMapping("/")
     public String getPostList(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            Model model, @AuthMember Member member) {
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
+            Model model
+    ) {
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        model.addAttribute("PostGetListResponseDtoPage", postService.getPostList(member, pageable));
+        model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
 
         return "post/postList";
     }
 
+    @GetMapping("/posts/more")
+    public String getPostListMore(
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
+            Model model
+    ) {
+
+        List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
+
+        if (postList.isEmpty()) {
+            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
+        }
+
+        model.addAttribute("PostGetListResponseDto", postList);
+
+        return "post/postListFragment";
+    }
+
     @ResponseBody
     @PatchMapping("/posts/{postId}/favorite")
-    public ResponseEntity<?> updatePostFavorite(@AuthMember Member member,
-            @PathVariable Long postId) {
+    public ResponseEntity<?> updatePostFavorite(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         if (member == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -89,8 +116,11 @@ public class PostController {
     }
 
     @PutMapping("/posts/{postId}/write")
-    public String updatePost(@Valid @ModelAttribute PostUpdateRequestDto requestDto
-            , @AuthMember Member member, @PathVariable Long postId) {
+    public String updatePost(
+            @PathVariable Long postId,
+            @Valid @ModelAttribute PostUpdateRequestDto requestDto,
+            @AuthMember Member member
+    ) {
 
         postService.updatePost(postId, member, requestDto);
 
@@ -98,8 +128,11 @@ public class PostController {
     }
 
     @GetMapping("/posts/{postId}/write")
-    public String getPostUpdateWriteForm(Model model, @AuthMember Member member,
-            @PathVariable Long postId) {
+    public String getPostUpdateWriteForm(
+            @PathVariable Long postId,
+            @AuthMember Member member,
+            Model model
+    ) {
 
         postService.getPostUpdateWriteForm(member, postId);
 
@@ -117,7 +150,10 @@ public class PostController {
 
     @ResponseBody
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> deletePost(@AuthMember Member member, @PathVariable Long postId) {
+    public ResponseEntity<?> deletePost(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         postService.deletePost(member, postId);
 
@@ -125,24 +161,47 @@ public class PostController {
     }
 
     @GetMapping("/search/posts")
-    public String searchPost(@RequestParam(required = false) String title,
+    public String searchPost(
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) LocalDateTime cursorTime,
             @AuthMember Member member,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
             Model model
     ) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("PostGetListResponseDto",
+                postService.searchPost(title, category, member, cursorTime));
 
-        model.addAttribute("PostGetListResponseDtoPage", postService.searchPost(title, category, member, pageable));
+        return "post/postSearchList";
+    }
 
-        return "post/postList";
+    @GetMapping("/search/posts/more")
+    public String searchPostMore(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            @AuthMember Member member,
+            Model model
+    ) {
+
+        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member,
+                cursorTime);
+
+        if (postList.isEmpty()) {
+            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
+        }
+
+        model.addAttribute("PostGetListResponseDto", postList);
+
+        return "post/postListFragment";
     }
 
     @ResponseBody
     @PatchMapping("/posts/{postId}/up")
-    public ResponseEntity<?> upPost(@PathVariable Long postId, @AuthMember Member member) {
+    public ResponseEntity<?> upPost(
+            @PathVariable Long postId,
+            @AuthMember Member member
+    ) {
 
         postService.upPost(postId, member);
 

@@ -8,10 +8,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
@@ -30,10 +28,10 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public Page<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(Pageable pageable,
-            Member member) {
+    public List<PostGetListResponseDto> findPostListWithFavoriteByCursor(
+            Member member, LocalDateTime cursorTime) {
 
-        List<PostGetListResponseDto> content = queryFactory
+        return queryFactory
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
                         post.member.id.as("memberId"),
@@ -44,31 +42,21 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(isNotDeleted())
+                .where(isNotDeleted(), lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .limit(12)
                 .fetch();
-
-        Long count = queryFactory.select(post.count())
-                                 .from(post)
-                                 .where(isNotDeleted())
-                                 .limit(pageable.getPageSize())
-                                 .offset(pageable.getOffset())
-                                 .fetchOne();
-
-        return new PageImpl<>(content, pageable, count);
     }
 
     @Override
-    public Page<PostGetListResponseDto> searchPost(String title, Category categoryCond,
-            Member member,
-            Pageable pageable) {
+    public List<PostGetListResponseDto> searchPostListWithFavorite(String titleCond,
+            Category categoryCond,
+            Member member, LocalDateTime cursorTime) {
 
-        List<PostGetListResponseDto> content = queryFactory.select(post)
+        return queryFactory.select(post)
                 .select(Projections.fields(PostGetListResponseDto.class,
                         post.id.as("postId"),
                         post.member.id.as("memberId"),
@@ -79,45 +67,46 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
+                .where(titleContains(titleCond), categoryEq(categoryCond), isNotDeleted(),
+                        lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .limit(12)
                 .fetch();
-
-        Long count = queryFactory.select(post.count())
-                                 .from(post)
-                                 .where(titleContains(title), categoryEq(categoryCond), isNotDeleted())
-                                 .offset(pageable.getOffset())
-                                 .limit(pageable.getPageSize())
-                                 .fetchOne();
-
-        return new PageImpl<>(content, pageable, count);
     }
 
-    private BooleanExpression titleContains(String title) {
-        return title != null ? post.title.contains(title) : null;
+    private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {
+
+        return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;
     }
 
-    private BooleanExpression categoryEq(Category category) {
-        return category != null ? post.category.eq(category) : null;
+    private BooleanExpression titleContains(String titleCond) {
+
+        return titleCond != null ? post.title.contains(titleCond) : null;
+    }
+
+    private BooleanExpression categoryEq(Category categoryCond) {
+
+        return categoryCond != null ? post.category.eq(categoryCond) : null;
     }
 
     private BooleanExpression isNotDeleted() {
+
         return post.isDeleted.isFalse();
     }
 
     private BooleanExpression favoriteStatus(Member member) {
+
         if (member == null) {
+
             return Expressions.asBoolean(false);
         }
 
         return new JPAQueryFactory(em).selectOne()
-                                      .from(favorite)
-                                      .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
-                                      .exists();
+                .from(favorite)
+                .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
+                .exists();
     }
 }
