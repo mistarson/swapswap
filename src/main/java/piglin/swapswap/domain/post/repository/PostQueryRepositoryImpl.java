@@ -10,8 +10,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
@@ -44,7 +42,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(isNotDeleted(), cursorTime(cursorTime))
+                .where(isNotDeleted(), lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
@@ -68,7 +66,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(), cursorTime(cursorTime))
+                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(), lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
@@ -78,7 +76,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     }
 
-    private BooleanExpression cursorTime(LocalDateTime cursorTime) {
+    private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {
 
         return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;
     }
