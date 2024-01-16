@@ -7,10 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Setter
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class PostGetListResponseDto {
 
     Long postId;
