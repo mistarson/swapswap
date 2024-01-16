@@ -118,7 +118,6 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return new JPAQueryFactory(em).selectOne()
                                       .from(favorite)
                                       .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
-                                      .limit(1)
                                       .exists();
     }
 }
