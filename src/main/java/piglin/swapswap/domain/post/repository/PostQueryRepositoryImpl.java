@@ -52,7 +52,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPostListWithFavorite(String title,
+    public List<PostGetListResponseDto> searchPostListWithFavorite(String titleCond,
             Category categoryCond,
             Member member, LocalDateTime cursorTime) {
 
@@ -67,7 +67,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(titleContains(title), categoryEq(categoryCond), isNotDeleted(),
+                .where(titleContains(titleCond), categoryEq(categoryCond), isNotDeleted(),
                         lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
@@ -82,14 +82,14 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;
     }
 
-    private BooleanExpression titleContains(String title) {
+    private BooleanExpression titleContains(String titleCond) {
 
-        return title != null ? post.title.contains(title) : null;
+        return titleCond != null ? post.title.contains(titleCond) : null;
     }
 
-    private BooleanExpression categoryEq(Category category) {
+    private BooleanExpression categoryEq(Category categoryCond) {
 
-        return category != null ? post.category.eq(category) : null;
+        return categoryCond != null ? post.category.eq(categoryCond) : null;
     }
 
     private BooleanExpression isNotDeleted() {
