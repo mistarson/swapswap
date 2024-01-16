@@ -16,6 +16,7 @@ import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;

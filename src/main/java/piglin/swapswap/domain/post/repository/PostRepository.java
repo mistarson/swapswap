@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.post.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdAndIsDeletedIsFalse(Long postId);
 
     Page<Post> findAllByIsDeletedIsFalse(Pageable pageable);
+
+    List<Post> findAllByMemberId(Long memberId);
 }

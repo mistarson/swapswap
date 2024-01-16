@@ -32,6 +32,7 @@ public class PostMapper {
             Long favoriteCnt, boolean favoriteStatus) {
 
         return PostGetResponseDto.builder()
+                                 .userId(post.getMember().getId())
                                  .author(post.getMember().getNickname())
                                  .title(post.getTitle())
                                  .content(post.getContent())

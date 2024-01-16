@@ -18,6 +18,7 @@ public class DealServiceImplV1 implements DealService {
 
     private final DealRepository dealRepository;
     private final MemberRepository memberRepository;
+
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto, Long secondMemberId) {
 

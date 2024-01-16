@@ -19,6 +19,7 @@ import piglin.swapswap.global.annotation.AuthMember;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/deals")
 public class DealController {
 
     private final DealService dealService;
