@@ -121,17 +121,18 @@ public class KakaoServiceImpl implements SocialService {
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
         String kakaoEmail = kakaoUserInfo.email();
 
-        Wallet wallet = Wallet.builder().money(0L).build();
-        Wallet savedWallet = walletRepository.save(wallet);
-
-        Member member = memberRepository.findByEmail(kakaoEmail)
-                .orElseGet(() -> memberRepository.save(
-                        MemberMapper.createMember(kakaoUserInfo, savedWallet)));
-
-        if (isWithdrawnMember(member)) {
-            member.reRegisterMember();
-        }
-        return member;
+        return memberRepository.findByEmail(kakaoEmail)
+                .map(existingMember -> {
+                    if (isWithdrawnMember(existingMember)) {
+                        existingMember.reRegisterMember();
+                    }
+                    return existingMember;
+                })
+                .orElseGet(() -> {
+                    Wallet savedWallet = walletRepository.save(Wallet.builder().money(0L).build());
+                    return memberRepository.save(
+                            MemberMapper.createMember(kakaoUserInfo, savedWallet));
+                });
     }
 
     public boolean isWithdrawnMember(Member member) {

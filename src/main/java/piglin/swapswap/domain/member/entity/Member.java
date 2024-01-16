@@ -9,17 +9,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
-import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.member.constant.MemberRoleEnum;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
@@ -28,7 +24,7 @@ import piglin.swapswap.domain.wallet.entity.Wallet;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,29 +43,19 @@ public class Member {
     @Column(nullable = false)
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "member")
-    private List<Post> postList;
-
     @JoinColumn(name = "wallet_id")
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private Wallet wallet;
 
-    @Column
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
-
     public void updateMember(String nickname) {
         this.nickname = nickname;
-        this.modifiedDate = LocalDateTime.now();
     }
 
     public void deleteMember() {
         isDeleted = true;
-        modifiedDate = LocalDateTime.now();
     }
 
     public void reRegisterMember() {
         isDeleted = false;
-        modifiedDate = null;
     }
 }

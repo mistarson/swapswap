@@ -16,7 +16,6 @@ public class MemberMapper {
                 .role(MemberRoleEnum.USER)
                 .isDeleted(false)
                 .wallet(wallet)
-                .modifiedDate(LocalDateTime.now())
                 .build();
     }
 }
