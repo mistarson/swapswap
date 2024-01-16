@@ -67,7 +67,7 @@ public class PostController {
     @GetMapping("/")
     public String getPostList(
             Model model, @AuthMember Member member,
-            @RequestParam(required = false) LocalDateTime cursorTime
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime
     ) {
 
         model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
