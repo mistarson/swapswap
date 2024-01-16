@@ -67,7 +67,7 @@ public class PostController {
     @GetMapping("/")
     public String getPostList(
             Model model, @AuthMember Member member,
-            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime
+            @RequestParam(required = false) LocalDateTime cursorTime
     ) {
 
         model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
@@ -78,7 +78,7 @@ public class PostController {
     @GetMapping("/posts/more")
     public String getPostListMore(
             Model model, @AuthMember Member member,
-            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime
+            @RequestParam(required = false) LocalDateTime cursorTime
     ) {
 
         List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
@@ -146,7 +146,7 @@ public class PostController {
     public String searchPost(@RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
             @AuthMember Member member,
-            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime,
+            @RequestParam(required = false) LocalDateTime cursorTime,
             Model model
     ) {
 
@@ -159,7 +159,7 @@ public class PostController {
     public String searchPostMore(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime,
+            @RequestParam(required = false) LocalDateTime cursorTime,
             Model model, @AuthMember Member member
     ) {
 
