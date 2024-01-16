@@ -1,11 +1,12 @@
 package piglin.swapswap.domain.post.controller;
 
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -63,15 +64,24 @@ public class PostController {
 
     @GetMapping("/")
     public String getPostList(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            Model model, @AuthMember Member member) {
+            Model model, @AuthMember Member member,
+            @RequestParam(required = false) LocalDateTime cursorTime
+    ) {
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        model.addAttribute("PostGetListResponseDtoPage", postService.getPostList(member, pageable));
+        model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
 
         return "post/postList";
+    }
+
+    @GetMapping("/posts/more")
+    public String getPostListMore(
+            Model model, @AuthMember Member member,
+            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime cursorTime
+    ) {
+
+        model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
+
+        return "post/postListFragment";
     }
 
     @ResponseBody

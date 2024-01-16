@@ -82,9 +82,10 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
+    public List<PostGetListResponseDto> getPostList(Member member,
+            LocalDateTime cursorTime) {
 
-        return postRepository.findAllPostListWithFavoriteAndPaging(pageable, member);
+        return postRepository.findAllPostListWithFavoriteAndPaging(member, cursorTime);
     }
 
     @Override

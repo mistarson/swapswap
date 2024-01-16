@@ -1,5 +1,7 @@
 package piglin.swapswap.domain.post.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
@@ -30,10 +32,12 @@ public interface PostService {
     /**
      * 게시글 목록 조회 메소드입니다.
      *
-     * @param member favorite 상태를 나타내기 위한 member 매개변수 입니다.
-     * @return Paging 처리가 된 PostGetListResponseDto 가 들어갑니다.
+     * @param member     favorite 상태를 나타내기 위한 member 매개변수 입니다.
+     * @param cursorTime
+     * @return List 형식의 PostGetListResponseDto 가 들어갑니다.
      */
-    Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable);
+    List<PostGetListResponseDto> getPostList(Member member,
+            LocalDateTime cursorTime);
 
     /**
      * 게시글 찜 기능입니다.

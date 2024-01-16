@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,8 +31,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public Page<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(Pageable pageable,
-            Member member) {
+    public List<PostGetListResponseDto> findAllPostListWithFavoriteAndPaging(
+            Member member, LocalDateTime cursorTime) {
 
         List<PostGetListResponseDto> content = queryFactory
                 .select(Projections.fields(PostGetListResponseDto.class,
@@ -44,23 +45,15 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count().as("favoriteCnt"),
                         favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
-                .where(isNotDeleted())
+                .where(isNotDeleted(), cursorTimeTest(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
+                .limit(12)
                 .fetch();
 
-        Long count = queryFactory.select(post.count())
-                                 .from(post)
-                                 .where(isNotDeleted())
-                                 .limit(pageable.getPageSize())
-                                 .offset(pageable.getOffset())
-                                 .fetchOne();
-
-        return new PageImpl<>(content, pageable, count);
+        return content;
     }
 
     @Override
@@ -98,20 +91,30 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
         return new PageImpl<>(content, pageable, count);
     }
 
+    private BooleanExpression cursorTimeTest(LocalDateTime cursorTime) {
+
+        return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;
+    }
+
     private BooleanExpression titleContains(String title) {
+
         return title != null ? post.title.contains(title) : null;
     }
 
     private BooleanExpression categoryEq(Category category) {
+
         return category != null ? post.category.eq(category) : null;
     }
 
     private BooleanExpression isNotDeleted() {
+
         return post.isDeleted.isFalse();
     }
 
     private BooleanExpression favoriteStatus(Member member) {
+
         if (member == null) {
+
             return Expressions.asBoolean(false);
         }
 

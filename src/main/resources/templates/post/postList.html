@@ -22,9 +22,9 @@
     <a href="#PET">반려동물용품</a>
     <a href="#ETC">기타중고물품</a>
   </div>
-
   <div class="post-container">
-    <div th:each="postDto : ${PostGetListResponseDtoPage.content}" class="post-card">
+    <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+         th:data-modified-time="${postDto.getModifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.getPostId})}">
         <div class="post-image-container">
           <img th:src="${postDto.getImageUrl.get(0).toString}" alt="Post Image" class="post-image">
@@ -47,6 +47,66 @@
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
+
+    let isLoading = false;
+    let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
+
+    window.addEventListener("scroll", function () {
+
+      const lastPost = document.querySelector('.post-card:last-of-type');
+      if (lastPost) {
+        const modifiedTime = lastPost.getAttribute('data-modified-time');
+        if (modifiedTime) {
+          lastModifiedTime = modifiedTime;
+        }
+      }
+
+      const SCROLLED_HEIGHT = window.scrollY;
+      const WINDOW_HEIGHT = window.innerHeight;
+      const DOC_TOTAL_HEIGHT = document.body.offsetHeight;
+      const IS_BOTTOM = (WINDOW_HEIGHT + SCROLLED_HEIGHT > DOC_TOTAL_HEIGHT - 300);
+
+      if (IS_BOTTOM && !isLoading) {
+        loadMorePosts();
+      }
+    });
+
+    function loadMorePosts() {
+      isLoading = true;
+      let url = '/posts/more?cursorTime=' + lastModifiedTime;
+
+      $.ajax({
+        url: url,
+        type: 'GET',
+        success: function(htmlFragment) {
+          console.log(lastModifiedTime);
+          console.log("Received HTML fragment:", htmlFragment);
+          $('.post-container').append(htmlFragment);
+          updateLastModifiedTime(htmlFragment);
+          isLoading = false;
+        },
+        error: function() {
+          alert('더 이상 로드할 게시물이 없습니다.')
+          isLoading = false;
+        }
+      });
+    }
+
+    function updateLastModifiedTime(htmlFragment) {
+      // HTML 조각을 임시 요소에 추가하여 파싱
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlFragment;
+
+      // 마지막 게시물의 수정 시간 추출
+      const lastPost = tempDiv.querySelector('.post-card:last-of-type');
+      if (lastPost) {
+        const modifiedTime = lastPost.getAttribute('data-modified-time');
+        if (modifiedTime) {
+          lastModifiedTime = modifiedTime;
+        }
+      }
+    }
+
     function toggleFavorite(postId) {
       $.ajax({
         url: '/posts/' + postId + '/favorite',
