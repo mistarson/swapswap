@@ -40,8 +40,10 @@ public class Scheduler {
     public void deletePostComplete() {
 
         List<String> postImageUrlListToDelete = new ArrayList<>();
-
         LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
+
+        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+
         List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
 
         for(Post post : postListToDelete) {
@@ -54,14 +56,5 @@ public class Scheduler {
         applicationEventPublisher.publishEvent(new DeleteImageUrlListEvent(postImageUrlListToDelete));
 
         postRepository.deleteAll(postListToDelete);
-    }
-
-    @Transactional
-    @Scheduled(cron = "0 0 0 * * *")
-    public void deleteFavoriteComplete() {
-
-        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
-
-        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
     }
 }
