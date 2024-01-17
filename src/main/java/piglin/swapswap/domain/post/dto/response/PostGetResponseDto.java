@@ -5,6 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record PostGetResponseDto(
+        Long userId,
         String author,
         String title,
         String content,
