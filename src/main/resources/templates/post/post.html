@@ -40,7 +40,7 @@
         <div class="post-title-meta-section">
           <h1 class="post-title" th:text="${postGetResponseDto.title()}"></h1>
           <div class="post-meta">
-            <span th:text="${category}"></span> ・
+            <span th:text="${postGetResponseDto.category().getName()}"></span> ・
             <span th:text="${postGetResponseDto.modifiedUpTime()}"></span>
           </div>
         </div>

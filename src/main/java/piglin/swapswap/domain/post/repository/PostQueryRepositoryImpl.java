@@ -1,7 +1,6 @@
 package piglin.swapswap.domain.post.repository;
 
 import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
-import static piglin.swapswap.domain.member.entity.QMember.*;
 import static piglin.swapswap.domain.post.entity.QPost.post;
 
 import com.querydsl.core.types.Projections;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.post.constant.Category;
-import piglin.swapswap.domain.post.constant.Category.CategoryName;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -95,24 +93,25 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     @Override
     public PostGetResponseDto findPostWithFavorite(Long postId, Member member) {
 
-        return queryFactory.select(Projections.constructor(PostGetResponseDto.class,
-                        post.member.nickname.as("author"),
-                        post.title,
-                        post.content,
-                        post.category,
-                        post.imageUrl,
-                        post.viewCnt,
-                        post.upCnt,
-                        favorite.post.count().as("favoriteCnt"),
-                        post.modifiedUpTime,
-                        favoriteStatus(member).as("favoriteStatus")))
+        return queryFactory.select(
+                        Projections.constructor(PostGetResponseDto.class,
+                                post.member.nickname.as("author"),
+                                post.title,
+                                post.content,
+                                post.category,
+                                post.imageUrl,
+                                post.viewCnt,
+                                post.upCnt,
+                                favorite.post.count().as("favoriteCnt"),
+                                post.modifiedUpTime,
+                                favoriteStatus(member).as("favoriteStatus")))
                 .from(post)
                 .where(isNotDeleted(), post.id.eq(postId))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .join(post)
                 .on(post.id.eq(QMember.member.id))
-                .fetchOne();
+                .fetchFirst();
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {

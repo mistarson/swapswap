@@ -10,7 +10,7 @@ public record PostGetResponseDto(
         String author,
         String title,
         String content,
-        Category categoryEnum,
+        Category category,
         Map<Integer, Object> imageUrl,
         Long viewCnt,
         Long upCnt,

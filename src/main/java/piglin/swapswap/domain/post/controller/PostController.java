@@ -65,7 +65,6 @@ public class PostController {
         PostGetResponseDto responseDto = postService.getPost(postId, member);
 
         model.addAttribute("postGetResponseDto", responseDto);
-        model.addAttribute("category", responseDto.categoryEnum().getName());
         model.addAttribute("postId", postId);
 
         return "post/post";
