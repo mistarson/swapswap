@@ -6,12 +6,12 @@
 <div layout:fragment="content">
   <input class="memberId" type="hidden" th:value="${memberId}">
   <input class="secondMemberId" type="hidden" th:value="${secondMemberId}">
-  <div class="author-name" th:text="${secondMemberName}+ '의 스왑물품'"></div>
-
   <!--   게시물 목록 부분 -->
+  <div class="author-name">사용자님의 스왑물품</div>
   <div id="postContent">
     <input type="number" id="firstExtraFee" placeholder="나의 추가 요금 입력">
   </div>
+  <div class="author-name" th:text="${secondMemberName}+ '의 스왑물품'"></div>
   <div id="postSecondContent">
     <input type="number" id="secondExtraFee" placeholder="상대 추가 요금 입력">
   </div>

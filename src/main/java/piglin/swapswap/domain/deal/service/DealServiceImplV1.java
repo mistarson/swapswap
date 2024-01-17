@@ -27,7 +27,7 @@ public class DealServiceImplV1 implements DealService {
         Member firstMember = getMember(member.getId());
         Deal deal = DealMapper.createDeal(requestDto, firstMember);
 
-        dealRepository.save(deal);
+        Deal savedDeal = dealRepository.save(deal);
 
         return deal.getId();
     }
@@ -41,12 +41,6 @@ public class DealServiceImplV1 implements DealService {
 
             return DealStatus.REQUESTED;
         }
-    }
-
-    private Member getMember(Long memberId) {
-
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
 
     private void existMember(Long memberId) {
