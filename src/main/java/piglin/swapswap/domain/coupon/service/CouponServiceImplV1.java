@@ -11,7 +11,6 @@ import piglin.swapswap.domain.coupon.repository.CouponRepository;
 import piglin.swapswap.domain.coupon.validator.CouponValidator;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.global.annotation.RetryIssueCoupon;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -48,16 +47,26 @@ public class CouponServiceImplV1 implements CouponService {
 
     @Override
     @Transactional
-    @RetryIssueCoupon
-    public void issueEventCoupon(Long couponId, Member member) {
+    public void issueEventCouponByPessimisticLock(Long couponId, Member member) {
 
-        Coupon coupon = couponRepository.findByIdWithLock(couponId)
+        Coupon coupon = couponRepository.findByIdWithPessimisticLock(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
 
         if (issueCouponPossible(coupon)) {
             memberCouponService.saveMemberCoupon(member, coupon);
             coupon.issueCoupon();
-            couponRepository.saveAndFlush(coupon);
+        }
+    }
+
+    @Override
+    public void issueEventCouponByOptimisticLock(Long couponId, Member member) {
+
+        Coupon coupon = couponRepository.findByIdWithOptimisticLock(couponId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
+
+        if (issueCouponPossible(coupon)) {
+            memberCouponService.saveMemberCoupon(member, coupon);
+            coupon.issueCoupon();
         }
     }
 

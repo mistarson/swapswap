@@ -9,6 +9,8 @@ public interface CouponService {
 
     int getCouponCount(Long couponId);
 
-    void issueEventCoupon(Long couponId, Member member);
+    void issueEventCouponByPessimisticLock(Long couponId, Member member);
+
+    void issueEventCouponByOptimisticLock(Long couponId, Member member);
 
 }

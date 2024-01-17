@@ -132,7 +132,6 @@ public class KakaoServiceImpl implements SocialService {
                 .orElseGet(() -> memberRepository.save(MemberMapper.createMember(kakaoUserInfo, savedWallet)));
 
         if (isWithdrawnMember(member)) {
-
             member.reRegisterMember();
         }
 

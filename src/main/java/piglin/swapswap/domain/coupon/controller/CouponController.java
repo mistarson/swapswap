@@ -70,7 +70,7 @@ public class CouponController {
     @PostMapping("/{couponId}/event")
     public ResponseEntity<?> issueEventCoupon(@PathVariable Long couponId, @AuthMember Member member) {
 
-        couponService.issueEventCoupon(couponId, member);
+        couponService.issueEventCouponByPessimisticLock(couponId, member);
 
         return ResponseEntity.ok("쿠폰 발급 성공");
     }

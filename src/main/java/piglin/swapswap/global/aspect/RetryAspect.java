@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RetryAspect {
 
-    @Around("@annotation(piglin.swapswap.global.annotation.RetryIssueCoupon)")
+    @Around("@annotation(piglin.swapswap.global.annotation.Retry)")
     public Object retryIssueCoupon(ProceedingJoinPoint joinPoint) throws Throwable {
 
         int retryCount = 0;
@@ -24,9 +24,13 @@ public class RetryAspect {
             log.info("retryCount: {}", retryCount);
             try {
                 return joinPoint.proceed();
-            } catch (ObjectOptimisticLockingFailureException oe) {
-                log.error("트랜잭션 충돌이 발생하여 재시도합니다.");
-                retryCount++;
+            } catch (Exception e) {
+                if (e instanceof ObjectOptimisticLockingFailureException) {
+                    log.error("트랜잭션 충돌이 발생하여 재시도합니다.");
+                    retryCount++;
+                    continue;
+                }
+                throw new RuntimeException(e);
             }
         }
 
