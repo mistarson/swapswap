@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.deal.controller;
 
 import jakarta.validation.Valid;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,8 @@ import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,6 +37,10 @@ public class DealController {
     public String createDealForm(Model model, @AuthMember Member member,
             @RequestParam Long secondMemberId,
             @RequestParam String memberName) {
+
+        if (member.getId().equals(secondMemberId)) {
+            throw new BusinessException(ErrorCode.REQUEST_ONLY_DIFFERENT_USER_EXCEPTION);
+        }
 
         model.addAttribute("secondMemberId", secondMemberId);
         model.addAttribute("secondMemberName", memberName);
