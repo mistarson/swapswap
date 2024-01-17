@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +23,8 @@ import piglin.swapswap.global.annotation.AuthMember;
 @RequiredArgsConstructor
 @RequestMapping("/coupons")
 public class CouponController {
+
+    static final Long EVENT_COUPON_ID = 1L;
 
     private final CouponService couponService;
 
@@ -66,10 +67,10 @@ public class CouponController {
         return "coupon/couponDetail";
     }
 
-    @GetMapping("/{couponId}/event")
-    public String couponEvent(@PathVariable Long couponId, Model model) {
+    @GetMapping("/event")
+    public String couponEvent(Model model) {
 
-        int couponCount = couponService.getCouponCount(couponId);
+        int couponCount = couponService.getCouponCount(EVENT_COUPON_ID);
 
         model.addAttribute("couponCount", couponCount);
 
@@ -77,10 +78,10 @@ public class CouponController {
     }
 
     @ResponseBody
-    @PostMapping("/{couponId}/event")
-    public ResponseEntity<?> issueEventCoupon(@PathVariable Long couponId, @AuthMember Member member) {
+    @PostMapping("/event")
+    public ResponseEntity<?> issueEventCoupon(@AuthMember Member member) {
 
-        couponService.issueEventCouponByPessimisticLock(couponId, member);
+        couponService.issueEventCouponByPessimisticLock(EVENT_COUPON_ID, member);
 
         return ResponseEntity.ok("쿠폰 발급 성공");
     }

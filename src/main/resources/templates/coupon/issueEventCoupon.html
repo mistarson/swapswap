@@ -4,8 +4,13 @@
       layout:decorate="~{common/layout/layout}">
 <body>
 <div layout:fragment="content">
-  <p>남은 쿠폰 개수: <span th:text="${couponCount}"></span></p>
-  <button th:if="${couponCount > 0}" onclick="claimCoupon()">선착순 쿠폰 받기</button>
+  <div class="extra-coupon">
+  <img class="coupon-event-img" src="/images/eventcouponimage.png">
+  </div>
+  <p class="extra-coupon">남은 쿠폰 개수 <span th:text="${couponCount}"></span></p>
+  <div class="extra-coupon">
+  <button class="coupon-issue-btn" th:if="${couponCount > 0}" onclick="claimCoupon()">쿠폰 받기</button>
+  </div>
   <div th:unless="${couponCount > 0}">
     <p>쿠폰이 모두 소진되었습니다.</p>
   </div>
