@@ -12,7 +12,12 @@ public class ImageEventListener {
     private final S3ImageService s3ImageService;
 
     @TransactionalEventListener
-    public void handleAfterCommitDeleteImage(DeleteImageUrlEvent deleteImageUrlEvent) {
-        s3ImageService.deleteImageUrlList(deleteImageUrlEvent.getImageUrl());
+    public void handleAfterCommitDeleteImageUrlMap(DeleteImageUrlMapEvent deleteImageUrlMapEvent) {
+        s3ImageService.deleteImageUrlMap(deleteImageUrlMapEvent.getImageUrlMap());
+    }
+
+    @TransactionalEventListener
+    public void handleAfterCommitDeleteImageUrlList(DeleteImageUrlListEvent deleteImageUrlListEvent) {
+        s3ImageService.deleteImageUrlList(deleteImageUrlListEvent.getImageUrlList());
     }
 }

@@ -8,5 +8,7 @@ public interface S3ImageService {
 
     List<String> saveImageUrlList(List<MultipartFile> multipartFileList);
 
-    void deleteImageUrlList(Map<Integer, Object> originalImageUrl);
+    void deleteImageUrlMap(Map<Integer, Object> originalImageUrl);
+
+    void deleteImageUrlList(List<String> originalImageUrl);
 }

@@ -18,7 +18,7 @@ import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
-import piglin.swapswap.domain.post.event.DeleteImageUrlEvent;
+import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
@@ -43,15 +43,9 @@ public class PostServiceImplV1 implements PostService {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
         }
 
-        List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
-                requestDto.imageUrlList());
-        Map<Integer, Object> imageUrlMap = new HashMap<>();
-        for (int i = 0; i < imageUrlList.size(); i++) {
-            imageUrlMap.put(i, imageUrlList.get(i));
-        }
+        List<String> imageUrlList = saveAndGetImageUrlList(requestDto.imageUrlList());
 
-        Post post = PostMapper.createPost(requestDto, imageUrlMap, member);
-
+        Post post = PostMapper.createPost(requestDto, createImageUrlMap(imageUrlList), member);
         postRepository.save(post);
 
         return post.getId();
@@ -73,10 +67,6 @@ public class PostServiceImplV1 implements PostService {
         post.upViewCnt();
 
         return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
-    }
-
-    private boolean isMemberLoggedIn(Member member) {
-        return member != null;
     }
 
     @Override
@@ -105,19 +95,13 @@ public class PostServiceImplV1 implements PostService {
         }
 
         checkPostWriter(member, post);
-
         checkImageUrlListSize(requestDto.imageUrlList());
 
-        s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
+        applicationEventPublisher.publishEvent(new DeleteImageUrlMapEvent(post.getImageUrl()));
 
-        List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
-                requestDto.imageUrlList());
-        Map<Integer, Object> imageUrlMap = new HashMap<>();
-        for (int i = 0; i < imageUrlList.size(); i++) {
-            imageUrlMap.put(i, imageUrlList.get(i));
-        }
+        List<String> imageUrlList = saveAndGetImageUrlList(requestDto.imageUrlList());
 
-        PostMapper.updatePost(post, requestDto, imageUrlMap);
+        PostMapper.updatePost(post, requestDto, createImageUrlMap(imageUrlList));
     }
 
     @Override
@@ -133,11 +117,15 @@ public class PostServiceImplV1 implements PostService {
     public void deletePost(Member member, Long postId) {
 
         Post post = findPost(postId);
+
         checkPostWriter(member, post);
+        if (post.getIsDeleted()) {
+            throw new BusinessException(ErrorCode.POST_ALREADY_DELETED);
+        }
+
+        favoriteService.deleteFavoritesByPostId(postId);
 
         post.deletePost();
-
-        applicationEventPublisher.publishEvent(new DeleteImageUrlEvent(post.getImageUrl()));
     }
 
     @Override
@@ -162,6 +150,26 @@ public class PostServiceImplV1 implements PostService {
         checkModifiedUpTime(post);
 
         post.upPost();
+    }
+
+    private boolean isMemberLoggedIn(Member member) {
+
+        return member != null;
+    }
+
+    private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
+
+        Map<Integer, Object> imageUrlMap = new HashMap<>();
+        for (int i = 0; i < imageUrlList.size(); i++) {
+            imageUrlMap.put(i, imageUrlList.get(i));
+        }
+
+        return imageUrlMap;
+    }
+
+    private List<String> saveAndGetImageUrlList(List<MultipartFile> imageUrlList) {
+
+        return s3ImageServiceImplV1.saveImageUrlList(imageUrlList);
     }
 
     private void checkModifiedUpTime(Post post) {

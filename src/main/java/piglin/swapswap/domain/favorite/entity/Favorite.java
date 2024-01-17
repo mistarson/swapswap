@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.favorite.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,9 @@ public class Favorite extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -33,4 +37,9 @@ public class Favorite extends BaseTime {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    public void deleteFavorite() {
+
+        this.isDeleted = true;
+    }
 }
