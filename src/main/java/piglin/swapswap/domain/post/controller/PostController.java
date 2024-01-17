@@ -21,6 +21,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -61,10 +62,11 @@ public class PostController {
             @AuthMember Member member,
             Model model
     ) {
+        PostGetResponseDto responseDto = postService.getPost(postId, member);
 
-        model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
-
-        model.addAttribute("PostId", postId);
+        model.addAttribute("postGetResponseDto", responseDto);
+        model.addAttribute("category", responseDto.categoryEnum().getName());
+        model.addAttribute("postId", postId);
 
         return "post/post";
     }

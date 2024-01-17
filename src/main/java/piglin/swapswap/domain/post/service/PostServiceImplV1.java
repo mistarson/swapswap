@@ -55,18 +55,9 @@ public class PostServiceImplV1 implements PostService {
     @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
 
-        Post post = findPost(postId);
+        postRepository.updatePostViewCnt(postId);
 
-        Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
-
-        boolean favoriteStatus = false;
-        if (isMemberLoggedIn(member)) {
-            favoriteStatus = favoriteService.isFavorite(post, member);
-        }
-
-        post.upViewCnt();
-
-        return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
+        return postRepository.findPostWithFavorite(postId, member);
     }
 
     @Override

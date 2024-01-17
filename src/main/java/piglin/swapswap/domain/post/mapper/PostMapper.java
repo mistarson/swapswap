@@ -32,22 +32,22 @@ public class PostMapper {
                    .build();
     }
 
-    public static PostGetResponseDto postToGetResponseDto(Post post,
-            Long favoriteCnt, boolean favoriteStatus) {
-
-        return PostGetResponseDto.builder()
-                                 .author(post.getMember().getNickname())
-                                 .title(post.getTitle())
-                                 .content(post.getContent())
-                                 .category(post.getCategory().getName())
-                                 .imageUrl(post.getImageUrl())
-                                 .viewCnt(post.getViewCnt())
-                                 .upCnt(post.getUpCnt())
-                                 .favoriteCnt(favoriteCnt)
-                                 .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-                                 .favoriteStatus(favoriteStatus)
-                                 .build();
-    }
+//    public static PostGetResponseDto postToGetResponseDto(Post post,
+//            Long favoriteCnt, boolean favoriteStatus) {
+//
+//        return PostGetResponseDto.builder()
+//                                 .author(post.getMember().getNickname())
+//                                 .title(post.getTitle())
+//                                 .content(post.getContent())
+//                                 .category(post.getCategory().getName())
+//                                 .imageUrl(post.getImageUrl())
+//                                 .viewCnt(post.getViewCnt())
+//                                 .upCnt(post.getUpCnt())
+//                                 .favoriteCnt(favoriteCnt)
+//                                 .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
+//                                 .favoriteStatus(favoriteStatus)
+//                                 .build();
+//    }
 
 
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
