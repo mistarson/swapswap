@@ -4,6 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 body {
   font-family: 'S-CoreDream-3Light';
 }
@@ -27,10 +28,12 @@ body {
   flex-grow: 0;
   flex-shrink: 0;
 }
+
 .header-logo img {
   height: 70px;
   width: 140px;
 }
+
 .nav-container {
   display: flex;
   justify-content: center;
@@ -39,6 +42,7 @@ body {
   flex-shrink: 1;
   margin: 0 10px; /* 조정된 여백 */
 }
+
 .nav-container a,
 .nav-container .swapswap-search-container {
   padding: 8px 16px;
@@ -48,15 +52,18 @@ body {
   font-weight: 500;
   transition: color 0.3s;
 }
+
 .nav-container a:hover {
   color: #00AADC;
 }
+
 .swapswap-search-container {
   width: 500px;
   position: relative;
   display: flex;
   align-items: center;
 }
+
 .swapswap-search-input {
   width: 100%; /* 수정: 입력란이 컨테이너 크기에 맞게 조정됩니다. */
   padding: 10px 40px 10px 15px; /* 오른쪽 패딩을 버튼 너비만큼 늘립니다. */
@@ -66,10 +73,12 @@ body {
   background-color: #EBEBEB;
   height: 20px; /* 입력란의 높이를 버튼과 동일하게 조정 */
 }
+
 .swapswap-search-input:focus {
   border-color: #00AADC; /* 포커스 상태일 때의 테두리 색상 */
   outline: none; /* 기본 브라우저 아웃라인 제거 */
 }
+
 .swapswap-search-button {
   position: absolute;
   right: 0; /* 수정: 오른쪽 패딩에 맞게 조정 */
@@ -84,9 +93,11 @@ body {
   text-align: center;
   line-height: 50%; /* 버튼 안의 내용을 수직 정렬 */
 }
+
 .swapswap-search-button:hover {
   background-color: #049cb3;
 }
+
 .header-nav {
   display: flex;
   justify-content: flex-end;
@@ -94,13 +105,16 @@ body {
   flex-grow: 0;
   flex-shrink: 0;
 }
+
 .header-nav a {
   text-decoration: none;
   color: black;
 }
+
 .header-nav a:hover {
   font-weight: 700;
 }
+
 .login-link {
   padding: 8px 16px;
   text-decoration: none;
@@ -110,6 +124,7 @@ body {
   transition: color 0.3s;
   margin-left: auto;
 }
+
 .category-bar {
   background-color: #ffffff;
   border-bottom: 1px solid #E5E5E5; /* 하단 경계선 */
@@ -152,7 +167,7 @@ body {
   position: relative;
   width: calc(33.333% - 40px);
   margin: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   overflow: hidden;
   background: #ffffff;
@@ -213,6 +228,7 @@ img {
   height: auto;
   margin-bottom: 5px;
 }
+
 .text-muted {
   color: #666;
   font-size: 0.8em;
@@ -353,7 +369,7 @@ img {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: white;
   border: none;
   padding: 10px;
@@ -474,11 +490,6 @@ img {
 }
 
 
-
-
-
-
-
 /*-----login-----*/
 .signin {
   padding: 100px 0 150px;
@@ -496,7 +507,8 @@ img {
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
   color: #555;
 }
-.signin__card h2{
+
+.signin__card h2 {
   padding: 30px;
   text-align: center;
 }
@@ -507,7 +519,7 @@ img {
   height: 400px;
 }
 
-.signin__card .actions img{
+.signin__card .actions img {
   width: 50px;
   height: 50px;
   border-radius: 50px;
@@ -517,7 +529,8 @@ img {
   float: left;
   vertical-align: middle;
 }
-.signin__card .actions p{
+
+.signin__card .actions p {
   font-size: 18px;
   margin-top: 22px;
   display: inline-block;
@@ -525,6 +538,7 @@ img {
   margin-right: 50px;
   font-weight: 900;
 }
+
 .signin__card .actions a {
   padding: 5px;
   margin: 20px 20px;
@@ -538,10 +552,12 @@ img {
   background-color: #fddc3a;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
-.signin__card .actions a:last-child{
+
+.signin__card .actions a:last-child {
   border-right: none;
 }
-.signin__card .actions a:hover{
+
+.signin__card .actions a:hover {
   text-decoration: underline;
 }
 
@@ -558,7 +574,6 @@ img {
   background-color: #f0f0f0;
   cursor: pointer;
 }
-
 
 
 /*------myPage 중 유저정보-------*/
@@ -596,16 +611,18 @@ img {
   margin-bottom: 30px;
 }
 
-.profile_userinfo .myPage_nickname .nick{
+.profile_userinfo .myPage_nickname .nick {
   width: 100px;
   text-align: left;
   margin-left: 20px;
 }
+
 .profile_userinfo .myPage_email .e {
   margin-left: 20px;
   width: 180px;
   text-align: left;
 }
+
 .profile_userinfo .myPage_nickname .name,
 .profile_userinfo .myPage_email .mail {
   width: 180px;
@@ -617,7 +634,6 @@ img {
   text-align: left;
   margin-left: auto;
 }
-
 
 
 /*---------myPage 중 확인내역--------------*/
@@ -646,21 +662,27 @@ img {
   margin-top: 50px;
 
 }
+
 .transaction_history:hover {
   background-color: #2980b9;
 }
+
 .my_wallet:hover {
   background-color: #2980b9;
 }
+
 .coupon:hover {
   background-color: #2980b9;
 }
+
 .favorite:hover {
   background-color: #2980b9;
 }
+
 .myPage_edit_profile:hover {
   background-color: #2980b9;
 }
+
 .check_list .unregister {
   background-color: #5D676A;
   text-align: center;
@@ -703,12 +725,14 @@ img {
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
   color: #555;
 }
-.edit_profile__card h2{
+
+.edit_profile__card h2 {
   padding: 30px;
   text-align: center;
   margin: 0 30px 0 30px;
 
 }
+
 .edit {
   display: flex;
   flex-direction: column;
@@ -738,6 +762,7 @@ img {
 
 
 }
+
 .edit .buttons {
   display: flex;
   flex-direction: row;
@@ -755,11 +780,13 @@ img {
   margin: 10px;
 
 }
+
 .edit .buttons a.editbutton:hover {
   background-color: #2980b9;
   text-decoration: none;
   color: #fff;
 }
+
 .edit .buttons a.cancelbutton:hover {
   background-color: #bfbfbf;
   text-decoration: none;
@@ -777,6 +804,7 @@ img {
   margin: 10px;
 
 }
+
 .edit .buttons .cancelbutton a:hover {
   background-color: #b0b0b0;
   text-decoration: none;
@@ -808,6 +836,7 @@ img {
 .unregister-content {
   max-width: 800px;
 }
+
 .unregister p {
   border-bottom: 2px solid #ccc;
   text-align: left;
@@ -815,6 +844,7 @@ img {
   font-size: 30px;
   font-weight: 900;
 }
+
 .unregister-content ul {
   list-style-type: disc;
   padding: 0;
@@ -991,3 +1021,37 @@ input[type="number"] {
   font-size: 12px;
 }
 
+.header-nav .coupon-event-link {
+  color: red;
+}
+
+.extra-coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.coupon-issue-btn {
+  top: 50%;
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 30px;
+  min-width: 120px;
+  font-size: 30px;
+}
+
+.coupon-issue-btn:hover {
+  background-color: #171264;
+  transition: 0.7s;
+}
+
+.coupon-event-img {
+  width: 800px;
+
+}

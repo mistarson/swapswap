@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
+import piglin.swapswap.domain.coupon.dto.response.CouponGetResponseDto;
 import piglin.swapswap.domain.coupon.entity.Coupon;
 import piglin.swapswap.domain.coupon.mapper.CouponMapper;
 import piglin.swapswap.domain.coupon.repository.CouponRepository;
@@ -73,5 +74,14 @@ public class CouponServiceImplV1 implements CouponService {
     public boolean issueCouponPossible(Coupon coupon) {
 
         return coupon.getCount() > 0;
+    }
+
+    @Override
+    public CouponGetResponseDto getCouponDetail(Long couponId) {
+
+        Coupon coupon = couponRepository.findById(couponId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
+
+        return CouponMapper.couponToGetResponseDto(coupon);
     }
 }

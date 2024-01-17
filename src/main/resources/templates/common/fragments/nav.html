@@ -21,6 +21,9 @@
       </div>
     </div>
     <div class="header-nav">
+      <span sec:authorize="isAuthenticated()">
+            <a href="/coupons/event" class="login-link coupon-event-link">쿠폰이벤트</a>
+          </span>
         <span sec:authorize="isAuthenticated()">
           <a href="/">글쓰기</a>
           </span>
