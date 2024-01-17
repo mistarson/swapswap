@@ -6,7 +6,6 @@ import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
-import piglin.swapswap.domain.member.entity.Member;
 
 public class DealMapper {
 
