@@ -1,11 +1,10 @@
 package piglin.swapswap.domain.post.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -147,5 +147,11 @@ public class PostController {
         postService.upPost(postId, member);
 
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/posts/member/{memberId}")
+    public ResponseEntity<?> getPostListByMemberId(@PathVariable Long memberId) {
+        List<PostGetByMemberIdResponseDto> responseDtos = postService.getPostInfoList(memberId);
+
+        return ResponseEntity.ok(responseDtos);
     }
 }

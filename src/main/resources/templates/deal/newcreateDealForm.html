@@ -10,23 +10,25 @@
 
   <!--   게시물 목록 부분 -->
   <div id="postContent">
+    <input type="number" id="firstExtraFee" placeholder="나의 추가 요금 입력">
   </div>
   <div id="postSecondContent">
+    <input type="number" id="secondExtraFee" placeholder="상대 추가 요금 입력">
   </div>
-  <button id="editButton" onclick="loadPosts()">상대 교환물품 수정</button>
+  <button id="editButton" onclick="loadPosts()">내 교환물품 수정</button>
 
-  <button id="editButton2" onclick="loadSecondPosts()">내 교환물품 수정</button>
+  <button id="editButton2" onclick="loadSecondPosts()">상대 교환물품 수정</button>
 
   <button id="requestDealButton" onclick="requestDeal()">거래요청하기</button>
 
-  <!-- Ajax로 게시물 가져오기 팝업 -->
+  <!--  팝업 부분 -->
   <div id="postModal" style="display: none">
   </div>
   <script th:inline="javascript">
     var popup = window;
+
     function loadPosts() {
       var memberId = document.querySelector('.memberId').value;
-      console.log(memberId);
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -37,9 +39,9 @@
       xhr.open("GET", "/posts/member/" + memberId, true);
       xhr.send();
     }
+
     function loadSecondPosts() {
       var secondMemberId = document.querySelector('.secondMemberId').value;
-      console.log(secondMemberId);
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -50,7 +52,6 @@
       xhr.open("GET", "/posts/member/" + secondMemberId, true);
       xhr.send();
     }
-
 
     function displayPosts(posts) {
       // 팝업 창 보이기
@@ -85,19 +86,17 @@
       popup.document.write('  var activeButtons = findAllActiveFirstPostButtons();');
       popup.document.write(
           '  var postInfoDiv = window.opener.document.getElementById(\'postContent\');');
+      popup.document.write('window.opener.firstPostIdList = [];');
+
       popup.document.write('  if (activeButtons.length > 0) {');
       popup.document.write('    activeButtons.forEach(function(activeButton) {');
       popup.document.write('      var postValues = activeButton.value.split(\',\');');
       popup.document.write('      postInfoDiv.innerHTML +=  \'<div class="request-post">\' +');
-      popup.document.write('        \'<div>Post ID: \' + postValues[0] + \'</div>\' +');
-      popup.document.write('        \'<div>Post Title: \' + postValues[1] + \'</div>\' +');
+      popup.document.write('        \'<div>게시물 제목: \' + postValues[1] + \'</div>\' +');
       popup.document.write(
-          '        \'<div style="font-style: italic; font-size: 16px; color: #4682B4;">Image URL: <img src="\' + postValues[2] + \'" alt="Post Image" style="width: 200px; height: 200px;"></div>\' +');
+          '        \'<div style="font-style: italic; font-size: 16px; color: #4682B4;"><img src="\' + postValues[2] + \'" alt="Post Image" style="width: 200px; height: 200px;"></div>\' +');
       popup.document.write('      \'</div>\';');
-      popup.document.write('        postId: postValues[0],');
-      popup.document.write('        postTitle: postValues[1],');
-      popup.document.write('        imageUrl: postValues[2]');
-      popup.document.write('      });');
+      popup.document.write('       window.opener.firstPostIdList.push(postValues[0]);')
       popup.document.write('    });');
       popup.document.write('  } else {');
       popup.document.write('    console.log("No post is selected.");');
@@ -106,16 +105,11 @@
       popup.document.write('}');
       popup.document.write('</' + 'script>');
 
-
-
       posts.forEach(function (post) {
         popup.document.write(
             '<div class="post" style="display: inline-block; margin: 10px; padding: 10px; border: 1px solid #87CEEB; text-align: center; background-color: #F0F8FF;">');
         popup.document.write(
-            '<div style="font-weight: bold; font-size: 18px; color: #4682B4;">Post ID: '
-            + post.postId + '</div>');
-        popup.document.write(
-            '<div style="font-style: italic; font-size: 16px; color: #4682B4;">Post Title: '
+            '<div style="font-style: italic; font-size: 16px; color: #4682B4;">게시물 제목: '
             + post.postTitle + '</div>');
         popup.document.write(
             '<img style="width: 300px; height: 300px; border: 2px solid #87CEEB;" src="'
@@ -125,13 +119,9 @@
             + post.imageUrl + '" onclick="addActiveClassForPostButton(this)">선택하기</button>');
         popup.document.write('</div>');
       });
-      popup.document.write(
-          '<input type="number" id="firstExtraFee" placeholder="First Extra Fee">');
       popup.document.write('<button onclick="sendSelectPostList()">요청하기</button>');
       popup.document.write('<button onclick="closePopup()">취소하기</button>');
       popup.document.write('</body></html>');
-
-
 
     }
 
@@ -168,44 +158,45 @@
       popup.document.write('  var activeSecondButtons = findAllActiveSecondPostButtons();');
       popup.document.write(
           '  var postSecondInfoDiv = window.opener.document.getElementById(\'postSecondContent\');');
+      popup.document.write('window.opener.secondPostIdList = [];');
+
       popup.document.write('  if (activeSecondButtons.length > 0) {');
       popup.document.write('    activeSecondButtons.forEach(function(activeSecondButton) {');
       popup.document.write('      var secondPostValues = activeSecondButton.value.split(\',\');');
-      popup.document.write('      postSecondInfoDiv.innerHTML +=  \'<div class="request-secnd-post">\' +');
-      popup.document.write('        \'<div>Post ID: \' + secondPostValues[0] + \'</div>\' +');
-      popup.document.write('        \'<div>Post Title: \' + secondPostValues[1] + \'</div>\' +');
       popup.document.write(
-          '        \'<div style="font-style: italic; font-size: 16px; color: #4682B4;">Image URL: <img src="\' + secondPostValues[2] + \'" alt="Post Image" style="width: 200px; height: 200px;"></div>\' +');
+          '      postSecondInfoDiv.innerHTML +=  \'<div class="request-second-post">\' +');
+      /* popup.document.write(
+           '        \'<div class ="test post" typeof="hidden" > \' + secondPostValues[0] + \'</div>\' +');*/
+      popup.document.write('        \'<div> 게시물 제목 : \' + secondPostValues[1] + \'</div>\' +');
+      popup.document.write(
+          '        \'<div style="font-style: italic; font-size: 16px; color: #4682B4;"><img src="\' + secondPostValues[2] + \'" alt="Post Image" style="width: 200px; height: 200px;"></div>\' +');
       popup.document.write('      \'</div>\';');
+      popup.document.write('       window.opener.secondPostIdList.push(secondPostValues[0]);')
+
       popup.document.write('    });');
       popup.document.write('  } else {');
       popup.document.write('    console.log("No post is selected.");');
       popup.document.write('  }');
       popup.document.write('  window.close();');
       popup.document.write('}');
+
       popup.document.write('</' + 'script>');
-
-
 
       posts.forEach(function (post) {
         popup.document.write(
             '<div class="post" style="display: inline-block; margin: 10px; padding: 10px; border: 1px solid #87CEEB; text-align: center; background-color: #F0F8FF;">');
         popup.document.write(
-            '<div style="font-weight: bold; font-size: 18px; color: #4682B4;">Post ID: '
-            + post.postId + '</div>');
-        popup.document.write(
-            '<div style="font-style: italic; font-size: 16px; color: #4682B4;">Post Title: '
+            '<div style="font-style: italic; font-size: 16px; color: #4682B4;">게시물 제목: '
             + post.postTitle + '</div>');
         popup.document.write(
             '<img style="width: 300px; height: 300px; border: 2px solid #87CEEB;" src="'
             + post.imageUrl + '" alt="Post Image">');
         popup.document.write(
-            '<button class="post-select-second-button" value="' + post.postId + ',' + post.postTitle + ','
+            '<button class="post-select-second-button" value="' + post.postId + ',' + post.postTitle
+            + ','
             + post.imageUrl + '" onclick="addActiveClassForSecondPostButton(this)">선택하기</button>');
         popup.document.write('</div>');
       });
-      popup.document.write(
-          '<input type="number" id="secondExtraFee" placeholder="Second Extra Fee">');
       popup.document.write('<button onclick="sendSelectSecondPostList()">요청하기</button>');
       popup.document.write('<button onclick="closePopup()">취소하기</button>');
       popup.document.write('</body></html>');
@@ -213,36 +204,27 @@
     }
 
     function requestDeal() {
+      var firstExtraFeeInput = document.getElementById('firstExtraFee');
+      var secondExtraFeeInput = document.getElementById('secondExtraFee');
 
-        var activeSecondButtons = popup.findAllActiveSecondPostButtons();
-        console.log(activeSecondButtons);
-        var activeButtons = popup.findAllActiveFirstPostButtons();
-        var firstExtraFee = popup.document.getElementById('firstExtraFee').value;
-        var secondExtraFee = popup.document.getElementById('secondExtraFee').value;
-        if (activeButtons.length > 0 && activeSecondButtons.length > 0) {
+      // 입력값을 변수에 할당
+      var firstExtraFee = firstExtraFeeInput.value;
+      var secondExtraFee = secondExtraFeeInput.value;
+      console.log(firstPostIdList);
+      console.log(secondPostIdList);
+      if (secondPostIdList.length > 0 && firstPostIdList.length > 0) {
         var postInfo = {
           firstExtraFee: firstExtraFee,
           secondExtraFee: secondExtraFee,
-          firstPostIdList: [],
-          secondPostIdList: [],
-          /* postTitle : postValues[1]*/
-          /* imageUrl: postValues[2],*/
+          secondPostIdList: secondPostIdList,
+          firstPostIdList: firstPostIdList
         };
-        activeButtons.forEach(function (activeButton) {
-          var postValues = activeButton.value.split(',');
-          postInfo.firstPostIdList.push(postValues[0]);
-        });
-
-        activeSecondButtons.forEach(function (activeSecondButton){
-          var secondPostValues = activeSecondButton.value.split(',');
-          postInfo.secondPostIdList.push(secondPostValues[0]);
-        });
 
         // AJAX를 사용하여 서버로 데이터 전송
         var xhr = new XMLHttpRequest();
-        var memberId = document.querySelector('.memberId').value;
+        var secondMemberId = document.querySelector('.secondMemberId').value;
 
-        xhr.open("POST", "/deals/" + memberId, true);
+        xhr.open("POST", "/deals/" + secondMemberId, true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {
@@ -257,7 +239,7 @@
       } else {
         console.log("No post is selected.");
       }
-     }
+    }
   </script>
 </div>
 </body>

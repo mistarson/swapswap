@@ -401,7 +401,7 @@ img {
   border: 1px solid #00AADC;
 }
 
-.post-up-button a, .post-update-button a, .post-delete-button a {
+.post-up-button a, .post-update-button a, .post-delete-button a, .post-request-button a {
   padding: 5px 15px;
   border-radius: 20px;
   text-decoration: none;
@@ -877,5 +877,116 @@ li {
   color: white;
   text-decoration: none;
   text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.author-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#postContent,
+#postSecondContent {
+  margin-bottom: 20px;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+#editButton,
+#editButton2,
+#requestDealButton {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#editButton:hover,
+#editButton2:hover,
+#requestDealButton:hover {
+  background-color: #45a049;
+}
+
+.post {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #87CEEB;
+  text-align: center;
+  background-color: #F0F8FF;
+}
+
+.post img {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #87CEEB;
+  margin-top: 10px;
+}
+
+.post button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.post button:hover {
+  background-color: #45a049;
+}
+
+.request-post,
+.request-second-post {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #87CEEB;
+  text-align: center;
+  background-color: #F0F8FF;
+}
+
+.request-post img,
+.request-second-post img {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #87CEEB;
+  margin-top: 10px;
+}
+
+.request-post button,
+.request-second-post button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.request-post button:hover,
+.request-second-post button:hover {
+  background-color: #45a049;
+}
+#firstExtraFee,
+#secondExtraFee {
+  width: 150px;
+  height: 20px;
+  font-size: 12px;
 }
 

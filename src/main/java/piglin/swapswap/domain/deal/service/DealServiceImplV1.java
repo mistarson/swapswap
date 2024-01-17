@@ -11,6 +11,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+
 @Service
 @RequiredArgsConstructor
 public class DealServiceImplV1 implements DealService {
@@ -22,30 +23,28 @@ public class DealServiceImplV1 implements DealService {
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto, Long secondMemberId) {
 
-      Member secondMember = getMember(secondMemberId);
-      Member firstMember = getMember(member.getId());
-      Deal deal = DealMapper.createDeal( requestDto, firstMember, secondMemberId);
+        getMember(secondMemberId);
+        Member firstMember = getMember(member.getId());
+        Deal deal = DealMapper.createDeal(requestDto, firstMember, secondMemberId);
 
-      dealRepository.save(deal);
-      return deal.getId();
+        dealRepository.save(deal);
+        return deal.getId();
     }
 
     private Member getMember(Long memberId) {
-      return memberRepository.findById(memberId).orElseThrow(
-          () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
-      );
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
 
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
 
-      if(firstAllow&&secondAllow) {
+        if (firstAllow && secondAllow) {
 
-        return DealStatus.DEALING;
-      }
-      else {
+            return DealStatus.DEALING;
+        } else {
 
-        return DealStatus.REQUESTED;
-      }
+            return DealStatus.REQUESTED;
+        }
     }
-  }
+}
 
