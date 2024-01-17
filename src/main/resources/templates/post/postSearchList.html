@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="category-bar">
+    <!-- 카테고리 링크 -->
+    <a href="#HOME_ELECTRONICS">가전제품</a>
+    <a href="#ELECTRONICS">전자제품</a>
+    <a href="#FASHION_MISCELLANEOUS">패션의류/잡화</a>
+    <a href="#BEAUTY">뷰티/미용</a>
+    <a href="#INFANT_CHILDCARE">출산/유아동</a>
+    <a href="#FOOD">식품</a>
+    <a href="#KITCHEN">주방용품</a>
+    <a href="#HOUSEHOLD">생활용품</a>
+    <a href="#FURNITURE_INTERIOR">가구/인테리어</a>
+    <a href="#SPORT_LEISURE">스포츠/레저</a>
+    <a href="#CAR">자동차용품</a>
+    <a href="#HOBBY_GAME_BOOK_ALBUM_DVD">취미/게임/도서/음반/DVD</a>
+    <a href="#OFFICE_SUPPLIES">문구/오피스</a>
+    <a href="#PET">반려동물용품</a>
+    <a href="#ETC">기타중고물품</a>
+  </div>
+  <div class="post-container">
+    <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+         th:data-modified-time="${postDto.getModifiedUpTime}">
+      <a th:href="@{/posts/{postId}(postId=${postDto.getPostId})}">
+        <div class="post-image-container">
+          <img th:src="${postDto.getImageUrl.get(0).toString}" alt="Post Image" class="post-image">
+        </div>
+        <h2 th:text="${postDto.getTitle}" class="post-title"></h2>
+        <div class="post-stats">
+          <span class="view-count">조회수 <span th:text="${postDto.getViewCnt}"></span></span>
+          <span class="favorite-count">찜 <span th:text="${postDto.getFavoriteCnt}"></span></span>
+          <span class="modified-date">올린 날짜 <span
+              th:text="${postDto.getModifiedUpTime}"></span></span>
+        </div>
+      </a>
+      <button
+          th:data-post-id="${postDto.getPostId}"
+          onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+          th:text="${postDto.isFavoriteStatus} == true ? '💙' : '🤍'"
+          type="button"
+      ></button>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+
+    let isLoading = false;
+    let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
+    let isLast = false;
+
+    window.addEventListener("scroll", function () {
+
+      const lastPost = document.querySelector('.post-card:last-of-type');
+      if (lastPost) {
+        const modifiedTime = lastPost.getAttribute('data-modified-time');
+        if (modifiedTime) {
+          lastModifiedTime = modifiedTime;
+        }
+      }
+
+      const SCROLLED_HEIGHT = window.scrollY;
+      const WINDOW_HEIGHT = window.innerHeight;
+      const DOC_TOTAL_HEIGHT = document.body.offsetHeight;
+      const IS_BOTTOM = (WINDOW_HEIGHT + SCROLLED_HEIGHT > DOC_TOTAL_HEIGHT);
+
+      if (IS_BOTTOM && !isLoading) {
+        loadMorePosts();
+      }
+    });
+
+    function loadMorePosts() {
+      isLoading = true;
+      let url = '/search/posts/more?cursorTime=' + lastModifiedTime + '&';
+      var searchValue = localStorage.getItem('searchValue') || '';
+      var selectedCategory = localStorage.getItem('selectedCategory') || '';
+
+      if (searchValue) {
+        url += 'title=' + encodeURIComponent(searchValue);
+      }
+      if (selectedCategory) {
+        url += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
+
+      if(!isLast) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function(htmlFragment) {
+            $('.post-container').append(htmlFragment);
+            updateLastModifiedTime(htmlFragment);
+            isLoading = false;
+          },
+          error: function() {
+            alert('더 이상 로드할 게시물이 없습니다.')
+            isLast = true;
+            isLoading = false;
+          }
+        });
+      }
+    }
+
+    function updateLastModifiedTime(htmlFragment) {
+      // HTML 조각을 임시 요소에 추가하여 파싱
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlFragment;
+
+      // 마지막 게시물의 수정 시간 추출
+      const lastPost = tempDiv.querySelector('.post-card:last-of-type');
+      if (lastPost) {
+        const modifiedTime = lastPost.getAttribute('data-modified-time');
+        if (modifiedTime) {
+          lastModifiedTime = modifiedTime;
+        }
+      }
+    }
+
+    function toggleFavorite(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/favorite',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function() {
+          location.reload()
+        }
+      });
+    }
+  </script>
+</div>
+</body>
+</html>

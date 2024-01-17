@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+  <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+       th:data-modified-time="${postDto.getModifiedUpTime}">
+    <a th:href="@{/posts/{postId}(postId=${postDto.getPostId})}">
+      <div class="post-image-container">
+        <img th:src="${postDto.getImageUrl.get(0).toString}" alt="Post Image" class="post-image">
+      </div>
+      <h2 th:text="${postDto.getTitle}" class="post-title"></h2>
+      <div class="post-stats">
+        <span class="view-count">조회수 <span th:text="${postDto.getViewCnt}"></span></span>
+        <span class="favorite-count">찜 <span th:text="${postDto.getFavoriteCnt}"></span></span>
+        <span class="modified-date">올린 날짜 <span
+            th:text="${postDto.getModifiedUpTime}"></span></span>
+      </div>
+    </a>
+    <button
+        th:data-post-id="${postDto.getPostId}"
+        onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+        th:text="${postDto.isFavoriteStatus} == true ? '💙' : '🤍'"
+        type="button"
+    ></button>
+  </div>
+</body>
+</html>
