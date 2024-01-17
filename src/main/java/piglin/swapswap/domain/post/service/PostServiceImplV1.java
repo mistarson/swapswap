@@ -55,9 +55,15 @@ public class PostServiceImplV1 implements PostService {
     @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
 
+        PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
+
+        if (responseDto.author() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
+        }
+
         postRepository.updatePostViewCnt(postId);
 
-        return postRepository.findPostWithFavorite(postId, member);
+        return responseDto;
     }
 
     @Override
