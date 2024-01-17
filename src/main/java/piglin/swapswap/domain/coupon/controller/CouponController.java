@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import piglin.swapswap.domain.coupon.constant.CouponType;
 import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
+import piglin.swapswap.domain.coupon.dto.response.CouponGetResponseDto;
 import piglin.swapswap.domain.coupon.service.CouponService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
@@ -53,7 +54,16 @@ public class CouponController {
             return "coupon/createCouponForm";
         }
 
-        return "redirect:/coupon/{couponId}";
+        return "redirect:/coupons/{couponId}";
+    }
+
+    @GetMapping("/{couponId}")
+    public String getCouponDetail(@PathVariable Long couponId, Model model) {
+
+        CouponGetResponseDto couponGetResponseDto = couponService.getCouponDetail(couponId);
+        model.addAttribute("couponGetResponseDto", couponGetResponseDto);
+
+        return "coupon/couponDetail";
     }
 
     @GetMapping("/{couponId}/event")
