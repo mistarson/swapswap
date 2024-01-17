@@ -111,7 +111,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .on(favorite.post.eq(post))
                 .join(post)
                 .on(post.id.eq(QMember.member.id))
-                .fetchFirst();
+                .fetchOne();
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {

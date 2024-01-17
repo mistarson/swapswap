@@ -52,7 +52,6 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
 
         PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
