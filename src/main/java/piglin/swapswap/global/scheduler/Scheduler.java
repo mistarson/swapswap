@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import piglin.swapswap.domain.favorite.repository.FavoriteRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.entity.Post;
@@ -21,6 +22,7 @@ public class Scheduler {
 
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final FavoriteRepository favoriteRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Scheduled(cron = "0 0 0 * * *")
@@ -51,5 +53,14 @@ public class Scheduler {
         applicationEventPublisher.publishEvent(new DeleteImageUrlListEvent(postImageUrlListToDelete));
 
         postRepository.deleteAll(postListToDelete);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteFavoriteComplete() {
+
+        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
+
+        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
     }
 }
