@@ -24,12 +24,14 @@ public class DealServiceImplV1 implements DealService {
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
 
         existMember(requestDto.secondMemberId());
-        Member firstMember = getMember(member.getId());
-        Deal deal = DealMapper.createDeal(requestDto, firstMember);
+
+        Member firstMember = memberRepository.findById(member.getId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+        Deal deal = DealMapper.createDeal(requestDto, firstMember.getId());
 
         Deal savedDeal = dealRepository.save(deal);
 
-        return deal.getId();
+        return savedDeal.getId();
     }
 
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
