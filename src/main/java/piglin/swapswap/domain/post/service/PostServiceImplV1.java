@@ -43,15 +43,9 @@ public class PostServiceImplV1 implements PostService {
             throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
         }
 
-        List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
-                requestDto.imageUrlList());
-        Map<Integer, Object> imageUrlMap = new HashMap<>();
-        for (int i = 0; i < imageUrlList.size(); i++) {
-            imageUrlMap.put(i, imageUrlList.get(i));
-        }
+        List<String> imageUrlList = saveAndGetImageUrlList(requestDto.imageUrlList());
 
-        Post post = PostMapper.createPost(requestDto, imageUrlMap, member);
-
+        Post post = PostMapper.createPost(requestDto, createImageUrlMap(imageUrlList), member);
         postRepository.save(post);
 
         return post.getId();
@@ -73,10 +67,6 @@ public class PostServiceImplV1 implements PostService {
         post.upViewCnt();
 
         return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
-    }
-
-    private boolean isMemberLoggedIn(Member member) {
-        return member != null;
     }
 
     @Override
@@ -109,14 +99,9 @@ public class PostServiceImplV1 implements PostService {
 
         applicationEventPublisher.publishEvent(new DeleteImageUrlMapEvent(post.getImageUrl()));
 
-        List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
-                requestDto.imageUrlList());
-        Map<Integer, Object> imageUrlMap = new HashMap<>();
-        for (int i = 0; i < imageUrlList.size(); i++) {
-            imageUrlMap.put(i, imageUrlList.get(i));
-        }
+        List<String> imageUrlList = saveAndGetImageUrlList(requestDto.imageUrlList());
 
-        PostMapper.updatePost(post, requestDto, imageUrlMap);
+        PostMapper.updatePost(post, requestDto, createImageUrlMap(imageUrlList));
     }
 
     @Override
@@ -165,6 +150,24 @@ public class PostServiceImplV1 implements PostService {
         checkModifiedUpTime(post);
 
         post.upPost();
+    }
+
+    private boolean isMemberLoggedIn(Member member) {
+
+        return member != null;
+    }
+
+    private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
+        Map<Integer, Object> imageUrlMap = new HashMap<>();
+        for (int i = 0; i < imageUrlList.size(); i++) {
+            imageUrlMap.put(i, imageUrlList.get(i));
+        }
+        return imageUrlMap;
+    }
+
+    private List<String> saveAndGetImageUrlList(List<MultipartFile> imageUrlList) {
+
+        return s3ImageServiceImplV1.saveImageUrlList(imageUrlList);
     }
 
     private void checkModifiedUpTime(Post post) {
