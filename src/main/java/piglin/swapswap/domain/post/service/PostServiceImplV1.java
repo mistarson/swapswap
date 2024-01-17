@@ -132,7 +132,13 @@ public class PostServiceImplV1 implements PostService {
     public void deletePost(Member member, Long postId) {
 
         Post post = findPost(postId);
+
         checkPostWriter(member, post);
+        if (post.getIsDeleted()) {
+            throw new BusinessException(ErrorCode.POST_ALREADY_DELETED);
+        }
+
+        favoriteService.deleteFavoritesByPostId(postId);
 
         post.deletePost();
     }

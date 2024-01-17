@@ -10,4 +10,6 @@ public interface FavoriteService {
     Long getPostFavoriteCnt(Post post);
 
     void updateFavorite(Member member, Post post);
+
+    void deleteFavoritesByPostId(Long postId);
 }
