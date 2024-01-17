@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import piglin.swapswap.domain.member.constant.MemberRoleEnum.Authority;
 import piglin.swapswap.global.jwt.JwtAuthorizationFilter;
 import piglin.swapswap.global.jwt.JwtUtil;
 import piglin.swapswap.global.security.UserDetailsServiceImpl;
@@ -59,6 +60,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/posts/more").permitAll()
                         .requestMatchers("/search/**").permitAll()
                         .requestMatchers("/posts/write").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
                         .anyRequest().authenticated()
         );
 
