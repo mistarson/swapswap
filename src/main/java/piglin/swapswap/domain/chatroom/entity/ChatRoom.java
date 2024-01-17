@@ -1,38 +1,55 @@
 package piglin.swapswap.domain.chatroom.entity;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import java.util.Map;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import piglin.swapswap.domain.common.BaseTime;
+import org.hibernate.annotations.DynamicUpdate;
+import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.message.entity.Message;
 
 @Entity
+@Data
 @Builder
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@DynamicUpdate
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoom extends BaseTime {
+public class ChatRoom {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EqualsAndHashCode.Include
+    private String id;
 
-    @Column(name = "first_user_id")
-    private Long firstUsrId;
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
 
-    @Column(name = "second_user_id")
-    private Long secondUsrId;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "lastChatMesgId")
+    private Message lastChatMessage;
 
-    @Type(JsonType.class)
-    @Column(nullable = false, columnDefinition = "json")
-    private Map<String, Object> chatMessage;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "ChatRoom_Members",
+            joinColumns = @JoinColumn(name = "chatRoomId"),
+            inverseJoinColumns = @JoinColumn(name = "memberId"))
+    private Set<Member> chatRoomMembers = new HashSet<>();
+
+    public void addMembers(Member roomMaker, Member guest) {
+        this.chatRoomMembers.add(roomMaker);
+        this.chatRoomMembers.add(guest);
+    }
 }
