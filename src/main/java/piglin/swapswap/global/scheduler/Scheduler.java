@@ -27,6 +27,7 @@ public class Scheduler {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredMember() {
+
         LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
 
         List<Member> memberListToDelete = memberRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
