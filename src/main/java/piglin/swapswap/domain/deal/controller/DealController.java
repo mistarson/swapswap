@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,11 +21,11 @@ public class DealController {
 
     private final DealService dealService;
 
-    @PostMapping("/{secondMemberId}")
+    @PostMapping("/")
     public String createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
-            @PathVariable Long secondMemberId, @AuthMember Member member) {
+            @AuthMember Member member) {
 
-        Long dealId = dealService.createDeal(member, requestDto, secondMemberId);
+        Long dealId = dealService.createDeal(member, requestDto);
 
         return "redirect:/deal" + dealId;
     }
@@ -37,11 +36,11 @@ public class DealController {
             @RequestParam String memberName) {
 
         model.addAttribute("secondMemberId", secondMemberId);
-        model.addAttribute("memberName", memberName);
+        model.addAttribute("secondMemberName", memberName);
         model.addAttribute("memberId", member.getId());
 
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
-                0, 0, null, null));
+                0, 0, null, null, null));
 
         return "deal/newcreateDealForm";
     }

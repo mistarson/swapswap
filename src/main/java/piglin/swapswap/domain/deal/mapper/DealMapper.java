@@ -10,7 +10,7 @@ import piglin.swapswap.domain.member.entity.Member;
 
 public class DealMapper {
 
-  public static Deal createDeal(DealCreateRequestDto requestDto, Member member, Long secondMemberId ) {
+  public static Deal createDeal(DealCreateRequestDto requestDto, Member member) {
 
     Map<Integer, Object> firstPostIdListMap = new HashMap<>();
     Map<Integer, Object> secondPostIdListMap = new HashMap<>();
@@ -28,7 +28,7 @@ public class DealMapper {
       return Deal.builder()
           .dealStatus(DealStatus.REQUESTED)
           .firstUserId(member.getId())
-          .secondUserId(secondMemberId)
+          .secondUserId(requestDto.secondMemberId())
           .firstAllow(true)
           .secondAllow(false)
           .firstTake(false)

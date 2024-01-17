@@ -212,19 +212,19 @@
       var secondExtraFee = secondExtraFeeInput.value;
       console.log(firstPostIdList);
       console.log(secondPostIdList);
+      var secondMemberId = document.querySelector('.secondMemberId').value;
       if (secondPostIdList.length > 0 && firstPostIdList.length > 0) {
         var postInfo = {
           firstExtraFee: firstExtraFee,
           secondExtraFee: secondExtraFee,
           secondPostIdList: secondPostIdList,
-          firstPostIdList: firstPostIdList
+          firstPostIdList: firstPostIdList,
+          secondMemberId : secondMemberId
         };
 
         // AJAX를 사용하여 서버로 데이터 전송
         var xhr = new XMLHttpRequest();
-        var secondMemberId = document.querySelector('.secondMemberId').value;
-
-        xhr.open("POST", "/deals/" + secondMemberId, true);
+        xhr.open("POST", "/deals/", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {

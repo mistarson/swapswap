@@ -21,11 +21,11 @@ public class DealServiceImplV1 implements DealService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long createDeal(Member member, DealCreateRequestDto requestDto, Long secondMemberId) {
+    public Long createDeal(Member member, DealCreateRequestDto requestDto) {
 
-        getMember(secondMemberId);
+        getMember(requestDto.secondMemberId());
         Member firstMember = getMember(member.getId());
-        Deal deal = DealMapper.createDeal(requestDto, firstMember, secondMemberId);
+        Deal deal = DealMapper.createDeal(requestDto, firstMember);
 
         dealRepository.save(deal);
         return deal.getId();

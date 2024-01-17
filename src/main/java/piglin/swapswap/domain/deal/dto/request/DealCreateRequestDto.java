@@ -5,6 +5,7 @@ public record DealCreateRequestDto (
      int firstExtraFee,
      int secondExtraFee,
      List<Long> firstPostIdList,
-     List<Long> secondPostIdList
+     List<Long> secondPostIdList,
+     Long secondMemberId
 ) {
 }
