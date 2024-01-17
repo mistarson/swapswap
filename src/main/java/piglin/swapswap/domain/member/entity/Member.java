@@ -16,7 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piglin.swapswap.domain.common.BaseTime;
-import piglin.swapswap.domain.member.constant.MemberRoleEnum;
+import piglin.swapswap.domain.member.constant.MemberRole;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 
 @Entity
@@ -38,7 +38,7 @@ public class Member extends BaseTime {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private MemberRoleEnum role;
+    private MemberRole role;
 
     @Column(nullable = false)
     private Boolean isDeleted;

@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import piglin.swapswap.domain.member.constant.MemberRoleEnum;
+import piglin.swapswap.domain.member.constant.MemberRole;
 
 @Component
 public class JwtUtil {
@@ -49,7 +49,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String email, MemberRoleEnum role) {
+    public String createToken(String email, MemberRole role) {
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
