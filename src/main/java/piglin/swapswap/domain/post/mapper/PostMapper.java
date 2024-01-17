@@ -2,15 +2,10 @@ package piglin.swapswap.domain.post.mapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 
@@ -36,6 +31,7 @@ public class PostMapper {
             Long favoriteCnt, boolean favoriteStatus) {
 
         return PostGetResponseDto.builder()
+                                 .userId(post.getMember().getId())
                                  .author(post.getMember().getNickname())
                                  .title(post.getTitle())
                                  .content(post.getContent())

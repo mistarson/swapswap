@@ -5,6 +5,7 @@ import java.util.List;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -55,4 +56,6 @@ public interface PostService {
             LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);
+
+    List<PostGetByMemberIdResponseDto> getPostInfoList(Long memberId);
 }

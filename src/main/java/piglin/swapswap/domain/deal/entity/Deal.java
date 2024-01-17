@@ -42,11 +42,11 @@ public class Deal extends BaseTime {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Long, Object> firstPostIdList;
+    private Map<Integer, Object> firstPostIdList;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Long, Object> secondPostIdList;
+    private Map<Integer, Object> secondPostIdList;
 
     @Column(nullable = false)
     private int firstExtraFee;
