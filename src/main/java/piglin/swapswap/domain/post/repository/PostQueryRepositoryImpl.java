@@ -95,6 +95,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
         return queryFactory.select(
                         Projections.constructor(PostGetResponseDto.class,
+                                post.member.id.as("memberId"),
                                 post.member.nickname.as("author"),
                                 post.title,
                                 post.content,

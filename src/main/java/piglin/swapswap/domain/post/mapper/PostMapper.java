@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.post.mapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
@@ -25,24 +26,6 @@ public class PostMapper {
                    .modifiedUpTime(LocalDateTime.now())
                    .build();
     }
-
-//    public static PostGetResponseDto postToGetResponseDto(Post post,
-//            Long favoriteCnt, boolean favoriteStatus) {
-//
-//        return PostGetResponseDto.builder()
-//                                 .author(post.getMember().getNickname())
-//                                 .title(post.getTitle())
-//                                 .content(post.getContent())
-//                                 .category(post.getCategory().getName())
-//                                 .imageUrl(post.getImageUrl())
-//                                 .viewCnt(post.getViewCnt())
-//                                 .upCnt(post.getUpCnt())
-//                                 .favoriteCnt(favoriteCnt)
-//                                 .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-//                                 .favoriteStatus(favoriteStatus)
-//                                 .build();
-//    }
-
 
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {

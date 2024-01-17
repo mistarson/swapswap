@@ -8,7 +8,7 @@
   <div class="post-content-container">
     <div class="post-content-image-container">
       <div class="post-content-image-slider">
-        <img th:each="entry:${postGetResponseDto.imageUrl().entrySet()}" th:src="${entry.value}"
+        <img th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
              th:alt="'Image '+ ${entry.key}" class="post-content-image">
       </div>
       <button class="post-slider-button post-prev-button" onclick="moveSlide(-1)">＜</button>
@@ -18,14 +18,13 @@
       <div class="post-content-details">
         <div class="post-author-favorite-section">
           <div class="author-details">
-            <input class="author-id" type="hidden" th:value="${postGetResponseDto.userId()}">
-            <span class="author-name" th:text="${PostGetResponseDto.author()}"></span>
-            <span class="author-name" th:text="${postGetResponseDto.author()}"></span>
+            <input class="author-id" type="hidden" th:value="${postGetResponseDto.memberId}">
+            <span class="author-name" th:text="${postGetResponseDto.author}"></span>
           </div>
           <div class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}">수정하기</a>
           </div>
           <div class="post-request-button">
-            <a th:href="@{/deals/request(secondMemberId=${PostGetResponseDto.userId()},memberName=${PostGetResponseDto.author})}">요청하기</a>
+            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}">요청하기</a>
           </div>
           <div class="post-up-button"
                th:data-post-id="${postId}"
@@ -39,22 +38,22 @@
             <button
                 th:data-post-id="${postId}"
                 th:onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-                th:text="${postGetResponseDto.favoriteStatus()} == true ? '💙' : '🤍'"></button>
+                th:text="${postGetResponseDto.favoriteStatus} == true ? '💙' : '🤍'"></button>
           </div>
         </div>
         <div class="post-title-meta-section">
-          <h1 class="post-title" th:text="${postGetResponseDto.title()}"></h1>
+          <h1 class="post-title" th:text="${postGetResponseDto.title}"></h1>
           <div class="post-meta">
-            <span th:text="${postGetResponseDto.category().getName()}"></span> ・
-            <span th:text="${postGetResponseDto.modifiedUpTime()}"></span>
+            <span th:text="${postGetResponseDto.category.getName}"></span> ・
+            <span th:text="${postGetResponseDto.modifiedUpTime}"></span>
           </div>
         </div>
         <div class="post-content-body">
-          <p th:text="${postGetResponseDto.content()}"></p>
+          <p th:text="${postGetResponseDto.content}"></p>
           <div class="post-content-stats">
-            <span>찜 횟수: <span th:text="${postGetResponseDto.favoriteCnt()}"></span></span> |
-            <span>조회수: <span th:text="${postGetResponseDto.viewCnt()}"></span></span> |
-            <span>업 횟수: <span th:text="${postGetResponseDto.upCnt()}"></span></span>
+            <span>찜 횟수: <span th:text="${postGetResponseDto.favoriteCnt}"></span></span> |
+            <span>조회수: <span th:text="${postGetResponseDto.viewCnt}"></span></span> |
+            <span>업 횟수: <span th:text="${postGetResponseDto.upCnt}"></span></span>
           </div>
         </div>
       </div>
