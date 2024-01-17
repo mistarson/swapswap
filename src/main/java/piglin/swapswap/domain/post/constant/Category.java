@@ -60,13 +60,4 @@ public enum Category {
         public static final String PET = "반려동물용품";
         public static final String ETC = "기타중고물품";
     }
-
-    public static String getNameByEnumName(String enumName) {
-
-        return Arrays.stream(Category.values())
-                .filter(e -> e.name().equals(enumName))
-                .findFirst()
-                .map(Category::getName)
-                .orElse(null);
-    }
 }
