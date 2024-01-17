@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.post.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryRepo
 
     Optional<Post> findByIdAndIsDeletedIsFalse(Long postId);
 
-    List<Post> findAllByMemberId(Long memberId);
+    List<Post> findByIsDeletedIsTrueAndModifiedTimeBefore(LocalDateTime fourTeenDaysAgo);
 }

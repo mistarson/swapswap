@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.favorite.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class FavoriteServiceImplV1 implements FavoriteService {
 
     @Override
     public boolean isFavorite(Post post, Member member) {
+
         Optional<Favorite> favorite = favoriteRepository.findByMemberAndPost(member, post);
 
         return favorite.isPresent();
@@ -25,6 +27,7 @@ public class FavoriteServiceImplV1 implements FavoriteService {
 
     @Override
     public Long getPostFavoriteCnt(Post post) {
+
         return favoriteRepository.countByPost(post);
     }
 
@@ -38,6 +41,16 @@ public class FavoriteServiceImplV1 implements FavoriteService {
             favoriteRepository.delete(favorite.get());
         } else {
             favoriteRepository.save(FavoriteMapper.createFavorite(member, post));
+        }
+    }
+
+    @Override
+    public void deleteFavoritesByPostId(Long postId) {
+
+        List<Favorite> favoriteList = favoriteRepository.findAllByPostId(postId);
+
+        for(Favorite favorite : favoriteList) {
+            favorite.deleteFavorite();
         }
     }
 }

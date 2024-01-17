@@ -5,29 +5,31 @@
 <body>
 <div layout:fragment="content">
   <div class="extra-coupon">
-  <img class="coupon-event-img" src="/images/eventcouponimage.png">
+    <img class="coupon-event-img" src="/images/eventcouponimage.png">
   </div>
   <p class="extra-coupon">남은 쿠폰 개수 <span th:text="${couponCount}"></span></p>
   <div class="extra-coupon">
-  <button class="coupon-issue-btn" th:if="${couponCount > 0}" onclick="claimCoupon()">쿠폰 받기</button>
+    <button class="coupon-issue-btn" th:if="${couponCount > 0}" onclick="claimCoupon()">쿠폰 받기
+    </button>
   </div>
   <div th:unless="${couponCount > 0}">
-    <p>쿠폰이 모두 소진되었습니다.</p>
+    <div class="extra-coupon">
+      <p>쿠폰이 모두 소진되었습니다.</p>
+    </div>
   </div>
 </div>
 </body>
 <script layout:fragment="script">
   function claimCoupon() {
-    var couponId = 1;
 
     var xhr = new XMLHttpRequest();
-    var url = "/coupons/" + couponId + "/event";
+    var url = "/coupons/event";
     xhr.open("POST", url, true);
 
     xhr.onload = function () {
       if (xhr.status === 200) {
         alert("쿠폰 받기 성공!");
-        var redirectUrl = "/coupons/" + couponId + "/event";
+        var redirectUrl = "/coupons/event";
         window.location.href = redirectUrl;
       } else if (xhr.status === 400) {
         alert("쿠폰 받기 실패. 유효하지 않은 요청 또는 쿠폰 소진됨.");

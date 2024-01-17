@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import piglin.swapswap.domain.member.constant.MemberRoleEnum;
+import piglin.swapswap.domain.member.constant.MemberRole;
 import piglin.swapswap.domain.member.entity.Member;
 
 @Getter
@@ -38,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        MemberRoleEnum role = member.getRole();
+        MemberRole role = member.getRole();
         String authority = role.getAuthority();
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
