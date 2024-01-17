@@ -40,6 +40,8 @@ public enum ErrorCode {
 
     // 쿠폰
     INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
+    NOT_FOUND_COUPON_EXCEPTION(401, "쿠폰을 찾을 수 없습니다."),
+    INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
 
     // S3
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),
