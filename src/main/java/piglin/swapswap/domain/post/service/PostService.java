@@ -5,9 +5,9 @@ import java.util.List;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 
 public interface PostService {
 
@@ -57,5 +57,5 @@ public interface PostService {
 
     void upPost(Long postId, Member member);
 
-    List<PostGetByMemberIdResponseDto> getPostInfoList(Long memberId);
+    List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 }

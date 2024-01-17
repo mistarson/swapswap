@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetByMemberIdResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -211,8 +211,9 @@ public class PostController {
 
     @GetMapping("/posts/member/{memberId}")
     public ResponseEntity<?> getPostListByMemberId(@PathVariable Long memberId) {
-        List<PostGetByMemberIdResponseDto> responseDtos = postService.getPostInfoList(memberId);
 
-        return ResponseEntity.ok(responseDtos);
+        List<PostSimpleResponseDto> responseDtoList = postService.getPostSimpleInfoList(memberId);
+
+        return ResponseEntity.ok(responseDtoList);
     }
 }

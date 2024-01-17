@@ -23,17 +23,13 @@ public class DealServiceImplV1 implements DealService {
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
 
-        getMember(requestDto.secondMemberId());
+        existMember(requestDto.secondMemberId());
         Member firstMember = getMember(member.getId());
         Deal deal = DealMapper.createDeal(requestDto, firstMember);
 
         dealRepository.save(deal);
-        return deal.getId();
-    }
 
-    private Member getMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+        return deal.getId();
     }
 
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
@@ -46,5 +42,20 @@ public class DealServiceImplV1 implements DealService {
             return DealStatus.REQUESTED;
         }
     }
+
+    private Member getMember(Long memberId) {
+
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private void existMember(Long memberId) {
+
+        if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
+        }
+    }
+
+
 }
 

@@ -15,6 +15,7 @@ import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
@@ -150,6 +151,12 @@ public class PostServiceImplV1 implements PostService {
         checkModifiedUpTime(post);
 
         post.upPost();
+    }
+
+    @Override
+    public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId){
+
+        return PostMapper.getPostSimpleInfoList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
     private boolean isMemberLoggedIn(Member member) {
