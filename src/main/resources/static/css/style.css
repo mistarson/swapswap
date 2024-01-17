@@ -24,6 +24,7 @@ body {
   align-items: center;
   padding: 10px 50px;
 }
+
 .header-logo {
   flex-grow: 0;
   flex-shrink: 0;
@@ -529,8 +530,7 @@ img {
   float: left;
   vertical-align: middle;
 }
-
-.signin__card .actions p {
+.signin__card .actions p{
   font-size: 18px;
   margin-top: 22px;
   display: inline-block;
@@ -646,6 +646,7 @@ img {
 .check_list > div {
   margin: 10px 0;
 }
+
 .check_list div {
   border: 2px solid #ccc;
   border-radius: 40px;
@@ -910,6 +911,35 @@ li {
   text-align: center;
 }
 
+.header-nav .coupon-event-link {
+  color: red;
+}
+
+.extra-coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.coupon-issue-btn {
+  top: 50%;
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 30px;
+  min-width: 120px;
+  font-size: 30px;
+}
+
+.coupon-issue-btn:hover {
+  background-color: #171264;
+  transition: 0.7s;
+}
 .container {
   max-width: 800px;
   margin: 20px auto;
