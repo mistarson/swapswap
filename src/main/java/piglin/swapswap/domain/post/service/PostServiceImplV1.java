@@ -18,7 +18,7 @@ import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
-import piglin.swapswap.domain.post.event.DeleteImageUrlEvent;
+import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
@@ -105,10 +105,9 @@ public class PostServiceImplV1 implements PostService {
         }
 
         checkPostWriter(member, post);
-
         checkImageUrlListSize(requestDto.imageUrlList());
 
-        s3ImageServiceImplV1.deleteImageUrlList(post.getImageUrl());
+        applicationEventPublisher.publishEvent(new DeleteImageUrlMapEvent(post.getImageUrl()));
 
         List<String> imageUrlList = s3ImageServiceImplV1.saveImageUrlList(
                 requestDto.imageUrlList());
@@ -136,8 +135,6 @@ public class PostServiceImplV1 implements PostService {
         checkPostWriter(member, post);
 
         post.deletePost();
-
-        applicationEventPublisher.publishEvent(new DeleteImageUrlEvent(post.getImageUrl()));
     }
 
     @Override
