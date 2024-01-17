@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스왑스왑</title>
+
+  <link rel="shortcut icon" th:href="@{/favicon.ico}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      var nicknameSpan = document.querySelector('.edit_nickname');
+      var originalNickname = nicknameSpan.innerText.trim();
+
+      document.querySelector('#nicknameLink').addEventListener('click', function (event) {
+
+        var newNickname = nicknameSpan.innerText.trim();
+        if (newNickname === originalNickname) {
+          event.preventDefault();
+          alert('변경하려는 닉네임이 현재 닉네임과 같습니다');
+        } else if (newNickname.length >= 2 && newNickname.length <= 10 && /^[a-zA-Z0-9가-힣]+$/.test(newNickname)) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('PATCH', '/members/nickname', true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+          alert('닉네임이 정상적으로 변경되었습니다');
+          originalNickname = newNickname;
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              console.log("success")
+              window.location.href = '/';
+
+            } else {
+              console.error('닉네임 업데이트 오류:', xhr.statusText);
+            }
+          };
+
+          xhr.onerror = function () {
+            console.error('요청 실패');
+            console.error(xhr);
+          };
+
+          xhr.send(JSON.stringify({nickname: newNickname}));
+        } else {
+          event.preventDefault();
+          alert('닉네임은 특수 문자를 제외한 2자 이상 10자 이내로 설정해주세요');
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+<header class="header">
+  <div class="header-content">
+    <div class="header-logo">
+      <a href="/">
+        <img th:src="@{/images/logo/swapswaphomepagelogo.png}" alt="스왑스왑 로고">
+      </a>
+    </div>
+    <div class="nav-container">
+      <a href="#chatroom">채팅방</a>
+      <a href="#cs">고객센터</a>
+      <div class="swapswap-search-container">
+        <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
+        <button class="swapswap-search-button">검색</button>
+      </div>
+    </div>
+    <div class="header-nav">
+        <span sec:authorize="isAuthenticated()">
+          <a href="/">글쓰기</a>
+          </span>
+      <span sec:authorize="isAuthenticated()">
+            <a href="/" class="login-link">스왑목록</a>
+          </span>
+      <span sec:authorize="isAuthenticated()">
+            <a href="/myPage" class="login-link">마이페이지</a>
+          </span>
+      <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/members/logout}" id="logoutButton">로그아웃</a>
+          </span>
+      <span sec:authorize="isAnonymous()">
+            <a href="/templates/member/login.html" class="login-link">로그인</a>
+          </span>
+    </div>
+  </div>
+  <div class="edit_profile">
+    <div class="edit_profile__card">
+      <h2>
+        프로필 수정
+      </h2>
+      <form id="nicknameForm" class="edit">
+        <div class="label">
+          <h2>
+            닉네임
+          </h2>
+          <span class="edit_nickname" th:text="${#authentication.principal.nickname}"
+                contenteditable="true"></span>
+        </div>
+        <div class="buttons">
+          <a id="nicknameLink" class="editbutton" href="/main">수정하기</a>
+          <a href="/myPage" class="cancelbutton">취소</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</header>
+</body>
+</html>

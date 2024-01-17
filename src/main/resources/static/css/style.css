@@ -1,0 +1,948 @@
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'S-CoreDream-3Light';
+}
+
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px #E5E5E5 solid;
+  position: relative;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  height: 100px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 10px 50px;
+}
+
+.header-logo {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.header-logo img {
+  height: 70px;
+  width: 140px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0 10px; /* 조정된 여백 */
+}
+
+.nav-container a,
+.nav-container .swapswap-search-container {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-container a:hover {
+  color: #00AADC;
+}
+
+.swapswap-search-container {
+  width: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.swapswap-search-input {
+  width: 100%; /* 수정: 입력란이 컨테이너 크기에 맞게 조정됩니다. */
+  padding: 10px 40px 10px 15px; /* 오른쪽 패딩을 버튼 너비만큼 늘립니다. */
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #EBEBEB;
+  height: 20px; /* 입력란의 높이를 버튼과 동일하게 조정 */
+}
+
+.swapswap-search-input:focus {
+  border-color: #00AADC; /* 포커스 상태일 때의 테두리 색상 */
+  outline: none; /* 기본 브라우저 아웃라인 제거 */
+}
+
+.swapswap-search-button {
+  position: absolute;
+  right: 0; /* 수정: 오른쪽 패딩에 맞게 조정 */
+  border: 0;
+  border-radius: 20px; /* 오른쪽 모서리만 둥글게 설정 */
+  height: 35px; /* 버튼의 높이를 입력란과 동일하게 설정 */
+  width: 40px; /* 너비를 40px로 설정하여 정사각형으로 만듭니다. */
+  cursor: pointer;
+  background: #00AADC;
+  margin-right: 4%;
+  color: white;
+  text-align: center;
+  line-height: 50%; /* 버튼 안의 내용을 수직 정렬 */
+}
+
+.swapswap-search-button:hover {
+  background-color: #049cb3;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: black;
+}
+
+.header-nav a:hover {
+  font-weight: 700;
+}
+
+.login-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+  margin-left: auto;
+}
+
+.category-bar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #E5E5E5; /* 하단 경계선 */
+  padding: 10px 0; /* 상하 패딩 */
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 가로축 중앙 정렬 */
+  align-items: center; /* 세로축 중앙 정렬 */
+  overflow: auto;
+}
+
+.category-bar a {
+  padding: 8px 16px; /* 링크 패딩 */
+  border-radius: 20px; /* 둥근 모서리 */
+  text-decoration: none;
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+  transition: background-color 0.3s;
+  margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+.category-bar a:hover {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.category-bar a.active {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.post-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.post-card {
+  position: relative;
+  width: calc(33.333% - 40px);
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 게시글 카드 링크에 대한 스타일 */
+.post-card a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 텍스트 색상을 상속받음 */
+}
+
+.post-card a:hover {
+  text-decoration: none; /* 호버 상태에서도 밑줄이 나타나지 않도록 함 */
+  color: inherit; /* 호버 상태에서도 텍스트 색상을 상속받음 */
+}
+
+.post-card button {
+  position: absolute;
+  top: 10px; /* 버튼을 상단으로부터 10px 떨어지게 위치 */
+  right: 10px; /* 버튼을 우측으로부터 10px 떨어지게 위치 */
+  background: none; /* 기본 배경 제거 */
+  border: none; /* 기본 테두리 제거 */
+  font-size: 1.5em; /* 아이콘 크기 */
+  cursor: pointer; /* 마우스 오버시 커서 변경 */
+}
+
+.post-image-container {
+  height: 300px; /* 이미지 컨테이너의 고정 높이 설정 */
+  width: 100%; /* 이미지가 전체 너비를 차지하도록 설정 */
+  overflow: hidden; /* 이미지가 컨테이너를 벗어나지 않도록 설정 */
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.post-title {
+  font-size: 1.5em; /* 제목 크기 */
+  color: #333; /* 제목 색상 */
+  margin: 16px 0; /* 상하 여백 */
+}
+
+.post-details {
+  font-size: 1em; /* 상세정보 크기 */
+  color: #666; /* 상세정보 색상 */
+  margin-bottom: 16px; /* 하단 여백 */
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.text-muted {
+  color: #666;
+  font-size: 0.8em;
+}
+
+
+.post-stats {
+  display: flex;
+  justify-content: space-around; /* 내용을 공간에 균등하게 분배 */
+  align-items: center;
+  padding: 10px;
+  font-size: 0.9em; /* 글꼴 크기 축소 */
+  color: #666; /* 회색 글꼴 */
+}
+
+.view-count,
+.favorite-count,
+.modified-date {
+  margin: 5px 0;
+}
+
+.modified-date:before {
+  content: ''; /* 날짜 앞에는 점을 추가하지 않음 */
+  margin-right: 0;
+}
+
+/**
+포스트 Write CSS
+ */
+
+.write-bar-container {
+  color: #333333;
+  width: 100%;
+  height: 400px;
+}
+
+.write-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #E5E5E5;
+  height: 33%;
+}
+
+.write-bar-explain {
+  flex-basis: 30%;
+  font-size: 60px;
+  text-align: center;
+}
+
+.write-bar-title-input {
+  flex-grow: 1;
+  height: 100%;
+  font-size: 80px;
+}
+
+.write-content-container {
+  height: 500px;
+  background-color: aqua;
+}
+
+.write-content-input {
+  flex-grow: 1;
+  width: 100%;
+  height: 500px;
+}
+
+.write-complete-button {
+  color: #333333;
+  background-color: #ffffff;
+  height: 50px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.write-complete-button:hover {
+  color: #ffffff;
+  background-color: #00AADC;
+}
+
+.write-bar-image-input {
+  flex-grow: 1;
+  height: 40px; /* Adjust as needed */
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+.category-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.category-button, .couponType-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #E5E5E5;
+  margin: 0 10px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+.active, .category-button:hover {
+  background-color: #00AADC;
+  color: #ffffff;
+}
+
+.post-content-container {
+  height: 400px;
+}
+
+.post-content-image-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.post-content-image-slider {
+  height: auto; /* 높이는 필요에 따라 조정 */
+  overflow: hidden;
+}
+
+.post-content-image {
+  height: 400px;
+  flex: 0 0 auto;
+  justify-content: center; /* 이미지를 가운데 정렬합니다 */
+  align-items: center; /* 이미지를 세로 방향으로 가운데 정렬합니다 */
+  object-fit: scale-down; /* 이미지가 컨테이너를 채우도록 하면서 비율을 유지 */
+}
+
+/* 슬라이더의 이전/다음 버튼 */
+.post-slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* 이전 버튼 위치 */
+.post-prev-button {
+  left: 10px;
+}
+
+/* 다음 버튼 위치 */
+.post-next-button {
+  right: 10px;
+}
+
+.post-content-details {
+  margin-top: 10px;
+  border: #333333 1px solid;
+  border-radius: 20px;
+}
+
+.post-author-favorite-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+}
+
+.author-details .author-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.favorite-action button {
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid #333333;
+  color: white;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.favorite-action button:hover {
+  border: 1px solid #00AADC;
+}
+
+.post-up-button a, .post-update-button a, .post-delete-button a {
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  border: 1px solid #333333;
+  display: inline-block;
+}
+
+/* 수정 버튼 스타일 */
+.post-update-button a {
+  background-color: #ffffff; /* 녹색 배경 */
+}
+
+.post-update-button a:hover {
+  color: white;
+  background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+/* 삭제 버튼 스타일 */
+.post-delete-button a {
+  background-color: #ffffff;
+}
+
+.post-delete-button a:hover {
+  color: white;
+  background-color: #da190b; /* 호버 시 색상 변경 */
+}
+
+
+.post-title-meta-section {
+  padding: 20px;
+}
+
+.post-title-meta-section .post-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.post-meta {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.post-content-body {
+  padding: 0 20px 20px;
+  line-height: 1.6;
+}
+
+.post-content-stats {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 20px;
+}
+
+.post-content-actions button:hover {
+  background-color: #007BFF;
+}
+
+.post-content-actions div {
+  font-size: 0.9em;
+  color: #666;
+}
+
+
+/*-----login-----*/
+.signin {
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.signin .signin__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+
+.signin__card h2 {
+  padding: 30px;
+  text-align: center;
+}
+
+.signin__card .actions {
+  display: flex;
+  border-top: 1px solid #ddd;
+  height: 400px;
+}
+
+.signin__card .actions img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 20px;
+  float: left;
+  vertical-align: middle;
+}
+
+.signin__card .actions p {
+  font-size: 18px;
+  margin-top: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 50px;
+  font-weight: 900;
+}
+
+.signin__card .actions a {
+  padding: 5px;
+  margin: 20px 20px;
+  height: 70px;
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #fddc3a;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.signin__card .actions a:last-child {
+  border-right: none;
+}
+
+.signin__card .actions a:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions a {
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
+/*------myPage 중 유저정보-------*/
+.myPage_profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.myPage_profile .myPage_profile_title {
+  width: 500px;
+  margin-bottom: 40px;
+  font-size: 25px;
+  font-weight: 900;
+  border-bottom: 1px solid #ccc;
+}
+
+.myPage_profile .profile_userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  font-size: 20px;
+}
+
+.profile_userinfo .myPage_nickname,
+.profile_userinfo .myPage_email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.profile_userinfo .myPage_nickname .nick {
+  width: 100px;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.profile_userinfo .myPage_email .e {
+  margin-left: 20px;
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .myPage_nickname .name,
+.profile_userinfo .myPage_email .mail {
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .nickname .name,
+.profile_userinfo .myPage_email .mail {
+  text-align: left;
+  margin-left: auto;
+}
+
+
+/*---------myPage 중 확인내역--------------*/
+.check_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.check_list > div {
+  margin: 10px 0;
+}
+
+.check_list div {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 250px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+}
+
+.check_list .myPage_edit_profile {
+  margin-top: 50px;
+
+}
+
+.transaction_history:hover {
+  background-color: #2980b9;
+}
+
+.my_wallet:hover {
+  background-color: #2980b9;
+}
+
+.coupon:hover {
+  background-color: #2980b9;
+}
+
+.favorite:hover {
+  background-color: #2980b9;
+}
+
+.myPage_edit_profile:hover {
+  background-color: #2980b9;
+}
+
+.check_list .unregister {
+  background-color: #5D676A;
+  text-align: center;
+}
+
+.check_list .unregister:hover {
+  background-color: #444;
+}
+
+.check_list a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+
+/*----------editProfile-------------*/
+.edit_profile .edit p.label {
+  display: inline-block;
+  margin: 0;
+}
+
+.edit_profile {
+  margin-top: 120px;
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.edit_profile__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+
+.edit_profile__card h2 {
+  padding: 30px;
+  text-align: center;
+  margin: 0 30px 0 30px;
+
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.edit .label {
+  display: flex;
+  align-items: center;
+  border-top: 2px #555 solid;
+  width: 400px;
+}
+
+.edit h2 {
+  margin-right: 10px;
+}
+
+.edit span.edit_nickname {
+  font-weight: bold;
+  width: 150px;
+  text-align: center;
+  color: #808080;
+  cursor: pointer;
+  border-bottom: 2px solid #808080;
+
+
+}
+
+.edit .buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.buttons .editbutton {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+
+.edit .buttons a.editbutton:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a.cancelbutton:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .cancelbutton {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+
+.edit .buttons .cancelbutton a:hover {
+  background-color: #b0b0b0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a {
+  margin: 10px;
+}
+
+.buttons a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+/*-------------unregister--------------*/
+.unregister {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  margin-top: 100px;
+}
+
+.unregister-content {
+  max-width: 800px;
+}
+
+.unregister p {
+  border-bottom: 2px solid #ccc;
+  text-align: left;
+  width: 800px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.unregister-content ul {
+  list-style-type: disc;
+  padding: 0;
+  margin-left: 50px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.unregister-buttons a {
+  margin-left: 10px;
+}
+
+.unregister-buttons .unregister-cancel {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-cancel:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister-buttons a:visited {
+  color: white;
+}
+
+.unregister-buttons .unregister-ok {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-ok:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister .unregister-buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.unregister-buttons a {
+  margin: 10px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
+
+.header-nav .coupon-event-link {
+  color: red;
+}
+
+.extra-coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.coupon-issue-btn {
+  top: 50%;
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 30px;
+  min-width: 120px;
+  font-size: 30px;
+}
+
+.coupon-issue-btn:hover {
+  background-color: #171264;
+  transition: 0.7s;
+}
+
+.coupon-event-img {
+  width: 800px;
+
+}

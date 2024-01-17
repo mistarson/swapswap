@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+
+<body>
+<div layout:fragment="content">
+  <div class="post-content-container">
+    <div class="post-content-image-container">
+      <div class="post-content-image-slider">
+        <img th:each="entry:${PostGetResponseDto.imageUrl().entrySet()}" th:src="${entry.value}"
+             th:alt="'Image '+ ${entry.key}" class="post-content-image">
+      </div>
+      <button class="post-slider-button post-prev-button" onclick="moveSlide(-1)">＜</button>
+      <button class="post-slider-button post-next-button" onclick="moveSlide(1)">＞</button>
+    </div>
+    <div>
+      <div class="post-content-details">
+        <div class="post-author-favorite-section">
+          <div class="author-details">
+            <span class="author-name" th:text="${PostGetResponseDto.author()}"></span>
+          </div>
+          <div class="post-update-button"><a th:href="@{/posts/{PostId}/write(PostId=${PostId})}">수정하기</a>
+          </div>
+          <div class="post-up-button"
+               th:data-post-id="${PostId}"
+               th:onclick="upPost(this.getAttribute('data-post-id'))"><a>업하기</a></div>
+          <div class="post-delete-button"
+               th:data-post-id="${PostId}"
+               th:onclick="deletePost(this.getAttribute('data-post-id'))">
+            <a>삭제하기</a>
+          </div>
+          <div class="favorite-action">
+            <button
+                th:data-post-id="${PostId}"
+                th:onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+                th:text="${PostGetResponseDto.favoriteStatus()} == true ? '💙' : '🤍'"></button>
+          </div>
+        </div>
+        <div class="post-title-meta-section">
+          <h1 class="post-title" th:text="${PostGetResponseDto.title()}"></h1>
+          <div class="post-meta">
+            <span th:text="${PostGetResponseDto.category()}"></span> ・
+            <span th:text="${PostGetResponseDto.modifiedUpTime()}"></span>
+          </div>
+        </div>
+        <div class="post-content-body">
+          <p th:text="${PostGetResponseDto.content()}"></p>
+          <div class="post-content-stats">
+            <span>찜 횟수: <span th:text="${PostGetResponseDto.favoriteCnt()}"></span></span> |
+            <span>조회수: <span th:text="${PostGetResponseDto.viewCnt()}"></span></span> |
+            <span>업 횟수: <span th:text="${PostGetResponseDto.upCnt()}"></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    var totalSlides = [[${PostGetResponseDto.imageUrl.size()}]];
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+
+      const slidesContainer = document.querySelector('.post-content-image-slider');
+      const images = document.querySelectorAll('.post-content-image')
+
+      images.forEach(image => {
+        image.style.width = `${100 / totalSlides}%`
+      })
+
+      // 컨테이너의 너비를 이미지 갯수에 따라 설정
+      slidesContainer.style.width = `${totalSlides * 100}%`;
+
+      let currentSlide = 0;
+
+      window.moveSlide = function (direction) {
+        if (direction === 1 && currentSlide < totalSlides - 1) {
+          currentSlide++;
+        } else if (direction === -1 && currentSlide > 0) {
+          currentSlide--;
+        }
+        updateSlidePosition();
+      };
+
+      function updateSlidePosition() {
+        const percentage = -(currentSlide * 100 / totalSlides);
+        slidesContainer.style.transform = `translateX(${percentage}%)`;
+      }
+
+      // 초기 슬라이드 위치 업데이트
+      updateSlidePosition();
+    });
+    /*]]>*/
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    function toggleFavorite(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/favorite',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function () {
+          location.reload()
+        }
+      });
+    }
+
+    function deletePost(postId) {
+      $.ajax({
+        url: '/posts/' + postId,
+        type: 'DELETE',
+        contentType: 'application/json; charset=utf-8',
+        success: function () {
+          location.href = '/'
+        }
+      });
+    }
+
+    function upPost(postId) {
+      $.ajax({
+        url: '/posts/' + postId + '/up',
+        type: 'PATCH',
+        contentType: 'application/json; charset=utf-8',
+        success: function () {
+          location.reload()
+        }
+      });
+    }
+  </script>
+</div>
+</body>
+</html>
