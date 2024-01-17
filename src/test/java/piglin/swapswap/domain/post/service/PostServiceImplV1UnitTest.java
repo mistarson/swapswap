@@ -127,8 +127,20 @@ class PostServiceImplV1UnitTest {
 
         @Mock
         private Post post;
+
+        private Long memberId = 1L;
+        private String author = "작성자";
         private String title = "제목";
         private String content = "내용";
+        private Long upCnt = 1L;
+        private Long viewCnt = 1L;
+        private Category category = Category.ELECTRONICS;
+        private Long favoriteCnt = 1L;
+        private Boolean favoriteStatus = false;
+        private LocalDateTime modifiedUpTime = LocalDateTime.now();
+
+        private PostGetResponseDto normalResponseDto;
+        private PostGetResponseDto nullResponseDto;
 
         private Map<Integer, Object> imageUrl;
 
@@ -142,15 +154,19 @@ class PostServiceImplV1UnitTest {
                 imageUrl = new HashMap<>();
                 imageUrl.put(0, "testImageServer.com");
 
-                // Post 스터빙
-                when(post.getMember()).thenReturn(member);
-                when(post.getTitle()).thenReturn(title);
-                when(post.getContent()).thenReturn(content);
-                when(post.getCategory()).thenReturn(Category.ELECTRONICS);
-                when(post.getViewCnt()).thenReturn(0L);
-                when(post.getUpCnt()).thenReturn(0L);
-                when(post.getModifiedUpTime()).thenReturn(LocalDateTime.now());
-                when(post.getImageUrl()).thenReturn(imageUrl);
+                normalResponseDto = PostGetResponseDto.builder()
+                        .memberId(memberId)
+                        .author(author)
+                        .title(title)
+                        .content(content)
+                        .category(category)
+                        .imageUrl(imageUrl)
+                        .viewCnt(viewCnt)
+                        .upCnt(upCnt)
+                        .favoriteCnt(favoriteCnt)
+                        .modifiedUpTime(modifiedUpTime)
+                        .favoriteStatus(favoriteStatus)
+                        .build();
             }
 
             @Test
@@ -158,20 +174,18 @@ class PostServiceImplV1UnitTest {
             void getPost_Success() {
                 // Given
                 Long postId = 1L;
-                when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(
-                        Optional.of(post));
-                when(favoriteService.getPostFavoriteCnt(post)).thenReturn(1L);
-                when(favoriteService.isFavorite(post, member)).thenReturn(false);
+                when(postRepository.findPostWithFavorite(postId, member)).thenReturn(
+                        normalResponseDto);
                 // When
                 PostGetResponseDto result = postService.getPost(postId, member);
                 // Then
                 assertThat(result).isNotNull();
-                assertThat(result.author()).isEqualTo(member.getNickname());
+                assertThat(result.author()).isEqualTo(author);
                 assertThat(result.title()).isEqualTo(title);
                 assertThat(result.content()).isEqualTo(content);
-//                assertThat(result.category()).isEqualTo(Category.ELECTRONICS.getName());
-                assertThat(result.favoriteCnt()).isEqualTo(1L);
-                assertThat(result.favoriteStatus()).isEqualTo(false);
+                assertThat(result.category()).isEqualTo(category);
+                assertThat(result.favoriteCnt()).isEqualTo(favoriteCnt);
+                assertThat(result.favoriteStatus()).isEqualTo(favoriteStatus);
             }
 
             @Test
@@ -180,19 +194,18 @@ class PostServiceImplV1UnitTest {
                 // Given
                 Member notLoginMember = null;
                 Long postId = 1L;
-                when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(
-                        Optional.of(post));
-                when(favoriteService.getPostFavoriteCnt(post)).thenReturn(1L);
+                when(postRepository.findPostWithFavorite(postId, notLoginMember)).thenReturn(
+                        normalResponseDto);
                 // When
                 PostGetResponseDto result = postService.getPost(postId, notLoginMember);
                 // Then
                 assertThat(result).isNotNull();
-                assertThat(result.author()).isEqualTo(member.getNickname());
+                assertThat(result.author()).isEqualTo(author);
                 assertThat(result.title()).isEqualTo(title);
                 assertThat(result.content()).isEqualTo(content);
-//                assertThat(result.category()).isEqualTo(Category.ELECTRONICS.getName());
-                assertThat(result.favoriteCnt()).isEqualTo(1L);
-                assertThat(result.favoriteStatus()).isEqualTo(false);
+                assertThat(result.category()).isEqualTo(category);
+                assertThat(result.favoriteCnt()).isEqualTo(favoriteCnt);
+                assertThat(result.favoriteStatus()).isEqualTo(favoriteStatus);
             }
         }
 
@@ -201,7 +214,15 @@ class PostServiceImplV1UnitTest {
         void getPost_Fail_Not_Found_Post() {
             // Given
             Long postId = 1L;
-            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.empty());
+
+            // setUp 에서 적용이 안 돼서 여기에 넣어놨습니다...
+            nullResponseDto = new PostGetResponseDto(
+                    null, null, null, null, null,
+                    null, null, null, null,null,
+                    false
+            );
+
+            when(postRepository.findPostWithFavorite(postId, member)).thenReturn(nullResponseDto);
 
             // When - Then
             assertThatThrownBy(() -> postService.getPost(postId, member))
@@ -233,17 +254,18 @@ class PostServiceImplV1UnitTest {
             Long postId = 1L;
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
-            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
-                                               .isInstanceOf(BusinessException.class)
-                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
+            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
         }
+
         @Test
         @DisplayName("게시글 수정 - 실패 / 이미지는 최소 n장 업로드 해야합니다.")
         void updatePost_Fail_Image_Min() {
             // Given
             List<MultipartFile> imageUrlList = new ArrayList<>();
 
-            for(int i = 0; i < PostConstant.IMAGE_MIN_SIZE-1; i++) {
+            for (int i = 0; i < PostConstant.IMAGE_MIN_SIZE - 1; i++) {
                 imageUrlList.add(Mockito.mock(MultipartFile.class));
             }
 
@@ -253,9 +275,9 @@ class PostServiceImplV1UnitTest {
             Long postId = 1L;
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
-            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
-                                               .isInstanceOf(BusinessException.class)
-                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
+            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.POST_IMAGE_MIN_SIZE.getMessage());
         }
 
         @Test
@@ -264,7 +286,7 @@ class PostServiceImplV1UnitTest {
             // Given
             List<MultipartFile> imageUrlList = new ArrayList<>();
 
-            for(int i = 0; i < PostConstant.IMAGE_MAX_SIZE+1; i++) {
+            for (int i = 0; i < PostConstant.IMAGE_MAX_SIZE + 1; i++) {
                 imageUrlList.add(Mockito.mock(MultipartFile.class));
             }
 
@@ -274,9 +296,9 @@ class PostServiceImplV1UnitTest {
             Long postId = 1L;
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
-            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
-                                               .isInstanceOf(BusinessException.class)
-                                               .hasMessageContaining(ErrorCode.POST_IMAGE_MAX_SIZE.getMessage());
+            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.POST_IMAGE_MAX_SIZE.getMessage());
         }
 
         @Test
@@ -293,7 +315,7 @@ class PostServiceImplV1UnitTest {
             Long postId = 1L;
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
-            assertThatThrownBy(()-> postService.updatePost(postId, member, requestDto))
+            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining(ErrorCode.WRITE_ONLY_USER.getMessage());
         }
@@ -314,7 +336,7 @@ class PostServiceImplV1UnitTest {
             Long postId = 1L;
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
-            assertThatThrownBy(()-> postService.updatePost(postId, anotherMember, requestDto))
+            assertThatThrownBy(() -> postService.updatePost(postId, anotherMember, requestDto))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION.getMessage());
         }
