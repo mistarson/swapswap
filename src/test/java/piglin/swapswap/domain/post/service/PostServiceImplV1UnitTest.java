@@ -125,8 +125,6 @@ class PostServiceImplV1UnitTest {
     @DisplayName("게시글 단 건 조회 테스트 모음")
     class GetPostTestList {
 
-        @Mock
-        private Post post;
 
         private Long memberId = 1L;
         private String author = "작성자";
