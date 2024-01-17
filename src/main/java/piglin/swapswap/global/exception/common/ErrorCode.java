@@ -44,11 +44,15 @@ public enum ErrorCode {
     NOT_FOUND_COUPON_EXCEPTION(401, "쿠폰을 찾을 수 없습니다."),
     INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
 
+    //거래
+    REQUEST_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 거래요청을 할 수 없습니다."),
+
     // S3
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),
     FAIL_UPLOAD(400, "이미지 업로드에 실패했습니다."),
     POST_IMAGE_MAX_SIZE(400, "이미지는 최대 10장만 업로드 할 수 있습니다."),
     POST_IMAGE_MIN_SIZE(400, "이미지를 최소 1장 업로드 해야합니다.");
+
 
     private final int status;
 

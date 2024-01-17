@@ -7,6 +7,7 @@ import piglin.swapswap.domain.post.constant.Category;
 
 @Builder
 public record PostGetResponseDto(
+        Long userId,
         String author,
         String title,
         String content,

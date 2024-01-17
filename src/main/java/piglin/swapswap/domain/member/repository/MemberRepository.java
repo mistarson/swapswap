@@ -19,4 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByNicknameAndIsDeletedIsFalse(String nickname);
 
     List<Member> findByIsDeletedIsTrueAndModifiedTimeBefore(LocalDateTime fourTeenDaysAgo);
+
+    boolean existsByIdAndIsDeletedIsFalse(Long memberId);
 }

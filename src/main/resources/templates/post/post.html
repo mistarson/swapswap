@@ -18,9 +18,14 @@
       <div class="post-content-details">
         <div class="post-author-favorite-section">
           <div class="author-details">
+            <input class="author-id" type="hidden" th:value="${postGetResponseDto.userId()}">
+            <span class="author-name" th:text="${PostGetResponseDto.author()}"></span>
             <span class="author-name" th:text="${postGetResponseDto.author()}"></span>
           </div>
           <div class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}">수정하기</a>
+          </div>
+          <div class="post-request-button">
+            <a th:href="@{/deals/request(secondMemberId=${PostGetResponseDto.userId()},memberName=${PostGetResponseDto.author})}">요청하기</a>
           </div>
           <div class="post-up-button"
                th:data-post-id="${postId}"
