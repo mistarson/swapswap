@@ -14,7 +14,7 @@ import piglin.swapswap.domain.coupon.constant.CouponType;
 import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
 import piglin.swapswap.domain.coupon.entity.Coupon;
 import piglin.swapswap.domain.coupon.repository.CouponRepository;
-import piglin.swapswap.domain.member.constant.MemberRoleEnum;
+import piglin.swapswap.domain.member.constant.MemberRole;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
@@ -66,7 +66,7 @@ class CouponServiceTest {
         member = Member.builder()
                 .email("yeowuli2@naver.com")
                 .nickname("손창현")
-                .role(MemberRoleEnum.USER)
+                .role(MemberRole.USER)
                 .isDeleted(false)
                 .wallet(wallet)
                 .build();
