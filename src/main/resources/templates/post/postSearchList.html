@@ -74,7 +74,16 @@
 
     function loadMorePosts() {
       isLoading = true;
-      let url = '/posts/more?cursorTime=' + lastModifiedTime;
+      let url = '/search/posts/more?cursorTime=' + lastModifiedTime + '&';
+      var searchValue = localStorage.getItem('searchValue') || '';
+      var selectedCategory = localStorage.getItem('selectedCategory') || '';
+
+      if (searchValue) {
+        url += 'title=' + encodeURIComponent(searchValue);
+      }
+      if (selectedCategory) {
+        url += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
 
       if(!isLast) {
         $.ajax({
@@ -92,7 +101,6 @@
           }
         });
       }
-
     }
 
     function updateLastModifiedTime(htmlFragment) {

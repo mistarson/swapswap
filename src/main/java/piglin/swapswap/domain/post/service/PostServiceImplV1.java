@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
@@ -83,9 +81,10 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Page<PostGetListResponseDto> getPostList(Member member, Pageable pageable) {
+    public List<PostGetListResponseDto> getPostList(Member member,
+            LocalDateTime cursorTime) {
 
-        return postRepository.findAllPostListWithFavoriteAndPaging(pageable, member);
+        return postRepository.findPostListWithFavoriteByCursor(member, cursorTime);
     }
 
     @Override
@@ -143,8 +142,8 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public Page<PostGetListResponseDto> searchPost(String title, String category, Member member,
-            Pageable pageable) {
+    public List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+            LocalDateTime cursorTime) {
 
         Category categoryCond = null;
 
@@ -152,7 +151,7 @@ public class PostServiceImplV1 implements PostService {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        return postRepository.searchPost(title, categoryCond, member, pageable);
+        return postRepository.searchPostListWithFavorite(title, categoryCond, member, cursorTime);
     }
 
     @Override
@@ -161,7 +160,7 @@ public class PostServiceImplV1 implements PostService {
 
         Post post = findPost(postId);
         checkPostWriter(member, post);
-        checkPostUpValid(post);
+        checkModifiedUpTime(post);
 
         post.upPost();
     }
@@ -172,7 +171,8 @@ public class PostServiceImplV1 implements PostService {
         return postList.stream().map(PostGetByMemberIdResponseDto::toDto).toList();
     }
 
-    private void checkPostUpValid(Post post) {
+    private void checkModifiedUpTime(Post post) {
+
         if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
