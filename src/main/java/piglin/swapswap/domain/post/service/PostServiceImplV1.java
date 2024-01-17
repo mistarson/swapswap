@@ -158,10 +158,12 @@ public class PostServiceImplV1 implements PostService {
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
+
         Map<Integer, Object> imageUrlMap = new HashMap<>();
         for (int i = 0; i < imageUrlList.size(); i++) {
             imageUrlMap.put(i, imageUrlList.get(i));
         }
+
         return imageUrlMap;
     }
 
