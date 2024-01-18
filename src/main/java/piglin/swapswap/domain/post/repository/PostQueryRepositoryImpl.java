@@ -32,15 +32,15 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory
-                .select(Projections.fields(PostGetListResponseDto.class,
-                        post.id.as("postId"),
-                        post.member.id.as("memberId"),
+                .select(Projections.constructor(PostGetListResponseDto.class,
+                        post.id,
+                        post.member.id,
                         post.title,
                         post.imageUrl,
                         post.modifiedUpTime,
                         post.viewCnt,
-                        favorite.post.count().as("favoriteCnt"),
-                        favoriteStatus(member).as("favoriteStatus")))
+                        favorite.post.count(),
+                        favoriteStatus(member)))
                 .from(post)
                 .where(isNotDeleted(), lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
@@ -57,15 +57,15 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory.select(post)
-                .select(Projections.fields(PostGetListResponseDto.class,
-                        post.id.as("postId"),
-                        post.member.id.as("memberId"),
+                .select(Projections.constructor(PostGetListResponseDto.class,
+                        post.id,
+                        post.member.id,
                         post.title,
                         post.imageUrl,
                         post.modifiedUpTime,
                         post.viewCnt,
-                        favorite.post.count().as("favoriteCnt"),
-                        favoriteStatus(member).as("favoriteStatus")))
+                        favorite.post.count(),
+                        favoriteStatus(member)))
                 .from(post)
                 .where(titleContains(titleCond), categoryEq(categoryCond), isNotDeleted(),
                         lessThanCursorTime(cursorTime))
