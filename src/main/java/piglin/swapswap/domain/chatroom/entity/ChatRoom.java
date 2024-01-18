@@ -36,7 +36,7 @@ public class ChatRoom {
     private String id;
 
     @Column(name = "createdAt")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdTime;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastChatMesgId")

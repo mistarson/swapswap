@@ -12,4 +12,6 @@ public interface ChatRoomService {
     List<MessageDto> getMessageByChatRoomId(String roomId);
 
     ChatRoomResponseDto findById(String roomId);
+
+    String createChatroom(Member member, Long secondMemberId);
 }

@@ -9,4 +9,3 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
 
     List<ChatRoom> findAllByChatRoomMembersContaining(Member member);
 }
-
