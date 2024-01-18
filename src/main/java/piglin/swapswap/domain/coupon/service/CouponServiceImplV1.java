@@ -84,4 +84,5 @@ public class CouponServiceImplV1 implements CouponService {
 
         return CouponMapper.couponToGetResponseDto(coupon);
     }
+
 }
