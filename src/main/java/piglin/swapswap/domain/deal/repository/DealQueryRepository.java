@@ -8,5 +8,5 @@ public interface DealQueryRepository {
 
     List<DealGetResponseDto> findAllMyDealRequest(Member member);
 
-    List<DealGetResponseDto> findALlMyDealResponse(Member member);
+    List<DealGetResponseDto> findAllMyDealResponse(Member member);
 }

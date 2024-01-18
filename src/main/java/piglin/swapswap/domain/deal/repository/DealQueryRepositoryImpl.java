@@ -37,7 +37,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     }
 
     @Override
-    public List<DealGetResponseDto> findALlMyDealResponse(Member member) {
+    public List<DealGetResponseDto> findAllMyDealResponse(Member member) {
 
         return queryFactory.select(
                 Projections.constructor(DealGetResponseDto.class,
