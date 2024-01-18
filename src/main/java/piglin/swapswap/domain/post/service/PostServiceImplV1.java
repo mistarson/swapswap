@@ -58,7 +58,7 @@ public class PostServiceImplV1 implements PostService {
 
         PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
 
-        IsNullPostResponseDto(responseDto);
+        isNullPostResponseDto(responseDto);
 
         postRepository.updatePostViewCnt(postId);
 
@@ -108,7 +108,8 @@ public class PostServiceImplV1 implements PostService {
         favoriteService.updateFavorite(member, post);
     }
 
-    private void IsNullPostResponseDto(PostGetResponseDto responseDto) {
+    private void isNullPostResponseDto(PostGetResponseDto responseDto) {
+
         if (responseDto.author() == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
