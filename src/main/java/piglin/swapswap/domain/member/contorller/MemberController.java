@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
+import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
@@ -30,8 +32,12 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 public class MemberController {
 
     private final KakaoServiceImpl kakaoServiceImpl;
+  
     private final MemberService memberService;
+  
     private final PostService postService;
+
+    private final MemberCouponService memberCouponService;
 
     @GetMapping("/login/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response)
@@ -55,7 +61,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-
     @ResponseBody
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> updateNickname(@AuthMember Member member,
@@ -64,6 +69,7 @@ public class MemberController {
         memberService.updateNickname(member, requestDto);
         return ResponseEntity.ok().build();
     }
+
     @ResponseBody
     @DeleteMapping("/members")
     public ResponseEntity<?> unregister(@AuthMember Member member, HttpServletResponse response) {
@@ -74,6 +80,14 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/members/coupon")
+    public String getMyCouponList(@AuthMember Member member, Model model) {
+
+        List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(member);
+        model.addAttribute("myCouponGetResponseDtoList", myCouponGetResponseDtoList);
+
+        return "/member/myCouponList";
+    }
     @GetMapping("/members/swap-money")
     public String getMySwapMoney(@AuthMember Member member, Model model) {
 
