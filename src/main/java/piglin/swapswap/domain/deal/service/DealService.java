@@ -20,4 +20,8 @@ public interface DealService {
     void updateDeal(Member member, Long dealId, Long memberId, DealUpdateRequestDto requestDto);
 
     void checkDeal(Long dealId);
+
+    void updateDealAllow(Long dealId, Member member);
+
+    void takeDeal(Long deal, Member member);
 }

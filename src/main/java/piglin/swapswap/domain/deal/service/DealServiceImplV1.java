@@ -63,9 +63,7 @@ public class DealServiceImplV1 implements DealService {
     @Transactional
     public void updateDeal(Member member, Long dealId, Long memberId, DealUpdateRequestDto requestDto) {
 
-        Deal deal = dealRepository.findById(dealId).orElseThrow(
-                () -> new RuntimeException("딜이 없습니다")
-        );
+        Deal deal = findDeal(dealId);
 
         if (!deal.getFirstUserId().equals(member.getId()) && !deal.getSecondUserId().equals(member.getId())) {
             throw new RuntimeException("딜을 수정할 수 있는 권한이 없어요~");
@@ -92,15 +90,70 @@ public class DealServiceImplV1 implements DealService {
         );
     }
 
-    private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
+    @Override
+    @Transactional
+    public void updateDealAllow(Long dealId, Member member) {
 
-        if (firstAllow && secondAllow) {
+        Deal deal = findDeal(dealId);
 
-            return DealStatus.DEALING;
-        } else {
-
-            return DealStatus.REQUESTED;
+        if (deal.getDealStatus().equals(DealStatus.COMPLETED)) {
+            throw new RuntimeException("거래가 완료되어 수정할 수 없습니다.");
         }
+
+        if(deal.getFirstUserId().equals(member.getId())) {
+            deal.updateDealFirstMemberAllow();
+        }
+
+        if(deal.getSecondUserId().equals(member.getId())) {
+            deal.updateDealSecondMemberAllow();
+        }
+
+        if(deal.getFirstAllow() && deal.getSecondAllow()) {
+            deal.updateDealStatus(DealStatus.DEALING);
+        }
+
+        if (!deal.getFirstAllow() || !deal.getSecondAllow()) {
+            deal.updateDealStatus(DealStatus.REQUESTED);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void takeDeal(Long dealId, Member member) {
+
+        Deal deal = findDeal(dealId);
+
+        if (!deal.getDealStatus().equals(DealStatus.DEALING)) {
+            throw new RuntimeException("인수 할 수 있는 상태가 아닙니다.");
+        }
+
+        if(deal.getFirstUserId().equals(member.getId())) {
+
+            if(!deal.getFirstTake()) {
+                deal.updateDealFirstMemberTake();
+            }
+        }
+
+        if(deal.getSecondUserId().equals(member.getId())) {
+
+            if(!deal.getSecondTake()) {
+                deal.updateDealSecondMemberTake();
+            }
+        }
+
+        if(deal.getFirstTake() && deal.getSecondTake()) {
+            deal.updateDealStatus(DealStatus.COMPLETED);
+        }
+
+        if(!deal.getFirstTake() || !deal.getSecondTake()) {
+            deal.updateDealStatus(DealStatus.DEALING);
+        }
+    }
+
+    private Deal findDeal(Long dealId) {
+        return dealRepository.findById(dealId).orElseThrow(
+                () -> new RuntimeException("딜이 없습니다")
+        );
     }
 
     private void existMember(Long memberId) {

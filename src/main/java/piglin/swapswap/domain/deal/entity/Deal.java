@@ -84,5 +84,34 @@ public class Deal extends BaseTime {
         this.firstAllow = false;
         this.secondAllow = false;
     }
+
+    public void updateDealFirstMemberAllow() {
+
+        this.firstAllow = !this.firstAllow;
+    }
+
+    public void updateDealSecondMemberAllow() {
+
+        this.secondAllow = !this.secondAllow;
+    }
+
+    public void updateDealFirstMemberTake() {
+
+        this.firstTake = true;
+    }
+
+    public void updateDealSecondMemberTake() {
+
+        this.secondTake = true;
+    }
+
+    public void updateDealStatus(DealStatus dealStatus) {
+
+        if (dealStatus.equals(DealStatus.COMPLETED)) {
+            this.completedDealTime = LocalDateTime.now();
+        }
+
+        this.dealStatus = dealStatus;
+    }
 }
 
