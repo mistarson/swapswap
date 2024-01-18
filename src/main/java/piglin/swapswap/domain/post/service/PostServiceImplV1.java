@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +157,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId){
 
-        return PostMapper.getPostSimpleInfoList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
+        return PostMapper.getPostSimpleInfoListByPostList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
     @Override
@@ -169,6 +170,21 @@ public class PostServiceImplV1 implements PostService {
         isEmptyPostList(postList);
 
         return postList;
+    }
+
+    @Override
+    public List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(
+            Map<Integer, Object> postIdList) {
+
+        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
+
+        for(int i = 0; i < postIdList.size(); i++) {
+            Long postId = Long.valueOf(String.valueOf(postIdList.get(i)));
+            Post post = findPost(postId);
+            responseDtoList.add(PostMapper.getPostSimpleInfoListByPost(post));
+        }
+
+        return responseDtoList;
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {

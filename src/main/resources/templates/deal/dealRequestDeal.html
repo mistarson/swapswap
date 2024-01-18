@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<link rel="stylesheet" type="text/css" href="your-stylesheet.css">
+<body>
+<div layout:fragment="content">
+  <div class="deal-detail-card">
+    <div class="deal-detail-card-body">
+      <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
+          class="deal-detail-nickname"></h2>
+    </div>
+    <div class="deal-detail-content-container">
+      <div class="deal-detail-request-list">
+        <div class="deal-detail-list-container">
+          <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
+            <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
+          <div class="deal-detail-first-user-edit-button">수정하기</div>
+        </div>
+        <div class="deal-detail-list-container">
+          <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
+              <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
+          <div class="deal-detail-second-user-edit-button">수정하기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
