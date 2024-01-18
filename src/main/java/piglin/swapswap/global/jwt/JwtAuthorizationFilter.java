@@ -17,9 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
-import piglin.swapswap.global.exception.user.UserNotFoundException;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 @AllArgsConstructor
@@ -27,8 +25,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
-    private final MemberRepository memberRepository;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
@@ -47,14 +43,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             Claims claims = jwtUtil.getUserInfoFromToken(tokenValue);
             String email = String.valueOf(claims.get(JwtUtil.CLAIM_USER_EMAIL));
 
-            if (!memberRepository.existsByEmail(email)) {
-                throw new UserNotFoundException();
-            }
             try {
                 setAuthentication(email);
             } catch (Exception e) {
                 log.error(e.getMessage());
-                return;
+
+                throw e;
             }
         }
 
@@ -62,6 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     public void setAuthentication(String email) {
+
         log.info("JwtAuthorizationFilter-setAuthentication");
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(email);
@@ -71,6 +66,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication createAuthentication(String email) {
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         return new UsernamePasswordAuthenticationToken(userDetails, null,

@@ -1,7 +1,6 @@
 package piglin.swapswap.global.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import piglin.swapswap.domain.member.constant.MemberRole.Authority;
-import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.global.exception.jwt.ExceptionHandlerFilter;
 import piglin.swapswap.global.jwt.JwtAuthorizationFilter;
 import piglin.swapswap.global.jwt.JwtUtil;
@@ -28,25 +26,32 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final MemberRepository memberRepository;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
-    @Autowired
-    private CustomAuthenticationEntryPoint authenticationEntryPoint;
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
+
         return configuration.getAuthenticationManager();
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService,memberRepository);
+
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
+
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+
+    @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter() {
+
+        return new ExceptionHandlerFilter();
     }
 
     @Bean
@@ -59,7 +64,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers("/login", "/login/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/error/errorpage").permitAll()
                         .requestMatchers("/", "/posts/{postId}").permitAll()
                         .requestMatchers("/posts/{postId}/favorite").permitAll()
@@ -74,7 +79,8 @@ public class WebSecurityConfig {
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthorizationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthorizationFilter.class);
+
         return http.build();
     }
 }

@@ -8,8 +8,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.view.RedirectView;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
@@ -17,7 +17,7 @@ import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
 
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
