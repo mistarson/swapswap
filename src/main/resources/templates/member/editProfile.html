@@ -32,7 +32,7 @@
           xhr.onload = function () {
             if (xhr.status === 200) {
               console.log("success")
-              window.location.href = '/';
+              window.location.href = '/myPage';
 
             } else {
               console.error('닉네임 업데이트 오류:', xhr.statusText);
@@ -102,7 +102,7 @@
                 contenteditable="true"></span>
         </div>
         <div class="buttons">
-          <a id="nicknameLink" class="editbutton" href="/main">수정하기</a>
+          <a id="nicknameLink" class="editbutton">수정하기</a>
           <a href="/myPage" class="cancelbutton">취소</a>
         </div>
       </form>
