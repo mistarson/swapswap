@@ -92,10 +92,6 @@ public class PostController {
 
         List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
 
-        if (postList.isEmpty()) {
-            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
-        }
-
         model.addAttribute("PostGetListResponseDto", postList);
 
         return "post/postListFragment";

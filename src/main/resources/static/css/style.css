@@ -1210,3 +1210,9 @@ input[type="number"] {
   background: url("/images/withdraw.jpg") no-repeat;
 
 }
+
+.my-favorite-explain {
+  font-size: 50px;
+  margin-top: 55px;
+  text-align: center;
+}
