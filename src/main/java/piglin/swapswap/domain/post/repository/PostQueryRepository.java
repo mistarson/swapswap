@@ -5,6 +5,7 @@ import java.util.List;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
 public interface PostQueryRepository {
 
@@ -13,4 +14,11 @@ public interface PostQueryRepository {
 
     List<PostGetListResponseDto> searchPostListWithFavorite(String title, Category categoryCond,
             Member member, LocalDateTime cursorTime);
+
+    PostGetResponseDto findPostWithFavorite(Long postId, Member member);
+
+    void updatePostViewCnt(Long postId);
+
+    List<PostGetListResponseDto> findAllMyFavoritePost(Member member,
+            LocalDateTime cursorTime);
 }
