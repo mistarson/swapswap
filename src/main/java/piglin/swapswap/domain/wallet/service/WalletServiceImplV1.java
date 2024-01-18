@@ -31,14 +31,14 @@ public class WalletServiceImplV1 implements WalletService {
 
     @Override
     @Transactional
-    public void depositSwapMoney(Long swapMoney, Long memberId) {
+    public void noramlDepositSwapMoney(Long depositSwapMoney, Long memberId) {
 
         Member member = memberService.getMemberWithWallet(memberId);
 
         Wallet wallet = member.getWallet();
-        wallet.depositSwapMoney(swapMoney);
+        wallet.depositSwapMoney(depositSwapMoney);
 
-        recordWalletHistory(swapMoney, HistoryType.NORMAL_DEPOSIT);
+        recordWalletHistory(depositSwapMoney, HistoryType.NORMAL_DEPOSIT);
     }
 
     private void recordWalletHistory(Long swapMoney, HistoryType historyType) {

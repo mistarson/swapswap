@@ -5,5 +5,5 @@ import piglin.swapswap.domain.wallet.entity.Wallet;
 public interface WalletService {
 
     Wallet createWallet();
-    void depositSwapMoney(Long swapMoney, Long member);
+    void noramlDepositSwapMoney(Long swapMoney, Long member);
 }

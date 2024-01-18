@@ -35,7 +35,7 @@ public class WalletController {
             DepositSwapMoneyRequestDto depositSwapMoneyRequestDto,
             @AuthMember Member member) {
 
-        walletService.depositSwapMoney(depositSwapMoneyRequestDto.swapMoney(), member.getId());
+        walletService.noramlDepositSwapMoney(depositSwapMoneyRequestDto.swapMoney(), member.getId());
 
         return "redirect:/members/swap-money";
     }
