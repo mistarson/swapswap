@@ -138,6 +138,8 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
                 .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc())
+                .limit(12)
                 .fetch();
     }
 
