@@ -6,17 +6,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
-import piglin.swapswap.domain.member.service.MemberServiceImpl;
+import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.jwt.JwtCookieManager;
 
@@ -26,7 +26,7 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 public class MemberController {
 
     private final KakaoServiceImpl kakaoServiceImpl;
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
 
     @GetMapping("/login/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response)
@@ -67,5 +67,14 @@ public class MemberController {
         JwtCookieManager.expireTokenCookie(response);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/members/swap-money")
+    public String getMySwapMoney(@AuthMember Member member, Model model) {
+
+        Long mySwapMoney = memberService.getMySwapMoney(member.getId());
+        model.addAttribute("mySwapMoney", mySwapMoney);
+
+        return "member/mySwapMoney";
     }
 }

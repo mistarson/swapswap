@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
 @Repository
 public class PostQueryRepositoryImpl implements PostQueryRepository {
@@ -75,6 +77,42 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
                 .limit(12)
                 .fetch();
+    }
+
+    @Override
+    public void updatePostViewCnt(Long postId) {
+
+        queryFactory.update(post)
+                .set(post.viewCnt, post.viewCnt.add(1L))
+                .where(isNotDeleted(), post.id.eq(postId))
+                .execute();
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public PostGetResponseDto findPostWithFavorite(Long postId, Member member) {
+
+        return queryFactory.select(
+                        Projections.constructor(PostGetResponseDto.class,
+                                post.member.id,
+                                post.member.nickname,
+                                post.title,
+                                post.content,
+                                post.category,
+                                post.imageUrl,
+                                post.viewCnt,
+                                post.upCnt,
+                                favorite.post.count(),
+                                post.modifiedUpTime,
+                                favoriteStatus(member)))
+                .from(post)
+                .where(isNotDeleted(), post.id.eq(postId))
+                .leftJoin(favorite)
+                .on(favorite.post.eq(post))
+                .join(QMember.member)
+                .on(post.member.id.eq(QMember.member.id))
+                .fetchOne();
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {

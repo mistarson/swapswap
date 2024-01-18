@@ -56,18 +56,13 @@ public class PostServiceImplV1 implements PostService {
     @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
 
-        Post post = findPost(postId);
+        PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
 
-        Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
+        isNullPostResponseDto(responseDto);
 
-        boolean favoriteStatus = false;
-        if (isMemberLoggedIn(member)) {
-            favoriteStatus = favoriteService.isFavorite(post, member);
-        }
+        postRepository.updatePostViewCnt(postId);
 
-        post.upViewCnt();
-
-        return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
+        return responseDto;
     }
 
     @Override
@@ -111,6 +106,13 @@ public class PostServiceImplV1 implements PostService {
         Post post = findPost(postId);
 
         favoriteService.updateFavorite(member, post);
+    }
+
+    private void isNullPostResponseDto(PostGetResponseDto responseDto) {
+
+        if (responseDto.author() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
+        }
     }
 
     @Override
