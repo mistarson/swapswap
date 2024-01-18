@@ -18,4 +18,7 @@ public interface PostQueryRepository {
     PostGetResponseDto findPostWithFavorite(Long postId, Member member);
 
     void updatePostViewCnt(Long postId);
+
+    List<PostGetListResponseDto> findAllMyFavoritePost(Member member,
+            LocalDateTime cursorTime);
 }

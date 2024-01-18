@@ -118,6 +118,20 @@
       }
       window.location.href = searchQuery;
     }
+
+    const rainbowColors = ['red', 'orange', 'green', 'blue', 'indigo', 'violet'];
+    let currentColorIndex = 0;
+
+    function updateRainbowColor() {
+      const element = document.querySelector('.header-nav .coupon-event-link');
+      if (element) {
+        element.style.color = rainbowColors[currentColorIndex];
+        currentColorIndex = (currentColorIndex + 1) % rainbowColors.length;
+      }
+    }
+
+    setInterval(updateRainbowColor, 1000); // 매 1초마다 색상을 업데이트합니다.
+
   });
 </script>
 </body>

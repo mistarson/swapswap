@@ -20,7 +20,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.wallet.entity.Wallet;
-import piglin.swapswap.domain.wallet.repository.WalletRepository;
+import piglin.swapswap.domain.wallet.service.WalletService;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
@@ -28,7 +28,7 @@ import piglin.swapswap.global.jwt.JwtUtil;
 @Log4j2
 public class KakaoServiceImpl implements SocialService {
 
-    private final WalletRepository walletRepository;
+    private final WalletService walletService;
     private final MemberRepository memberRepository;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
@@ -129,7 +129,7 @@ public class KakaoServiceImpl implements SocialService {
                     return existingMember;
                 })
                 .orElseGet(() -> {
-                    Wallet savedWallet = walletRepository.save(Wallet.builder().money(0L).build());
+                    Wallet savedWallet = walletService.createWallet();
                     return memberRepository.save(
                             MemberMapper.createMember(kakaoUserInfo, savedWallet));
                 });

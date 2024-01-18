@@ -2,6 +2,8 @@ package piglin.swapswap.domain.member.contorller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
+import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.domain.member.service.MemberService;
+import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.jwt.JwtCookieManager;
 
@@ -26,7 +32,12 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 public class MemberController {
 
     private final KakaoServiceImpl kakaoServiceImpl;
+  
     private final MemberService memberService;
+  
+    private final PostService postService;
+
+    private final MemberCouponService memberCouponService;
 
     @GetMapping("/login/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response)
@@ -50,7 +61,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-
     @ResponseBody
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> updateNickname(@AuthMember Member member,
@@ -59,6 +69,7 @@ public class MemberController {
         memberService.updateNickname(member, requestDto);
         return ResponseEntity.ok().build();
     }
+
     @ResponseBody
     @DeleteMapping("/members")
     public ResponseEntity<?> unregister(@AuthMember Member member, HttpServletResponse response) {
@@ -69,6 +80,14 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/members/coupon")
+    public String getMyCouponList(@AuthMember Member member, Model model) {
+
+        List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(member);
+        model.addAttribute("myCouponGetResponseDtoList", myCouponGetResponseDtoList);
+
+        return "/member/myCouponList";
+    }
     @GetMapping("/members/swap-money")
     public String getMySwapMoney(@AuthMember Member member, Model model) {
 
@@ -76,5 +95,25 @@ public class MemberController {
         model.addAttribute("mySwapMoney", mySwapMoney);
 
         return "member/mySwapMoney";
+    }
+
+    @GetMapping("/members/favorites")
+    public String getMyFavoriteList(@AuthMember Member member,@RequestParam(required = false) LocalDateTime cursorTime, Model model) {
+
+        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostList(
+                member, cursorTime);
+        model.addAttribute("postGetListResponseDto", responseDtoList);
+
+        return "post/postFavoriteList";
+    }
+
+    @GetMapping("/members/favorites/more")
+    public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime, Model model) {
+
+        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostList(
+                member, cursorTime);
+        model.addAttribute("postGetListResponseDto", responseDtoList);
+
+        return "post/postListFragment";
     }
 }
