@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="swap-money-body">
+    <p>얼마를 충전하시겠습니까?</p>
+    <form th:action="@{/wallets/deposit}" th:object="${depositSwapMoneyRequestDto}" method="post" enctype="application/x-www-form-urlencoded">
+      <input class="swap-money-input" th:field="*{swapMoney}">
+      <button type="submit" class="deposit-swap-money-btn">입금하기</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
