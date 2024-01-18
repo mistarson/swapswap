@@ -29,7 +29,7 @@ public class DealController {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:/deal" + dealId;
+        return "deals/" + dealId;
     }
 
     @GetMapping("/request")
@@ -51,15 +51,25 @@ public class DealController {
         return "deal/newcreateDealForm";
     }
 
-    @GetMapping("/request/list") // deals/request/list로 들어가세여
-    public String  getDealList(
+    @GetMapping("/request/list")
+    public String  getRequestDealList(
             @AuthMember Member member,
             Model model) {
 
         model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member));
-        model.addAttribute("meberId", member.getId());
+        model.addAttribute("memberId", member.getId());
 
         return  "deal/requestDealList";
     }
 
+    @GetMapping("response/list")
+    public String getResponseDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member));
+        model.addAttribute("memberId", member.getId());
+
+        return "deal/responseDealList";
+    }
 }

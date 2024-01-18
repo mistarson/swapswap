@@ -10,4 +10,6 @@ public interface DealService {
     Long createDeal(Member member, DealCreateRequestDto requestDto);
 
     List<DealGetResponseDto> getMyRequestDealList(Member member);
+
+    List<DealGetResponseDto> getMyResponseDealList(Member member);
 }

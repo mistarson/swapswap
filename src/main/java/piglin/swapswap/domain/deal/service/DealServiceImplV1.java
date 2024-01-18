@@ -43,6 +43,12 @@ public class DealServiceImplV1 implements DealService {
         return dealRepository.findAllMyDealRequest(member);
     }
 
+    @Override
+    public List<DealGetResponseDto> getMyResponseDealList(Member member) {
+
+        return dealRepository.findALlMyDealResponse(member);
+    }
+
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
 
         if (firstAllow && secondAllow) {

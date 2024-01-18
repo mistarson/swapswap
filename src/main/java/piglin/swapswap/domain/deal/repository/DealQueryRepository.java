@@ -7,4 +7,6 @@ import piglin.swapswap.domain.member.entity.Member;
 public interface DealQueryRepository {
 
     List<DealGetResponseDto> findAllMyDealRequest(Member member);
+
+    List<DealGetResponseDto> findALlMyDealResponse(Member member);
 }

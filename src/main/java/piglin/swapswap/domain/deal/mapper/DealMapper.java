@@ -1,15 +1,11 @@
 package piglin.swapswap.domain.deal.mapper;
 
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
-import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
-import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
-import piglin.swapswap.domain.post.entity.Post;
 
 public class DealMapper {
 

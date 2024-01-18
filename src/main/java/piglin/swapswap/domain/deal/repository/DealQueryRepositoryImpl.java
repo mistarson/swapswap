@@ -35,4 +35,19 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                 .on(deal.secondUserId.eq(QMember.member.id))
                 .fetch();
     }
+
+    @Override
+    public List<DealGetResponseDto> findALlMyDealResponse(Member member) {
+
+        return queryFactory.select(
+                Projections.constructor(DealGetResponseDto.class,
+                        deal.id,
+                        QMember.member.nickname,
+                        deal.dealStatus))
+                .from(deal)
+                .where(deal.secondUserId.eq(member.getId()))
+                .join(QMember.member)
+                .on(deal.firstUserId.eq(QMember.member.id))
+                .fetch();
+    }
 }

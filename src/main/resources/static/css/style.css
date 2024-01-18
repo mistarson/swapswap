@@ -1108,9 +1108,10 @@ input[type="number"] {
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
-  width: 500px;
   height: 70px;
   margin-top: 30px;
+  display: flex;
+  align-items: center;
 }
 
 .deal-request-List{
@@ -1151,5 +1152,35 @@ input[type="number"] {
 .deal-list{
   width: 1500px;
   border-bottom: solid #808080;
-  margin-left: 500px
+  margin-left: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.author-dealResponseList-name{
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  width: 550px;
+  height: 70px;
+  margin-top: 30px;
+}
+
+.deal-response-button{
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  color: white;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  text-decoration: none;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.deal-list a:hover {
+
+  background-color: #2980b9;
 }

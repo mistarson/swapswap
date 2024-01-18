@@ -6,16 +6,13 @@
 <body>
 <div layout:fragment="content">
   <div class="deal-list">
-  <div class="author-dealList-name">
-    사용자님의 스왑요청목록
-    <a href="/deals/response/list" class="deal-response-button"> 요청 받은 목록 보러가기</a>
+    <div class="author-dealResponseList-name">사용자님이 받은 스왑 요청 목록</div>
   </div>
-</div>
   <div class="deal-content-container">
     <div class="deal-request-List">
       <div th:each="dealDto : ${dealGetListResponseDto}" class="deal-card">
         <div class="deal-card-body">
-          <h2 th:text="${dealDto.secondUserNickname()} +'님에게 요청한 거래'" class="deal-nickname"></h2>
+          <h2 th:text="${dealDto.secondUserNickname()} +'님이 요청한 거래'" class="deal-nickname"></h2>
           <h2 th:text="${dealDto.dealStatus().getName()}" class="deal-status"></h2>
           <a th:href="@{/deals/{dealId}(dealId=${dealDto.dealId})}" class="deal-button">거래 요청 보기</a>
         </div>
@@ -41,7 +38,7 @@
       });
       /*]]>*/
     </script>
-    </div>
   </div>
+</div>
 </body>
 </html>
