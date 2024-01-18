@@ -1,9 +1,12 @@
 package piglin.swapswap.domain.deal.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
+import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
@@ -34,6 +37,26 @@ public class DealServiceImplV1 implements DealService {
         return savedDeal.getId();
     }
 
+    @Override
+    public List<DealGetResponseDto> getMyRequestDealList(Member member) {
+
+        return dealRepository.findAllMyDealRequest(member);
+    }
+
+    @Override
+    public List<DealGetResponseDto> getMyResponseDealList(Member member) {
+
+        return dealRepository.findAllMyDealResponse(member);
+    }
+
+    @Override
+    public DealDetailResponseDto getDeal(Long dealId, Member member) {
+
+        DealDetailResponseDto responseDto = dealRepository.findDealByIdToDetailResponseDto(dealId);
+
+        return responseDto;
+    }
+
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
 
         if (firstAllow && secondAllow) {
@@ -51,6 +74,7 @@ public class DealServiceImplV1 implements DealService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
     }
+
 
 
 }

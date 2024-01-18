@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -60,4 +61,6 @@ public interface PostService {
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 
     List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
+
+    List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(Map<Integer, Object> postIdList);
 }

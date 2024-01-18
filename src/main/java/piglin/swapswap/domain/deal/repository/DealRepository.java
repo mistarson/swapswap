@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 @Repository
-public interface DealRepository extends JpaRepository<Deal, Long> {
+public interface DealRepository extends JpaRepository<Deal, Long>, DealQueryRepository {
+
 }
