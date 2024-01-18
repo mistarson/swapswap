@@ -69,7 +69,12 @@ public class PostServiceImplV1 implements PostService {
     public List<PostGetListResponseDto> getPostList(Member member,
             LocalDateTime cursorTime) {
 
-        return postRepository.findPostListWithFavoriteByCursor(member, cursorTime);
+        List<PostGetListResponseDto> postList = postRepository.findPostListWithFavoriteByCursor(
+                member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
     }
 
     @Override
@@ -106,13 +111,6 @@ public class PostServiceImplV1 implements PostService {
         Post post = findPost(postId);
 
         favoriteService.updateFavorite(member, post);
-    }
-
-    private void isNullPostResponseDto(PostGetResponseDto responseDto) {
-
-        if (responseDto.author() == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
-        }
     }
 
     @Override
@@ -161,9 +159,16 @@ public class PostServiceImplV1 implements PostService {
         return PostMapper.getPostSimpleInfoList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
-    private boolean isMemberLoggedIn(Member member) {
+    @Override
+    public List<PostGetListResponseDto> getMyFavoritePostList(Member member,
+            LocalDateTime cursorTime) {
 
-        return member != null;
+        List<PostGetListResponseDto> postList = postRepository.findAllMyFavoritePost(
+                member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
@@ -212,6 +217,20 @@ public class PostServiceImplV1 implements PostService {
         }
         if (imageUrlList.size() > PostConstant.IMAGE_MAX_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MAX_SIZE);
+        }
+    }
+
+    private void isNullPostResponseDto(PostGetResponseDto responseDto) {
+
+        if (responseDto.author() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
+        }
+    }
+
+    private void isEmptyPostList(List<PostGetListResponseDto> postList) {
+
+        if (postList.isEmpty()) {
+            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
         }
     }
 }

@@ -1126,7 +1126,7 @@ input[type="number"] {
 }
 
 .header-nav .coupon-event-link {
-  color: red;
+  transition: color 1s;
 }
 
 .extra-coupon {
@@ -1157,7 +1157,32 @@ input[type="number"] {
 
 .coupon-event-img {
   width: 800px;
+}
 
+.coupon-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.coupon-card {
+  width: 300px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.coupon-card-body {
+  margin-left: 20px;
+}
+
+.coupon-list-box {
+  margin: 20px;
+  font-size: 50px;
+  border-bottom: solid;
+  width: 80%;
 }
 
 /*------------errorPage--------*/
@@ -1270,4 +1295,10 @@ input[type="number"] {
 .withdraw-btn {
   background: url("/images/withdraw.jpg") no-repeat;
 
+}
+
+.my-favorite-explain {
+  font-size: 50px;
+  margin-top: 55px;
+  text-align: center;
 }

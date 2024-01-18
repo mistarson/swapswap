@@ -9,7 +9,6 @@ import piglin.swapswap.domain.member.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-
     Optional<Member> findByEmailAndIsDeletedIsFalse(String Email);
 
     Optional<Member> findByEmail(String email);
@@ -20,7 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     void deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(LocalDateTime fourTeenDaysAgo);
 
-    boolean existsByEmail(String email);
-
     boolean existsByIdAndIsDeletedIsFalse(Long memberId);
+
 }

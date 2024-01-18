@@ -15,4 +15,5 @@ public interface CouponService {
     void issueEventCouponByOptimisticLock(Long couponId, Member member);
 
     CouponGetResponseDto getCouponDetail(Long couponId);
+
 }
