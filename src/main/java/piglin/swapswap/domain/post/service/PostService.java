@@ -58,4 +58,6 @@ public interface PostService {
     void upPost(Long postId, Member member);
 
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
+
+    List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
 }

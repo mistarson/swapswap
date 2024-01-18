@@ -2,12 +2,13 @@ package piglin.swapswap.domain.wallethistory.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.wallet.entity.Wallet;
+import piglin.swapswap.domain.wallethistory.constant.HistoryType;
 
 @Entity
 @Builder
@@ -27,13 +29,18 @@ public class WalletHistory extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private LocalDateTime depositTime;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HistoryType historyType;
 
-    @Column
-    private LocalDateTime withdrawTime;
+    @Column(nullable = false)
+    private Long swapMoney;
 
     @ManyToOne
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
+
+    @Column(nullable = false)
+    private boolean isDeleted;
+
 }

@@ -11,7 +11,7 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberServiceImplV1 implements MemberService {
 
     private final MemberRepository memberRepository;
 
@@ -38,5 +38,20 @@ public class MemberServiceImpl implements MemberService {
         );
 
         member.deleteMember();
+    }
+
+    @Override
+    @Transactional
+    public Long getMySwapMoney(Long memberId) {
+
+        Member member = getMemberWithWallet(memberId);
+
+        return member.getWallet().getSwapMoney();
+    }
+
+    @Override
+    public Member getMemberWithWallet(Long memberId) {
+        return memberRepository.findByIdWithWallet(memberId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
 }

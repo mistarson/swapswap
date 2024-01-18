@@ -263,7 +263,9 @@ img {
 .write-bar-container {
   color: #333333;
   width: 100%;
+  max-width: 1000px;
   height: 400px;
+  margin: 0 auto;
 }
 
 .write-bar {
@@ -274,65 +276,130 @@ img {
 }
 
 .write-bar-explain {
-  flex-basis: 30%;
-  font-size: 60px;
+  flex-basis: 20%;
+  font-size: 40px;
   text-align: center;
 }
 
 .write-bar-title-input {
   flex-grow: 1;
-  height: 100%;
-  font-size: 80px;
+  height: 80%;
+  font-size: 30px;
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+.write-bar-title-input:focus {
+  border-color: #00AADC;
+  box-shadow: 0 0 8px rgba(0, 170, 220, 0.4);
+  outline: none;
+}
+
+
 .write-content-container {
+  width: 80%;
+  max-width: 1000px;
   height: 500px;
-  background-color: aqua;
+  margin: 0 auto;
 }
 
 .write-content-input {
   flex-grow: 1;
   width: 100%;
-  height: 500px;
+  max-width: 100%;
+  height: auto;
+  min-height: 200px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 18px;
+  line-height: 1.6;
+  background-color: #ffffff;
+  color: #333333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .write-content-input {
+    padding: 15px;
+  }
+}
+
+.write-content-input:focus {
+  border-color: #00AADC;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 170, 220, 0.5);
 }
 
 .write-complete-button {
-  color: #333333;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #00AADC;
   height: 50px;
-  border-radius: 20px;
-  transition: background-color 0.3s;
+  border-radius: 25px; /* 더 둥근 모서리로 변경 */
+  padding: 0 30px; /* 버튼의 내부 좌우 패딩을 넉넉하게 조정 */
+  border: none; /* 테두리 제거 */
+  font-size: 18px; /* 폰트 사이즈 조정 */
+  font-weight: bold; /* 폰트 굵기 변경 */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+  align-self: flex-end; /* 자신만 오른쪽 하단 정렬 */
+  margin-left: 88%;
 }
 
 .write-complete-button:hover {
-  color: #ffffff;
-  background-color: #00AADC;
+  background-color: #0077b3; /* 호버 시 색상 변경 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 강조 */
 }
 
 .write-bar-image-input {
   flex-grow: 1;
-  height: 40px; /* Adjust as needed */
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  padding: 5px;
+  height: 50px; /* 높이 조정 */
+  border-radius: 25px; /* 더 둥근 모서리로 변경 */
+  border: 1px solid #ddd; /* 테두리 스타일 조정 */
+  padding: 5px 20px; /* 좌우 패딩 추가 */
+  font-size: 16px; /* 폰트 사이즈 적당히 조정 */
+  line-height: 1.5; /* 줄 간격 조정 */
+  background-color: #f8f8f8; /* 배경색 변경 */
+  color: #333; /* 글자색 변경 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* 부드러운 전환 효과 */
+  display: inline-block; /* 다른 인라인 요소들과 같은 줄에 표시 */
+  cursor: pointer; /* 마우스 오버 시 포인터 커서로 변경 */
+}
+
+.write-bar-image-input:hover, .write-bar-image-input:focus {
+  border-color: #00AADC; /* 호버 및 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 6px rgba(0, 170, 220, 0.3); /* 호버 및 포커스 시 그림자 강조 */
+  outline: none; /* 기본 아웃라인 제거 */
 }
 
 .category-button-container {
+  flex-basis: 80%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  padding: 0 10px;
 }
 
-.category-button, .couponType-button {
-  padding: 8px 16px;
+.category-button {
+  padding: 8px 12px;
   border-radius: 20px;
   text-decoration: none;
   color: #333;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid #E5E5E5;
-  margin: 0 10px;
+  margin: 5px;
+  flex: 0 1 auto;
   transition: background-color 0.3s, color 0.3s;
   cursor: pointer;
 }
@@ -530,7 +597,8 @@ img {
   float: left;
   vertical-align: middle;
 }
-.signin__card .actions p{
+
+.signin__card .actions p {
   font-size: 18px;
   margin-top: 22px;
   display: inline-block;
@@ -940,6 +1008,7 @@ li {
   background-color: #171264;
   transition: 0.7s;
 }
+
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -1044,6 +1113,7 @@ input[type="number"] {
 .request-second-post button:hover {
   background-color: #45a049;
 }
+
 #firstExtraFee,
 #secondExtraFee {
   width: 150px;
@@ -1052,7 +1122,7 @@ input[type="number"] {
 }
 
 .header-nav .coupon-event-link {
-  color: red;
+  transition: color 1s;
 }
 
 .extra-coupon {
@@ -1083,6 +1153,46 @@ input[type="number"] {
 
 .coupon-event-img {
   width: 800px;
+}
+
+.coupon-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.coupon-card {
+  width: 300px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.coupon-card-body {
+  margin-left: 20px;
+}
+
+.coupon-list-box {
+  margin: 20px;
+  font-size: 50px;
+  border-bottom: solid;
+  width: 80%;
+}
+
+.couponType-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #E5E5E5;
+  margin: 0 10px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
 
 }
 
@@ -1117,11 +1227,33 @@ input[type="number"] {
 .deal-request-List{
   display: flex;
   flex-direction: column;
+=======
+.swap-money-body {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   text-align: center;
   font-size: 30px;
   padding: 10px;
 }
+
+.wallet-logo-image {
+  width: 100px;
+}
+
+.swap-pay-title {
+  font-size: 40px;
+}
+
+.deposit-withdraw-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
 
 .deal-nickname {
   margin-right: auto; /* 원하는 간격으로 조정하세요. */
@@ -1183,4 +1315,51 @@ input[type="number"] {
 .deal-list a:hover {
 
   background-color: #2980b9;
+ }
+  
+.deposit-withdraw-btn {
+  width: 190px;
+  height: 260px;
+  margin: 20px;
+  border: none;
+}
+
+.deposit-btn {
+  background: url("/images/deposit.jpg") no-repeat;
+}
+
+.withdraw-btn {
+  background: url("/images/withdraw.jpg") no-repeat;
+}
+
+.swap-money-input {
+  width: 300px;
+  height: 50px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 3px solid;
+}
+
+.deposit-swap-money-btn {
+  width: 100px;
+  height: 50px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 5px;
+  background-color: #00AADC;
+}
+
+.deposit-swap-money-btn:hover {
+  background-color: #171264;
+  color: white;
+  transition: 0.7s;
+}
+
+.my-favorite-explain {
+  font-size: 50px;
+  margin-top: 55px;
+  text-align: center;
 }
