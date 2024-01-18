@@ -9,4 +9,6 @@ public interface MemberService {
 
     void deleteMember(Member loginMember);
 
+    Long getMySwapMoney(Long member);
+
 }

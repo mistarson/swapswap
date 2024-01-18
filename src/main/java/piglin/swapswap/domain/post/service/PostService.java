@@ -7,6 +7,7 @@ import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 
 public interface PostService {
 
@@ -55,4 +56,8 @@ public interface PostService {
             LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);
+
+    List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
+
+    List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
 }

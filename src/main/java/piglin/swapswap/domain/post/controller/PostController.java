@@ -21,6 +21,8 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 
@@ -61,10 +63,10 @@ public class PostController {
             @AuthMember Member member,
             Model model
     ) {
+        PostGetResponseDto responseDto = postService.getPost(postId, member);
 
-        model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
-
-        model.addAttribute("PostId", postId);
+        model.addAttribute("postGetResponseDto", responseDto);
+        model.addAttribute("postId", postId);
 
         return "post/post";
     }
@@ -89,10 +91,6 @@ public class PostController {
     ) {
 
         List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
-
-        if (postList.isEmpty()) {
-            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
-        }
 
         model.addAttribute("PostGetListResponseDto", postList);
 
@@ -206,5 +204,13 @@ public class PostController {
         postService.upPost(postId, member);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/posts/member/{memberId}")
+    public ResponseEntity<?> getPostListByMemberId(@PathVariable Long memberId) {
+
+        List<PostSimpleResponseDto> responseDtoList = postService.getPostSimpleInfoList(memberId);
+
+        return ResponseEntity.ok(responseDtoList);
     }
 }

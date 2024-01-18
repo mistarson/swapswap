@@ -39,4 +39,17 @@ public class MemberServiceImpl implements MemberService {
 
         member.deleteMember();
     }
+
+    @Override
+    @Transactional
+    public Long getMySwapMoney(Long memberId) {
+
+        Member member = memberRepository.findByIdAndIsDeletedIsFalse(memberId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
+        );
+
+        return member.getWallet().getMoney();
+    }
+
+
 }

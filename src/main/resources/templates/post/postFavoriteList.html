@@ -4,26 +4,11 @@
       layout:decorate="~{common/layout/layout}">
 <body>
 <div layout:fragment="content">
-  <div class="category-bar">
-    <!-- 카테고리 링크 -->
-    <a href="#HOME_ELECTRONICS">가전제품</a>
-    <a href="#ELECTRONICS">전자제품</a>
-    <a href="#FASHION_MISCELLANEOUS">패션의류/잡화</a>
-    <a href="#BEAUTY">뷰티/미용</a>
-    <a href="#INFANT_CHILDCARE">출산/유아동</a>
-    <a href="#FOOD">식품</a>
-    <a href="#KITCHEN">주방용품</a>
-    <a href="#HOUSEHOLD">생활용품</a>
-    <a href="#FURNITURE_INTERIOR">가구/인테리어</a>
-    <a href="#SPORT_LEISURE">스포츠/레저</a>
-    <a href="#CAR">자동차용품</a>
-    <a href="#HOBBY_GAME_BOOK_ALBUM_DVD">취미/게임/도서/음반/DVD</a>
-    <a href="#OFFICE_SUPPLIES">문구/오피스</a>
-    <a href="#PET">반려동물용품</a>
-    <a href="#ETC">기타중고물품</a>
+  <div class="my-favorite-explain">
+    💙 내 찜 목록 💙
   </div>
   <div class="post-container">
-    <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+    <div th:each="postDto : ${postGetListResponseDto}" class="post-card"
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
@@ -74,7 +59,7 @@
 
     function loadMorePosts() {
       isLoading = true;
-      let url = '/posts/more?cursorTime=' + lastModifiedTime;
+      let url = '/members/favorites/more?cursorTime=' + lastModifiedTime;
 
       if(!isLast) {
         $.ajax({

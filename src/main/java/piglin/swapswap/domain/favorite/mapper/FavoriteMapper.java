@@ -11,6 +11,7 @@ public class FavoriteMapper {
         return Favorite.builder()
                        .member(member)
                        .post(post)
+                       .isDeleted(false)
                        .build();
     }
 }

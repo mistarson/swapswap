@@ -55,17 +55,32 @@ public class S3ImageServiceImplV1 implements S3ImageService {
 
     @Async
     @Override
-    public void deleteImageUrlList(Map<Integer, Object> originalImageUrl) {
+    public void deleteImageUrlMap(Map<Integer, Object> originalImageUrlMap) {
 
-        for(int i = 0; i < originalImageUrl.size(); i++) {
+        for(int i = 0; i < originalImageUrlMap.size(); i++) {
 
-            String[] urlSplit = originalImageUrl.get(i).toString().split("/");
+            String[] urlSplit = originalImageUrlMap.get(i).toString().split("/");
             String objectName = urlSplit[urlSplit.length - 1];
 
             if(amazonS3.doesObjectExist(bucket, objectName)) {
                 amazonS3.deleteObject(bucket, objectName);
             }
 
+        }
+    }
+
+    @Async
+    @Override
+    public void deleteImageUrlList(List<String> originalImageUrlList) {
+
+        for (String url : originalImageUrlList) {
+
+            String[] urlSplit = url.split("/");
+            String objectName = urlSplit[urlSplit.length - 1];
+
+            if(amazonS3.doesObjectExist(bucket, objectName)) {
+                amazonS3.deleteObject(bucket, objectName);
+            }
         }
     }
 }
