@@ -95,23 +95,23 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
         return queryFactory.select(
                         Projections.constructor(PostGetResponseDto.class,
-                                post.member.id.as("memberId"),
-                                post.member.nickname.as("author"),
+                                post.member.id,
+                                post.member.nickname,
                                 post.title,
                                 post.content,
                                 post.category,
                                 post.imageUrl,
                                 post.viewCnt,
                                 post.upCnt,
-                                favorite.post.count().as("favoriteCnt"),
+                                favorite.post.count(),
                                 post.modifiedUpTime,
-                                favoriteStatus(member).as("favoriteStatus")))
+                                favoriteStatus(member)))
                 .from(post)
                 .where(isNotDeleted(), post.id.eq(postId))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
-                .join(post)
-                .on(post.id.eq(QMember.member.id))
+                .join(QMember.member)
+                .on(post.member.id.eq(QMember.member.id))
                 .fetchOne();
     }
 
