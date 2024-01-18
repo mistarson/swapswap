@@ -1122,7 +1122,7 @@ input[type="number"] {
 }
 
 .header-nav .coupon-event-link {
-  color: red;
+  transition: color 1s;
 }
 
 .extra-coupon {
