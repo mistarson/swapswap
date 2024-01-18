@@ -69,6 +69,13 @@ public class PostServiceImplV1 implements PostService {
     public List<PostGetListResponseDto> getPostList(Member member,
             LocalDateTime cursorTime) {
 
+        return postRepository.findPostListWithFavoriteByCursor(
+                member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> getPostListMore(Member member, LocalDateTime cursorTime) {
+
         List<PostGetListResponseDto> postList = postRepository.findPostListWithFavoriteByCursor(
                 member, cursorTime);
 
@@ -140,6 +147,24 @@ public class PostServiceImplV1 implements PostService {
         }
 
         return postRepository.searchPostListWithFavorite(title, categoryCond, member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> searchPostMore(String title, String category, Member member,
+            LocalDateTime cursorTime) {
+
+        Category categoryCond = null;
+
+        if(category != null) {
+            categoryCond = Enum.valueOf(Category.class, category);
+        }
+
+        List<PostGetListResponseDto> postList = postRepository.searchPostListWithFavorite(
+                title, categoryCond, member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
     }
 
     @Override
