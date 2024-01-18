@@ -61,8 +61,14 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                         Projections.constructor(DealDetailResponseDto.class,
                                 deal.id,
                                 deal.dealStatus,
-                                JPAExpressions.select(member.nickname).from(member).where(member.id.eq(deal.firstUserId)),
-                                JPAExpressions.select(member.nickname).from(member).where(member.id.eq(deal.secondUserId)),
+                                deal.firstUserId,
+                                deal.secondUserId,
+                                JPAExpressions.select(member.nickname)
+                                        .from(member)
+                                        .where(member.id.eq(deal.firstUserId)),
+                                JPAExpressions.select(member.nickname)
+                                        .from(member)
+                                        .where(member.id.eq(deal.secondUserId)),
                                 deal.firstPostIdList,
                                 deal.secondPostIdList,
                                 deal.firstExtraFee,

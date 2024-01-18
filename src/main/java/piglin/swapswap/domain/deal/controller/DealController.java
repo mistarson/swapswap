@@ -2,15 +2,18 @@ package piglin.swapswap.domain.deal.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
@@ -89,5 +92,27 @@ public class DealController {
         model.addAttribute("secondMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
         model.addAttribute("memberId", member.getId());
         return  "deal/dealRequestDeal";
+    }
+
+    @PutMapping("/{dealId}/member/{memberId}")
+    public ResponseEntity<?> updateDeal(@AuthMember Member member, @PathVariable Long dealId,
+            @PathVariable Long memberId, @RequestBody DealUpdateRequestDto requestDto){
+
+        dealService.updateDeal(member, dealId, memberId, requestDto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{dealId}/member/{memberId}")
+    public String showUpdateDealForm(@PathVariable Long dealId,
+            @PathVariable Long memberId, Model model) {
+
+        dealService.checkDeal(dealId);
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("dealId",dealId);
+        model.addAttribute("dealUpdateRequestDto", new DealUpdateRequestDto(
+                0, null));
+
+        return "deal/dealUpdateForm";
     }
 }

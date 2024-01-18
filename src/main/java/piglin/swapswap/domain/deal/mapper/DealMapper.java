@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 public class DealMapper {
@@ -27,6 +28,20 @@ public class DealMapper {
                 .firstExtraFee(requestDto.firstExtraFee())
                 .secondExtraFee(requestDto.secondExtraFee())
                 .build();
+    }
+
+    public static void updateDealFirst(Deal deal, DealUpdateRequestDto requestDto) {
+
+        Map<Integer, Object> firstPostIdMap = postIdListToMap(requestDto.postIdList());
+
+        deal.updateDealFirst(requestDto.extraFee(), firstPostIdMap);
+    }
+
+    public static void updateDealSecond(Deal deal, DealUpdateRequestDto requestDto) {
+
+        Map<Integer, Object> secondPostIdMap = postIdListToMap(requestDto.postIdList());
+
+        deal.updateDealSecond(requestDto.extraFee(), secondPostIdMap);
     }
 
     private static Map<Integer, Object> postIdListToMap(List<Long> postIdList) {

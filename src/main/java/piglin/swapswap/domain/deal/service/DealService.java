@@ -2,6 +2,7 @@ package piglin.swapswap.domain.deal.service;
 
 import java.util.List;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.member.entity.Member;
@@ -15,4 +16,8 @@ public interface DealService {
     List<DealGetResponseDto> getMyResponseDealList(Member member);
 
     DealDetailResponseDto getDeal(Long dealId, Member member);
+
+    void updateDeal(Member member, Long dealId, Long memberId, DealUpdateRequestDto requestDto);
+
+    void checkDeal(Long dealId);
 }

@@ -8,6 +8,10 @@ public record DealDetailResponseDto(
 
          DealStatus dealStatus,
 
+         Long firstUserId,
+
+         Long secondUserId,
+
          String firstUserNickname,
 
          String secondUserNickname,
