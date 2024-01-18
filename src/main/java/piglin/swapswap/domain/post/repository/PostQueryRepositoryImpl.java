@@ -3,9 +3,11 @@ package piglin.swapswap.domain.post.repository;
 import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
 import static piglin.swapswap.domain.post.entity.QPost.post;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -113,6 +115,32 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .join(QMember.member)
                 .on(post.member.id.eq(QMember.member.id))
                 .fetchOne();
+    }
+
+    @Override
+    public List<PostGetListResponseDto> findAllMyFavoritePost(Member member,
+            LocalDateTime cursorTime) {
+
+        return queryFactory.select(Projections.constructor(PostGetListResponseDto.class,
+                        post.id,
+                        post.member.id,
+                        post.title,
+                        post.imageUrl,
+                        post.modifiedUpTime,
+                        post.viewCnt,
+                        JPAExpressions.select(favorite.count())
+                                      .from(favorite)
+                                      .where(favorite.post.eq(post)),
+                        favoriteStatus(member)
+                ))
+                .from(post)
+                .where(isNotDeleted(), lessThanCursorTime(cursorTime), favorite.member.eq(member))
+                .leftJoin(favorite)
+                .on(favorite.post.eq(post))
+                .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc())
+                .limit(12)
+                .fetch();
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {
