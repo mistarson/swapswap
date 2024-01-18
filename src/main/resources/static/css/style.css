@@ -979,6 +979,10 @@ li {
   text-align: center;
 }
 
+
+/*------coupon------*/
+
+
 .header-nav .coupon-event-link {
   color: red;
 }
@@ -1155,6 +1159,63 @@ input[type="number"] {
   width: 800px;
 
 }
+
+/*------------errorPage--------*/
+.error {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  margin-top: 150px;
+  flex-direction: column;
+}
+.error .Oops {
+  position: fixed;
+  top: 15%;
+  right: 35%;
+}
+.error-image img {
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 5px
+}
+
+.error-image {
+  margin-bottom: 20px;
+  width: 150px;
+  height: 150px;
+  margin-left: 30px;
+}
+
+
+.error-content {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.error-content h2 {
+  color: #afafaf;
+}
+
+.buttons a.error-confirm:hover {
+  background-color: #00AADC;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .error-confirm {
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+  height: auto;
+}
+
+/*-----------coupon------------*/
+
 
 .couponType-button {
   padding: 8px 16px;

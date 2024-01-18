@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,23 +17,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import piglin.swapswap.global.security.UserDetailsServiceImpl;
+import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.global.exception.jwt.JwtInvalidException;
+import piglin.swapswap.global.exception.user.UserNotFoundException;
 
 @Slf4j(topic = "JWT 검증 및 인가")
+@AllArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final MemberRepository memberRepository;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
             FilterChain filterChain) throws ServletException, IOException {
-        log.info("JwtAuthorizationFilter-doFilterInternal");
+
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
@@ -40,17 +41,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             log.info(tokenValue);
 
             if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
-
-                JwtCookieManager.expireTokenCookie(res);
-                res.sendRedirect("/login");
-
-                return;
+                throw new JwtInvalidException();
             }
 
             Claims claims = jwtUtil.getUserInfoFromToken(tokenValue);
             String email = String.valueOf(claims.get(JwtUtil.CLAIM_USER_EMAIL));
 
+            if (!memberRepository.existsByEmail(email)) {
+                throw new UserNotFoundException();
+            }
             try {
                 setAuthentication(email);
             } catch (Exception e) {
@@ -72,8 +71,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication createAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(
-                email);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         return new UsernamePasswordAuthenticationToken(userDetails, null,
                 userDetails.getAuthorities());
