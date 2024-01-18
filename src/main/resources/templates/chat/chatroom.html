@@ -113,17 +113,17 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:inline="javascript">
 
-  var stompClient = null;
-  var chatRoomId = [[${chatRoomDto.id}]];
-  var messageForm = document.querySelector('#messageForm');
-  var messageInput = document.querySelector('#message');
-  var connectingElement = document.querySelector('.connecting');
-  var currentUserIdElement = document.getElementById('currentUserId');
-  var senderNickname = currentUserIdElement.textContent;
-  var chatContainer = document.getElementById('chatContainer');
+  const chatRoomId = [[${chatRoomDto.id}]];
+  const messageForm = document.querySelector('#messageForm');
+  const messageInput = document.querySelector('#message');
+  const connectingElement = document.querySelector('.connecting');
+  const currentUserIdElement = document.getElementById('currentUserId');
+  const senderNickname = currentUserIdElement.textContent;
+  const chatContainer = document.getElementById('chatContainer');
+  let stompClient = null;
 
   window.onload = function connect() {
-    var socket = new SockJS('/ws/chat')
+    let socket = new SockJS('/ws/chat')
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected, onError);
@@ -142,10 +142,10 @@
   }
 
   function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
+    let messageContent = messageInput.value.trim();
 
     if (messageContent && stompClient) {
-      var chatMessage = {
+      let chatMessage = {
         chatRoomId: chatRoomId,
         senderNickname: senderNickname,
         text: messageInput.value,
@@ -160,12 +160,12 @@
   }
 
   function onMessageReceived(payload) {
-    var message = JSON.parse(payload.body);
-    var messageElement = document.createElement('div');
+    let message = JSON.parse(payload.body);
+    let messageElement = document.createElement('div');
 
-    var senderDiv = document.createElement('div');
+    let senderDiv = document.createElement('div');
     senderDiv.textContent = message.senderNickname;
-    var textboxDiv = document.createElement('div');
+    let textboxDiv = document.createElement('div');
     textboxDiv.textContent = message.text;
 
     messageElement.classList.add('chat');
