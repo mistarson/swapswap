@@ -76,8 +76,8 @@
 
       <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
         <div class="chatRoomId" th:text="${chatRoom.id()}"></div>
-        <div class="lastChatMessage" th:text="${chatRoom.lastChatMessage()}"></div>
-        <div class="modifiedAt" th:text="${chatRoom.modifiedAt()}"></div>
+        <div class="lastChatMessage" th:text="${chatRoom.lastMessage()}"></div>
+        <div class="modifiedAt" th:text="${chatRoom.modifiedTime()}"></div>
       </a>
 
     </div>

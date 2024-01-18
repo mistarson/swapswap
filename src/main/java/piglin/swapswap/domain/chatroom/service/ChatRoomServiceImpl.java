@@ -1,87 +1,120 @@
 package piglin.swapswap.domain.chatroom.service;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
+import piglin.swapswap.domain.chatroom.mapper.ChatRoomMapper;
 import piglin.swapswap.domain.chatroom.repository.ChatRoomRepository;
+import piglin.swapswap.domain.chatroom_member.entity.ChatRoomMember;
+import piglin.swapswap.domain.chatroom_member.mapper.ChatRoomMemberMapper;
+import piglin.swapswap.domain.chatroom_member.repository.ChatRoomMemberRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
-import piglin.swapswap.domain.message.dto.MessageDto;
-import piglin.swapswap.domain.message.repository.MessageRepository;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService{
 
     private final MemberRepository memberRepository;
-    private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomMemberRepository chatRoomMemberRepository;
 
     @Override
     public List<ChatRoomResponseDto> getChatRoomList(Member member) {
 
-        return chatRoomRepository.findAllByChatRoomMembersContaining(member).stream().map(chatRoom -> {
+        List<ChatRoomMember> chatRoomMemberList = chatRoomMemberRepository.findAllByMember(member);
+        List<ChatRoomResponseDto> chatRoomList = new ArrayList<>();
 
-            String lastChatMessage = "";
-            LocalDateTime modifiedAt = null;
-
-            if (chatRoom.getLastChatMessage() != null) {
-                lastChatMessage = chatRoom.getLastChatMessage().getText();
-                modifiedAt = chatRoom.getLastChatMessage().getModifiedTime();
-            }
-
-            return ChatRoomResponseDto.builder()
-                    .id(chatRoom.getId())
-                    .lastChatMessage(lastChatMessage)
-                    .modifiedAt(modifiedAt)
-                    .build();
-
-        }).toList();
+        return ChatRoomMapper.chatRoomMemberListToChatRoomDtoList(chatRoomMemberList, chatRoomList);
     }
 
     @Override
-    public List<MessageDto> getMessageByChatRoomId(String roomId) {
-        return messageRepository.findAllByChatRoom_Id(roomId).stream().map(message -> MessageDto.builder()
-                .id(message.getId())
-                .chatRoomId(message.getChatRoom().getId())
-                .type(message.getType())
-                .senderNickname(message.getSenderNickname())
-                .text(message.getText())
-                .build()).toList();
-    }
-
-    @Override
-    public ChatRoomResponseDto findById(String roomId) {
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() ->
-                new NoSuchElementException("존재하지 않는 채팅방입니다."));
+    public ChatRoomResponseDto findById(String roomId, Member member) {
+        ChatRoom chatRoom = validateMember(member, roomId);
 
         return ChatRoomResponseDto.builder()
-                .id(chatRoom.getId())
-                .build();
+                                .id(chatRoom.getId())
+                                .build();
     }
 
     @Override
     public String createChatroom(Member member, Long secondMemberId) {
-        Member secondMember = memberRepository.findById(secondMemberId).orElseThrow(() ->
-                new NoSuchElementException("존재하지 않는 유저입니다."));
 
-        Set<Member> members = new HashSet<>();
-        members.add(member);
-        members.add(secondMember);
+        if (member.getId().equals(secondMemberId)) {
+            throw new BusinessException(ErrorCode.CHAT_ONLY_DIFFERENT_USER_EXCEPTION);
+        }
 
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder()
-                .id(UUID.randomUUID().toString())
-                .createdTime(LocalDateTime.now())
-                .chatRoomMembers(members)
-                .build());
+        Member secondMember = findMember(secondMemberId);
+
+        List<ChatRoomMember> chatRoomMemberList1 = chatRoomMemberRepository.findAllByMember(member);
+        List<ChatRoomMember> chatRoomMemberList2 = chatRoomMemberRepository.findAllByMember(secondMember);
+
+        for (ChatRoomMember chatRoomMember1 : chatRoomMemberList1) {
+            for (ChatRoomMember chatRoomMember2 : chatRoomMemberList2) {
+                if (chatRoomMember1.getChatRoom().getId().equals(chatRoomMember2.getChatRoom().getId())) {
+                    return chatRoomMember1.getChatRoom().getId();
+                }
+            }
+        }
+
+        return createChatRoomAndAddMember(member, secondMember);
+    }
+
+    @Override
+    public void leaveChatRoom(Member member, String roomId) {
+
+        List<ChatRoomMember> chatRoomMemberList = chatRoomMemberRepository.findAllByMember(member);
+
+        for (ChatRoomMember chatRoomMember : chatRoomMemberList) {
+            if (chatRoomMember.getChatRoom().getId().equals(roomId)) {
+
+                chatRoomMemberRepository.delete(chatRoomMember);
+
+                return;
+            }
+        }
+
+        throw new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION);
+    }
+
+    private Member findMember(Long memberId) {
+
+        return memberRepository.findById(memberId).orElseThrow(() ->
+                new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    private ChatRoom findChatRoom(String roomId) {
+
+        return chatRoomRepository.findById(roomId).orElseThrow(() ->
+                new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
+    }
+
+    private ChatRoom validateMember(Member member, String roomId) {
+
+        ChatRoom chatRoom = findChatRoom(roomId);
+
+        for (ChatRoomMember chatRoomMember : chatRoomMemberRepository.findAllByChatRoom(chatRoom)) {
+            if (chatRoomMember.getMember().getId().equals(member.getId())) {
+
+                return chatRoom;
+            }
+        }
+
+        throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);
+    }
+
+    private String createChatRoomAndAddMember(Member member, Member secondMember) {
+
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoomMapper.createChatRoom());
+        chatRoomMemberRepository.save(ChatRoomMemberMapper.createChatRoomMember(chatRoom, member));
+        chatRoomMemberRepository.save(ChatRoomMemberMapper.createChatRoomMember(chatRoom, secondMember));
 
         return chatRoom.getId();
     }
+
 }

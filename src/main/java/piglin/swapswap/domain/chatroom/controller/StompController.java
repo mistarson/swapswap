@@ -16,8 +16,10 @@ public class StompController {
 
     @MessageMapping("/chat/message")
     public void enter(MessageDto message) {
-        String destination = "/queue/chat/room" + message.getChatRoomId();
+
         messageService.saveMessage(message);
+
+        String destination = "/queue/chat/room" + message.getChatRoomId();
         sendingOperations.convertAndSend(destination, message);
     }
 }

@@ -39,6 +39,11 @@ public enum ErrorCode {
     UP_IS_NEED_ONE_DAY(400, "게시된지 하루, 업 한지 하루 이상 된 게시글만 업 할 수 있습니다."),
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
 
+    // 채팅
+    NOT_FOUND_CHATROOM_EXCEPTION(401, "채팅방을 찾을 수 없습니다."),
+    NOT_CHAT_ROOM_MEMBER_EXCEPTION(401, "채팅방의 참여자가 아닙니다."),
+    CHAT_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 채팅하기를 할 수 없습니다."),
+
     // 쿠폰
     INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
     NOT_FOUND_COUPON_EXCEPTION(401, "쿠폰을 찾을 수 없습니다."),

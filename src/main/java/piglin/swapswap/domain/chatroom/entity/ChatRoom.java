@@ -1,55 +1,40 @@
 package piglin.swapswap.domain.chatroom.entity;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
-import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.chatroom_member.entity.ChatRoomMember;
+import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.message.entity.Message;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @DynamicUpdate
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoom {
+public class ChatRoom extends BaseTime {
 
     @Id
-    @EqualsAndHashCode.Include
     private String id;
-
-    @Column(name = "createdAt")
-    private LocalDateTime createdTime;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastChatMesgId")
-    private Message lastChatMessage;
+    private Message lastMessage;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "ChatRoom_Members",
-            joinColumns = @JoinColumn(name = "chatRoomId"),
-            inverseJoinColumns = @JoinColumn(name = "memberId"))
-    private Set<Member> chatRoomMembers = new HashSet<>();
-
-    public void addMembers(Member roomMaker, Member guest) {
-        this.chatRoomMembers.add(roomMaker);
-        this.chatRoomMembers.add(guest);
-    }
+    @OneToMany(mappedBy = "chatRoom")
+    private List<ChatRoomMember> chatRoomMembers;
 }

@@ -101,14 +101,16 @@
         <div class="input-group clearfix">
           <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
           <button type="submit" >보내기</button>
-          <button class="leave">채팅방 나가기</button>
+          <button class="leave" th:data-room-id="${chatRoomDto.id}" th:onclick="leaveChatRoom(this.getAttribute('data-room-id'))">채팅방 나가기</button>
         </div>
       </div>
     </form>
   </div>
 </section>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:inline="javascript">
 
   var stompClient = null;
@@ -166,14 +168,12 @@
     var textboxDiv = document.createElement('div');
     textboxDiv.textContent = message.text;
 
-    // Thymeleaf의 th:if를 사용하여 클래스를 동적으로 설정
     messageElement.classList.add('chat');
     senderDiv.classList.add('sender');
     textboxDiv.classList.add('textbox');
 
     if (message.senderId === currentUserId) {
       messageElement.classList.add('ch2');
-      // textboxDiv.classList.add('wrap');
     } else {
       messageElement.classList.add('ch1');
     }
@@ -182,6 +182,18 @@
     messageElement.appendChild(textboxDiv);
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function leaveChatRoom(roomId) {
+    $.ajax({
+      url: '/chats/leave',
+      type: 'DELETE',
+      data: { roomId : roomId },
+
+      success: function () {
+        window.location.href = '/chats'
+      }
+    })
   }
 
   messageForm.addEventListener('submit', sendMessage, true);
