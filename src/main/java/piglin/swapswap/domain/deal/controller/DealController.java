@@ -23,7 +23,7 @@ public class DealController {
 
     private final DealService dealService;
 
-    @PostMapping("/")
+    @PostMapping
     public String createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
             @AuthMember Member member) {
 
@@ -49,6 +49,17 @@ public class DealController {
                 0, 0, null, null, null));
 
         return "deal/newcreateDealForm";
+    }
+
+    @GetMapping("/request/list") // deals/request/list로 들어가세여
+    public String  getDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member));
+        model.addAttribute("meberId", member.getId());
+
+        return  "deal/requestDealList";
     }
 
 }

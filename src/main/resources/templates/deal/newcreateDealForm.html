@@ -224,7 +224,7 @@
 
         // AJAX를 사용하여 서버로 데이터 전송
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/deals/", true);
+        xhr.open("POST", "/deals", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4) {

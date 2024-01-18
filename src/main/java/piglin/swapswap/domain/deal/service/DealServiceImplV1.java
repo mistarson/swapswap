@@ -1,9 +1,12 @@
 package piglin.swapswap.domain.deal.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
@@ -32,6 +35,12 @@ public class DealServiceImplV1 implements DealService {
         Deal savedDeal = dealRepository.save(deal);
 
         return savedDeal.getId();
+    }
+
+    @Override
+    public List<DealGetResponseDto> getMyRequestDealList(Member member) {
+
+        return dealRepository.findAllMyDealRequest(member);
     }
 
     private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {

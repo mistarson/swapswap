@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<link rel="stylesheet" type="text/css" href="your-stylesheet.css">
+<body>
+<div layout:fragment="content">
+  <div class="deal-list">
+  <div class="author-dealList-name">사용자님의 스왑요청목록</div>
+</div>
+  <div class="deal-content-container">
+    <div class="deal-request-List">
+      <div th:each="dealDto : ${dealGetListResponseDto}" class="deal-card">
+        <div class="deal-card-body">
+          <h2 th:text="${dealDto.secondUserNickname()} +'님에게 요청한 거래'" class="deal-nickname"></h2>
+          <h2 th:text="${dealDto.dealStatus().getName()}" class="deal-status"></h2>
+          <a href="/deals/request" class="deal-button">거래 요청 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      var statusElements = document.querySelectorAll('.deal-status');
+
+      statusElements.forEach(function (element) {
+        var statusName = element.textContent.trim();
+        var statusColors = {
+          '요청 상태': '#FF0000',
+          '거래 중': '#00AADC',
+          '거래 완료': '#000000'
+        };
+
+        if (statusColors.hasOwnProperty(statusName)) {
+          var color = statusColors[statusName];
+          element.style.color = color;
+        }
+      });
+      /*]]>*/
+    </script>
+    </div>
+  </div>
+</body>
+</html>
