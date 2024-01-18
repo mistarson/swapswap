@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.post.constant;
 
-import java.util.Arrays;
 import lombok.Getter;
 
 @Getter
