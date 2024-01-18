@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{common/layout/layout}">
 
 <body>
@@ -21,18 +22,18 @@
             <input class="author-id" type="hidden" th:value="${postGetResponseDto.memberId}">
             <span class="author-name" th:text="${postGetResponseDto.author}"></span>
           </div>
-          <div class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}">수정하기</a>
+          <div class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}" sec:authorize="isAuthenticated()">수정하기</a>
           </div>
           <div class="post-request-button">
-            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}">요청하기</a>
+            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}" sec:authorize="isAuthenticated()">요청하기</a>
           </div>
           <div class="post-up-button"
                th:data-post-id="${postId}"
-               th:onclick="upPost(this.getAttribute('data-post-id'))"><a>업하기</a></div>
+               th:onclick="upPost(this.getAttribute('data-post-id'))"><a sec:authorize="isAuthenticated()">업하기</a></div>
           <div class="post-delete-button"
                th:data-post-id="${postId}"
                th:onclick="deletePost(this.getAttribute('data-post-id'))">
-            <a>삭제하기</a>
+            <a sec:authorize="isAuthenticated()">삭제하기</a>
           </div>
           <div class="favorite-action">
             <button
