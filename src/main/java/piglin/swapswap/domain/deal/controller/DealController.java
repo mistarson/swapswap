@@ -23,13 +23,13 @@ public class DealController {
 
     private final DealService dealService;
 
-    @PostMapping("/")
+    @PostMapping
     public String createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
             @AuthMember Member member) {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:/deal" + dealId;
+        return "redirect:/deals/" + dealId;
     }
 
     @GetMapping("/request")
@@ -51,4 +51,25 @@ public class DealController {
         return "deal/newcreateDealForm";
     }
 
+    @GetMapping("/request/list")
+    public String  getRequestDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return  "deal/requestDealList";
+    }
+
+    @GetMapping("response/list")
+    public String getResponseDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/responseDealList";
+    }
 }
