@@ -48,17 +48,6 @@ public class DealServiceImplV1 implements DealService {
         return dealRepository.findAllMyDealResponse(meberId);
     }
 
-    private DealStatus allowDealBoth(Boolean firstAllow, Boolean secondAllow) {
-
-        if (firstAllow && secondAllow) {
-
-            return DealStatus.DEALING;
-        } else {
-
-            return DealStatus.REQUESTED;
-        }
-    }
-
     private void existMember(Long memberId) {
 
         if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
