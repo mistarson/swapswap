@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.KakaoServiceImpl;
+import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
@@ -40,8 +40,7 @@ public class MemberController {
     private final MemberCouponService memberCouponService;
 
     @GetMapping("/login/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response)
-            throws Exception {
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) {
 
         try {
             String accessToken = kakaoServiceImpl.kakaoLogin(code);
@@ -67,6 +66,7 @@ public class MemberController {
             @Valid @RequestBody MemberNicknameDto requestDto) {
 
         memberService.updateNickname(member, requestDto);
+
         return ResponseEntity.ok().build();
     }
 
@@ -86,7 +86,7 @@ public class MemberController {
         List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(member);
         model.addAttribute("myCouponGetResponseDtoList", myCouponGetResponseDtoList);
 
-        return "/member/myCouponList";
+        return "member/myCouponList";
     }
     @GetMapping("/members/swap-money")
     public String getMySwapMoney(@AuthMember Member member, Model model) {
