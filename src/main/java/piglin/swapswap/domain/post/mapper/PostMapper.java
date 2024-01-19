@@ -33,7 +33,7 @@ public class PostMapper {
         post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category());
     }
 
-    public static List<PostSimpleResponseDto> getPostSimpleInfoList(List<Post> postList) {
+    public static List<PostSimpleResponseDto> getPostSimpleInfoListByPostList(List<Post> postList) {
 
         return postList.stream().map((post) -> PostSimpleResponseDto.builder()
                         .postId(post.getId())
@@ -41,5 +41,14 @@ public class PostMapper {
                         .imageUrl(post.getImageUrl().get(0).toString())
                         .build())
                 .toList();
+    }
+
+    public static PostSimpleResponseDto getPostSimpleInfoListByPost(Post post) {
+
+        return PostSimpleResponseDto.builder()
+                        .postId(post.getId())
+                        .postTitle(post.getTitle())
+                        .imageUrl(post.getImageUrl().get(0).toString())
+                        .build();
     }
 }

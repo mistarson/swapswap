@@ -42,11 +42,11 @@ public class Deal extends BaseTime {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Integer, Object> firstPostIdList;
+    private Map<Integer, Long> firstPostIdList;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Integer, Object> secondPostIdList;
+    private Map<Integer, Long> secondPostIdList;
 
     @Column(nullable = false)
     private int firstExtraFee;
@@ -69,5 +69,49 @@ public class Deal extends BaseTime {
     @Column
     private LocalDateTime completedDealTime;
 
+    public void updateDealFirst(int firstExtraFee, Map<Integer, Long> firstPostIdMap) {
+
+        this.firstExtraFee = firstExtraFee;
+        this.firstPostIdList = firstPostIdMap;
+        this.firstAllow = false;
+        this.secondAllow = false;
+    }
+
+    public void updateDealSecond(int secondExtraFee, Map<Integer, Long> secondPostIdMap) {
+
+        this.secondExtraFee = secondExtraFee;
+        this.secondPostIdList = secondPostIdMap;
+        this.firstAllow = false;
+        this.secondAllow = false;
+    }
+
+    public void updateDealFirstMemberAllow() {
+
+        firstAllow = !firstAllow;
+    }
+
+    public void updateDealSecondMemberAllow() {
+
+        secondAllow = !secondAllow;
+    }
+
+    public void updateDealFirstMemberTake() {
+
+        firstTake = true;
+    }
+
+    public void updateDealSecondMemberTake() {
+
+        secondTake = true;
+    }
+
+    public void updateDealStatus(DealStatus dealStatus) {
+
+        if (dealStatus.equals(DealStatus.COMPLETED)) {
+            this.completedDealTime = LocalDateTime.now();
+        }
+
+        this.dealStatus = dealStatus;
+    }
 }
 

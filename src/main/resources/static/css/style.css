@@ -1385,7 +1385,7 @@ input[type="number"] {
   background-color: #2980b9;
 }
 
-.deal-list{
+.deal-list {
   width: 1500px;
   border-bottom: solid #808080;
   margin-left: 500px;
@@ -1393,7 +1393,7 @@ input[type="number"] {
   flex-direction: column;
 }
 
-.author-dealResponseList-name{
+.author-dealResponseList-name {
   font-size: 40px;
   font-weight: bold;
   color: #333;
@@ -1403,7 +1403,7 @@ input[type="number"] {
   margin-top: 30px;
 }
 
-.deal-response-button{
+.deal-response-button {
   border: 2px solid #ccc;
   border-radius: 40px;
   padding: 10px;
@@ -1418,9 +1418,9 @@ input[type="number"] {
 }
 
 .deal-list a:hover {
-
   background-color: #2980b9;
- }
+}
+
 
 .deposit-withdraw-btn {
   width: 190px;
@@ -1512,3 +1512,213 @@ input[type="number"] {
 }
 
 
+/* deal request deal */
+
+.deal-detail-card {
+  background-color: #fff;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Style for the card header */
+.deal-detail-card-body {
+  background-color: #007bff; /* Example header background color */
+  color: #fff; /* Example header text color */
+  padding: 20px;
+  font-size: 1.5rem;
+}
+
+/* Flex container for deal content */
+.deal-detail-content-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.deal-detail-request-list {
+  position: relative;
+  width: 100%;
+  padding-bottom: 80px;
+}
+
+/* deal-detail-list-container 스타일 조정 */
+.deal-detail-list-container {
+  position: relative;
+  width: 100%;
+  padding: 20px; /* 내부 여백 추가 */
+  margin-bottom: 20px; /* 하단 여백 추가 */
+  background-color: #ffffff; /* 배경색 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+  border-radius: 8px; /* 모서리 둥글게 처리 */
+}
+
+/* 컨테이너 상단에 구분선 추가 */
+.deal-detail-list-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-top-left-radius: 8px; /* 왼쪽 상단 모서리 둥글게 */
+  border-top-right-radius: 8px; /* 오른쪽 상단 모서리 둥글게 */
+}
+
+/* 마지막 컨테이너에는 하단 여백을 적게 설정 */
+.deal-detail-list-container:last-child {
+  margin-bottom: 10px;
+}
+
+/* 반응형 디자인에서의 스타일 조정 */
+@media screen and (max-width: 768px) {
+  .deal-detail-list-container {
+    padding: 15px; /* 모바일에서의 내부 여백 조정 */
+  }
+}
+
+
+/* Style for the swap item titles */
+.deal-detail-item {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.deal-detail-post {
+  font-size: 20px;
+  font-weight: bold;
+  color: royalblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 추가금 정보 */
+.deal-detail-ExtraFee {
+  font-size: 16px;
+  color: dodgerblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 수락상태 정보 */
+.deal-detail-allow {
+  font-size: 16px;
+  color: mediumblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 인수상태 정보 */
+.deal-detail-take {
+  font-size: 16px;
+  color: darkblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+
+/* Buttons for editing, positioned at the top-right corner */
+.deal-detail-first-user-edit-button,
+.deal-detail-second-user-edit-button {
+  position: absolute;
+  top: 10px; /* 컨테이너 상단에서의 위치 */
+  right: 25px; /* 컨테이너 오른쪽에서의 위치 */
+  background-color: #28a745; /* Example button background color */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.deal-detail-first-user-edit-button a,
+.deal-detail-second-user-edit-button a{
+  color: white;
+  text-decoration: none;
+}
+
+
+.deal-detail-first-user-edit-button:hover,
+.deal-detail-second-user-edit-button:hover {
+  background-color: #1b6c2f;
+}
+
+.deal-detail-post-image {
+  width: auto; /* 이미지 원본 크기에 맞게 너비 설정 */
+  margin-right: 20px;
+  flex-direction: row; /* 이미지들을 가로로 배치 */
+  height: 200px; /* 예시 높이, 실제 사용할 높이에 맞게 조정 필요 */
+  flex-shrink: 0; /* 이미지 크기가 flex container에 의해 축소되는 것을 방지 */
+  object-fit: cover; /* 이미지 비율 유지하면서 높이에 맞게 조절 */
+  border-radius: 4px; /* 이미지 모서리 둥글게 */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .deal-content-container {
+    flex-direction: column;
+  }
+  .deal-list-container {
+    width: 100%;
+    margin: 5px 0; /* Adjust margin for vertical layout */
+  }
+  .deal-first-user-edit-button,
+  .deal-second-user-edit-button {
+    top: initial;
+    bottom: 20px;
+  }
+}
+
+/* 거래 수락 및 인수 버튼 스타일링 */
+.deal-acceptance-buttons {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  align-items: center;
+  background-color: #fff; /* 배경색 설정 */
+  border-radius: 8px; /* 둥근 모서리 */
+  bottom: 70px; /* 버튼이 컨테이너 밖으로 나오도록 위치 조정 */
+  right: 35px;
+  z-index: 10; /* z-index를 통해 컨테이너 위에 위치하도록 설정 */
+}
+
+.deal-acceptance-button {
+  padding: 10px 15px; /* 버튼 내부 패딩 */
+  margin-left: 10px; /* 버튼 간 여백 */
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+.deal-acceptance-button:hover {
+  background-color: #218838; /* 호버 시 배경색 변경 */
+}
+
+/* 거래 수락 및 인수 버튼을 deal-detail-request-list에 추가 */
+.deal-detail-request-list {
+  position: relative; /* 상대적 위치 지정 */
+  /* 기존 스타일링 코드 유지 */
+}
+
+.deal-detail-request-list .deal-acceptance-buttons {
+  position: absolute;
+  bottom: 10px; /* 아래쪽에서 10px 오프셋 */
+  right: 0; /* 오른쪽 정렬 */
+  width: 100%; /* 전체 너비 */
+}
+
+@media screen and (max-width: 768px) {
+  .deal-detail-request-list .deal-acceptance-buttons {
+    position: static; /* 작은 화면에서는 정적 위치 사용 */
+    margin-top: 20px; /* 상단 여백 추가 */
+  }
+
+  .deal-detail-first-user-edit-button,
+  .deal-detail-second-user-edit-button {
+    position: static; /* 작은 화면에서는 정적 위치 사용 */
+    margin: 10px 0; /* 상단 및 하단 여백 조정 */
+  }
+
+
+}
