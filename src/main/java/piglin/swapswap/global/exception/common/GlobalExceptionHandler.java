@@ -3,7 +3,6 @@ package piglin.swapswap.global.exception.common;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
@@ -74,13 +73,6 @@ public class GlobalExceptionHandler {
 
         return new RedirectView("/error/errorpage");
     }
-    
-    @ResponseBody
-    @ExceptionHandler(NoMorePostListException.class)
-    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
 
     @ExceptionHandler(BusinessException.class)
     protected RedirectView handleConflict(BusinessException e) {
@@ -106,6 +98,15 @@ public class GlobalExceptionHandler {
         log.error("HttpMediaTypeNotSupportedException", e);
 
         return new RedirectView("/error/errorpage");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NoMorePostListException.class)
+    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
+
+        log.error("NoMorePostListException", e);
+
+        return ResponseEntity.status(e.getStatus()).build();
     }
 
     @ExceptionHandler(Exception.class)

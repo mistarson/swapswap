@@ -11,6 +11,8 @@ import piglin.swapswap.domain.wallethistory.constant.HistoryType;
 import piglin.swapswap.domain.wallethistory.entity.WalletHistory;
 import piglin.swapswap.domain.wallethistory.mapper.WalletHistoryMapper;
 import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
+import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.wallet.InvalidWithdrawException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,19 +33,41 @@ public class WalletServiceImplV1 implements WalletService {
 
     @Override
     @Transactional
-    public void noramlDepositSwapMoney(Long depositSwapMoney, Long memberId) {
+    public void depositSwapMoney(Long depositSwapMoney, HistoryType historyType, Long memberId) {
 
         Member member = memberService.getMemberWithWallet(memberId);
 
         Wallet wallet = member.getWallet();
         wallet.depositSwapMoney(depositSwapMoney);
 
-        recordWalletHistory(depositSwapMoney, HistoryType.NORMAL_DEPOSIT);
+        recordWalletHistory(wallet, depositSwapMoney, historyType);
     }
 
-    private void recordWalletHistory(Long swapMoney, HistoryType historyType) {
+    @Override
+    @Transactional
+    public void withdrawSwapMoney(Long withdrawSwapMoney, HistoryType historyType, Long memberId) {
 
-        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(swapMoney, historyType);
+        Member member = memberService.getMemberWithWallet(memberId);
+
+        Wallet wallet = member.getWallet();
+        if (impossibleWithdrawSwapMoney(wallet, withdrawSwapMoney)) {
+            throw new InvalidWithdrawException(ErrorCode.LACK_OF_SWAP_MONEY_EXCEPTION);
+        }
+        wallet.withdrawSwapMoney(withdrawSwapMoney);
+
+        recordWalletHistory(wallet, withdrawSwapMoney, historyType);
+    }
+
+    private boolean impossibleWithdrawSwapMoney(Wallet wallet, Long withdrawSwapMoney) {
+
+        return wallet.getSwapMoney() < withdrawSwapMoney;
+    }
+
+    private void recordWalletHistory(Wallet wallet, Long swapMoney, HistoryType historyType) {
+
+        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(wallet, swapMoney,
+                historyType);
+
         walletHistoryService.recordWalletHistory(walletHistory);
     }
 }

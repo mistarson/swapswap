@@ -143,7 +143,7 @@ public class PostServiceImplV1 implements PostService {
 
         Category categoryCond = null;
 
-        if(category != null) {
+        if (category != null) {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
@@ -156,7 +156,7 @@ public class PostServiceImplV1 implements PostService {
 
         Category categoryCond = null;
 
-        if(category != null) {
+        if (category != null) {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
@@ -180,13 +180,21 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId){
+    public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId) {
 
-        return PostMapper.getPostSimpleInfoList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
+        return PostMapper.getPostSimpleInfoList(
+                postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
     @Override
     public List<PostGetListResponseDto> getMyFavoritePostList(Member member,
+            LocalDateTime cursorTime) {
+
+        return postRepository.findAllMyFavoritePost(member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> getMyFavoritePostListMore(Member member,
             LocalDateTime cursorTime) {
 
         List<PostGetListResponseDto> postList = postRepository.findAllMyFavoritePost(
@@ -214,7 +222,7 @@ public class PostServiceImplV1 implements PostService {
 
     private void checkModifiedUpTime(Post post) {
 
-        if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
+        if (post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
     }

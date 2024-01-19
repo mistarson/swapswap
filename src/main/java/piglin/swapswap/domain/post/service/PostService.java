@@ -90,4 +90,5 @@ public interface PostService {
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 
     List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
+    List<PostGetListResponseDto> getMyFavoritePostListMore(Member member, LocalDateTime cursorTime);
 }
