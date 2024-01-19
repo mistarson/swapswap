@@ -29,3 +29,8 @@ cloud:
       auto: false
     stack:
       auto: false
+
+kakao:
+  client:
+    id: ENC(DmCqicA7Pa7EFxu5XTVtBxYl3K6fHeM1nSl090T2k+aJXj/JxcAnC1++VMpiz2ZU)
+  redirect-uri: http://13.124.101.39/login/kakao/callback
