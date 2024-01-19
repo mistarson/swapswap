@@ -5,6 +5,8 @@
 <link rel="stylesheet" type="text/css" href="your-stylesheet.css">
 <body>
 <div layout:fragment="content">
+  <input type="hidden" th:value="${dealId}" class="deal-id">
+  <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-status"></h2>
   <div class="deal-detail-card">
     <div class="deal-detail-card-body">
       <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
@@ -13,8 +15,14 @@
     <div class="deal-detail-content-container">
       <div class="deal-detail-request-list">
         <div class="deal-detail-list-container">
-          <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
-          <div th:text="'추가금: ' + ${dealDetailResponseDto.firstExtraFee()}" class="deal-detail-item"></div>
+          <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <div th:text="'추가금: ' + ${dealDetailResponseDto.firstExtraFee()}" class="deal-detail-ExtraFee"></div>
+          <div class="deal-allow-status">수락 상태:
+          <div class="deal-detail-allow" th:text="${dealDetailResponseDto.firstAllow} ? '수락 완료' : '수락 대기'"></div>
+          </div>
+          <div class="deal-take-status">인수 상태:
+            <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
+          </div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
@@ -23,8 +31,14 @@
           </div>
         </div>
         <div class="deal-detail-list-container">
-          <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
-          <div th:text="'추가금: ' + ${dealDetailResponseDto.secondExtraFee}" class="deal-detail-item"></div>
+          <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <div th:text="'추가금: ' + ${dealDetailResponseDto.secondExtraFee}" class="deal-detail-ExtraFee"></div>
+          <div class="deal-allow-status">수락 상태:
+          <div class="deal-detail-allow "th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
+          </div>
+            <div class="deal-take-status">인수 상태:
+          <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
+            </div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
@@ -32,8 +46,69 @@
           </div>
         </div>
       </div>
+      <div class="deal-acceptance-buttons">
+        <button class="deal-acceptance-button" onclick="dealAllow()">거래 수락하기</button>
+        <button class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
+      </div>
     </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    const dealIdElement = document.querySelector('.deal-id');
+    const dealId = +dealIdElement.value;
+
+    var allowUrl = '/deals/' + dealId + '/allow'
+    var takeUrl = '/deals/' + dealId + '/take'
+
+    var statusElements = document.querySelectorAll('.deal-status');
+
+    statusElements.forEach(function (element) {
+      var statusName = element.textContent.trim();
+      var statusColors = {
+        '요청 중': '#FF0000',
+        '거래 중': '#00AADC',
+        '거래 완료': '#000000'
+      };
+
+      if (statusColors.hasOwnProperty(statusName)) {
+        var color = statusColors[statusName];
+        element.style.color = color;
+      }
+    });
+    var firstAllow = /*[[${dealDetailResponseDto.firstAllow}]]*/ false;
+    function dealAllow() {
+      $.ajax({
+        url: allowUrl,
+        type: 'PATCH',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          // 에러 처리
+          alert("수락 할 수 없는 상태입니다.")
+          console.error("Update failed:", status, error);
+        }
+      })
+    }
+
+    function dealTake() {
+      $.ajax({
+        url: takeUrl,
+        type: 'PATCH',
+        success: function () {
+
+          $('.deal-detail-take').text('인수 완료').css('color', '#3366CC');
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          // 에러 처리
+          alert("인수 할 수 없는 상태입니다.")
+          console.error("Update failed:", status, error);
+        }
+      })
+    }
+  </script>
 </div>
 </body>
 </html>

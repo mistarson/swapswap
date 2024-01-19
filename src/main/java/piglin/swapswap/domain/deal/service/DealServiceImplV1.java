@@ -65,9 +65,7 @@ public class DealServiceImplV1 implements DealService {
     @Transactional
     public void updateDeal(Member member, Long dealId, Long memberId, DealUpdateRequestDto requestDto) {
 
-        Deal deal = dealRepository.findById(dealId).orElseThrow(
-                () -> new RuntimeException("딜이 없습니다")
-        );
+        Deal deal = findDeal(dealId);
 
         if (!deal.getFirstUserId().equals(member.getId()) && !deal.getSecondUserId().equals(member.getId())) {
             throw new RuntimeException("딜을 수정할 수 있는 권한이 없어요~");
@@ -90,6 +88,63 @@ public class DealServiceImplV1 implements DealService {
     public void checkDeal(Long dealId) {
 
         dealRepository.findById(dealId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
+    }
+
+    @Override
+    @Transactional
+    public void updateDealAllow(Long dealId, Member member) {
+
+        Deal deal = findDeal(dealId);
+
+        if (!deal.getDealStatus().equals(DealStatus.REQUESTED)) {
+            throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
+        }
+
+        if(deal.getFirstUserId().equals(member.getId())) {
+            deal.updateDealFirstMemberAllow();
+        }
+
+        if(deal.getSecondUserId().equals(member.getId())) {
+            deal.updateDealSecondMemberAllow();
+        }
+
+        if(deal.getFirstAllow() && deal.getSecondAllow()) {
+            deal.updateDealStatus(DealStatus.DEALING);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void takeDeal(Long dealId, Member member) {
+
+        Deal deal = findDeal(dealId);
+
+        if (!deal.getDealStatus().equals(DealStatus.DEALING)) {
+            throw new RuntimeException("인수 할 수 있는 상태가 아닙니다.");
+        }
+
+        if(deal.getFirstUserId().equals(member.getId())) {
+                deal.updateDealFirstMemberTake();
+        }
+
+        if(deal.getSecondUserId().equals(member.getId())) {
+                deal.updateDealSecondMemberTake();
+        }
+
+        if(deal.getFirstTake() && deal.getSecondTake()) {
+            deal.updateDealStatus(DealStatus.COMPLETED);
+        }
+
+        if(!deal.getFirstTake() || !deal.getSecondTake()) {
+            deal.updateDealStatus(DealStatus.DEALING);
+        }
+    }
+
+    private Deal findDeal(Long dealId) {
+
+        return dealRepository.findById(dealId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
         );
     }

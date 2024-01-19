@@ -6,12 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
@@ -115,5 +117,21 @@ public class DealController {
                 0, null));
 
         return "deal/dealUpdateForm";
+    }
+    @ResponseBody
+    @PatchMapping("/{dealId}/allow")
+    public ResponseEntity<?> updateDealAllow(@PathVariable Long dealId, @AuthMember Member member) {
+
+        dealService.updateDealAllow(dealId, member);
+
+        return ResponseEntity.ok().build();
+    }
+    @ResponseBody
+    @PatchMapping("/{dealId}/take")
+    public ResponseEntity<?> takeDeal(@PathVariable Long dealId, @AuthMember Member member) {
+
+        dealService.takeDeal(dealId, member);
+
+        return ResponseEntity.ok().build();
     }
 }

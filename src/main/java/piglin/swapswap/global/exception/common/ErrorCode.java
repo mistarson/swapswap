@@ -46,6 +46,7 @@ public enum ErrorCode {
     INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
 
     //거래
+    CAN_NOT_UPDATE_ALLOW_STATUS(401, "수정 할 수 없는 상태입니다."),
     NOT_FOUND_DEAL_EXCEPTION(401, "거래를 찾을 수 없습니다."),
     REQUEST_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 거래요청을 할 수 없습니다."),
 

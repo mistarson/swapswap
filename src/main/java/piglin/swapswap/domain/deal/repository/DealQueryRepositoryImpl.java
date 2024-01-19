@@ -1,8 +1,7 @@
 package piglin.swapswap.domain.deal.repository;
 
 import static piglin.swapswap.domain.deal.entity.QDeal.deal;
-import static piglin.swapswap.domain.member.entity.QMember.*;
-
+import static piglin.swapswap.domain.member.entity.QMember.member;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
-import piglin.swapswap.domain.member.entity.QMember;
 
 public class DealQueryRepositoryImpl implements DealQueryRepository {
 
@@ -29,12 +27,12 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
         return queryFactory
                 .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
-                        QMember.member.nickname,
+                        member.nickname,
                         deal.dealStatus))
                 .from(deal)
                 .where(deal.firstUserId.eq(memberId))
-                .join(QMember.member)
-                .on(deal.secondUserId.eq(QMember.member.id))
+                .join(member)
+                .on(deal.secondUserId.eq(member.id))
                 .fetch();
     }
 
@@ -44,12 +42,12 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
         return queryFactory
                 .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
-                        QMember.member.nickname,
+                        member.nickname,
                         deal.dealStatus))
                 .from(deal)
                 .where(deal.secondUserId.eq(memberId))
-                .join(QMember.member)
-                .on(deal.firstUserId.eq(QMember.member.id))
+                .join(member)
+                .on(deal.firstUserId.eq(member.id))
                 .fetch();
     }
 
