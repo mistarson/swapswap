@@ -26,8 +26,8 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public List<DealGetResponseDto> findAllMyDealRequest(Long memberId) {
 
-        return queryFactory.select(
-                Projections.constructor(DealGetResponseDto.class,
+        return queryFactory
+                .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
                         QMember.member.nickname,
                         deal.dealStatus))
@@ -41,8 +41,8 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public List<DealGetResponseDto> findAllMyDealResponse(Long memberId) {
 
-        return queryFactory.select(
-                Projections.constructor(DealGetResponseDto.class,
+        return queryFactory
+                .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
                         QMember.member.nickname,
                         deal.dealStatus))
@@ -56,10 +56,11 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public DealDetailResponseDto findDealByIdToDetailResponseDto(Long dealId) {
         return queryFactory
-                .select(
-                        Projections.constructor(DealDetailResponseDto.class,
+                .select(Projections.constructor(DealDetailResponseDto.class,
                                 deal.id,
                                 deal.dealStatus,
+                                JPAExpressions.select(member.nickname)
+                                        .from(member)
                                 deal.firstUserId,
                                 deal.secondUserId,
                                 JPAExpressions.select(member.nickname)
@@ -75,8 +76,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                                 deal.firstAllow,
                                 deal.secondAllow,
                                 deal.firstTake,
-                                deal.secondTake
-                        ))
+                                deal.secondTake))
                 .from(deal)
                 .where(deal.id.eq(dealId))
                 .fetchOne();
