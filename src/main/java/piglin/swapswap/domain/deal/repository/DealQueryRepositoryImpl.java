@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
-import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.entity.QMember;
 
 public class DealQueryRepositoryImpl implements DealQueryRepository {
@@ -22,7 +21,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     }
 
     @Override
-    public List<DealGetResponseDto> findAllMyDealRequest(Member member) {
+    public List<DealGetResponseDto> findAllMyDealRequest(Long memberId) {
 
         return queryFactory.select(
                 Projections.constructor(DealGetResponseDto.class,
@@ -30,14 +29,14 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                         QMember.member.nickname,
                         deal.dealStatus))
                 .from(deal)
-                .where(deal.firstUserId.eq(member.getId()))
+                .where(deal.firstUserId.eq(memberId))
                 .join(QMember.member)
                 .on(deal.secondUserId.eq(QMember.member.id))
                 .fetch();
     }
 
     @Override
-    public List<DealGetResponseDto> findAllMyDealResponse(Member member) {
+    public List<DealGetResponseDto> findAllMyDealResponse(Long memberId) {
 
         return queryFactory.select(
                 Projections.constructor(DealGetResponseDto.class,
@@ -45,7 +44,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                         QMember.member.nickname,
                         deal.dealStatus))
                 .from(deal)
-                .where(deal.secondUserId.eq(member.getId()))
+                .where(deal.secondUserId.eq(memberId))
                 .join(QMember.member)
                 .on(deal.firstUserId.eq(QMember.member.id))
                 .fetch();

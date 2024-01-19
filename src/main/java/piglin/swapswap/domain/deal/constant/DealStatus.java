@@ -4,12 +4,20 @@ import lombok.Getter;
 
 @Getter
 public enum DealStatus {
-    REQUESTED("요청 상태"), DEALING("거래 중"), COMPLTIED("거래 완료");
+    REQUESTED(DealName.REQUESTED),
+    DEALING(DealName.DEALING),
+    COMPLETED(DealName.COMPLETED);
 
     private final String name;
 
     DealStatus(String name) {
         this.name = name;
     }
-}
 
+    public static class DealName {
+
+        public static final String REQUESTED = "요청 중";
+        public static final String DEALING = "거래 중";
+        public static final String COMPLETED = "거래 완료";
+    }
+}

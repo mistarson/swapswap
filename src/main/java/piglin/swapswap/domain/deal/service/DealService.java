@@ -9,7 +9,7 @@ public interface DealService {
 
     Long createDeal(Member member, DealCreateRequestDto requestDto);
 
-    List<DealGetResponseDto> getMyRequestDealList(Member member);
+    List<DealGetResponseDto> getMyRequestDealList(Long memberId);
 
-    List<DealGetResponseDto> getMyResponseDealList(Member member);
+    List<DealGetResponseDto> getMyResponseDealList(Long memberId);
 }

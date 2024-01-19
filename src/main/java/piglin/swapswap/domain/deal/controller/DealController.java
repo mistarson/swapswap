@@ -56,8 +56,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member));
-        model.addAttribute("memberId", member.getId());
+        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
 
         return  "deal/requestDealList";
     }
@@ -67,8 +67,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member));
-        model.addAttribute("memberId", member.getId());
+        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/responseDealList";
     }

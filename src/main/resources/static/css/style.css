@@ -1194,11 +1194,17 @@ input[type="number"] {
   cursor: pointer;
 }
 
-}
-
 .deal-card {
   width: 1375px;
-  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 500px;
+  margin-right: 50px;
+  margin-top: 100px;
+}
+
+.deal-response-card {
+  width: 1375px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin-right: 50px;
@@ -1206,6 +1212,14 @@ input[type="number"] {
 }
 
 .deal-card-body {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deal-response-card-body {
   margin-left: 20px;
   display: flex;
   flex-direction: row;
@@ -1224,10 +1238,17 @@ input[type="number"] {
   align-items: center;
 }
 
-.deal-request-List{
+.deal-request-List {
   display: flex;
   flex-direction: column;
-=======
+}
+
+.deal-response-List{
+  display: flex;
+  flex-direction: column;
+  margin-left: 500px;
+}
+
 .swap-money-body {
   display: flex;
   flex-direction: column;
@@ -1270,10 +1291,10 @@ input[type="number"] {
   padding: 10px;
   display: inline-block;
   background-color: #00aadc;
-  width: 250px;
+  width: 110px;
   color: white;
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
-  margin-left: 10px;/* 원하는 스타일 속성을 추가하세요. */
+  margin-left: 10px;
   text-decoration: none;
 }
 
@@ -1281,6 +1302,7 @@ input[type="number"] {
 
   background-color: #2980b9;
 }
+
 .deal-list{
   width: 1500px;
   border-bottom: solid #808080;
@@ -1310,6 +1332,7 @@ input[type="number"] {
   text-decoration: none;
   margin-left: auto;
   margin-right: 10px;
+  height: 20px;
 }
 
 .deal-list a:hover {
@@ -1363,3 +1386,4 @@ input[type="number"] {
   margin-top: 55px;
   text-align: center;
 }
+
