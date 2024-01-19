@@ -1,5 +1,8 @@
 name: Swapswap
 
+env:
+  SWAPSWAP_JASYPT_PASSWORD: ${{ secrets.SWAPSWAP_JASYPT_PASSWORD }}
+
 on:
   pull_request:
     branches: [ main ]
