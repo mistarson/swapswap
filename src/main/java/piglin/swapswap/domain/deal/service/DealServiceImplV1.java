@@ -52,11 +52,17 @@ public class DealServiceImplV1 implements DealService {
     public DealDetailResponseDto getDeal(Long dealId, Member member) {
 
         DealDetailResponseDto responseDto = dealRepository.findDealByIdToDetailResponseDto(dealId);
+
+        isNullDealDetailResponseDto(responseDto);
+
+        return responseDto;
+    }
+
+    private void isNullDealDetailResponseDto(DealDetailResponseDto responseDto) {
+
         if (responseDto.id() == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION);
         }
-
-        return responseDto;
     }
 
     private void existMember(Long memberId) {
