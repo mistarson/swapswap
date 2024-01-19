@@ -31,7 +31,7 @@ public class PostMapper {
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {
 
-        post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category());
+        post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category(), requestDto.city());
     }
 
     public static List<PostSimpleResponseDto> getPostSimpleInfoList(List<Post> postList) {

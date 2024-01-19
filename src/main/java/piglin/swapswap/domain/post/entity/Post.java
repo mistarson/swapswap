@@ -73,11 +73,13 @@ public class Post extends BaseTime {
         this.viewCnt++;
     }
 
-    public void updatePost(String title, String content, Map<Integer, Object> imageUrl, Category category) {
+    public void updatePost(String title, String content, Map<Integer, Object> imageUrl,
+            Category category, City city) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.city = city;
     }
 
     public void deletePost() {

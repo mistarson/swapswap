@@ -139,7 +139,7 @@ public class PostController {
         }
 
         model.addAttribute("PostUpdateRequestDto",
-                new PostUpdateRequestDto(null, null, null, null));
+                new PostUpdateRequestDto(null, null, null, null, null));
 
         model.addAttribute("PostId", postId);
 
