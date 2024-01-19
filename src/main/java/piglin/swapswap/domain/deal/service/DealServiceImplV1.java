@@ -40,15 +40,15 @@ public class DealServiceImplV1 implements DealService {
     }
 
     @Override
-    public List<DealGetResponseDto> getMyRequestDealList(Member member) {
+    public List<DealGetResponseDto> getMyRequestDealList(Long memberId) {
 
-        return dealRepository.findAllMyDealRequest(member);
+        return dealRepository.findAllMyDealRequest(memberId);
     }
 
     @Override
-    public List<DealGetResponseDto> getMyResponseDealList(Member member) {
+    public List<DealGetResponseDto> getMyResponseDealList(Long memberId) {
 
-        return dealRepository.findAllMyDealResponse(member);
+        return dealRepository.findAllMyDealResponse(memberId);
     }
 
     @Override
@@ -109,8 +109,5 @@ public class DealServiceImplV1 implements DealService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
     }
-
-
-
 }
 

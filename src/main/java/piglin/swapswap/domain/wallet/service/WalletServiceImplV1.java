@@ -11,6 +11,8 @@ import piglin.swapswap.domain.wallethistory.constant.HistoryType;
 import piglin.swapswap.domain.wallethistory.entity.WalletHistory;
 import piglin.swapswap.domain.wallethistory.mapper.WalletHistoryMapper;
 import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
+import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.wallet.InvalidWithdrawException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class WalletServiceImplV1 implements WalletService {
 
     @Override
     @Transactional
-    public void noramlDepositSwapMoney(Long depositSwapMoney, Long memberId) {
+    public void normalDepositSwapMoney(Long depositSwapMoney, Long memberId) {
 
         Member member = memberService.getMemberWithWallet(memberId);
 
@@ -41,9 +43,30 @@ public class WalletServiceImplV1 implements WalletService {
         recordWalletHistory(depositSwapMoney, HistoryType.NORMAL_DEPOSIT);
     }
 
+    @Override
+    @Transactional
+    public void normalWithdrawSwapMoney(Long withdrawSwapMoney, Long memberId) {
+
+        Member member = memberService.getMemberWithWallet(memberId);
+
+        Wallet wallet = member.getWallet();
+        if (impossibleWithdrawSwapMoney(wallet, withdrawSwapMoney)) {
+            throw new InvalidWithdrawException(ErrorCode.LACK_OF_SWAP_MONEY_EXCEPTION);
+        }
+        wallet.withdrawSwapMoney(withdrawSwapMoney);
+
+        recordWalletHistory(withdrawSwapMoney, HistoryType.NORMAL_WITHDRAW);
+    }
+
+    private boolean impossibleWithdrawSwapMoney(Wallet wallet, Long withdrawSwapMoney) {
+
+        return wallet.getSwapMoney() < withdrawSwapMoney;
+    }
+
     private void recordWalletHistory(Long swapMoney, HistoryType historyType) {
 
-        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(swapMoney, historyType);
+        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(swapMoney,
+                historyType);
         walletHistoryService.recordWalletHistory(walletHistory);
     }
 }

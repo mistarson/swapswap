@@ -7,10 +7,10 @@ public enum HistoryType {
     DEAL_DEPOSIT(HistoryTypeName.DEAL_DEPOSIT),
     DEAL_WITHDRAW(HistoryTypeName.DEAL_WITHDRAW);
     
-    private final String name;
+    private final String type;
 
-    HistoryType(String name) {
-        this.name = name;
+    HistoryType(String type) {
+        this.type = type;
     }
 
     public static class HistoryTypeName {
