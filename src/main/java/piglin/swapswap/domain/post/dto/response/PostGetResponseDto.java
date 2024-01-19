@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.Builder;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 
 @Builder
 public record PostGetResponseDto(
@@ -12,6 +13,7 @@ public record PostGetResponseDto(
         String title,
         String content,
         Category category,
+        City city,
         Map<Integer, Object> imageUrl,
         Long viewCnt,
         Long upCnt,
