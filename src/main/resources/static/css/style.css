@@ -272,7 +272,7 @@ img {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #E5E5E5;
-  height: 33%;
+  padding: 10px 0;
 }
 
 .write-bar-explain {
@@ -408,6 +408,36 @@ img {
   background-color: #00AADC;
   color: #ffffff;
 }
+
+.styled-select {
+  flex-grow: 1;
+  height: 80%;
+  font-size: 30px;
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none; /* 네이티브 셀렉트 스타일 제거 */
+  -webkit-appearance: none; /* 크롬, 사파리 적용 */
+  -moz-appearance: none; /* 파이어폭스 적용 */
+}
+
+/* 셀렉트 화살표를 사용자 정의 스타일로 변경하는 추가 스타일 (선택 사항) */
+.styled-select::-ms-expand {
+  display: none; /* IE/Edge에서 기본 화살표 숨김 */
+}
+
+/* 셀렉트 박스 포커스 시 스타일 */
+.styled-select:focus {
+  border-color: #00AADC;
+  box-shadow: 0 0 6px rgba(0, 170, 220, 0.3);
+  outline: none;
+}
+
+
 
 .post-content-container {
   height: 400px;

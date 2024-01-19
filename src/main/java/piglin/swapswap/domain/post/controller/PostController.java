@@ -52,7 +52,7 @@ public class PostController {
         }
 
         model.addAttribute("PostCreateRequestDto",
-                new PostCreateRequestDto(null, null, null, null));
+                new PostCreateRequestDto(null, null, null, null, null));
 
         return "post/postWrite";
     }

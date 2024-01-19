@@ -16,6 +16,7 @@ public class PostMapper {
 
         return Post.builder()
                    .category(requestDto.category())
+                   .city(requestDto.city())
                    .title(requestDto.title())
                    .content(requestDto.content())
                    .imageUrl(imageUrlMap)
