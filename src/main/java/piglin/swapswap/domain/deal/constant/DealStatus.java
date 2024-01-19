@@ -21,4 +21,3 @@ public enum DealStatus {
         public static final String COMPLETED = "거래 완료";
     }
 }
-
