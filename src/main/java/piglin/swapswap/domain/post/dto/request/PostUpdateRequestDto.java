@@ -5,8 +5,10 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 
 public record PostUpdateRequestDto(
+        City city,
         Category category,
         @Size(max = 50, message = "제목은 최소 1자 이상, 최대 50자 까지 입력 할 수 있습니다.")
         @NotBlank(message = "제목은 필수 입력란입니다.")

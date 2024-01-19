@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.service;
 
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -24,6 +26,7 @@ import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.post.NoMorePostListException;
 import piglin.swapswap.global.s3.S3ImageServiceImplV1;
 
 @Service
@@ -56,25 +59,32 @@ public class PostServiceImplV1 implements PostService {
     @Transactional
     public PostGetResponseDto getPost(Long postId, Member member) {
 
-        Post post = findPost(postId);
+        PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
 
-        Long favoriteCnt = favoriteService.getPostFavoriteCnt(post);
+        isNullPostResponseDto(responseDto);
 
-        boolean favoriteStatus = false;
-        if (isMemberLoggedIn(member)) {
-            favoriteStatus = favoriteService.isFavorite(post, member);
-        }
+        postRepository.updatePostViewCnt(postId);
 
-        post.upViewCnt();
-
-        return PostMapper.postToGetResponseDto(post, favoriteCnt, favoriteStatus);
+        return responseDto;
     }
 
     @Override
     public List<PostGetListResponseDto> getPostList(Member member,
             LocalDateTime cursorTime) {
 
-        return postRepository.findPostListWithFavoriteByCursor(member, cursorTime);
+        return postRepository.findPostListWithFavoriteByCursor(
+                member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> getPostListMore(Member member, LocalDateTime cursorTime) {
+
+        List<PostGetListResponseDto> postList = postRepository.findPostListWithFavoriteByCursor(
+                member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
     }
 
     @Override
@@ -130,16 +140,44 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+    public List<PostGetListResponseDto> searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime) {
 
         Category categoryCond = null;
+        City cityCond = null;
 
-        if(category != null) {
+        if (category != null) {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        return postRepository.searchPostListWithFavorite(title, categoryCond, member, cursorTime);
+        if (city != null) {
+            cityCond = Enum.valueOf(City.class, city);
+        }
+
+        return postRepository.searchPostListWithFavorite(title, categoryCond, cityCond, member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> searchPostMore(String title, String category, String city, Member member,
+            LocalDateTime cursorTime) {
+
+        Category categoryCond = null;
+        City cityCond = null;
+
+        if (category != null) {
+            categoryCond = Enum.valueOf(Category.class, category);
+        }
+
+        if (city != null) {
+            cityCond = Enum.valueOf(City.class, city);
+        }
+
+        List<PostGetListResponseDto> postList = postRepository.searchPostListWithFavorite(
+                title, categoryCond, cityCond, member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
     }
 
     @Override
@@ -156,12 +194,41 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId){
 
-        return PostMapper.getPostSimpleInfoList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
+        return PostMapper.getPostSimpleInfoListByPostList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
-    private boolean isMemberLoggedIn(Member member) {
+    @Override
+    public List<PostGetListResponseDto> getMyFavoritePostList(Member member,
+            LocalDateTime cursorTime) {
 
-        return member != null;
+        return postRepository.findAllMyFavoritePost(member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> getMyFavoritePostListMore(Member member,
+            LocalDateTime cursorTime) {
+
+        List<PostGetListResponseDto> postList = postRepository.findAllMyFavoritePost(
+                member, cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
+    }
+
+    @Override
+    public List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(
+            Map<Integer, Long> postIdList) {
+
+        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
+
+        for(int i = 0; i < postIdList.size(); i++) {
+            Long postId = postIdList.get(i);
+            Post post = findPost(postId);
+            responseDtoList.add(PostMapper.getPostSimpleInfoListByPost(post));
+        }
+
+        return responseDtoList;
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
@@ -181,7 +248,7 @@ public class PostServiceImplV1 implements PostService {
 
     private void checkModifiedUpTime(Post post) {
 
-        if(post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
+        if (post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
     }
@@ -210,6 +277,20 @@ public class PostServiceImplV1 implements PostService {
         }
         if (imageUrlList.size() > PostConstant.IMAGE_MAX_SIZE) {
             throw new BusinessException(ErrorCode.POST_IMAGE_MAX_SIZE);
+        }
+    }
+
+    private void isNullPostResponseDto(PostGetResponseDto responseDto) {
+
+        if (responseDto.author() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
+        }
+    }
+
+    private void isEmptyPostList(List<PostGetListResponseDto> postList) {
+
+        if (postList.isEmpty()) {
+            throw new NoMorePostListException();
         }
     }
 }

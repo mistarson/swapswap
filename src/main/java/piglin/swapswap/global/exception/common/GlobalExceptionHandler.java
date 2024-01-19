@@ -1,148 +1,153 @@
 package piglin.swapswap.global.exception.common;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.RedirectView;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
 import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
+import piglin.swapswap.global.exception.post.NoMorePostListException;
 
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleValidationException(
+    protected RedirectView handleValidationException(
             MethodArgumentNotValidException e) {
 
         log.error("ValidationException", e);
 
-        BindingResult bindingResult = e.getBindingResult();
-        String msg = bindingResult.getFieldErrors().get(0).getDefaultMessage();
-
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, msg);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(NoJwtException.class)
-    protected ResponseEntity<ErrorResponse> handleNoJwtException(NoJwtException e) {
+    protected RedirectView handleNoJwtException(NoJwtException e) {
 
         log.error("NoJwtException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(UnsupportedGrantTypeException.class)
-    protected ResponseEntity<ErrorResponse> handleUnSupportedGrantTypeException(
+    protected RedirectView handleUnSupportedGrantTypeException(
             UnsupportedGrantTypeException e) {
 
         log.error("UnSupportedGrantTypeException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(JwtInvalidException.class)
-    protected ResponseEntity<ErrorResponse> handleJwtInvalidException(JwtInvalidException e) {
+    protected RedirectView handleJwtInvalidException(JwtInvalidException e) {
 
         log.error("JwtInvalidException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(BindException.class)
-    protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
+    protected RedirectView handleBindException(BindException e) {
 
         log.error("handleBindException", e);
 
-        BindingResult bindingResult = e.getBindingResult();
-
-        List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
-
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST, errorMessages);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
+    protected RedirectView handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
 
-        log.error("handleHttpRequestMethodNotSupportedException", e);
+        log.error("HttpRequestMethodNotSupportedException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(BusinessException.class)
-    protected ResponseEntity<ErrorResponse> handleConflict(BusinessException e) {
+    protected RedirectView handleConflict(BusinessException e) {
 
         log.error("BusinessException", e);
 
-        HttpStatus httpStatus = HttpStatus.valueOf(e.getStatus());
-        ErrorResponse errorResponse = ErrorResponse.of(httpStatus, List.of(e.getMessage()));
-
-        return ResponseEntity.status(httpStatus).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(HttpMessageConversionException.class)
-    protected ResponseEntity<ErrorResponse> handleHttpMessageConversionException(
+    protected RedirectView handleHttpMessageConversionException(
             HttpMessageConversionException e) {
 
         log.error("HttpMessageConversionException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    protected ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedException(
+    protected RedirectView handleHttpMediaTypeNotSupportedException(
             HttpMediaTypeNotSupportedException e) {
 
         log.error("HttpMediaTypeNotSupportedException", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
-                List.of(e.getMessage()));
+        return new RedirectView("/error/errorpage");
+    }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    @ResponseBody
+    @ExceptionHandler(NoMorePostListException.class)
+    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
+
+        log.error("NoMorePostListException", e);
+
+        return ResponseEntity.status(e.getStatus()).build();
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    protected RedirectView handleException(Exception e) {
 
         log.error("Exception", e);
 
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR,
-                List.of(e.getMessage()));
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        return new RedirectView("/error/errorpage");
     }
 
+    @ExceptionHandler(DataAccessException.class)
+    protected RedirectView handleDataAccessException(DataAccessException e) {
+        log.error("DataAccessException", e);
+
+        return new RedirectView("/error/errorpage");
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    protected RedirectView handleNullPointerException(NullPointerException e) {
+        log.error("NullPointerException", e);
+
+        return new RedirectView("/error/errorpage");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected RedirectView handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error("IllegalArgumentException", e);
+        return new RedirectView("/error/errorpage");
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    protected RedirectView handleSecurityException(SecurityException e) {
+        log.error("SecurityException", e);
+
+        return new RedirectView("/error/errorpage");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    protected RedirectView handlerNoSuchElementFoundException(NoSuchElementException e) {
+        log.error("NoSuchElementFoundException", e);
+
+        return new RedirectView("/error/errorpage");
+    }
 }

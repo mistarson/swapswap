@@ -5,15 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piglin.swapswap.domain.common.BaseTime;
-import piglin.swapswap.domain.wallethistory.entity.WalletHistory;
 
 @Entity
 @Builder
@@ -27,9 +24,25 @@ public class Wallet extends BaseTime {
     private Long id;
 
     @Column(nullable = false)
-    private Long money;
+    private Long swapMoney;
 
-    // TODO 지워도 ㅗ딜것같음
-    @OneToMany(mappedBy = "wallet")
-    private List<WalletHistory> walletHistoryList;
+    @Column(nullable = false)
+    private boolean isDeleted;
+
+    public void depositSwapMoney(Long depositSwapMoney) {
+
+        swapMoney += depositSwapMoney;
+    }
+
+    public void withdrawSwapMoney(Long withdrawSwapMoney) {
+
+        swapMoney -= withdrawSwapMoney;
+    }
+
+    public static Wallet createWallet() {
+        return Wallet.builder()
+                .swapMoney(0L)
+                .isDeleted(false)
+                .build();
+    }
 }

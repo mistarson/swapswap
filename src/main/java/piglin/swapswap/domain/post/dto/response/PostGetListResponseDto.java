@@ -2,26 +2,26 @@ package piglin.swapswap.domain.post.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import piglin.swapswap.domain.post.constant.City;
 
-@Getter
-@NoArgsConstructor
-public class PostGetListResponseDto {
+public record PostGetListResponseDto(
+        Long postId,
 
-    Long postId;
+        Long memberId,
 
-    Long memberId;
+        City city,
 
-    String title;
+        String title,
 
-    Map<Integer, Object> imageUrl;
+        Map<Integer, Object> imageUrl,
 
-    LocalDateTime modifiedUpTime;
+        LocalDateTime modifiedUpTime,
 
-    Long viewCnt;
+        Long viewCnt,
 
-    Long favoriteCnt;
+        Long favoriteCnt,
 
-    boolean favoriteStatus;
+        boolean favoriteStatus
+) {
+
 }

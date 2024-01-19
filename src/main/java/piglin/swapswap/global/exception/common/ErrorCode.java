@@ -38,6 +38,7 @@ public enum ErrorCode {
     WRITE_ONLY_USER(401, "로그인 한 유저만 게시글을 작성할 수 있습니다"),
     UP_IS_NEED_ONE_DAY(400, "게시된지 하루, 업 한지 하루 이상 된 게시글만 업 할 수 있습니다."),
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
+    NO_MORE_POST_LIST(400, "더이상 불러올 게시글이 없습니다."),
 
     // 채팅
     NOT_FOUND_CHATROOM_EXCEPTION(401, "채팅방을 찾을 수 없습니다."),
@@ -50,7 +51,12 @@ public enum ErrorCode {
     INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
 
     //거래
+    CAN_NOT_UPDATE_ALLOW_STATUS(401, "수정 할 수 없는 상태입니다."),
+    NOT_FOUND_DEAL_EXCEPTION(401, "거래를 찾을 수 없습니다."),
     REQUEST_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 거래요청을 할 수 없습니다."),
+
+    // 지갑
+    LACK_OF_SWAP_MONEY_EXCEPTION(400, "내 지갑의 스왑머니가 부족하여 출금할 수 없습니다."),
 
     // S3
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),

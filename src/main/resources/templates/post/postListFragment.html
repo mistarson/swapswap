@@ -2,23 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
   <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
-       th:data-modified-time="${postDto.getModifiedUpTime}">
-    <a th:href="@{/posts/{postId}(postId=${postDto.getPostId})}">
+       th:data-modified-time="${postDto.modifiedUpTime}">
+    <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
       <div class="post-image-container">
-        <img th:src="${postDto.getImageUrl.get(0).toString}" alt="Post Image" class="post-image">
+        <img th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
       </div>
-      <h2 th:text="${postDto.getTitle}" class="post-title"></h2>
+      <h2 th:text="${postDto.title}" class="post-title"></h2>
       <div class="post-stats">
-        <span class="view-count">조회수 <span th:text="${postDto.getViewCnt}"></span></span>
-        <span class="favorite-count">찜 <span th:text="${postDto.getFavoriteCnt}"></span></span>
+        <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
+        <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
+        <span class="post-city"><span th:text="${postDto.city.getProvince.getName}"></span> / <span th:text="${postDto.city.getName}"></span></span>
         <span class="modified-date">올린 날짜 <span
-            th:text="${postDto.getModifiedUpTime}"></span></span>
+            th:text="${postDto.modifiedUpTime}"></span></span>
       </div>
     </a>
     <button
-        th:data-post-id="${postDto.getPostId}"
+        th:data-post-id="${postDto.postId}"
         onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-        th:text="${postDto.isFavoriteStatus} == true ? '💙' : '🤍'"
+        th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
         type="button"
     ></button>
   </div>

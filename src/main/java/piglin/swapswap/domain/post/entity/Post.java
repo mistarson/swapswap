@@ -21,6 +21,7 @@ import org.hibernate.annotations.Type;
 import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 
 
 @Entity
@@ -57,6 +58,10 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private City city;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -68,11 +73,13 @@ public class Post extends BaseTime {
         this.viewCnt++;
     }
 
-    public void updatePost(String title, String content, Map<Integer, Object> imageUrl, Category category) {
+    public void updatePost(String title, String content, Map<Integer, Object> imageUrl,
+            Category category, City city) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.city = city;
     }
 
     public void deletePost() {

@@ -1,14 +1,12 @@
 package piglin.swapswap.domain.post.mapper;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
-import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 
 public class PostMapper {
@@ -18,6 +16,7 @@ public class PostMapper {
 
         return Post.builder()
                    .category(requestDto.category())
+                   .city(requestDto.city())
                    .title(requestDto.title())
                    .content(requestDto.content())
                    .imageUrl(imageUrlMap)
@@ -29,32 +28,13 @@ public class PostMapper {
                    .build();
     }
 
-    public static PostGetResponseDto postToGetResponseDto(Post post,
-            Long favoriteCnt, boolean favoriteStatus) {
-
-        return PostGetResponseDto.builder()
-                                 .userId(post.getMember().getId())
-                                 .author(post.getMember().getNickname())
-                                 .title(post.getTitle())
-                                 .content(post.getContent())
-                                 .category(post.getCategory().getName())
-                                 .imageUrl(post.getImageUrl())
-                                 .viewCnt(post.getViewCnt())
-                                 .upCnt(post.getUpCnt())
-                                 .favoriteCnt(favoriteCnt)
-                                 .modifiedUpTime(post.getModifiedUpTime().format(DateTimeFormatter.ISO_DATE_TIME))
-                                 .favoriteStatus(favoriteStatus)
-                                 .build();
-    }
-
-
     public static void updatePost(Post post, PostUpdateRequestDto requestDto,
             Map<Integer, Object> imageUrlMap) {
 
-        post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category());
+        post.updatePost(requestDto.title(), requestDto.content(), imageUrlMap, requestDto.category(), requestDto.city());
     }
 
-    public static List<PostSimpleResponseDto> getPostSimpleInfoList(List<Post> postList) {
+    public static List<PostSimpleResponseDto> getPostSimpleInfoListByPostList(List<Post> postList) {
 
         return postList.stream().map((post) -> PostSimpleResponseDto.builder()
                         .postId(post.getId())
@@ -62,5 +42,14 @@ public class PostMapper {
                         .imageUrl(post.getImageUrl().get(0).toString())
                         .build())
                 .toList();
+    }
+
+    public static PostSimpleResponseDto getPostSimpleInfoListByPost(Post post) {
+
+        return PostSimpleResponseDto.builder()
+                        .postId(post.getId())
+                        .postTitle(post.getTitle())
+                        .imageUrl(post.getImageUrl().get(0).toString())
+                        .build();
     }
 }

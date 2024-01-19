@@ -5,7 +5,7 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 
 public class JwtInvalidException extends BusinessException {
 
-    public JwtInvalidException(ErrorCode errorCode, Throwable cause) {
-        super(errorCode, cause);
+    public JwtInvalidException() {
+        super(ErrorCode.INVALID_JWT_EXCEPTION);
     }
 }

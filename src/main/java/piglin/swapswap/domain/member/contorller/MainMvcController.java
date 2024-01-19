@@ -12,19 +12,17 @@ public class MainMvcController {
     public String login() {
         return "/member/login";
     }
+
     @GetMapping("/main")
     public String mainPage() {
         return "main";
-    }
-    @GetMapping("/userinfo")
-    public String userinfo() {
-        return "/member/userinfo";
     }
 
     @GetMapping("/myPage")
     public String myPage() {
         return "/member/myPage";
     }
+
     @GetMapping("/editProfile")
     public String editProfile() {
         return "/member/editProfile";
@@ -34,4 +32,17 @@ public class MainMvcController {
     public String unregister() {
         return "/member/unregister";
     }
+
+    @GetMapping("/error/errorpage")
+    public String handleError() {
+        return "/error/errorpage";
+    }
+
+    @GetMapping("/error/accessdenied")
+    public String handleAccessError() {
+        return "/error/accessdenied";
+    }
+
 }
+
+

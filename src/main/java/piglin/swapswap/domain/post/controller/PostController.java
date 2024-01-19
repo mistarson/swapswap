@@ -21,6 +21,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
@@ -51,7 +52,7 @@ public class PostController {
         }
 
         model.addAttribute("PostCreateRequestDto",
-                new PostCreateRequestDto(null, null, null, null));
+                new PostCreateRequestDto(null, null, null, null, null));
 
         return "post/postWrite";
     }
@@ -62,10 +63,10 @@ public class PostController {
             @AuthMember Member member,
             Model model
     ) {
+        PostGetResponseDto responseDto = postService.getPost(postId, member);
 
-        model.addAttribute("PostGetResponseDto", postService.getPost(postId, member));
-
-        model.addAttribute("PostId", postId);
+        model.addAttribute("postGetResponseDto", responseDto);
+        model.addAttribute("postId", postId);
 
         return "post/post";
     }
@@ -89,11 +90,7 @@ public class PostController {
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
-
-        if (postList.isEmpty()) {
-            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
-        }
+        List<PostGetListResponseDto> postList = postService.getPostListMore(member, cursorTime);
 
         model.addAttribute("PostGetListResponseDto", postList);
 
@@ -142,7 +139,7 @@ public class PostController {
         }
 
         model.addAttribute("PostUpdateRequestDto",
-                new PostUpdateRequestDto(null, null, null, null));
+                new PostUpdateRequestDto(null, null, null, null, null));
 
         model.addAttribute("PostId", postId);
 
@@ -165,13 +162,14 @@ public class PostController {
     public String searchPost(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String city,
             @RequestParam(required = false) LocalDateTime cursorTime,
             @AuthMember Member member,
             Model model
     ) {
 
         model.addAttribute("PostGetListResponseDto",
-                postService.searchPost(title, category, member, cursorTime));
+                postService.searchPost(title, category, city, member, cursorTime));
 
         return "post/postSearchList";
     }
@@ -180,12 +178,13 @@ public class PostController {
     public String searchPostMore(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String city,
             @RequestParam(required = false) LocalDateTime cursorTime,
             @AuthMember Member member,
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member,
+        List<PostGetListResponseDto> postList = postService.searchPostMore(title, category, city, member,
                 cursorTime);
 
         if (postList.isEmpty()) {
