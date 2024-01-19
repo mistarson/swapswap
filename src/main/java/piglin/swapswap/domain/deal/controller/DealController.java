@@ -134,4 +134,14 @@ public class DealController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/history")
+    public String getDealHistory(@AuthMember Member member,
+    Model model) {
+
+        model.addAttribute("dealHistoryResponseDto",dealService.getDealHistoryList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealHistory";
+    }
 }

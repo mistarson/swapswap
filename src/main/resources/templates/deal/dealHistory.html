@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<link rel="stylesheet" type="text/css" href="your-stylesheet.css">
+<body>
+<div layout:fragment="content">
+  <div class="deal-list">
+    <div class="author-dealList-name" th:text="${memberNickname}+'님의 스왑요청목록'">
+    </div>
+  </div>
+  <div class="deal-content-container">
+    <div class="deal-request-List">
+      <div th:each="dealHistoryDto : ${dealHistoryResponseDto}" class="deal-card">
+        <div class="deal-card-body">
+          <h2 th:text="${dealHistoryDto.createdTime()} +'거래 요청 날짜'" class="deal-nickname"></h2>
+          <h2 th:text="${dealHistoryDto.completedDealTime()} +'거래 완료 날짜'" class="deal-nickname"></h2>
+          <h2 th:text="${dealHistoryDto.dealStatus().getName()}" class="deal-status"></h2>
+          <a th:href="@{/deals/{dealId}(dealId=${dealHistoryDto.id()})}" class="deal-button">거래 요청 보기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
