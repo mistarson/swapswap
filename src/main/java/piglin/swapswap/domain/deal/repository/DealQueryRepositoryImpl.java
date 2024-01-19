@@ -24,8 +24,8 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public List<DealGetResponseDto> findAllMyDealRequest(Long memberId) {
 
-        return queryFactory.select(
-                Projections.constructor(DealGetResponseDto.class,
+        return queryFactory
+                .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
                         member.nickname,
                         deal.dealStatus))
@@ -39,8 +39,8 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public List<DealGetResponseDto> findAllMyDealResponse(Long memberId) {
 
-        return queryFactory.select(
-                Projections.constructor(DealGetResponseDto.class,
+        return queryFactory
+                .select(Projections.constructor(DealGetResponseDto.class,
                         deal.id,
                         member.nickname,
                         deal.dealStatus))
@@ -54,8 +54,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public DealDetailResponseDto findDealByIdToDetailResponseDto(Long dealId) {
         return queryFactory
-                .select(
-                        Projections.constructor(DealDetailResponseDto.class,
+                .select(Projections.constructor(DealDetailResponseDto.class,
                                 deal.id,
                                 deal.dealStatus,
                                 deal.firstUserId,
@@ -73,8 +72,7 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                                 deal.firstAllow,
                                 deal.secondAllow,
                                 deal.firstTake,
-                                deal.secondTake
-                        ))
+                                deal.secondTake))
                 .from(deal)
                 .where(deal.id.eq(dealId))
                 .fetchOne();

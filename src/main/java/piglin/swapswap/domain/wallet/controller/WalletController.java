@@ -12,6 +12,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.wallet.dto.request.DepositSwapMoneyRequestDto;
 import piglin.swapswap.domain.wallet.dto.request.WithdrawSwapMoneyRequestDto;
 import piglin.swapswap.domain.wallet.service.WalletService;
+import piglin.swapswap.domain.wallethistory.constant.HistoryType;
 import piglin.swapswap.global.annotation.AuthMember;
 
 @Controller
@@ -31,12 +32,13 @@ public class WalletController {
     }
 
     @PostMapping("/deposit/normal")
-    public String depositSwapMoney(
+    public String normalDepositSwapMoney(
             @Valid @ModelAttribute("depositSwapMoneyRequestDto")
             DepositSwapMoneyRequestDto depositSwapMoneyRequestDto,
             @AuthMember Member member) {
 
-        walletService.normalDepositSwapMoney(depositSwapMoneyRequestDto.swapMoney(),
+        walletService.depositSwapMoney(depositSwapMoneyRequestDto.swapMoney(),
+                HistoryType.NORMAL_DEPOSIT,
                 member.getId());
 
         return "redirect:/members/swap-money";
@@ -56,7 +58,8 @@ public class WalletController {
             WithdrawSwapMoneyRequestDto withdrawSwapMoneyRequestDto,
             @AuthMember Member member) {
 
-        walletService.normalWithdrawSwapMoney(withdrawSwapMoneyRequestDto.swapMoney(),
+        walletService.withdrawSwapMoney(withdrawSwapMoneyRequestDto.swapMoney(),
+                HistoryType.NORMAL_WITHDRAW,
                 member.getId());
 
         return "redirect:/members/swap-money";

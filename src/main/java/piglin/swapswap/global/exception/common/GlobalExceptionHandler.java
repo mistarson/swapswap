@@ -3,6 +3,7 @@ package piglin.swapswap.global.exception.common;
 import java.util.NoSuchElementException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -10,10 +11,12 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
 import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
+import piglin.swapswap.global.exception.post.NoMorePostListException;
 
 
 @Slf4j
@@ -95,6 +98,15 @@ public class GlobalExceptionHandler {
         log.error("HttpMediaTypeNotSupportedException", e);
 
         return new RedirectView("/error/errorpage");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NoMorePostListException.class)
+    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
+
+        log.error("NoMorePostListException", e);
+
+        return ResponseEntity.status(e.getStatus()).build();
     }
 
     @ExceptionHandler(Exception.class)

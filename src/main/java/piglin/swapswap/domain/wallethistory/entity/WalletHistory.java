@@ -36,8 +36,8 @@ public class WalletHistory extends BaseTime {
     @Column(nullable = false)
     private Long swapMoney;
 
-    @ManyToOne
-    @JoinColumn(name = "wallet_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "wallet_id", nullable = false)
     private Wallet wallet;
 
     @Column(nullable = false)
