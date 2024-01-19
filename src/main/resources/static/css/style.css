@@ -58,6 +58,43 @@ body {
   color: #00AADC;
 }
 
+.nav-city-select {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.nav-city-select:focus {
+  border-color: #00AADC;
+  outline: none;
+}
+
+/* 화살표 아이콘 추가 */
+.nav-city-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #333;
+  font-size: 10px;
+}
+
+.nav-city-select option {
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+}
+
 .swapswap-search-container {
   width: 500px;
   position: relative;

@@ -162,13 +162,14 @@ public class PostController {
     public String searchPost(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String city,
             @RequestParam(required = false) LocalDateTime cursorTime,
             @AuthMember Member member,
             Model model
     ) {
 
         model.addAttribute("PostGetListResponseDto",
-                postService.searchPost(title, category, member, cursorTime));
+                postService.searchPost(title, category, city, member, cursorTime));
 
         return "post/postSearchList";
     }
@@ -177,12 +178,13 @@ public class PostController {
     public String searchPostMore(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String city,
             @RequestParam(required = false) LocalDateTime cursorTime,
             @AuthMember Member member,
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.searchPostMore(title, category, member,
+        List<PostGetListResponseDto> postList = postService.searchPostMore(title, category, city, member,
                 cursorTime);
 
         if (postList.isEmpty()) {
