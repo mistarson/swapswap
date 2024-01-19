@@ -33,19 +33,19 @@ public class WalletServiceImplV1 implements WalletService {
 
     @Override
     @Transactional
-    public void normalDepositSwapMoney(Long depositSwapMoney, Long memberId) {
+    public void depositSwapMoney(Long depositSwapMoney, HistoryType historyType, Long memberId) {
 
         Member member = memberService.getMemberWithWallet(memberId);
 
         Wallet wallet = member.getWallet();
         wallet.depositSwapMoney(depositSwapMoney);
 
-        recordWalletHistory(depositSwapMoney, HistoryType.NORMAL_DEPOSIT);
+        recordWalletHistory(wallet, depositSwapMoney, historyType);
     }
 
     @Override
     @Transactional
-    public void normalWithdrawSwapMoney(Long withdrawSwapMoney, Long memberId) {
+    public void withdrawSwapMoney(Long withdrawSwapMoney, HistoryType historyType, Long memberId) {
 
         Member member = memberService.getMemberWithWallet(memberId);
 
@@ -55,7 +55,7 @@ public class WalletServiceImplV1 implements WalletService {
         }
         wallet.withdrawSwapMoney(withdrawSwapMoney);
 
-        recordWalletHistory(withdrawSwapMoney, HistoryType.NORMAL_WITHDRAW);
+        recordWalletHistory(wallet, withdrawSwapMoney, historyType);
     }
 
     private boolean impossibleWithdrawSwapMoney(Wallet wallet, Long withdrawSwapMoney) {
@@ -63,10 +63,11 @@ public class WalletServiceImplV1 implements WalletService {
         return wallet.getSwapMoney() < withdrawSwapMoney;
     }
 
-    private void recordWalletHistory(Long swapMoney, HistoryType historyType) {
+    private void recordWalletHistory(Wallet wallet, Long swapMoney, HistoryType historyType) {
 
-        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(swapMoney,
+        WalletHistory walletHistory = WalletHistoryMapper.createWalletHistory(wallet, swapMoney,
                 historyType);
+
         walletHistoryService.recordWalletHistory(walletHistory);
     }
 }
