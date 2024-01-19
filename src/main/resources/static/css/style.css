@@ -740,7 +740,7 @@ img {
   background-color: #2980b9;
 }
 
-.coupon:hover {
+.my-coupon:hover {
   background-color: #2980b9;
 }
 
@@ -1223,7 +1223,7 @@ input[type="number"] {
 }
 
 .buttons a.error-confirm:hover {
-  background-color: #00AADC;
+  background-color: #2980b9;
   text-decoration: none;
   color: #fff;
 }
@@ -1317,10 +1317,25 @@ input[type="number"] {
   text-align: center;
   font-size: 30px;
   padding: 10px;
+  margin-top: 50px;
+}
+
+.swap-money-content {
+  width: 500px;
+  margin: 50px auto;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.swap-money-content .swap-pay-money {
+  font-size: 23px;
 }
 
 .wallet-logo-image {
   width: 100px;
+  margin-top: 20px;
+  margin-bottom: 0px;
 }
 
 .swap-pay-title {
@@ -1334,6 +1349,12 @@ input[type="number"] {
   text-align: center;
   font-size: 30px;
   padding: 10px;
+  border: solid #ddd;
+  border-radius: 30px;
+  width: 400px;
+  margin-left: 35px;
+  height: 250px;
+  margin-bottom: 10px;
 }
 
 
@@ -1397,14 +1418,14 @@ input[type="number"] {
 }
 
 .deal-list a:hover {
-
   background-color: #2980b9;
 }
+
 
 .deposit-withdraw-btn {
   width: 190px;
   height: 260px;
-  margin: 20px;
+  margin: 10px;
   border: none;
 }
 
@@ -1447,6 +1468,49 @@ input[type="number"] {
   margin-top: 55px;
   text-align: center;
 }
+/*--------------accessdenied---------------*/
+.forbidden-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin-top: 150px;
+}
+.forbidden-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.forbidden-header p {
+  font-size: 25px;
+}
+
+.forbidden-content img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  margin-right: 30px;
+}
+
+.forbidden-buttons a:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.forbidden-buttons .forbidden-error-confirm {
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+  height: auto;
+  text-decoration: none;
+
+}
+
 
 /* deal request deal */
 
