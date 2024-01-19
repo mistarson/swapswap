@@ -21,6 +21,89 @@
       </div>
     </div>
     <div class="header-nav">
+      <select id="cityInput" class="nav-city-select">
+        <option value="">도시를 선택하세요...</option>
+
+        <option value="GWANGJU">기타 - 광주광역시</option>
+        <option value="DAEGU">기타 - 대구광역시</option>
+        <option value="DAEJEON">기타 - 대전광역시</option>
+        <option value="BUSAN">기타 - 부산광역시</option>
+        <option value="SEOUL">기타 - 서울특별시</option>
+        <option value="SEJONG">기타 - 세종특별자치시</option>
+        <option value="INCHEON">기타 - 인천광역시</option>
+
+        <option value="DONGHAE">강원도 - 동해시</option>
+        <option value="WONJU">강원도 - 원주시</option>
+        <option value="CHUNCHEON">강원도 - 춘천시</option>
+        <option value="TAEBACK">강원도 - 태백시</option>
+
+        <option value="GOYANG">경기도 - 고양시</option>
+        <option value="GWACHEON">경기도 - 과천시</option>
+        <option value="GWANGMYEONG">경기도 - 광명시</option>
+        <option value="GWANGJU_GYEONGGI">경기도 - 광주시</option>
+        <option value="GUNPO">경기도 - 군포시</option>
+        <option value="NAMYANGJU">경기도 - 남양주시</option>
+        <option value="DONGDUCHEON">경기도 - 동두천시</option>
+        <option value="BUCHEON">경기도 - 부천시</option>
+        <option value="SEONGNAM">경기도 - 성남시</option>
+        <option value="SUWON">경기도 - 수원시</option>
+        <option value="SIHEUNG">경기도 - 시흥시</option>
+        <option value="ANSAN">경기도 - 안산시</option>
+        <option value="ANSEONG">경기도 - 안성시</option>
+        <option value="ANYANG">경기도 - 안양시</option>
+        <option value="YANGSAN">경기도 - 양산시</option>
+        <option value="YANGJU">경기도 - 양주시</option>
+        <option value="YEOJU">경기도 - 여주시</option>
+        <option value="OSAN">경기도 - 오산시</option>
+        <option value="YONGIN">경기도 - 용인시</option>
+        <option value="UIJEONGBU">경기도 - 의정부시</option>
+        <option value="UIWANG">경기도 - 의왕시</option>
+        <option value="ICHEON">경기도 - 이천시</option>
+        <option value="PAJU">경기도 - 파주시</option>
+        <option value="PYEONGTAEK">경기도 - 평택시</option>
+        <option value="POCHEON">경기도 - 포천시</option>
+        <option value="HANAM">경기도 - 하남시</option>
+        <option value="HWASEONG">경기도 - 화성시</option>
+
+        <option value="GIMHAE">경상남도 - 김해시</option>
+        <option value="ANDONG">경상남도 - 안동시</option>
+        <option value="JINJU">경상남도 - 진주시</option>
+        <option value="CHANGWON">경상남도 - 창원시</option>
+        <option value="TONGYEONG">경상남도 - 통영시</option>
+
+        <option value="GYEONGSAN">경상북도 - 경산시</option>
+        <option value="GYEONGJU">경상북도 - 경주시</option>
+        <option value="GUMI">경상북도 - 구미시</option>
+        <option value="GIMCHEON">경상북도 - 김천시</option>
+        <option value="YEONGJU">경상북도 - 영주시</option>
+        <option value="YEONGCHEON">경상북도 - 영천시</option>
+        <option value="POHANG">경상북도 - 포항시</option>
+
+        <option value="NAJU">전라남도 - 나주시</option>
+        <option value="SUNCHEON">전라남도 - 순천시</option>
+        <option value="YEOSU">전라남도 - 여수시</option>
+
+        <option value="GUNSAN">전라북도 - 군산시</option>
+        <option value="GIMJE">전라북도 - 김제시</option>
+        <option value="NAMWON">전라북도 - 남원시</option>
+        <option value="IKSAN">전라북도 - 익산시</option>
+        <option value="JEONJU">전라북도 - 전주시</option>
+
+        <option value="SEOGWIPO">제주도 - 서귀포시</option>
+        <option value="JEJU">제주도 - 제주시</option>
+
+        <option value="GYERYONG">충청남도 - 계룡시</option>
+        <option value="NONSAN">충청남도 - 논산시</option>
+        <option value="DANGJIN">충청남도 - 당진시</option>
+        <option value="BORYEONG">충청남도 - 보령시</option>
+        <option value="SEOSAN">충청남도 - 서산시</option>
+        <option value="ASAN">충청남도 - 아산시</option>
+        <option value="CHEONAN">충청남도 - 천안시</option>
+
+        <option value="JECHEON">충청북도 - 제천시</option>
+        <option value="CHEONGJU">충청북도 - 청주시</option>
+        <option value="CHUNGJU">충청북도 - 충주시</option>
+      </select>
       <span sec:authorize="isAuthenticated()">
             <a href="/coupons/event" class="login-link coupon-event-link">쿠폰이벤트</a>
           </span>
@@ -46,12 +129,18 @@
   document.addEventListener('DOMContentLoaded', function() {
     var logo = document.querySelector('.header-logo a');
     var searchInput = document.querySelector('.swapswap-search-input');
+    var cityInput = document.getElementById('cityInput');
     var categoryLinks = document.querySelectorAll('.category-bar a');
 
     // URL에서 검색어와 카테고리 추출
     var urlParams = new URLSearchParams(window.location.search);
     var currentSearchValue = urlParams.get('title');
     var currentCategory = urlParams.get('category');
+    var selectedCity = localStorage.getItem('selectedCity');
+
+    if (selectedCity) {
+      cityInput.value = selectedCity;
+    }
 
     // 검색란에 파라미터 title 추가
     if (currentSearchValue) {
@@ -62,6 +151,7 @@
       logo.addEventListener('click', function() {
         localStorage.removeItem('searchValue');
         localStorage.removeItem('selectedCategory');
+        localStorage.removeItem('selectedCity');
       });
     }
 
@@ -108,6 +198,7 @@
     function updateSearch() {
       var searchValue = localStorage.getItem('searchValue') || '';
       var selectedCategory = localStorage.getItem('selectedCategory') || '';
+      var selectedCity = cityInput.value;
 
       var searchQuery = '/search/posts?';
       if (searchValue) {
@@ -116,8 +207,15 @@
       if (selectedCategory) {
         searchQuery += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
       }
+      if (selectedCity) {
+        searchQuery += (searchValue || selectedCategory ? '&' : '') + 'city=' + encodeURIComponent(selectedCity);
+      }
       window.location.href = searchQuery;
     }
+
+    cityInput.addEventListener('change', function() {
+      localStorage.setItem('selectedCity', this.value);
+    });
 
     const rainbowColors = ['red', 'orange', 'green', 'blue', 'indigo', 'violet'];
     let currentColorIndex = 0;

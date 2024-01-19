@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -139,30 +140,40 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+    public List<PostGetListResponseDto> searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime) {
 
         Category categoryCond = null;
+        City cityCond = null;
 
         if (category != null) {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
-        return postRepository.searchPostListWithFavorite(title, categoryCond, member, cursorTime);
+        if (city != null) {
+            cityCond = Enum.valueOf(City.class, city);
+        }
+
+        return postRepository.searchPostListWithFavorite(title, categoryCond, cityCond, member, cursorTime);
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPostMore(String title, String category, Member member,
+    public List<PostGetListResponseDto> searchPostMore(String title, String category, String city, Member member,
             LocalDateTime cursorTime) {
 
         Category categoryCond = null;
+        City cityCond = null;
 
         if (category != null) {
             categoryCond = Enum.valueOf(Category.class, category);
         }
 
+        if (city != null) {
+            cityCond = Enum.valueOf(City.class, city);
+        }
+
         List<PostGetListResponseDto> postList = postRepository.searchPostListWithFavorite(
-                title, categoryCond, member, cursorTime);
+                title, categoryCond, cityCond, member, cursorTime);
 
         isEmptyPostList(postList);
 

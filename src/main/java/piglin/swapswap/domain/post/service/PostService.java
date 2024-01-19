@@ -71,7 +71,7 @@ public interface PostService {
      * @param cursorTime
      * @return
      */
-    List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+    List<PostGetListResponseDto> searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime);
 
     /**
@@ -83,7 +83,7 @@ public interface PostService {
      * @param cursorTime
      * @return
      */
-    List<PostGetListResponseDto> searchPostMore(String title, String category, Member member,
+    List<PostGetListResponseDto> searchPostMore(String title, String category, String city, Member member,
             LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);

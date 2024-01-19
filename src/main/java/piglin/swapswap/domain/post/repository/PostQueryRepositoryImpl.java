@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
@@ -58,7 +59,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     @Override
     public List<PostGetListResponseDto> searchPostListWithFavorite(String titleCond,
-            Category categoryCond,
+            Category categoryCond, City cityCond,
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory.select(post)
@@ -73,7 +74,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                         favorite.post.count(),
                         favoriteStatus(member)))
                 .from(post)
-                .where(titleContains(titleCond), categoryEq(categoryCond), isNotDeleted(),
+                .where(titleContains(titleCond), categoryEq(categoryCond), cityEq(cityCond), isNotDeleted(),
                         lessThanCursorTime(cursorTime))
                 .leftJoin(favorite)
                 .on(favorite.post.eq(post))
@@ -160,6 +161,11 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     private BooleanExpression categoryEq(Category categoryCond) {
 
         return categoryCond != null ? post.category.eq(categoryCond) : null;
+    }
+
+    private BooleanExpression cityEq(City cityCond) {
+
+        return cityCond != null ? post.city.eq(cityCond) : null;
     }
 
     private BooleanExpression isNotDeleted() {
