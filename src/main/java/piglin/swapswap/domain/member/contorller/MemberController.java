@@ -110,7 +110,7 @@ public class MemberController {
     @GetMapping("/members/favorites/more")
     public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime, Model model) {
 
-        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostList(
+        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostListMore(
                 member, cursorTime);
         model.addAttribute("postGetListResponseDto", responseDtoList);
 
