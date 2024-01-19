@@ -84,7 +84,7 @@
     <div class="header">채팅</div>
     <div id="chatContainer" class="chat-container">
       <div id="chatRoomId" th:text="${chatRoomDto.id}" style="display: none;"></div>
-      <div id="currentUserId" style="display: none;" th:text="${#authentication.principal.username}"></div>
+      <div id="currentUserId" style="display: none;" th:text="${#authentication.principal.nickname}"></div>
       <div class="connecting">
         Connecting...
       </div>
