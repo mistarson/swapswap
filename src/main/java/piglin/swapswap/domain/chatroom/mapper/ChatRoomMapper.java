@@ -3,13 +3,10 @@ package piglin.swapswap.domain.chatroom.mapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
-import piglin.swapswap.domain.chatroom.repository.ChatRoomRepository;
 import piglin.swapswap.domain.chatroom_member.entity.ChatRoomMember;
-import piglin.swapswap.domain.chatroom_member.repository.ChatRoomMemberRepository;
-import piglin.swapswap.domain.member.entity.Member;
 
 public class ChatRoomMapper {
 

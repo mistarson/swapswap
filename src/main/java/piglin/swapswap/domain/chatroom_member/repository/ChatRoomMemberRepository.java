@@ -6,7 +6,7 @@ import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 import piglin.swapswap.domain.chatroom_member.entity.ChatRoomMember;
 import piglin.swapswap.domain.member.entity.Member;
 
-public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMember, Long> {
+public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMember, Long>, ChatRoomMemberQueryRepository {
 
     List<ChatRoomMember> findAllByMember(Member member);
 
