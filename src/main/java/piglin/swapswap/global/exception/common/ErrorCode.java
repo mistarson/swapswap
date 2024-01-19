@@ -47,6 +47,9 @@ public enum ErrorCode {
     //거래
     REQUEST_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 거래요청을 할 수 없습니다."),
 
+    // 지갑
+    LACK_OF_SWAP_MONEY_EXCEPTION(400, "내 지갑의 스왑머니가 부족하여 출금할 수 없습니다."),
+
     // S3
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),
     FAIL_UPLOAD(400, "이미지 업로드에 실패했습니다."),

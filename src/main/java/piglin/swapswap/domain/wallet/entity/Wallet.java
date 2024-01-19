@@ -34,11 +34,15 @@ public class Wallet extends BaseTime {
         swapMoney += depositSwapMoney;
     }
 
+    public void withdrawSwapMoney(Long withdrawSwapMoney) {
+
+        swapMoney -= withdrawSwapMoney;
+    }
+
     public static Wallet createWallet() {
         return Wallet.builder()
                 .swapMoney(0L)
                 .isDeleted(false)
                 .build();
     }
-
 }
