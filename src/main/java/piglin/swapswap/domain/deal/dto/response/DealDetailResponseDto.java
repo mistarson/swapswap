@@ -12,9 +12,9 @@ public record DealDetailResponseDto(
 
          String secondUserNickname,
 
-         Map<Integer, Object> firstPostIdList,
+         Map<Integer, Long> firstPostIdList,
 
-         Map<Integer, Object> secondPostIdList,
+         Map<Integer, Long> secondPostIdList,
 
          int firstExtraFee,
 

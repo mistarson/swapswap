@@ -11,8 +11,8 @@ public class DealMapper {
 
     public static Deal createDeal(DealCreateRequestDto requestDto, Long firstUserId) {
 
-        Map<Integer, Object> firstPostIdListMap = postIdListToMap(requestDto.firstPostIdList());
-        Map<Integer, Object> secondPostIdListMap = postIdListToMap(requestDto.secondPostIdList());
+        Map<Integer, Long> firstPostIdListMap = postIdListToMap(requestDto.firstPostIdList());
+        Map<Integer, Long> secondPostIdListMap = postIdListToMap(requestDto.secondPostIdList());
 
         return Deal.builder()
                 .dealStatus(DealStatus.REQUESTED)
@@ -29,9 +29,9 @@ public class DealMapper {
                 .build();
     }
 
-    private static Map<Integer, Object> postIdListToMap(List<Long> postIdList) {
+    private static Map<Integer, Long> postIdListToMap(List<Long> postIdList) {
 
-        Map<Integer, Object> postIdListMap = new HashMap<>();
+        Map<Integer, Long> postIdListMap = new HashMap<>();
 
         for (int i = 0; i < postIdList.size(); i++) {
             postIdListMap.put(i, postIdList.get(i));
