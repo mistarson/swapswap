@@ -37,7 +37,7 @@ public class DealController {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:deals/" + dealId;
+        return "redirect:/deals/" + dealId;
     }
 
     @GetMapping("/request")
@@ -64,8 +64,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member));
-        model.addAttribute("memberId", member.getId());
+        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealRequestDealListForm";
     }
@@ -75,8 +75,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member));
-        model.addAttribute("memberId", member.getId());
+        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealResponseDealListForm";
     }
@@ -92,6 +92,7 @@ public class DealController {
         model.addAttribute("firstMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.firstPostIdList()));
         model.addAttribute("secondMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
         model.addAttribute("memberId", member.getId());
+
         return  "deal/dealRequestDeal";
     }
 
