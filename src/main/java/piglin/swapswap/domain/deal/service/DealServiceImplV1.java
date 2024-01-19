@@ -124,17 +124,11 @@ public class DealServiceImplV1 implements DealService {
         }
 
         if(deal.getFirstUserId().equals(member.getId())) {
-
-            if(!deal.getFirstTake()) {
                 deal.updateDealFirstMemberTake();
-            }
         }
 
         if(deal.getSecondUserId().equals(member.getId())) {
-
-            if(!deal.getSecondTake()) {
                 deal.updateDealSecondMemberTake();
-            }
         }
 
         if(deal.getFirstTake() && deal.getSecondTake()) {

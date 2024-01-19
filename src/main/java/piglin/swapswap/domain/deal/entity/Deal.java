@@ -87,22 +87,22 @@ public class Deal extends BaseTime {
 
     public void updateDealFirstMemberAllow() {
 
-        this.firstAllow = !this.firstAllow;
+        firstAllow = !firstAllow;
     }
 
     public void updateDealSecondMemberAllow() {
 
-        this.secondAllow = !this.secondAllow;
+        secondAllow = !secondAllow;
     }
 
     public void updateDealFirstMemberTake() {
 
-        this.firstTake = true;
+        firstTake = true;
     }
 
     public void updateDealSecondMemberTake() {
 
-        this.secondTake = true;
+        secondTake = true;
     }
 
     public void updateDealStatus(DealStatus dealStatus) {

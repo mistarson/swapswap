@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
@@ -117,7 +118,7 @@ public class DealController {
 
         return "deal/dealUpdateForm";
     }
-
+    @ResponseBody
     @PatchMapping("/{dealId}/allow")
     public ResponseEntity<?> updateDealAllow(@PathVariable Long dealId, @AuthMember Member member) {
 
@@ -125,7 +126,7 @@ public class DealController {
 
         return ResponseEntity.ok().build();
     }
-
+    @ResponseBody
     @PatchMapping("/{dealId}/take")
     public ResponseEntity<?> takeDeal(@PathVariable Long dealId, @AuthMember Member member) {
 
