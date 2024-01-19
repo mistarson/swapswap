@@ -90,7 +90,7 @@ public class PostController {
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.getPostList(member, cursorTime);
+        List<PostGetListResponseDto> postList = postService.getPostListMore(member, cursorTime);
 
         model.addAttribute("PostGetListResponseDto", postList);
 
@@ -182,7 +182,7 @@ public class PostController {
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.searchPost(title, category, member,
+        List<PostGetListResponseDto> postList = postService.searchPostMore(title, category, member,
                 cursorTime);
 
         if (postList.isEmpty()) {

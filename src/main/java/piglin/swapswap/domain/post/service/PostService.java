@@ -40,6 +40,16 @@ public interface PostService {
             LocalDateTime cursorTime);
 
     /**
+     * 게시글 목록 조회 메소드입니다.
+     * 예외 처리를 위해 따로 분리하였습니다.
+     * @param member     favorite 상태를 나타내기 위한 member 매개변수 입니다.
+     * @param cursorTime
+     * @return List 형식의 PostGetListResponseDto 가 들어갑니다.
+     */
+    List<PostGetListResponseDto> getPostListMore(Member member,
+            LocalDateTime cursorTime);
+
+    /**
      * 게시글 찜 기능입니다.
      * favorite 은 토글로 작동합니다.
      * @param member Favorite 은 Member 와 Post 다대다 관계로, Favorite 에 member 를 등록하기 위해 사용합니다.
@@ -53,7 +63,27 @@ public interface PostService {
 
     void deletePost(Member member, Long postId);
 
+    /**
+     * 게시글 검색 기능입니다.
+     * @param title
+     * @param category
+     * @param member
+     * @param cursorTime
+     * @return
+     */
     List<PostGetListResponseDto> searchPost(String title, String category, Member member,
+            LocalDateTime cursorTime);
+
+    /**
+     * 게시글 검색 기능입니다
+     * 예외 처리를 위해 따로 분리 하였습니다.
+     * @param title
+     * @param category
+     * @param member
+     * @param cursorTime
+     * @return
+     */
+    List<PostGetListResponseDto> searchPostMore(String title, String category, Member member,
             LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);
@@ -61,6 +91,8 @@ public interface PostService {
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 
     List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
+
+    List<PostGetListResponseDto> getMyFavoritePostListMore(Member member, LocalDateTime cursorTime);
 
     List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(Map<Integer, Object> postIdList);
 }
