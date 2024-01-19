@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
-import piglin.swapswap.domain.favorite.service.FavoriteServiceImplV1;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
@@ -47,9 +43,6 @@ class PostServiceImplV1UnitTest {
 
     @Mock
     private PostRepository postRepository;
-
-    @Mock
-    private FavoriteServiceImplV1 favoriteService;
 
     @InjectMocks
     private PostServiceImplV1 postService;
