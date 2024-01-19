@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
 
         log.error("NoMorePostListException", e);
 
-        return ResponseEntity.status(400).build();
+        return ResponseEntity.status(e.getStatus()).build();
     }
 
     @ExceptionHandler(Exception.class)
