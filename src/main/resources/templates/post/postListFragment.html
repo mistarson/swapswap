@@ -11,6 +11,7 @@
       <div class="post-stats">
         <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
         <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
+        <span class="post-city"><span th:text="${postDto.city.getProvince.getName}"></span> / <span th:text="${postDto.city.getName}"></span></span>
         <span class="modified-date">올린 날짜 <span
             th:text="${postDto.modifiedUpTime}"></span></span>
       </div>
