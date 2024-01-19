@@ -165,12 +165,12 @@
 
     let senderDiv = document.createElement('div');
     senderDiv.textContent = message.senderNickname;
-    let textboxDiv = document.createElement('div');
-    textboxDiv.textContent = message.text;
+    let textBoxDiv = document.createElement('div');
+    textBoxDiv.textContent = message.text;
 
     messageElement.classList.add('chat');
     senderDiv.classList.add('sender');
-    textboxDiv.classList.add('textbox');
+    textBoxDiv.classList.add('textbox');
 
     if (message.senderId === currentUserId) {
       messageElement.classList.add('ch2');
@@ -179,7 +179,7 @@
     }
 
     messageElement.appendChild(senderDiv);
-    messageElement.appendChild(textboxDiv);
+    messageElement.appendChild(textBoxDiv);
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
