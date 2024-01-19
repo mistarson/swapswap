@@ -42,11 +42,11 @@ public class Deal extends BaseTime {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Integer, Object> firstPostIdList;
+    private Map<Integer, Long> firstPostIdList;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
-    private Map<Integer, Object> secondPostIdList;
+    private Map<Integer, Long> secondPostIdList;
 
     @Column(nullable = false)
     private int firstExtraFee;
@@ -69,7 +69,7 @@ public class Deal extends BaseTime {
     @Column
     private LocalDateTime completedDealTime;
 
-    public void updateDealFirst(int firstExtraFee, Map<Integer, Object> firstPostIdMap) {
+    public void updateDealFirst(int firstExtraFee, Map<Integer, Long> firstPostIdMap) {
 
         this.firstExtraFee = firstExtraFee;
         this.firstPostIdList = firstPostIdMap;
@@ -77,7 +77,7 @@ public class Deal extends BaseTime {
         this.secondAllow = false;
     }
 
-    public void updateDealSecond(int secondExtraFee, Map<Integer, Object> secondPostIdMap) {
+    public void updateDealSecond(int secondExtraFee, Map<Integer, Long> secondPostIdMap) {
 
         this.secondExtraFee = secondExtraFee;
         this.secondPostIdList = secondPostIdMap;

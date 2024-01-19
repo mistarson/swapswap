@@ -12,8 +12,8 @@ public class DealMapper {
 
     public static Deal createDeal(DealCreateRequestDto requestDto, Long firstUserId) {
 
-        Map<Integer, Object> firstPostIdListMap = postIdListToMap(requestDto.firstPostIdList());
-        Map<Integer, Object> secondPostIdListMap = postIdListToMap(requestDto.secondPostIdList());
+        Map<Integer, Long> firstPostIdListMap = postIdListToMap(requestDto.firstPostIdList());
+        Map<Integer, Long> secondPostIdListMap = postIdListToMap(requestDto.secondPostIdList());
 
         return Deal.builder()
                 .dealStatus(DealStatus.REQUESTED)
@@ -32,21 +32,21 @@ public class DealMapper {
 
     public static void updateDealFirst(Deal deal, DealUpdateRequestDto requestDto) {
 
-        Map<Integer, Object> firstPostIdMap = postIdListToMap(requestDto.postIdList());
+        Map<Integer, Long> firstPostIdMap = postIdListToMap(requestDto.postIdList());
 
         deal.updateDealFirst(requestDto.extraFee(), firstPostIdMap);
     }
 
     public static void updateDealSecond(Deal deal, DealUpdateRequestDto requestDto) {
 
-        Map<Integer, Object> secondPostIdMap = postIdListToMap(requestDto.postIdList());
+        Map<Integer, Long> secondPostIdMap = postIdListToMap(requestDto.postIdList());
 
         deal.updateDealSecond(requestDto.extraFee(), secondPostIdMap);
     }
 
-    private static Map<Integer, Object> postIdListToMap(List<Long> postIdList) {
+    private static Map<Integer, Long> postIdListToMap(List<Long> postIdList) {
 
-        Map<Integer, Object> postIdListMap = new HashMap<>();
+        Map<Integer, Long> postIdListMap = new HashMap<>();
 
         for (int i = 0; i < postIdList.size(); i++) {
             postIdListMap.put(i, postIdList.get(i));
