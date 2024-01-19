@@ -2,7 +2,7 @@ name: Swapswap Deploy
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
     types: [closed]
 
 jobs:
