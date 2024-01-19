@@ -3,7 +3,6 @@ package piglin.swapswap.domain.deal.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
