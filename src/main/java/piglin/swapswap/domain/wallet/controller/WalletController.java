@@ -21,7 +21,7 @@ public class WalletController {
 
     private final WalletService walletService;
 
-    @GetMapping("/normal-deposit")
+    @GetMapping("/deposit/normal")
     public String showNormalDepositSwapMoneyPage(Model model) {
 
         model.addAttribute("depositSwapMoneyRequestDto",
@@ -30,7 +30,7 @@ public class WalletController {
         return "wallet/depositSwapMoney";
     }
 
-    @PostMapping("/normal-deposit")
+    @PostMapping("/deposit/normal")
     public String depositSwapMoney(
             @Valid @ModelAttribute("depositSwapMoneyRequestDto")
             DepositSwapMoneyRequestDto depositSwapMoneyRequestDto,
@@ -42,7 +42,7 @@ public class WalletController {
         return "redirect:/members/swap-money";
     }
 
-    @GetMapping("/normal-withdraw")
+    @GetMapping("/withdraw/normal")
     public String showNormalWithdrawSwapMoneyPage(Model model) {
 
         model.addAttribute("withdrawSwapMoneyRequestDto", new WithdrawSwapMoneyRequestDto(null));
@@ -50,7 +50,7 @@ public class WalletController {
         return "wallet/withdrawSwapMoney";
     }
 
-    @PostMapping("/normal-withdraw")
+    @PostMapping("/withdraw/normal")
     public String normalWithdrawSwapMoney(
             @Valid @ModelAttribute("withdrawSwapMoneyRequestDto")
             WithdrawSwapMoneyRequestDto withdrawSwapMoneyRequestDto,
