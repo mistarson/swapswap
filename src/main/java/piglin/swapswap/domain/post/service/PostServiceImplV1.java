@@ -24,6 +24,7 @@ import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.post.NoMorePostListException;
 import piglin.swapswap.global.s3.S3ImageServiceImplV1;
 
 @Service
@@ -263,7 +264,7 @@ public class PostServiceImplV1 implements PostService {
     private void isEmptyPostList(List<PostGetListResponseDto> postList) {
 
         if (postList.isEmpty()) {
-            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
+            throw new NoMorePostListException();
         }
     }
 }

@@ -38,6 +38,7 @@ public enum ErrorCode {
     WRITE_ONLY_USER(401, "로그인 한 유저만 게시글을 작성할 수 있습니다"),
     UP_IS_NEED_ONE_DAY(400, "게시된지 하루, 업 한지 하루 이상 된 게시글만 업 할 수 있습니다."),
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
+    NO_MORE_POST_LIST(400, "더이상 불러올 게시글이 없습니다."),
 
     // 쿠폰
     INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
