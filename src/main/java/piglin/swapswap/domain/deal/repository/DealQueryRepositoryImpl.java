@@ -27,10 +27,10 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     public List<DealGetResponseDto> findAllMyDealRequest(Long memberId) {
 
         return queryFactory.select(
-                        Projections.constructor(DealGetResponseDto.class,
-                                deal.id,
-                                QMember.member.nickname,
-                                deal.dealStatus))
+                Projections.constructor(DealGetResponseDto.class,
+                        deal.id,
+                        QMember.member.nickname,
+                        deal.dealStatus))
                 .from(deal)
                 .where(deal.firstUserId.eq(memberId))
                 .join(QMember.member)
@@ -42,10 +42,10 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     public List<DealGetResponseDto> findAllMyDealResponse(Long memberId) {
 
         return queryFactory.select(
-                        Projections.constructor(DealGetResponseDto.class,
-                                deal.id,
-                                QMember.member.nickname,
-                                deal.dealStatus))
+                Projections.constructor(DealGetResponseDto.class,
+                        deal.id,
+                        QMember.member.nickname,
+                        deal.dealStatus))
                 .from(deal)
                 .where(deal.secondUserId.eq(memberId))
                 .join(QMember.member)
@@ -60,8 +60,10 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                         Projections.constructor(DealDetailResponseDto.class,
                                 deal.id,
                                 deal.dealStatus,
-                                JPAExpressions.select(member.nickname).from(member).where(member.id.eq(deal.firstUserId)),
-                                JPAExpressions.select(member.nickname).from(member).where(member.id.eq(deal.secondUserId)),
+                                JPAExpressions.select(member.nickname).from(member)
+                                        .where(member.id.eq(deal.firstUserId)),
+                                JPAExpressions.select(member.nickname).from(member)
+                                        .where(member.id.eq(deal.secondUserId)),
                                 deal.firstPostIdList,
                                 deal.secondPostIdList,
                                 deal.firstExtraFee,

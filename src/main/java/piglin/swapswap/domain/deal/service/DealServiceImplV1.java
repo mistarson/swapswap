@@ -56,17 +56,11 @@ public class DealServiceImplV1 implements DealService {
         return responseDto;
     }
 
-
-
-
     private void existMember(Long memberId) {
 
         if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
     }
-
-
-
 }
 
