@@ -56,6 +56,8 @@ public class DealServiceImplV1 implements DealService {
 
         DealDetailResponseDto responseDto = dealRepository.findDealByIdToDetailResponseDto(dealId);
 
+        isNullDealDetailResponseDto(responseDto);
+
         return responseDto;
     }
 
@@ -141,9 +143,17 @@ public class DealServiceImplV1 implements DealService {
     }
 
     private Deal findDeal(Long dealId) {
+
         return dealRepository.findById(dealId).orElseThrow(
-                () -> new RuntimeException("딜이 없습니다")
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
         );
+    }
+
+    private void isNullDealDetailResponseDto(DealDetailResponseDto responseDto) {
+
+        if (responseDto.id() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION);
+        }
     }
 
     private void existMember(Long memberId) {
