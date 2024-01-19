@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="header-nav">
-      <select id="cityInput" class="nav-city-select">
+      <select id="navCityInput" class="nav-city-select">
         <option value="">도시를 선택하세요...</option>
 
         <option value="GWANGJU">기타 - 광주광역시</option>
@@ -129,7 +129,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     var logo = document.querySelector('.header-logo a');
     var searchInput = document.querySelector('.swapswap-search-input');
-    var cityInput = document.getElementById('cityInput');
+    var navCityInput = document.getElementById('navCityInput');
     var categoryLinks = document.querySelectorAll('.category-bar a');
 
     // URL에서 검색어와 카테고리 추출
@@ -139,7 +139,7 @@
     var selectedCity = localStorage.getItem('selectedCity');
 
     if (selectedCity) {
-      cityInput.value = selectedCity;
+      navCityInput.value = selectedCity;
     }
 
     // 검색란에 파라미터 title 추가
@@ -198,7 +198,7 @@
     function updateSearch() {
       var searchValue = localStorage.getItem('searchValue') || '';
       var selectedCategory = localStorage.getItem('selectedCategory') || '';
-      var selectedCity = cityInput.value;
+      var selectedCity = navCityInput.value;
 
       var searchQuery = '/search/posts?';
       if (searchValue) {
@@ -213,7 +213,7 @@
       window.location.href = searchQuery;
     }
 
-    cityInput.addEventListener('change', function() {
+    navCityInput.addEventListener('change', function() {
       localStorage.setItem('selectedCity', this.value);
     });
 
