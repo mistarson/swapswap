@@ -1,0 +1,17 @@
+name: Swapswap Deploy
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [closed]
+
+jobs:
+  continuous-delivery:
+    if: github.event.pull_request.merged == true
+    name: Deploy
+    runs-on: [ self-hosted, label-development ]
+    steps:
+      - name: Docker run
+        run: |
+          sudo docker stop swapswap && docker rm talmorello && docker rmi ${{ secrets.DOCKERHUB_TAG }}
+          sudo docker run -d -p 80:8080 --name swapswap ${{ secrets.DOCKERHUB_TAG }}
