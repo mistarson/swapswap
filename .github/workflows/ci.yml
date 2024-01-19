@@ -2,7 +2,7 @@ name: Swapswap
 
 on:
   push:
-    branches: [ "feature/ci_cd" ]
+    branches: [ "feature/cicd" ]
     
 jobs:
   build-docker-image:
