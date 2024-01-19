@@ -37,4 +37,12 @@ public class MainMvcController {
     public String handleError() {
         return "/error/errorpage";
     }
+
+    @GetMapping("/error/accessdenied")
+    public String handleAccessError() {
+        return "/error/accessdenied";
+    }
+
 }
+
+

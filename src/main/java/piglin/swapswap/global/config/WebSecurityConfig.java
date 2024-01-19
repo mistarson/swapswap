@@ -28,6 +28,18 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+    static String[] whiteList = {
+            "/login/**",
+            "/error/errorpage",
+            "/",
+            "/posts/{postId}",
+            "/posts/{postId}/favorite",
+            "/posts/more",
+            "/search/**",
+            "/posts/write",
+            "/admin/**"
+    };
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
@@ -64,17 +76,14 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers("/login/**").permitAll()
-                        .requestMatchers("/error/errorpage").permitAll()
-                        .requestMatchers("/", "/posts/{postId}").permitAll()
-                        .requestMatchers("/posts/{postId}/favorite").permitAll()
-                        .requestMatchers("/posts/more").permitAll()
-                        .requestMatchers("/search/**").permitAll()
+                        .requestMatchers(whiteList).permitAll()
                         .requestMatchers("/posts/write").authenticated()
                         .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
                         .anyRequest().authenticated()
         );
+
         http.exceptionHandling(exceptionHandling -> exceptionHandling
+                .accessDeniedPage("/error/accessdenied")
                 .authenticationEntryPoint(authenticationEntryPoint)
         );
 
