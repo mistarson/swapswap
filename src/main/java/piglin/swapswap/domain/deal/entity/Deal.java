@@ -69,5 +69,20 @@ public class Deal extends BaseTime {
     @Column
     private LocalDateTime completedDealTime;
 
+    public void updateDealFirst(int firstExtraFee, Map<Integer, Long> firstPostIdMap) {
+
+        this.firstExtraFee = firstExtraFee;
+        this.firstPostIdList = firstPostIdMap;
+        this.firstAllow = false;
+        this.secondAllow = false;
+    }
+
+    public void updateDealSecond(int secondExtraFee, Map<Integer, Long> secondPostIdMap) {
+
+        this.secondExtraFee = secondExtraFee;
+        this.secondPostIdList = secondPostIdMap;
+        this.firstAllow = false;
+        this.secondAllow = false;
+    }
 }
 

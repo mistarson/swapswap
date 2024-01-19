@@ -14,13 +14,22 @@
       <div class="deal-detail-request-list">
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
+          <div th:text="'추가금: ' + ${dealDetailResponseDto.firstExtraFee()}" class="deal-detail-item"></div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-first-user-edit-button">수정하기</div>
+          <div class="deal-detail-first-user-edit-button"> <a
+               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
+            수정하기
+          </a>
+          </div>
         </div>
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-item"></div>
+          <div th:text="'추가금: ' + ${dealDetailResponseDto.secondExtraFee}" class="deal-detail-item"></div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-second-user-edit-button">수정하기</div>
+          <div class="deal-detail-second-user-edit-button"> <a
+               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
+            수정하기</a>
+          </div>
         </div>
       </div>
     </div>
