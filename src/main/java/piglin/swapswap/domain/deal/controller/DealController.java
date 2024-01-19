@@ -33,7 +33,7 @@ public class DealController {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:deals/" + dealId;
+        return "redirect:/deals/" + dealId;
     }
 
     @GetMapping("/request")
