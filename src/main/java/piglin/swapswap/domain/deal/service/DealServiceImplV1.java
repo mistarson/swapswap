@@ -53,7 +53,7 @@ public class DealServiceImplV1 implements DealService {
 
         DealDetailResponseDto responseDto = dealRepository.findDealByIdToDetailResponseDto(dealId);
         if (responseDto.id() == null) {
-            throw new RuntimeException("딜을 찾을 수 없습니다.");
+            throw new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION);
         }
 
         return responseDto;
