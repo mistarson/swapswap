@@ -102,6 +102,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                                 post.title,
                                 post.content,
                                 post.category,
+                                post.city,
                                 post.imageUrl,
                                 post.viewCnt,
                                 post.upCnt,

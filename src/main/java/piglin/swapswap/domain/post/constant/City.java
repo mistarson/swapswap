@@ -1,5 +1,8 @@
 package piglin.swapswap.domain.post.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum City {
     ANDONG("안동시", Province.NORTH_GYEONGSANG),
     ANSAN("안산시", Province.GYEONGGI),
