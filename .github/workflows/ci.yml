@@ -1,8 +1,8 @@
 name: Swapswap
 
 on:
-  push:
-    branches: [ "feature/cicd" ]
+  pull_request:
+    branches: [ feature/cicd ]
     
 jobs:
   build-docker-image:
