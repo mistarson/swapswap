@@ -15,25 +15,15 @@ spring:
 
 jwt:
   secret:
-    key: ${JWT_SECRET_KEY}
-
-
-  thymeleaf:
-    cache: false
-
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: true
+    key: ENC(vvNeDy5afcRKYPy6Pdy2uIGfROZ6ZVGaYEBgaBPs4cttxYsNvS8PD5Xv9DNMC8tU/gxMtW2wHf4M7igHTjZBLUazfi8m3OyxWbDjXIyup4HAfvN9YrMmnAVTN1fAMKsC)
 
 cloud:
   aws:
     s3:
-      bucket: ${S3_BUCKET}
+      bucket: ENC(MVNfeB0sW8i0nQZv2Jy+eBWczZ1PdGVb)
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key: ENC(/7Arz0iQHZf1toVV3pwOQfQRXCePIfnPtF5JQh1jO68=)
+      secret-key: ENC(GRUuScJFKz9/v2bc/rFIbS3S0LafnAFjX7Neajd3jdSV7/3m48wRVdK0gfzg71tbvA3ccB9+NYg=)
     region:
       static: ap-northeast-2
       auto: false
