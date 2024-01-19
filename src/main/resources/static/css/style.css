@@ -1364,7 +1364,7 @@ input[type="number"] {
   background-color: #2980b9;
 }
 
-.deal-list{
+.deal-list {
   width: 1500px;
   border-bottom: solid #808080;
   margin-left: 500px;
@@ -1372,7 +1372,7 @@ input[type="number"] {
   flex-direction: column;
 }
 
-.author-dealResponseList-name{
+.author-dealResponseList-name {
   font-size: 40px;
   font-weight: bold;
   color: #333;
@@ -1382,7 +1382,7 @@ input[type="number"] {
   margin-top: 30px;
 }
 
-.deal-response-button{
+.deal-response-button {
   border: 2px solid #ccc;
   border-radius: 40px;
   padding: 10px;
@@ -1399,8 +1399,8 @@ input[type="number"] {
 .deal-list a:hover {
 
   background-color: #2980b9;
- }
-  
+}
+
 .deposit-withdraw-btn {
   width: 190px;
   height: 260px;
@@ -1448,3 +1448,84 @@ input[type="number"] {
   text-align: center;
 }
 
+/* deal request deal */
+
+.deal-detail-card {
+  background-color: #fff;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Style for the card header */
+.deal-detail-card-body {
+  background-color: #007bff; /* Example header background color */
+  color: #fff; /* Example header text color */
+  padding: 20px;
+  font-size: 1.5rem;
+}
+
+/* Flex container for deal content */
+.deal-detail-content-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.deal-detail-request-list {
+  width: 100%;
+}
+
+/* Style for each list container */
+.deal-detail-list-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Style for the swap item titles */
+.deal-detail-item {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Buttons for editing, positioned at the top-right corner */
+.deal-detail-first-user-edit-button,
+.deal-detail-second-user-edit-button {
+  position: absolute;
+  bottom: 10px; /* 컨테이너 하단에서 10px 위 */
+  right: 10px; /* 컨테이너 오른쪽에서 10px 왼쪽 */
+  background-color: #28a745; /* Example button background color */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.deal-detail-post-image {
+  width: auto; /* 이미지 원본 크기에 맞게 너비 설정 */
+  margin-right: 20px;
+  flex-direction: row; /* 이미지들을 가로로 배치 */
+  height: 200px; /* 예시 높이, 실제 사용할 높이에 맞게 조정 필요 */
+  flex-shrink: 0; /* 이미지 크기가 flex container에 의해 축소되는 것을 방지 */
+  object-fit: cover; /* 이미지 비율 유지하면서 높이에 맞게 조절 */
+  border-radius: 4px; /* 이미지 모서리 둥글게 */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .deal-content-container {
+    flex-direction: column;
+  }
+  .deal-list-container {
+    width: 100%;
+    margin: 5px 0; /* Adjust margin for vertical layout */
+  }
+  .deal-first-user-edit-button,
+  .deal-second-user-edit-button {
+    top: initial;
+    bottom: 20px;
+  }
+}

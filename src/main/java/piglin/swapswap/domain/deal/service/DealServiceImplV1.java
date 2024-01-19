@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
@@ -36,15 +37,32 @@ public class DealServiceImplV1 implements DealService {
     }
 
     @Override
-    public List<DealGetResponseDto> getMyRequestDealList(Long meberId) {
+    public List<DealGetResponseDto> getMyRequestDealList(Long memberId) {
 
-        return dealRepository.findAllMyDealRequest(meberId);
+        return dealRepository.findAllMyDealRequest(memberId);
     }
 
     @Override
-    public List<DealGetResponseDto> getMyResponseDealList(Long meberId) {
+    public List<DealGetResponseDto> getMyResponseDealList(Long memberId) {
 
-        return dealRepository.findAllMyDealResponse(meberId);
+        return dealRepository.findAllMyDealResponse(memberId);
+    }
+
+    @Override
+    public DealDetailResponseDto getDeal(Long dealId, Member member) {
+
+        DealDetailResponseDto responseDto = dealRepository.findDealByIdToDetailResponseDto(dealId);
+
+        isNullDealDetailResponseDto(responseDto);
+
+        return responseDto;
+    }
+
+    private void isNullDealDetailResponseDto(DealDetailResponseDto responseDto) {
+
+        if (responseDto.id() == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION);
+        }
     }
 
     private void existMember(Long memberId) {
@@ -53,7 +71,5 @@ public class DealServiceImplV1 implements DealService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
     }
-
-
 }
 
