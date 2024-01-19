@@ -37,7 +37,6 @@ public class WebSecurityConfig {
             "/posts/more",
             "/search/**",
             "/posts/write",
-            "/admin/**"
     };
 
     @Bean
