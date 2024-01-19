@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+
+
+<head>
+  <title>SwapSwap</title>
+  <link rel="icon" href="/images/logo/swapswaphomepagelogo.png">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="signin">
+    <div class="signin__card">
+      <h2>
+        로그인
+      </h2>
+      <div class="actions">
+        <a href="https://kauth.kakao.com/oauth/authorize?client_id=a304535271497a06332e50e9eec191ab&redirect_uri=http://localhost:8080/login/kakao/callback&response_type=code">
+          <img src="/images/kakaologinlogo.png" alt="Kakao Logo">
+          <p>카카오로 간편 로그인</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

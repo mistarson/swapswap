@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+
+
+<head>
+  <title>SwapSwap</title>
+  <link rel="icon" href="/images/logo/swapswaphomepagelogo.png">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="overflow:hidden">
+<div layout:fragment="content">
+  <div class="forbidden-header">
+    <div class="forbidden-content">
+      <img src="/images/forbidden.PNG"/>
+      <h1>접근이 거부되었습니다.</h1><br>
+    </div>
+    <p>403 Forbidden</p>
+    <div class="forbidden-buttons" style="margin-top: 100px">
+      <a href="/" class="forbidden-error-confirm">메인페이지로 이동</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

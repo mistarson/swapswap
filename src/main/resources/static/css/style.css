@@ -1,0 +1,1791 @@
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'S-CoreDream-3Light';
+}
+
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px #E5E5E5 solid;
+  position: relative;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  height: 100px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  padding: 10px 50px;
+}
+
+.header-logo {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.header-logo img {
+  height: 70px;
+  width: 140px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 0 10px; /* 조정된 여백 */
+}
+
+.nav-container a,
+.nav-container .swapswap-search-container {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-container a:hover {
+  color: #00AADC;
+}
+
+.nav-city-select {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.nav-city-select:focus {
+  border-color: #00AADC;
+  outline: none;
+}
+
+/* 화살표 아이콘 추가 */
+.nav-city-select::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #333;
+  font-size: 10px;
+}
+
+.nav-city-select option {
+  padding: 10px;
+  background-color: #fff;
+  color: #333;
+}
+
+.swapswap-search-container {
+  width: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.swapswap-search-input {
+  width: 100%; /* 수정: 입력란이 컨테이너 크기에 맞게 조정됩니다. */
+  padding: 10px 40px 10px 15px; /* 오른쪽 패딩을 버튼 너비만큼 늘립니다. */
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: #EBEBEB;
+  height: 20px; /* 입력란의 높이를 버튼과 동일하게 조정 */
+}
+
+.swapswap-search-input:focus {
+  border-color: #00AADC; /* 포커스 상태일 때의 테두리 색상 */
+  outline: none; /* 기본 브라우저 아웃라인 제거 */
+}
+
+.swapswap-search-button {
+  position: absolute;
+  right: 0; /* 수정: 오른쪽 패딩에 맞게 조정 */
+  border: 0;
+  border-radius: 20px; /* 오른쪽 모서리만 둥글게 설정 */
+  height: 35px; /* 버튼의 높이를 입력란과 동일하게 설정 */
+  width: 40px; /* 너비를 40px로 설정하여 정사각형으로 만듭니다. */
+  cursor: pointer;
+  background: #00AADC;
+  margin-right: 4%;
+  color: white;
+  text-align: center;
+  line-height: 50%; /* 버튼 안의 내용을 수직 정렬 */
+}
+
+.swapswap-search-button:hover {
+  background-color: #049cb3;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: black;
+}
+
+.header-nav a:hover {
+  font-weight: 700;
+}
+
+.login-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  transition: color 0.3s;
+  margin-left: auto;
+}
+
+.category-bar {
+  background-color: #ffffff;
+  border-bottom: 1px solid #E5E5E5; /* 하단 경계선 */
+  padding: 10px 0; /* 상하 패딩 */
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 가로축 중앙 정렬 */
+  align-items: center; /* 세로축 중앙 정렬 */
+  overflow: auto;
+}
+
+.category-bar a {
+  padding: 8px 16px; /* 링크 패딩 */
+  border-radius: 20px; /* 둥근 모서리 */
+  text-decoration: none;
+  font-size: 13px;
+  color: #333;
+  text-align: center;
+  transition: background-color 0.3s;
+  margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+.category-bar a:hover {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.category-bar a.active {
+  background-color: #00AADC; /* 호버 효과 */
+  color: #ffffff;
+}
+
+.post-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.post-card {
+  position: relative;
+  width: calc(33.333% - 40px);
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 게시글 카드 링크에 대한 스타일 */
+.post-card a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 텍스트 색상을 상속받음 */
+}
+
+.post-card a:hover {
+  text-decoration: none; /* 호버 상태에서도 밑줄이 나타나지 않도록 함 */
+  color: inherit; /* 호버 상태에서도 텍스트 색상을 상속받음 */
+}
+
+.post-card button {
+  position: absolute;
+  top: 10px; /* 버튼을 상단으로부터 10px 떨어지게 위치 */
+  right: 10px; /* 버튼을 우측으로부터 10px 떨어지게 위치 */
+  background: none; /* 기본 배경 제거 */
+  border: none; /* 기본 테두리 제거 */
+  font-size: 1.5em; /* 아이콘 크기 */
+  cursor: pointer; /* 마우스 오버시 커서 변경 */
+}
+
+.post-image-container {
+  height: 300px; /* 이미지 컨테이너의 고정 높이 설정 */
+  width: 100%; /* 이미지가 전체 너비를 차지하도록 설정 */
+  overflow: hidden; /* 이미지가 컨테이너를 벗어나지 않도록 설정 */
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.post-title {
+  font-size: 1.5em; /* 제목 크기 */
+  color: #333; /* 제목 색상 */
+  margin: 16px 0; /* 상하 여백 */
+}
+
+.post-details {
+  font-size: 1em; /* 상세정보 크기 */
+  color: #666; /* 상세정보 색상 */
+  margin-bottom: 16px; /* 하단 여백 */
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.text-muted {
+  color: #666;
+  font-size: 0.8em;
+}
+
+
+.post-stats {
+  display: flex;
+  justify-content: space-around; /* 내용을 공간에 균등하게 분배 */
+  align-items: center;
+  padding: 10px;
+  font-size: 0.9em; /* 글꼴 크기 축소 */
+  color: #666; /* 회색 글꼴 */
+}
+
+.view-count,
+.favorite-count,
+.modified-date {
+  margin: 5px 0;
+}
+
+.modified-date:before {
+  content: ''; /* 날짜 앞에는 점을 추가하지 않음 */
+  margin-right: 0;
+}
+
+/**
+포스트 Write CSS
+ */
+
+.write-bar-container {
+  color: #333333;
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
+  margin: 0 auto;
+}
+
+.write-bar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #E5E5E5;
+  padding: 10px 0;
+}
+
+.write-bar-explain {
+  flex-basis: 20%;
+  font-size: 40px;
+  text-align: center;
+}
+
+.write-bar-title-input {
+  flex-grow: 1;
+  height: 80%;
+  font-size: 30px;
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.write-bar-title-input:focus {
+  border-color: #00AADC;
+  box-shadow: 0 0 8px rgba(0, 170, 220, 0.4);
+  outline: none;
+}
+
+
+.write-content-container {
+  width: 80%;
+  max-width: 1000px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.write-content-input {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 200px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 18px;
+  line-height: 1.6;
+  background-color: #ffffff;
+  color: #333333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  .write-content-input {
+    padding: 15px;
+  }
+}
+
+.write-content-input:focus {
+  border-color: #00AADC;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 170, 220, 0.5);
+}
+
+.write-complete-button {
+  color: #ffffff;
+  background-color: #00AADC;
+  height: 50px;
+  border-radius: 25px; /* 더 둥근 모서리로 변경 */
+  padding: 0 30px; /* 버튼의 내부 좌우 패딩을 넉넉하게 조정 */
+  border: none; /* 테두리 제거 */
+  font-size: 18px; /* 폰트 사이즈 조정 */
+  font-weight: bold; /* 폰트 굵기 변경 */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+  align-self: flex-end; /* 자신만 오른쪽 하단 정렬 */
+  margin-left: 88%;
+}
+
+.write-complete-button:hover {
+  background-color: #0077b3; /* 호버 시 색상 변경 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 강조 */
+}
+
+.write-bar-image-input {
+  flex-grow: 1;
+  height: 50px; /* 높이 조정 */
+  border-radius: 25px; /* 더 둥근 모서리로 변경 */
+  border: 1px solid #ddd; /* 테두리 스타일 조정 */
+  padding: 5px 20px; /* 좌우 패딩 추가 */
+  font-size: 16px; /* 폰트 사이즈 적당히 조정 */
+  line-height: 1.5; /* 줄 간격 조정 */
+  background-color: #f8f8f8; /* 배경색 변경 */
+  color: #333; /* 글자색 변경 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* 부드러운 전환 효과 */
+  display: inline-block; /* 다른 인라인 요소들과 같은 줄에 표시 */
+  cursor: pointer; /* 마우스 오버 시 포인터 커서로 변경 */
+}
+
+.write-bar-image-input:hover, .write-bar-image-input:focus {
+  border-color: #00AADC; /* 호버 및 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 6px rgba(0, 170, 220, 0.3); /* 호버 및 포커스 시 그림자 강조 */
+  outline: none; /* 기본 아웃라인 제거 */
+}
+
+.category-button-container {
+  flex-basis: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.category-button {
+  padding: 8px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #E5E5E5;
+  margin: 5px;
+  flex: 0 1 auto;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+.active, .category-button:hover {
+  background-color: #00AADC;
+  color: #ffffff;
+}
+
+.styled-select {
+  flex-grow: 1;
+  height: 80%;
+  font-size: 30px;
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none; /* 네이티브 셀렉트 스타일 제거 */
+  -webkit-appearance: none; /* 크롬, 사파리 적용 */
+  -moz-appearance: none; /* 파이어폭스 적용 */
+}
+
+/* 셀렉트 화살표를 사용자 정의 스타일로 변경하는 추가 스타일 (선택 사항) */
+.styled-select::-ms-expand {
+  display: none; /* IE/Edge에서 기본 화살표 숨김 */
+}
+
+/* 셀렉트 박스 포커스 시 스타일 */
+.styled-select:focus {
+  border-color: #00AADC;
+  box-shadow: 0 0 6px rgba(0, 170, 220, 0.3);
+  outline: none;
+}
+
+
+
+.post-content-container {
+  height: 400px;
+}
+
+.post-content-image-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.post-content-image-slider {
+  height: auto; /* 높이는 필요에 따라 조정 */
+  overflow: hidden;
+}
+
+.post-content-image {
+  height: 400px;
+  flex: 0 0 auto;
+  justify-content: center; /* 이미지를 가운데 정렬합니다 */
+  align-items: center; /* 이미지를 세로 방향으로 가운데 정렬합니다 */
+  object-fit: scale-down; /* 이미지가 컨테이너를 채우도록 하면서 비율을 유지 */
+}
+
+/* 슬라이더의 이전/다음 버튼 */
+.post-slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* 이전 버튼 위치 */
+.post-prev-button {
+  left: 10px;
+}
+
+/* 다음 버튼 위치 */
+.post-next-button {
+  right: 10px;
+}
+
+.post-content-details {
+  margin-top: 10px;
+  border: #333333 1px solid;
+  border-radius: 20px;
+}
+
+.post-author-favorite-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+}
+
+.author-details .author-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.favorite-action button {
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid #333333;
+  color: white;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.favorite-action button:hover {
+  border: 1px solid #00AADC;
+}
+
+.post-up-button a, .post-update-button a, .post-delete-button a, .post-request-button a {
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: black;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+  border: 1px solid #333333;
+  display: inline-block;
+}
+
+/* 수정 버튼 스타일 */
+.post-update-button a {
+  background-color: #ffffff; /* 녹색 배경 */
+}
+
+.post-update-button a:hover {
+  color: white;
+  background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+/* 삭제 버튼 스타일 */
+.post-delete-button a {
+  background-color: #ffffff;
+}
+
+.post-delete-button a:hover {
+  color: white;
+  background-color: #da190b; /* 호버 시 색상 변경 */
+}
+
+
+.post-title-meta-section {
+  padding: 20px;
+}
+
+.post-title-meta-section .post-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.post-meta {
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.post-content-body {
+  padding: 0 20px 20px;
+  line-height: 1.6;
+}
+
+.post-content-stats {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 20px;
+}
+
+.post-content-actions button:hover {
+  background-color: #007BFF;
+}
+
+.post-content-actions div {
+  font-size: 0.9em;
+  color: #666;
+}
+
+
+/*-----login-----*/
+.signin {
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.signin .signin__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 6px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+
+.signin__card h2 {
+  padding: 30px;
+  text-align: center;
+}
+
+.signin__card .actions {
+  display: flex;
+  border-top: 1px solid #ddd;
+  height: 400px;
+}
+
+.signin__card .actions img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 20px;
+  float: left;
+  vertical-align: middle;
+}
+
+.signin__card .actions p {
+  font-size: 18px;
+  margin-top: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 50px;
+  font-weight: 900;
+}
+
+.signin__card .actions a {
+  padding: 5px;
+  margin: 20px 20px;
+  height: 70px;
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  background-color: #fddc3a;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.signin__card .actions a:last-child {
+  border-right: none;
+}
+
+.signin__card .actions a:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions a {
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
+/*------myPage 중 유저정보-------*/
+.myPage_profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.myPage_profile .myPage_profile_title {
+  width: 500px;
+  margin-bottom: 40px;
+  font-size: 25px;
+  font-weight: 900;
+  border-bottom: 1px solid #ccc;
+}
+
+.myPage_profile .profile_userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 400px;
+  font-size: 20px;
+}
+
+.profile_userinfo .myPage_nickname,
+.profile_userinfo .myPage_email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.profile_userinfo .myPage_nickname .nick {
+  width: 100px;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.profile_userinfo .myPage_email .e {
+  margin-left: 20px;
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .myPage_nickname .name,
+.profile_userinfo .myPage_email .mail {
+  width: 180px;
+  text-align: left;
+}
+
+.profile_userinfo .nickname .name,
+.profile_userinfo .myPage_email .mail {
+  text-align: left;
+  margin-left: auto;
+}
+
+
+/*---------myPage 중 확인내역--------------*/
+.check_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.check_list > div {
+  margin: 10px 0;
+}
+
+.check_list div {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 250px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+}
+
+.check_list .myPage_edit_profile {
+  margin-top: 50px;
+
+}
+
+.transaction_history:hover {
+  background-color: #2980b9;
+}
+
+.my_wallet:hover {
+  background-color: #2980b9;
+}
+
+.my-coupon:hover {
+  background-color: #2980b9;
+}
+
+.favorite:hover {
+  background-color: #2980b9;
+}
+
+.myPage_edit_profile:hover {
+  background-color: #2980b9;
+}
+
+.check_list .unregister {
+  background-color: #5D676A;
+  text-align: center;
+}
+
+.check_list .unregister:hover {
+  background-color: #444;
+}
+
+.check_list a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+
+/*----------editProfile-------------*/
+.edit_profile .edit p.label {
+  display: inline-block;
+  margin: 0;
+}
+
+.edit_profile {
+  margin-top: 120px;
+  padding: 100px 0 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: contain;
+}
+
+.edit_profile__card {
+  width: 500px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+
+.edit_profile__card h2 {
+  padding: 30px;
+  text-align: center;
+  margin: 0 30px 0 30px;
+
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.edit .label {
+  display: flex;
+  align-items: center;
+  border-top: 2px #555 solid;
+  width: 400px;
+}
+
+.edit h2 {
+  margin-right: 10px;
+}
+
+.edit span.edit_nickname {
+  font-weight: bold;
+  width: 150px;
+  text-align: center;
+  color: #808080;
+  cursor: pointer;
+  border-bottom: 2px solid #808080;
+
+
+}
+
+.edit .buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.buttons .editbutton {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+
+.edit .buttons a.editbutton:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a.cancelbutton:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .cancelbutton {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+
+}
+
+.edit .buttons .cancelbutton a:hover {
+  background-color: #b0b0b0;
+  text-decoration: none;
+  color: #fff;
+}
+
+.edit .buttons a {
+  margin: 10px;
+}
+
+.buttons a {
+  color: white;
+  text-decoration: none;
+}
+
+.check_list a:visited {
+  color: white;
+}
+
+/*-------------unregister--------------*/
+.unregister {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  margin-top: 100px;
+}
+
+.unregister-content {
+  max-width: 800px;
+}
+
+.unregister p {
+  border-bottom: 2px solid #ccc;
+  text-align: left;
+  width: 800px;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.unregister-content ul {
+  list-style-type: disc;
+  padding: 0;
+  margin-left: 50px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.unregister-buttons a {
+  margin-left: 10px;
+}
+
+.unregister-buttons .unregister-cancel {
+  background-color: #00aadc;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-cancel:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister-buttons a:visited {
+  color: white;
+}
+
+.unregister-buttons .unregister-ok {
+  background-color: #cdcdcd;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+  margin: 10px;
+}
+
+.unregister-buttons a.unregister-ok:hover {
+  background-color: #bfbfbf;
+  text-decoration: none;
+  color: #fff;
+}
+
+.unregister .unregister-buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.unregister-buttons a {
+  margin: 10px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+}
+
+
+/*------coupon------*/
+
+
+.header-nav .coupon-event-link {
+  color: red;
+}
+
+.extra-coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.coupon-issue-btn {
+  top: 50%;
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 30px;
+  min-width: 120px;
+  font-size: 30px;
+}
+
+.coupon-issue-btn:hover {
+  background-color: #171264;
+  transition: 0.7s;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.author-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#postContent,
+#postSecondContent {
+  margin-bottom: 20px;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+#editButton,
+#editButton2,
+#requestDealButton {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#editButton:hover,
+#editButton2:hover,
+#requestDealButton:hover {
+  background-color: #45a049;
+}
+
+.post {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #87CEEB;
+  text-align: center;
+  background-color: #F0F8FF;
+}
+
+.post img {
+  width: 300px;
+  height: 300px;
+  border: 2px solid #87CEEB;
+  margin-top: 10px;
+}
+
+.post button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.post button:hover {
+  background-color: #45a049;
+}
+
+.request-post,
+.request-second-post {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #87CEEB;
+  text-align: center;
+  background-color: #F0F8FF;
+}
+
+.request-post img,
+.request-second-post img {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #87CEEB;
+  margin-top: 10px;
+}
+
+.request-post button,
+.request-second-post button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.request-post button:hover,
+.request-second-post button:hover {
+  background-color: #45a049;
+}
+
+#firstExtraFee,
+#secondExtraFee {
+  width: 150px;
+  height: 20px;
+  font-size: 12px;
+}
+
+.header-nav .coupon-event-link {
+  transition: color 1s;
+}
+
+.extra-coupon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+}
+
+.coupon-issue-btn {
+  top: 50%;
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 30px;
+  min-width: 120px;
+  font-size: 30px;
+}
+
+.coupon-issue-btn:hover {
+  background-color: #171264;
+  transition: 0.7s;
+}
+
+.coupon-event-img {
+  width: 800px;
+}
+
+.coupon-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.coupon-card {
+  width: 300px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.coupon-card-body {
+  margin-left: 20px;
+}
+
+.coupon-list-box {
+  margin: 20px;
+  font-size: 50px;
+  border-bottom: solid;
+  width: 80%;
+}
+
+/*------------errorPage--------*/
+.error {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  margin-top: 150px;
+  flex-direction: column;
+}
+.error .Oops {
+  position: fixed;
+  top: 15%;
+  right: 35%;
+}
+.error-image img {
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 5px
+}
+
+.error-image {
+  margin-bottom: 20px;
+  width: 150px;
+  height: 150px;
+  margin-left: 30px;
+}
+
+
+.error-content {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.error-content h2 {
+  color: #afafaf;
+}
+
+.buttons a.error-confirm:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.buttons .error-confirm {
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+  height: auto;
+}
+
+/*-----------coupon------------*/
+
+
+.couponType-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #E5E5E5;
+  margin: 0 10px;
+  transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
+}
+
+.deal-card {
+  width: 1375px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 500px;
+  margin-right: 50px;
+  margin-top: 100px;
+}
+
+.deal-response-card {
+  width: 1375px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-right: 50px;
+  margin-top: 100px;
+}
+
+.deal-card-body {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deal-response-card-body {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author-dealList-name {
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  height: 70px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.deal-request-List {
+  display: flex;
+  flex-direction: column;
+}
+
+.deal-response-List{
+  display: flex;
+  flex-direction: column;
+  margin-left: 500px;
+}
+
+.swap-money-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+  margin-top: 50px;
+}
+
+.swap-money-content {
+  width: 500px;
+  margin: 50px auto;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  color: #555;
+}
+.swap-money-content .swap-pay-money {
+  font-size: 23px;
+}
+
+.wallet-logo-image {
+  width: 100px;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.swap-pay-title {
+  font-size: 40px;
+}
+
+.deposit-withdraw-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 30px;
+  padding: 10px;
+  border: solid #ddd;
+  border-radius: 30px;
+  width: 400px;
+  margin-left: 35px;
+  height: 250px;
+  margin-bottom: 10px;
+}
+
+
+.deal-nickname {
+  margin-right: auto; /* 원하는 간격으로 조정하세요. */
+}
+
+.deal-status {
+  margin-left: auto;/* 원하는 간격으로 조정하세요. */
+  /* 원하는 스타일 속성을 추가하세요. */
+}
+
+.deal-button {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 110px;
+  color: white;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.deal-card-body a:hover {
+
+  background-color: #2980b9;
+}
+
+.deal-list {
+  width: 1500px;
+  border-bottom: solid #808080;
+  margin-left: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.author-dealResponseList-name {
+  font-size: 40px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  width: 550px;
+  height: 70px;
+  margin-top: 30px;
+}
+
+.deal-response-button {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  color: white;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  text-decoration: none;
+  margin-left: auto;
+  margin-right: 10px;
+  height: 20px;
+}
+
+.deal-list a:hover {
+  background-color: #2980b9;
+}
+
+
+.deposit-withdraw-btn {
+  width: 190px;
+  height: 260px;
+  margin: 10px;
+  border: none;
+}
+
+.deposit-btn {
+  background: url("/images/deposit.jpg") no-repeat;
+}
+
+.withdraw-btn {
+  background: url("/images/withdraw.jpg") no-repeat;
+}
+
+.swap-money-input {
+  width: 300px;
+  height: 50px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 3px solid;
+}
+
+.swap-money-btn {
+  width: 100px;
+  height: 50px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 5px;
+  background-color: #00AADC;
+}
+
+.swap-money-btn:hover {
+  background-color: #171264;
+  color: white;
+  transition: 0.7s;
+}
+
+.my-favorite-explain {
+  font-size: 50px;
+  margin-top: 55px;
+  text-align: center;
+}
+/*--------------accessdenied---------------*/
+.forbidden-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin-top: 150px;
+}
+.forbidden-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.forbidden-header p {
+  font-size: 25px;
+}
+
+.forbidden-content img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+  margin-right: 30px;
+}
+
+.forbidden-buttons a:hover {
+  background-color: #2980b9;
+  text-decoration: none;
+  color: #fff;
+}
+
+.forbidden-buttons .forbidden-error-confirm {
+  background-color: #00AADC;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+  height: auto;
+  text-decoration: none;
+
+}
+
+
+/* deal request deal */
+
+.deal-detail-card {
+  background-color: #fff;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Style for the card header */
+.deal-detail-card-body {
+  background-color: #007bff; /* Example header background color */
+  color: #fff; /* Example header text color */
+  padding: 20px;
+  font-size: 1.5rem;
+}
+
+/* Flex container for deal content */
+.deal-detail-content-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.deal-detail-request-list {
+  position: relative;
+  width: 100%;
+  padding-bottom: 80px;
+}
+
+/* deal-detail-list-container 스타일 조정 */
+.deal-detail-list-container {
+  position: relative;
+  width: 100%;
+  padding: 20px; /* 내부 여백 추가 */
+  margin-bottom: 20px; /* 하단 여백 추가 */
+  background-color: #ffffff; /* 배경색 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+  border-radius: 8px; /* 모서리 둥글게 처리 */
+}
+
+/* 컨테이너 상단에 구분선 추가 */
+.deal-detail-list-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-top-left-radius: 8px; /* 왼쪽 상단 모서리 둥글게 */
+  border-top-right-radius: 8px; /* 오른쪽 상단 모서리 둥글게 */
+}
+
+/* 마지막 컨테이너에는 하단 여백을 적게 설정 */
+.deal-detail-list-container:last-child {
+  margin-bottom: 10px;
+}
+
+/* 반응형 디자인에서의 스타일 조정 */
+@media screen and (max-width: 768px) {
+  .deal-detail-list-container {
+    padding: 15px; /* 모바일에서의 내부 여백 조정 */
+  }
+}
+
+
+/* Style for the swap item titles */
+.deal-detail-item {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.deal-detail-post {
+  font-size: 20px;
+  font-weight: bold;
+  color: royalblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 추가금 정보 */
+.deal-detail-ExtraFee {
+  font-size: 16px;
+  color: dodgerblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 수락상태 정보 */
+.deal-detail-allow {
+  font-size: 16px;
+  color: mediumblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+/* 인수상태 정보 */
+.deal-detail-take {
+  font-size: 16px;
+  color: darkblue; /* 원하는 색상으로 변경하세요 */
+  margin-bottom: 10px;
+}
+
+
+/* Buttons for editing, positioned at the top-right corner */
+.deal-detail-first-user-edit-button,
+.deal-detail-second-user-edit-button {
+  position: absolute;
+  top: 10px; /* 컨테이너 상단에서의 위치 */
+  right: 25px; /* 컨테이너 오른쪽에서의 위치 */
+  background-color: #28a745; /* Example button background color */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.deal-detail-first-user-edit-button a,
+.deal-detail-second-user-edit-button a{
+  color: white;
+  text-decoration: none;
+}
+
+
+.deal-detail-first-user-edit-button:hover,
+.deal-detail-second-user-edit-button:hover {
+  background-color: #1b6c2f;
+}
+
+.deal-detail-post-image {
+  width: auto; /* 이미지 원본 크기에 맞게 너비 설정 */
+  margin-right: 20px;
+  flex-direction: row; /* 이미지들을 가로로 배치 */
+  height: 200px; /* 예시 높이, 실제 사용할 높이에 맞게 조정 필요 */
+  flex-shrink: 0; /* 이미지 크기가 flex container에 의해 축소되는 것을 방지 */
+  object-fit: cover; /* 이미지 비율 유지하면서 높이에 맞게 조절 */
+  border-radius: 4px; /* 이미지 모서리 둥글게 */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .deal-content-container {
+    flex-direction: column;
+  }
+  .deal-list-container {
+    width: 100%;
+    margin: 5px 0; /* Adjust margin for vertical layout */
+  }
+  .deal-first-user-edit-button,
+  .deal-second-user-edit-button {
+    top: initial;
+    bottom: 20px;
+  }
+}
+
+/* 거래 수락 및 인수 버튼 스타일링 */
+.deal-acceptance-buttons {
+  position: absolute;
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  align-items: center;
+  background-color: #fff; /* 배경색 설정 */
+  border-radius: 8px; /* 둥근 모서리 */
+  bottom: 70px; /* 버튼이 컨테이너 밖으로 나오도록 위치 조정 */
+  right: 35px;
+  z-index: 10; /* z-index를 통해 컨테이너 위에 위치하도록 설정 */
+}
+
+.deal-acceptance-button {
+  padding: 10px 15px; /* 버튼 내부 패딩 */
+  margin-left: 10px; /* 버튼 간 여백 */
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+.deal-acceptance-button:hover {
+  background-color: #218838; /* 호버 시 배경색 변경 */
+}
+
+/* 거래 수락 및 인수 버튼을 deal-detail-request-list에 추가 */
+.deal-detail-request-list {
+  position: relative; /* 상대적 위치 지정 */
+  /* 기존 스타일링 코드 유지 */
+}
+
+.deal-detail-request-list .deal-acceptance-buttons {
+  position: absolute;
+  bottom: 10px; /* 아래쪽에서 10px 오프셋 */
+  right: 0; /* 오른쪽 정렬 */
+  width: 100%; /* 전체 너비 */
+}
+
+@media screen and (max-width: 768px) {
+  .deal-detail-request-list .deal-acceptance-buttons {
+    position: static; /* 작은 화면에서는 정적 위치 사용 */
+    margin-top: 20px; /* 상단 여백 추가 */
+  }
+
+  .deal-detail-first-user-edit-button,
+  .deal-detail-second-user-edit-button {
+    position: static; /* 작은 화면에서는 정적 위치 사용 */
+    margin: 10px 0; /* 상단 및 하단 여백 조정 */
+  }
+
+
+}

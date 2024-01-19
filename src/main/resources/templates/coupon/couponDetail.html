@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="write-bar-container">
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 Id</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.couponId()}"></a>
+    </div>
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 이름</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.couponName()}"></a>
+    </div>
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 타입</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.couponType()}"></a>
+    </div>
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 할인율</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.discountPercentage()}"></a>
+    </div>
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 만료 기한</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.expiredTime()}"></a>
+    </div>
+    <div class="write-bar">
+      <div class="write-bar-explain">쿠폰 갯수</div>
+      <a class="write-bar-title-input" th:text="${couponGetResponseDto.couponCount()}"></a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

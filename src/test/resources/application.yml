@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+    open-in-view: false
+
+jwt:
+  secret:
+    key: ENC(vvNeDy5afcRKYPy6Pdy2uIGfROZ6ZVGaYEBgaBPs4cttxYsNvS8PD5Xv9DNMC8tU/gxMtW2wHf4M7igHTjZBLUazfi8m3OyxWbDjXIyup4HAfvN9YrMmnAVTN1fAMKsC)
+
+cloud:
+  aws:
+    s3:
+      bucket: ENC(MVNfeB0sW8i0nQZv2Jy+eBWczZ1PdGVb)
+    credentials:
+      access-key: ENC(/7Arz0iQHZf1toVV3pwOQfQRXCePIfnPtF5JQh1jO68=)
+      secret-key: ENC(GRUuScJFKz9/v2bc/rFIbS3S0LafnAFjX7Neajd3jdSV7/3m48wRVdK0gfzg71tbvA3ccB9+NYg=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

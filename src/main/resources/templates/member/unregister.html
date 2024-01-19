@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스왑스왑</title>
+
+  <link rel="shortcut icon" th:href="@{/favicon.ico}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script th:inline="javascript">
+    $(document).ready(function() {
+      $("#cancelMembership").on("click", function(e) {
+        var confirmResult = confirm("회원 탈퇴를 하시겠습니까?");
+
+        if (confirmResult) {
+          $.ajax({
+            type: "DELETE",
+            url: "/members",
+            success: function (data) {
+              console.log("성공적으로 탈퇴되었습니다");
+              window.location.href = "/";
+            },
+            error: function (xhr, status, error) {
+              console.error("회원 탈퇴 실패:", error);
+            }
+          });
+        } else {
+          event.preventDefault();
+        }
+      });
+    });
+  </script>
+<body>
+<div class="unregister">
+  <p>
+    회원탈퇴
+  </p>
+
+  <div class="unregister-content">
+    1. 회원탈퇴 전, 유의사항을 확인해 주시기 바랍니다.
+    <ul>
+      <li>회원탈퇴 시 회원전용 웹 서비스 이용이 불가합니다.</li>
+      <li>회원정보의 경우, 회원탈퇴 후 2주동안 보관된 이후에 삭제됩니다.</li>
+      <li>유효기간이 경과되지 않은 미사용 쿠폰관련 정보는 유효기간 만료일까지 보관되며, 탈퇴 후에도 유효기간 내 사용하실 수 있습니다.</li>
+      <li>보유하셨던 스왑머니는 탈퇴와 함께 삭제되며 환불되지 않습니다.</li>
+      <li>회원탈퇴 시 스왑스왑에 입력하신 게시글은 자동으로 삭제됩니다.
+      </li>
+    </ul>
+  </div>
+  <div class="unregister-buttons">
+    <a href="/myPage" class="unregister-cancel">취소</a>
+    <a href="/main" class="unregister-ok" id="cancelMembership">회원 탈퇴</a>
+  </div>
+</div>
+</body>
+</html>

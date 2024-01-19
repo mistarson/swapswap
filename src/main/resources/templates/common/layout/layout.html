@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<!--라이브러리 참조 : Thymeleaf & Thymeleaf Layout -->
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--Header 영역을 참조합니다.-->
+<head th:replace="~{common/fragments/head::head}"></head>
+<body>
+<div th:replace="~{common/fragments/nav::nav}"></div>
+<div th:replace="~{common/fragments/nav::search}"></div>
+<div layout:fragment="content"></div>
+</body>
+<script layout:fragment="script"></script>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <div class="swap-money-body">
+    <div class="swap-money-content">
+      <img class="wallet-logo-image" src="/images/logo/swapswaplogo.png">
+      <p class="swap-pay-title">스왑페이</p>
+      <p class="swap-pay-money" th:text="'현재 잔액: ' + ${mySwapMoney}"></p>
+      <div class="deposit-withdraw-body">
+        <a class="deposit-withdraw-btn deposit-btn" href="/wallets/deposit/normal"></a>
+        <a class="deposit-withdraw-btn withdraw-btn" href="/wallets/withdraw/normal"></a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

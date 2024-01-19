@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
+<body>
+<div layout:fragment="content">
+  <script>
+    function selectCouponType(data) {
+      var couponValue = data.getAttribute('value');
+      document.getElementById('couponTypeInput').value = couponValue;
+      console.log(couponValue);
+
+      document.querySelectorAll('.couponType-button').forEach(button => {
+        button.classList.remove('active')
+      });
+
+      event.target.classList.add('active')
+    }
+  </script>
+  <form th:action="@{/admin/coupons}" th:object="${couponCreateRequestDto}" method="post"
+        enctype="application/x-www-form-urlencoded">
+    <div class="write-bar-container">
+      <div class="write-bar">
+        <div class="write-bar-explain">쿠폰 이름</div>
+        <input class="write-bar-title-input" th:field="*{couponName}">
+      </div>
+
+      <div class="write-bar">
+        <div class="write-bar-explain">쿠폰 종류</div>
+        <input type="hidden" th:field="*{couponType}" id="couponTypeInput">
+        <div th:each="type : ${couponType}">
+          <button type="button" th:value="${type}" th:text="${type}" class="couponType-button"
+                  onclick="selectCouponType(this)">
+          </button>
+        </div>
+      </div>
+
+      <div class="write-bar">
+        <div class="write-bar-explain ">쿠폰 할인율</div>
+        <input class="write-bar-title-input" type="number" th:field="*{discountPercentage}"
+               required>
+      </div>
+
+      <div class="write-bar">
+        <div class="write-bar-explain">만료 기한</div>
+        <input class="write-bar-title-input" type="datetime-local" th:field="*{expiredTime}"
+               required>
+      </div>
+
+      <div class="write-bar">
+        <div class="write-bar-explain">쿠폰 갯수</div>
+        <input class="write-bar-title-input" type="number" th:field="*{couponCount}" required>
+      </div>
+      <button type="submit" class="write-complete-button">쿠폰 등록</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
