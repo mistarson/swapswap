@@ -17,8 +17,12 @@
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
           <div th:text="'추가금: ' + ${dealDetailResponseDto.firstExtraFee()}" class="deal-detail-ExtraFee"></div>
-          <div th:text="'수락상태: ' + ${dealDetailResponseDto.firstAllow} == true ? '수락 완료' : '수락 대기'" class="deal-detail-allow"></div>
-          <div th:text="'인수상태: ' + ${dealDetailResponseDto.firstTake} == true ? '인수 완료' : '인수 대기'" class="deal-detail-take"></div>
+          <div class="deal-allow-status">수락 상태:
+          <div class="deal-detail-allow" th:text="${dealDetailResponseDto.firstAllow} ? '수락 완료' : '수락 대기'"></div>
+          </div>
+          <div class="deal-take-status">인수 상태:
+            <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
+          </div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
@@ -29,8 +33,12 @@
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
           <div th:text="'추가금: ' + ${dealDetailResponseDto.secondExtraFee}" class="deal-detail-ExtraFee"></div>
-          <div th:text="'수락 상태: ' + ${dealDetailResponseDto.secondAllow} == true ? '수락 완료' : '수락 대기'" class="deal-detail-allow"></div>
-          <div th:text="'인수 상태: ' + ${dealDetailResponseDto.secondTake}== true ? '인수 완료' : '인수 대기'" class="deal-detail-take"></div>
+          <div class="deal-allow-status">수락 상태:
+          <div class="deal-detail-allow "th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
+          </div>
+            <div class="deal-take-status">인수 상태:
+          <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
+            </div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
@@ -68,7 +76,7 @@
         element.style.color = color;
       }
     });
-
+    var firstAllow = /*[[${dealDetailResponseDto.firstAllow}]]*/ false;
     function dealAllow() {
       $.ajax({
         url: allowUrl,
@@ -78,6 +86,7 @@
         },
         error: function (xhr, status, error) {
           // 에러 처리
+          alert("수락 할 수 없는 상태입니다.")
           console.error("Update failed:", status, error);
         }
       })
@@ -88,16 +97,18 @@
         url: takeUrl,
         type: 'PATCH',
         success: function () {
+
+          $('.deal-detail-take').text('인수 완료').css('color', '#3366CC');
           location.reload();
         },
         error: function (xhr, status, error) {
           // 에러 처리
+          alert("인수 할 수 없는 상태입니다.")
           console.error("Update failed:", status, error);
         }
       })
     }
   </script>
-
 </div>
 </body>
 </html>

@@ -96,8 +96,8 @@ public class DealServiceImplV1 implements DealService {
 
         Deal deal = findDeal(dealId);
 
-        if (deal.getDealStatus().equals(DealStatus.COMPLETED)) {
-            throw new RuntimeException("거래가 완료되어 수정할 수 없습니다.");
+        if (!deal.getDealStatus().equals(DealStatus.REQUESTED)) {
+            throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
         }
 
         if(deal.getFirstUserId().equals(member.getId())) {
@@ -110,10 +110,6 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstAllow() && deal.getSecondAllow()) {
             deal.updateDealStatus(DealStatus.DEALING);
-        }
-
-        if (!deal.getFirstAllow() || !deal.getSecondAllow()) {
-            deal.updateDealStatus(DealStatus.REQUESTED);
         }
     }
 
