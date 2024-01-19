@@ -5,11 +5,11 @@
 <body>
 <div layout:fragment="content">
   <div class="swap-money-body">
-    <p>얼마를 충전하시겠습니까?</p>
-    <form th:action="@{/wallets/deposit/normal}" th:object="${depositSwapMoneyRequestDto}"
+    <p>얼마를 출금하시겠습니까?</p>
+    <form th:action="@{/wallets/withdraw/normal}" th:object="${withdrawSwapMoneyRequestDto}"
           method="post" enctype="application/x-www-form-urlencoded">
       <input class="swap-money-input" th:field="*{swapMoney}">
-      <button type="submit" class="swap-money-btn">입금하기</button>
+      <button type="submit" class="swap-money-btn">출금하기</button>
     </form>
   </div>
 </div>

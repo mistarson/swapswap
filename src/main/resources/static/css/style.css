@@ -1305,7 +1305,7 @@ input[type="number"] {
   border-bottom: 3px solid;
 }
 
-.deposit-swap-money-btn {
+.swap-money-btn {
   width: 100px;
   height: 50px;
   border-top: none;
@@ -1316,7 +1316,7 @@ input[type="number"] {
   background-color: #00AADC;
 }
 
-.deposit-swap-money-btn:hover {
+.swap-money-btn:hover {
   background-color: #171264;
   color: white;
   transition: 0.7s;
