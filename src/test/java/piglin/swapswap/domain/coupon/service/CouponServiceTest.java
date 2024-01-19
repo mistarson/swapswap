@@ -57,9 +57,10 @@ class CouponServiceTest {
 
         couponId = couponService.createCoupon(requestDto);
 
-//        wallet = Wallet.builder()
-//                .money(1L)
-//                .build();
+        wallet = Wallet.builder()
+                .swapMoney(1L)
+                .isDeleted(false)
+                .build();
 
         walletRepository.save(wallet);
 
