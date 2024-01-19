@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,10 +22,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
-import piglin.swapswap.domain.favorite.service.FavoriteServiceImplV1;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.constant.Category;
+import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -46,9 +43,6 @@ class PostServiceImplV1UnitTest {
 
     @Mock
     private PostRepository postRepository;
-
-    @Mock
-    private FavoriteServiceImplV1 favoriteService;
 
     @InjectMocks
     private PostServiceImplV1 postService;
@@ -74,7 +68,7 @@ class PostServiceImplV1UnitTest {
             // Given
             List<MultipartFile> imageUrlList = new ArrayList<>();
             imageUrlList.add(Mockito.mock(MultipartFile.class));
-            PostCreateRequestDto requestDto = new PostCreateRequestDto(Category.ELECTRONICS, "제목",
+            PostCreateRequestDto requestDto = new PostCreateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
 
@@ -90,7 +84,7 @@ class PostServiceImplV1UnitTest {
         void createPost_Fail_Image_None() {
             // Given
             List<MultipartFile> imageUrlList = new ArrayList<>();
-            PostCreateRequestDto requestDto = new PostCreateRequestDto(Category.ELECTRONICS, "제목",
+            PostCreateRequestDto requestDto = new PostCreateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
 
@@ -110,7 +104,7 @@ class PostServiceImplV1UnitTest {
                 imageUrlList.add(Mockito.mock(MultipartFile.class));
             }
 
-            PostCreateRequestDto requestDto = new PostCreateRequestDto(Category.ELECTRONICS, "제목",
+            PostCreateRequestDto requestDto = new PostCreateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
 
@@ -216,7 +210,7 @@ class PostServiceImplV1UnitTest {
             // setUp 에서 적용이 안 돼서 여기에 넣어놨습니다...
             nullResponseDto = new PostGetResponseDto(
                     null, null, null, null, null,
-                    null, null, null, null,null,
+                    null, null, null, null,null, null,
                     false
             );
 
@@ -246,7 +240,7 @@ class PostServiceImplV1UnitTest {
         void updatePost_Fail_Not_Upload_Image() {
             // Given
             List<MultipartFile> imageUrlList = new ArrayList<>();
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
             Long postId = 1L;
@@ -267,7 +261,7 @@ class PostServiceImplV1UnitTest {
                 imageUrlList.add(Mockito.mock(MultipartFile.class));
             }
 
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
             Long postId = 1L;
@@ -288,7 +282,7 @@ class PostServiceImplV1UnitTest {
                 imageUrlList.add(Mockito.mock(MultipartFile.class));
             }
 
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
             Long postId = 1L;
@@ -307,7 +301,7 @@ class PostServiceImplV1UnitTest {
             List<MultipartFile> imageUrlList = new ArrayList<>();
             imageUrlList.add(Mockito.mock(MultipartFile.class));
 
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
             Long postId = 1L;
@@ -328,7 +322,7 @@ class PostServiceImplV1UnitTest {
             List<MultipartFile> imageUrlList = new ArrayList<>();
             imageUrlList.add(Mockito.mock(MultipartFile.class));
 
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(Category.ELECTRONICS, "제목",
+            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
                     "내용",
                     imageUrlList);
             Long postId = 1L;
