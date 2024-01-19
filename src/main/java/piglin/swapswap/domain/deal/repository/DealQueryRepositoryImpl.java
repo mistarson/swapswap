@@ -59,8 +59,6 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                 .select(Projections.constructor(DealDetailResponseDto.class,
                                 deal.id,
                                 deal.dealStatus,
-                                JPAExpressions.select(member.nickname)
-                                        .from(member)
                                 deal.firstUserId,
                                 deal.secondUserId,
                                 JPAExpressions.select(member.nickname)
