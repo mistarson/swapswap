@@ -13,4 +13,6 @@ public interface MemberService {
 
     Member getMemberWithWallet(Long memberId);
 
+    Member getMember(Long memberId);
+
 }

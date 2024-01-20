@@ -54,4 +54,11 @@ public class MemberServiceImplV1 implements MemberService {
         return memberRepository.findByIdWithWallet(memberId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
+
+    @Override
+    public Member getMember(Long memberId) {
+
+        return memberRepository.findById(memberId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+    }
 }
