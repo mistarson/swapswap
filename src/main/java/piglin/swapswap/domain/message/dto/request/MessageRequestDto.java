@@ -12,5 +12,5 @@ public class MessageRequestDto {
     private MessageType type;
     private String senderNickname;
     private String text;
-    private String chatRoomId;
+    private Long chatRoomId;
 }

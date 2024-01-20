@@ -9,5 +9,5 @@ public interface MessageService {
 
     void saveMessage(MessageRequestDto messageDto);
 
-    List<MessageResponseDto> getMessageByChatRoomId(String roomId, Member member);
+    List<MessageResponseDto> getMessageByChatRoomId(Long roomId, Member member);
 }

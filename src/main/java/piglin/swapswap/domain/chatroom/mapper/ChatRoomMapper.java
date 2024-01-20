@@ -9,7 +9,6 @@ public class ChatRoomMapper {
     public static ChatRoom createChatRoom() {
 
         return ChatRoom.builder()
-                .id(UUID.randomUUID().toString())
                 .isDeleted(false)
                 .build();
     }

@@ -7,5 +7,5 @@ import piglin.swapswap.domain.message.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long>, MessageQueryRepository {
 
-    List<Message> findAllByChatRoom_Id(String roomId);
+    List<Message> findAllByChatRoom_Id(Long roomId);
 }

@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record ChatRoomResponseDto(
-        String id,
+        Long id,
         String username,
         String lastMessage,
         LocalDateTime lastMessageTime

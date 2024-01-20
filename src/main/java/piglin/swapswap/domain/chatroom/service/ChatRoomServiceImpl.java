@@ -34,7 +34,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     }
 
     @Override
-    public String createChatroom(Member member, Long secondMemberId) {
+    public Long createChatroom(Member member, Long secondMemberId) {
 
         ChatRoom chatRoom = chatRoomRepository.findByMyMemberIdAndOpponentMemberId(member.getId(), secondMemberId)
                 .orElseGet(() -> createChatRoomAndAddMember(member, secondMemberId));
@@ -44,7 +44,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     @Override
     @Transactional
-    public void leaveChatRoom(Member member, String roomId) {
+    public void leaveChatRoom(Member member, Long roomId) {
 
         ChatRoom chatRoom = findChatRoom(roomId);
 
@@ -56,7 +56,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         deleteChatRoomAndMessagesIfNoParticipants(chatRoom);
     }
 
-    private ChatRoom findChatRoom(String roomId) {
+    private ChatRoom findChatRoom(Long roomId) {
 
         return chatRoomRepository.findById(roomId).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
@@ -79,7 +79,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
         if (chatRoomMember.isEmpty()) {
 
-            chatRoom.setIsDeleted(true);
+            chatRoom.deleteChatRoom();
             messageRepository.messageIsDeletedToTrue(chatRoom);
         }
     }

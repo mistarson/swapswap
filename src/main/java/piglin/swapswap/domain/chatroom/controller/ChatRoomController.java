@@ -35,7 +35,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/chats/room/{roomId}")
-    public String getChatRoom(@PathVariable String roomId, @AuthMember Member member, Model model) {
+    public String getChatRoom(@PathVariable Long roomId, @AuthMember Member member, Model model) {
 
         List<MessageResponseDto> messageList = messageService.getMessageByChatRoomId(roomId, member);
 
@@ -47,7 +47,7 @@ public class ChatRoomController {
 
     @ResponseBody
     @PostMapping("/chats/create")
-    public String createChatRoom(
+    public Long createChatRoom(
             @AuthMember Member member,
             @RequestParam Long secondMemberId
     ) {
@@ -58,7 +58,7 @@ public class ChatRoomController {
     @ResponseBody
     @DeleteMapping("/chats/leave")
     public ResponseEntity<?> leaveChatRoom(
-            @RequestParam String roomId,
+            @RequestParam Long roomId,
             @AuthMember Member member
     ) {
 

@@ -8,7 +8,7 @@ public interface ChatRoomService {
 
     List<ChatRoomResponseDto> getChatRoomList(Member member);
 
-    String createChatroom(Member member, Long secondMemberId);
+    Long createChatroom(Member member, Long secondMemberId);
 
-    void leaveChatRoom(Member member, String roomId);
+    void leaveChatRoom(Member member, Long roomId);
 }

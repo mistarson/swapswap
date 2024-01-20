@@ -37,7 +37,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageResponseDto> getMessageByChatRoomId(String roomId, Member member) {
+    public List<MessageResponseDto> getMessageByChatRoomId(Long roomId, Member member) {
 
         validateMember(member, roomId);
 
@@ -46,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
         return MessageMapper.messageToMessageDto(messageList);
     }
 
-    private ChatRoom getChatRoomById(String roomId) {
+    private ChatRoom getChatRoomById(Long roomId) {
 
         return chatRoomRepository.findById(roomId).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
@@ -67,7 +67,7 @@ public class MessageServiceImpl implements MessageService {
         return message;
     }
 
-    private void validateMember(Member member, String roomId) {
+    private void validateMember(Member member, Long roomId) {
 
         ChatRoom chatRoom = getChatRoomById(roomId);
 
