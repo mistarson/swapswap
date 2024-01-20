@@ -25,7 +25,7 @@
           <div class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}" sec:authorize="isAuthenticated()">수정하기</a>
           </div>
           <div class="chat-request-button"
-               th:data-member-id="${PostGetResponseDto.userId()}"
+               th:data-member-id="${postGetResponseDto.memberId}"
                th:onclick="requestChat(this.getAttribute('data-member-id'))">
             <a>채팅하기</a>
           </div>
