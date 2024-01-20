@@ -12,7 +12,7 @@ import piglin.swapswap.domain.chatroom_member.entity.ChatRoomMember;
 import piglin.swapswap.domain.chatroom_member.mapper.ChatRoomMemberMapper;
 import piglin.swapswap.domain.chatroom_member.repository.ChatRoomMemberRepository;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.member.service.MemberServiceImplV1;
 import piglin.swapswap.domain.message.repository.MessageRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -21,7 +21,7 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService{
 
-    private final MemberRepository memberRepository;
+    private final MemberServiceImplV1 memberService;
     private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
@@ -30,32 +30,16 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     @Transactional
     public List<ChatRoomResponseDto> getChatRoomList(Member member) {
 
-        List<ChatRoomMember> chatRoomMemberList =  chatRoomMemberRepository.findAllByMemberWithChatRoom(member);
-
-        return ChatRoomMapper.getChatRoomFromChatRoomMemberList(chatRoomMemberList);
+        return chatRoomRepository.findAllByMemberIdWithMember(member.getId());
     }
 
     @Override
     public String createChatroom(Member member, Long secondMemberId) {
 
-        if (member.getId().equals(secondMemberId)) {
-            throw new BusinessException(ErrorCode.CHAT_ONLY_DIFFERENT_USER_EXCEPTION);
-        }
+        ChatRoom chatRoom = chatRoomRepository.findByMyMemberIdAndOpponentMemberId(member.getId(), secondMemberId)
+                .orElseGet(() -> createChatRoomAndAddMember(member, secondMemberId));
 
-        Member secondMember = findMember(secondMemberId);
-
-        List<ChatRoomMember> chatRoomMemberList1 = chatRoomMemberRepository.findAllByMember(member);
-        List<ChatRoomMember> chatRoomMemberList2 = chatRoomMemberRepository.findAllByMember(secondMember);
-
-        for (ChatRoomMember chatRoomMember1 : chatRoomMemberList1) {
-            for (ChatRoomMember chatRoomMember2 : chatRoomMemberList2) {
-                if (chatRoomMember1.getChatRoom().getId().equals(chatRoomMember2.getChatRoom().getId())) {
-                    return chatRoomMember1.getChatRoom().getId();
-                }
-            }
-        }
-
-        return createChatRoomAndAddMember(member, secondMember);
+        return chatRoom.getId();
     }
 
     @Override
@@ -78,19 +62,15 @@ public class ChatRoomServiceImpl implements ChatRoomService{
                 new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
     }
 
-    private Member findMember(Long memberId) {
+    private ChatRoom createChatRoomAndAddMember(Member member, Long secondMemberId) {
 
-        return memberRepository.findById(memberId).orElseThrow(() ->
-                new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
-    }
-
-    private String createChatRoomAndAddMember(Member member, Member secondMember) {
+        Member secondMember = memberService.getMember(secondMemberId);
 
         ChatRoom chatRoom = chatRoomRepository.save(ChatRoomMapper.createChatRoom());
         chatRoomMemberRepository.save(ChatRoomMemberMapper.createChatRoomMember(chatRoom, member));
         chatRoomMemberRepository.save(ChatRoomMemberMapper.createChatRoomMember(chatRoom, secondMember));
 
-        return chatRoom.getId();
+        return chatRoom;
     }
 
     private void deleteChatRoomAndMessagesIfNoParticipants(ChatRoom chatRoom) {
