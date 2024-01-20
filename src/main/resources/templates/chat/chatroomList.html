@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>SWAPSWAP</title>
+  <style>
+    .section--message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .inner {
+      width: 500px;
+      height: 800px;
+      display: flex;
+      background: #dcdcdc;
+      flex-direction: column;
+    }
+
+    .header {
+      width: 100%;
+      height: 50px;
+      font-size: 25px;
+      color: #fff;
+      background: #00AADC;
+      text-align: center;
+      padding-top: 10px;
+      box-sizing: border-box;
+    }
+
+    .room-container {
+      width: 100%;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .room {
+      display: block;
+      height: 60px;
+      position: relative;
+      margin-bottom: 10px;
+      text-decoration-line: none;
+      color: #828282;
+      background: #dcdcdc;
+
+    }
+
+    .room:hover {
+      background-color: #a0a0a0;
+      color: #fff;
+    }
+
+    .chatRoomId {
+      font-size: 20px;
+      margin-left: 10px;
+    }
+
+    .lastChatMessage {
+      margin: 5px 0 5px 10px;
+    }
+
+    .modifiedAt {
+      position: absolute;
+      margin: 0 10px 5px 0;
+      right: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+<section class="section--message">
+  <div class="inner">
+    <div class="header">채팅방 목록</div>
+    <div class="room-container">
+
+      <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
+        <div class="other-username" th:text="${chatRoom.username} + '님과의 채팅방'">
+          <span>와의 채팅방</span>
+        </div>
+        <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
+        <div class="modifiedAt">
+          <span th:if="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(chatRoom.lastMessageTime, 'HH:mm')}">Today</span>
+          <span th:unless="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(chatRoom.lastMessageTime, 'yyyy-MM-dd')}"></span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+</body>
+</html>
