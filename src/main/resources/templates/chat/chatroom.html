@@ -83,7 +83,7 @@
   <div class="inner">
     <div class="header">채팅</div>
     <div id="chatContainer" class="chat-container">
-      <div id="chatRoomId" th:text="${chatRoomDto.id}" style="display: none;"></div>
+      <div id="chatRoomId" th:text="${roomId}" style="display: none;"></div>
       <div id="currentUserId" style="display: none;" th:text="${#authentication.principal.nickname}"></div>
       <div class="connecting">
         Connecting...
@@ -101,7 +101,7 @@
         <div class="input-group clearfix">
           <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
           <button type="submit" >보내기</button>
-          <button class="leave" th:data-room-id="${chatRoomDto.id}" th:onclick="leaveChatRoom(this.getAttribute('data-room-id'))">채팅방 나가기</button>
+          <button class="leave" th:data-room-id="${roomId}" th:onclick="leaveChatRoom(this.getAttribute('data-room-id'))">채팅방 나가기</button>
         </div>
       </div>
     </form>
@@ -113,7 +113,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script th:inline="javascript">
 
-  const chatRoomId = [[${chatRoomDto.id}]];
+  const chatRoomId = [[${roomId}]];
   const messageForm = document.querySelector('#messageForm');
   const messageInput = document.querySelector('#message');
   const connectingElement = document.querySelector('.connecting');

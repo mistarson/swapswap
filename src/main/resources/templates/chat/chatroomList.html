@@ -75,9 +75,14 @@
     <div class="room-container">
 
       <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
-        <div class="chatRoomId" th:text="${chatRoom.id()}"></div>
-        <div class="lastChatMessage" th:text="${chatRoom.lastMessage()}"></div>
-        <div class="modifiedAt" th:text="${chatRoom.modifiedTime()}"></div>
+        <div class="chatRoomId" th:text="${chatRoom.id}"></div>
+        <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
+        <div class="modifiedAt">
+          <span th:if="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(chatRoom.lastMessageTime, 'HH:mm')}">Today</span>
+          <span th:unless="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(chatRoom.lastMessageTime, 'yyyy-MM-dd')}"></span>
+        </div>
       </a>
 
     </div>
