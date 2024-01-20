@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import piglin.swapswap.domain.message.dto.MessageDto;
+import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
 import piglin.swapswap.domain.message.service.MessageServiceImpl;
 
 @Controller
@@ -15,7 +15,7 @@ public class StompController {
     private final SimpMessageSendingOperations sendingOperations;
 
     @MessageMapping("/chat/message")
-    public void enter(MessageDto message) {
+    public void enter(MessageRequestDto message) {
 
         messageService.saveMessage(message);
 

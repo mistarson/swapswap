@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.chatroom_member.repository;
 
-
 import static piglin.swapswap.domain.chatroom_member.entity.QChatRoomMember.chatRoomMember;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,8 +11,8 @@ import piglin.swapswap.domain.member.entity.Member;
 
 @Repository
 public class ChatRoomMemberQueryRepositoryImpl implements ChatRoomMemberQueryRepository {
-    private final EntityManager em;
 
+    private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
     public ChatRoomMemberQueryRepositoryImpl(EntityManager em) {
@@ -21,9 +20,9 @@ public class ChatRoomMemberQueryRepositoryImpl implements ChatRoomMemberQueryRep
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
     @Override
     public List<ChatRoomMember> findAllByMemberWithChatRoom(Member member) {
+
         return queryFactory
                 .selectFrom(chatRoomMember)
                 .leftJoin(chatRoomMember.chatRoom).fetchJoin()

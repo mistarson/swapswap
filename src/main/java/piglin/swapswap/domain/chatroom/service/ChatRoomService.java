@@ -8,8 +8,6 @@ public interface ChatRoomService {
 
     List<ChatRoomResponseDto> getChatRoomList(Member member);
 
-    ChatRoomResponseDto findById(String roomId, Member member);
-
     String createChatroom(Member member, Long secondMemberId);
 
     void leaveChatRoom(Member member, String roomId);

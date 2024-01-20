@@ -40,6 +40,9 @@ public class Message extends BaseTime {
     @Column(nullable = false)
     private String text;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;

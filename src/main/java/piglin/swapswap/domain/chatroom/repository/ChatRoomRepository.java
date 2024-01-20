@@ -8,5 +8,4 @@ import piglin.swapswap.domain.member.entity.Member;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
 
-    List<ChatRoom> findAllByChatRoomMembersContaining(ChatRoomMember chatRoomMember);
 }

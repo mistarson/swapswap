@@ -7,7 +7,7 @@ import lombok.Builder;
 public record ChatRoomResponseDto(
         String id,
         String lastMessage,
-        LocalDateTime modifiedTime
+        LocalDateTime lastMessageTime
 ) {
 
 }
