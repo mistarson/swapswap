@@ -3,6 +3,7 @@ package piglin.swapswap.domain.post.mapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
@@ -25,6 +26,7 @@ public class PostMapper {
                    .viewCnt(0L)
                    .isDeleted(false)
                    .modifiedUpTime(LocalDateTime.now())
+                   .dealStatus(DealStatus.REQUESTED)
                    .build();
     }
 
