@@ -8,6 +8,10 @@
 <div layout:fragment="content">
   <div class="post-content-container">
     <div class="post-content-image-container">
+      <div class="deal-status">
+        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}" class="deal-status dealing"> 거래 진행 중 </div>
+        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}" class="deal-status completed"> 거래 완료 </div>
+      </div>
       <div class="post-content-image-slider">
         <img th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
              th:alt="'Image '+ ${entry.key}" class="post-content-image">
