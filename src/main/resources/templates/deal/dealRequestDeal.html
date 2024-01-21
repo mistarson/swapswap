@@ -6,7 +6,7 @@
 <body>
 <div layout:fragment="content">
   <input type="hidden" th:value="${dealId}" class="deal-id">
-  <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-status"></h2>
+  <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
   <div class="deal-detail-card">
     <div class="deal-detail-card-body">
       <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
@@ -24,10 +24,14 @@
             <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
           </div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-first-user-edit-button"> <a
+          <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
             수정하기
           </a>
+          </div>
+          <div class="deal-acceptance-buttons">
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
         <div class="deal-detail-list-container">
@@ -40,15 +44,15 @@
           <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
             </div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-second-user-edit-button"> <a
+          <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
             수정하기</a>
           </div>
+          <div class="deal-acceptance-buttons">
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
+          </div>
         </div>
-      </div>
-      <div class="deal-acceptance-buttons">
-        <button class="deal-acceptance-button" onclick="dealAllow()">거래 수락하기</button>
-        <button class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
       </div>
     </div>
   </div>
@@ -61,7 +65,7 @@
     var allowUrl = '/deals/' + dealId + '/allow'
     var takeUrl = '/deals/' + dealId + '/take'
 
-    var statusElements = document.querySelectorAll('.deal-status');
+    var statusElements = document.querySelectorAll('.deal-detail-status');
 
     statusElements.forEach(function (element) {
       var statusName = element.textContent.trim();

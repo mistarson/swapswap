@@ -1,13 +1,13 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test;MODE=MySQL
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(PRjyS0Jl4g5gui3+eRrUOqLY6u2NmwssxAw1A77dOtpvGdxmUN35U1CW8NmK9bN90T7M1NCvNzPk70TTMzUW9zj0KqQIS6nWUIVBiRwAmEJpEDlWIwuy8ACdNV9HMU1aFs6lwcLF9h4=)
+    username: ENC(73mbe6WYpNUcZll5MNSTCw==)
+    password: ENC(mq3Ta8p1QUHu5bawedSaGjApAMH0e+/t)
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
@@ -18,9 +18,24 @@ spring:
       max-file-size: 10MB
       max-request-size: 100MB
 
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
 jwt:
   secret:
     key: ENC(vvNeDy5afcRKYPy6Pdy2uIGfROZ6ZVGaYEBgaBPs4cttxYsNvS8PD5Xv9DNMC8tU/gxMtW2wHf4M7igHTjZBLUazfi8m3OyxWbDjXIyup4HAfvN9YrMmnAVTN1fAMKsC)
+
+
+  thymeleaf:
+    cache: false
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 cloud:
   aws:
@@ -38,4 +53,4 @@ cloud:
 kakao:
   client:
     id: ENC(DmCqicA7Pa7EFxu5XTVtBxYl3K6fHeM1nSl090T2k+aJXj/JxcAnC1++VMpiz2ZU)
-  redirect-uri: http://localhost:8080/login/kakao/callback
+  redirect-uri: http://swapswap.shop/login/kakao/callback

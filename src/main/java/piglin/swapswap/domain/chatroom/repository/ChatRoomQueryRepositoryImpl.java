@@ -36,7 +36,7 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
                 .from(chatRoomMember)
                 .join(chatRoom).on(chatRoomMember.chatRoom.id.eq(chatRoom.id))
                 .join(member).on(chatRoomMember.member.id.eq(member.id))
-                .where(memberIdNotEq(memberId))
+                .where(chatRoomIdIn(memberId),memberIdNotEq(memberId))
                 .fetch();
     }
 
@@ -62,5 +62,14 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
 
         return chatRoomMember.member.id.eq(memberId);
     }
+
+    private BooleanExpression chatRoomIdIn(Long memberId) {
+        return chatRoom.id.in(JPAExpressions
+                .select(chatRoomMember.chatRoom.id)
+                .from(chatRoomMember)
+                .where(memberIdEq(memberId)));
+    }
+
+
 
 }

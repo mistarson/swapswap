@@ -32,13 +32,14 @@ public class DealController {
     private final DealService dealService;
     private final PostService postService;
 
+    @ResponseBody
     @PostMapping
-    public String createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
+        public ResponseEntity<?> createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
             @AuthMember Member member) {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:/deals/" + dealId;
+        return ResponseEntity.ok().body(dealId);
     }
 
     @GetMapping("/request")
@@ -98,7 +99,7 @@ public class DealController {
     }
 
     @PutMapping("/{dealId}/member/{memberId}")
-    public ResponseEntity<?> updateDeal(@AuthMember Member member, @PathVariable Long dealId,
+    public ResponseEntity<?> updateDeal(@Valid @AuthMember Member member, @PathVariable Long dealId,
             @PathVariable Long memberId, @RequestBody DealUpdateRequestDto requestDto){
 
         dealService.updateDeal(member, dealId, memberId, requestDto);
@@ -118,6 +119,7 @@ public class DealController {
 
         return "deal/dealUpdateForm";
     }
+
     @ResponseBody
     @PatchMapping("/{dealId}/allow")
     public ResponseEntity<?> updateDealAllow(@PathVariable Long dealId, @AuthMember Member member) {
@@ -126,6 +128,7 @@ public class DealController {
 
         return ResponseEntity.ok().build();
     }
+
     @ResponseBody
     @PatchMapping("/{dealId}/take")
     public ResponseEntity<?> takeDeal(@PathVariable Long dealId, @AuthMember Member member) {
@@ -133,5 +136,15 @@ public class DealController {
         dealService.takeDeal(dealId, member);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/history")
+    public String getDealHistory(@AuthMember Member member,
+    Model model) {
+
+        model.addAttribute("dealHistoryResponseDto",dealService.getDealHistoryList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealHistory";
     }
 }
