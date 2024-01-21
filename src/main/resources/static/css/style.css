@@ -293,6 +293,26 @@ img {
   margin-right: 0;
 }
 
+.deal-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.deal-status.dealing {
+  background-color: #FFA500; /* 거래 진행 중일 때의 색상 */
+}
+
+.deal-status.completed {
+  background-color: #28a745; /* 거래 완료일 때의 색상 */
+}
+
 /**
 포스트 Write CSS
  */
