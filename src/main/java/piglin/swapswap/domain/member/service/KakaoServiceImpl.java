@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,12 @@ import piglin.swapswap.global.jwt.JwtUtil;
 @RequiredArgsConstructor
 @Log4j2
 public class KakaoServiceImpl implements SocialService {
+
+    @Value("${kakao.client.id}")
+    private String KAKAO_CLIENT_ID;
+
+    @Value("${kakao.redirect-uri}")
+    private String KAKAO_REDIRECT_URI;
 
     private final WalletService walletService;
     private final MemberRepository memberRepository;
@@ -58,8 +65,8 @@ public class KakaoServiceImpl implements SocialService {
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "a304535271497a06332e50e9eec191ab");
-        body.add("redirect_uri", "http://localhost:8080/login/kakao/callback");
+        body.add("client_id", KAKAO_CLIENT_ID);
+        body.add("redirect_uri", KAKAO_REDIRECT_URI);
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
