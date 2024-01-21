@@ -13,7 +13,7 @@
       </a>
     </div>
     <div class="nav-container">
-      <a href="#chatroom">채팅방</a>
+      <a href="/chats">채팅방</a>
       <a href="#cs">고객센터</a>
       <div class="swapswap-search-container">
         <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="header-nav">
-      <select id="cityInput" class="nav-city-select">
+      <select id="navCityInput" class="nav-city-select">
         <option value="">도시를 선택하세요...</option>
 
         <option value="GWANGJU">기타 - 광주광역시</option>
@@ -66,7 +66,6 @@
         <option value="HWASEONG">경기도 - 화성시</option>
 
         <option value="GIMHAE">경상남도 - 김해시</option>
-        <option value="ANDONG">경상남도 - 안동시</option>
         <option value="JINJU">경상남도 - 진주시</option>
         <option value="CHANGWON">경상남도 - 창원시</option>
         <option value="TONGYEONG">경상남도 - 통영시</option>
@@ -75,6 +74,7 @@
         <option value="GYEONGJU">경상북도 - 경주시</option>
         <option value="GUMI">경상북도 - 구미시</option>
         <option value="GIMCHEON">경상북도 - 김천시</option>
+        <option value="ANDONG">경상북도 - 안동시</option>
         <option value="YEONGJU">경상북도 - 영주시</option>
         <option value="YEONGCHEON">경상북도 - 영천시</option>
         <option value="POHANG">경상북도 - 포항시</option>
@@ -129,7 +129,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     var logo = document.querySelector('.header-logo a');
     var searchInput = document.querySelector('.swapswap-search-input');
-    var cityInput = document.getElementById('cityInput');
+    var navCityInput = document.getElementById('navCityInput');
     var categoryLinks = document.querySelectorAll('.category-bar a');
 
     // URL에서 검색어와 카테고리 추출
@@ -139,7 +139,7 @@
     var selectedCity = localStorage.getItem('selectedCity');
 
     if (selectedCity) {
-      cityInput.value = selectedCity;
+      navCityInput.value = selectedCity;
     }
 
     // 검색란에 파라미터 title 추가
@@ -198,7 +198,7 @@
     function updateSearch() {
       var searchValue = localStorage.getItem('searchValue') || '';
       var selectedCategory = localStorage.getItem('selectedCategory') || '';
-      var selectedCity = cityInput.value;
+      var selectedCity = navCityInput.value;
 
       var searchQuery = '/search/posts?';
       if (searchValue) {
@@ -213,7 +213,7 @@
       window.location.href = searchQuery;
     }
 
-    cityInput.addEventListener('change', function() {
+    navCityInput.addEventListener('change', function() {
       localStorage.setItem('selectedCity', this.value);
     });
 

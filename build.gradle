@@ -25,10 +25,6 @@ dependencies {
     implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.7.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations'
 
-    runtimeOnly 'com.h2database:h2'
-
-    testImplementation 'org.springframework.security:spring-security-test'
-
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -67,12 +63,20 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
 
-    //MySQL
+    // DB
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
+
+    // Jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
     // Test
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.mockito:mockito-core"
+
+    // web socket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('bootBuildImage') {
