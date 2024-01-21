@@ -4,9 +4,9 @@
       layout:decorate="~{common/layout/layout}">
 <link rel="stylesheet" type="text/css" href="your-stylesheet.css">
 <body>
-<div layout:fragment="content">
+<div style="margin-left: 10%;" layout:fragment="content">
   <div class="deal-list">
-  <div class="author-dealList-name" th:text="${memberNickname}+'님의 스왑요청목록'">
+  <div class="author-dealList-name" th:text="${memberNickname}+'님의 스왑 요청 목록'">
   </div>
     <a href="/deals/response/list" class="deal-response-button"> 요청 받은 목록 보러가기</a>
 </div>

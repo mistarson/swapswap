@@ -495,7 +495,6 @@ img {
 }
 
 
-
 .post-content-container {
   height: 400px;
 }
@@ -1280,11 +1279,13 @@ input[type="number"] {
   margin-top: 150px;
   flex-direction: column;
 }
+
 .error .Oops {
   position: fixed;
   top: 15%;
   right: 35%;
 }
+
 .error-image img {
   width: 200px;
   max-width: 100%;
@@ -1391,7 +1392,7 @@ input[type="number"] {
   flex-direction: column;
 }
 
-.deal-response-List{
+.deal-response-List {
   display: flex;
   flex-direction: column;
   margin-left: 500px;
@@ -1415,6 +1416,7 @@ input[type="number"] {
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
   color: #555;
 }
+
 .swap-money-content .swap-pay-money {
   font-size: 23px;
 }
@@ -1450,10 +1452,12 @@ input[type="number"] {
 }
 
 .deal-status {
-  margin-left: auto;/* 원하는 간격으로 조정하세요. */
+  margin-left: 350px; /* 원하는 간격으로 조정하세요. */
   /* 원하는 스타일 속성을 추가하세요. */
 }
-
+.deal-detail-status{
+  margin-left: 20px;
+}
 .deal-button {
   border: 2px solid #ccc;
   border-radius: 40px;
@@ -1555,6 +1559,7 @@ input[type="number"] {
   margin-top: 55px;
   text-align: center;
 }
+
 /*--------------accessdenied---------------*/
 .forbidden-header {
   display: flex;
@@ -1563,11 +1568,13 @@ input[type="number"] {
   height: 100vh;
   margin-top: 150px;
 }
+
 .forbidden-content {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .forbidden-header p {
   font-size: 25px;
 }
@@ -1717,7 +1724,7 @@ input[type="number"] {
 }
 
 .deal-detail-first-user-edit-button a,
-.deal-detail-second-user-edit-button a{
+.deal-detail-second-user-edit-button a {
   color: white;
   text-decoration: none;
 }
@@ -1743,10 +1750,12 @@ input[type="number"] {
   .deal-content-container {
     flex-direction: column;
   }
+
   .deal-list-container {
     width: 100%;
     margin: 5px 0; /* Adjust margin for vertical layout */
   }
+
   .deal-first-user-edit-button,
   .deal-second-user-edit-button {
     top: initial;
@@ -1778,6 +1787,7 @@ input[type="number"] {
   font-size: 0.9rem;
   transition: background-color 0.3s;
 }
+
 .deal-acceptance-button:hover {
   background-color: #218838; /* 호버 시 배경색 변경 */
 }
@@ -1791,7 +1801,7 @@ input[type="number"] {
 .deal-detail-request-list .deal-acceptance-buttons {
   position: absolute;
   bottom: 10px; /* 아래쪽에서 10px 오프셋 */
-  right: 0; /* 오른쪽 정렬 */
+  right: 25px; /* 오른쪽 정렬 */
   width: 100%; /* 전체 너비 */
 }
 
@@ -1801,11 +1811,63 @@ input[type="number"] {
     margin-top: 20px; /* 상단 여백 추가 */
   }
 
-  .deal-detail-first-user-edit-button,
-  .deal-detail-second-user-edit-button {
-    position: static; /* 작은 화면에서는 정적 위치 사용 */
-    margin: 10px 0; /* 상단 및 하단 여백 조정 */
-  }
+
+.deal-detail-first-user-edit-button,
+.deal-detail-second-user-edit-button {
+  position: static; /* 작은 화면에서는 정적 위치 사용 */
+  margin: 10px 0; /* 상단 및 하단 여백 조정 */
+}
+}
+
+.deal-history-all-body {
+  width: 1375px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-left: 500px;
+  margin-right: 50px;
+  margin-top: 100px;
+}
+
+.deal-history-all-body .deal-history-body {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deal-history-all-body .deal-history-body h2 {
+  margin: 0;
+}
 
 
+.deal-card2-body{
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.deal-content{
+  margin-left: 10%;
+}
+
+.deal-history-created{
+  width: 200px;
+}
+
+.deal-history-completed{
+  width: 200px;
+  margin-left: 170px;
+}
+
+.deal-history-status {
+  width: 100px;
+  margin-left: 235px;
+  text-align: center;
+}
+
+.deal-history-detail {
+  width: 100px;
+  margin-left: 300px;
 }
