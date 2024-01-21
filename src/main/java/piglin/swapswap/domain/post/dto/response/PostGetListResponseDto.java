@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.post.constant.City;
 
 public record PostGetListResponseDto(
@@ -10,6 +11,8 @@ public record PostGetListResponseDto(
         Long memberId,
 
         City city,
+
+        DealStatus dealStatus,
 
         String title,
 

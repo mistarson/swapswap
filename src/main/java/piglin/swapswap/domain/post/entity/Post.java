@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import piglin.swapswap.domain.common.BaseTime;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.City;
@@ -61,6 +62,10 @@ public class Post extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private City city;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DealStatus dealStatus;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
