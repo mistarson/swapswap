@@ -68,6 +68,15 @@ public class PostController {
         model.addAttribute("postGetResponseDto", responseDto);
         model.addAttribute("postId", postId);
 
+        String seeMemberNickname;
+        if(member == null) {
+            seeMemberNickname = "";
+        } else {
+            seeMemberNickname = member.getNickname();
+        }
+
+        model.addAttribute("isWriter", responseDto.author().equals(seeMemberNickname));
+
         return "post/post";
     }
 

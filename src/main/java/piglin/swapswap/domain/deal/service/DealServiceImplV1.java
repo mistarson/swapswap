@@ -9,6 +9,7 @@ import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
+import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
@@ -140,6 +141,15 @@ public class DealServiceImplV1 implements DealService {
         if(!deal.getFirstTake() || !deal.getSecondTake()) {
             deal.updateDealStatus(DealStatus.DEALING);
         }
+    }
+
+    @Override
+    public List<DealHistoryResponseDto> getDealHistoryList(Long memberId) {
+
+        List<Deal> dealList = dealRepository.findAllByFirstUserIdOrSecondUserId(
+                memberId, memberId);
+
+        return DealMapper.getDealHistory(dealList);
     }
 
     private Deal findDeal(Long dealId) {

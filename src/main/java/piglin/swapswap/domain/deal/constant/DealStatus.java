@@ -17,7 +17,7 @@ public enum DealStatus {
     public static class DealName {
 
         public static final String REQUESTED = "요청 중";
-        public static final String DEALING = "거래 중";
+        public static final String DEALING = "거래 진행 중";
         public static final String COMPLETED = "거래 완료";
     }
 }

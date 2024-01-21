@@ -7,11 +7,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
     open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 
   mvc:
     hiddenmethod:
@@ -25,12 +29,6 @@ jwt:
 
   thymeleaf:
     cache: false
-
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: true
 
 cloud:
   aws:
@@ -48,4 +46,4 @@ cloud:
 kakao:
   client:
     id: ENC(DmCqicA7Pa7EFxu5XTVtBxYl3K6fHeM1nSl090T2k+aJXj/JxcAnC1++VMpiz2ZU)
-  redirect-uri: http://13.124.101.39/login/kakao/callback
+  redirect-uri: http://swapswap.shop/login/kakao/callback
