@@ -209,7 +209,7 @@ class PostServiceImplV1UnitTest {
 
             // setUp 에서 적용이 안 돼서 여기에 넣어놨습니다...
             nullResponseDto = new PostGetResponseDto(
-                    null, null, null, null, null,
+                    null, null, null, null, null, null,
                     null, null, null, null,null, null,
                     false
             );
