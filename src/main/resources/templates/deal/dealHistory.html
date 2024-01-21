@@ -3,20 +3,29 @@
       xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
       layout:decorate="~{common/layout/layout}">
 <link rel="stylesheet" type="text/css" href="your-stylesheet.css">
+
 <body>
 <div layout:fragment="content">
   <div class="deal-list">
-    <div class="author-dealList-name" th:text="${memberNickname}+'님의 스왑요청목록'">
+    <div class="author-dealList-name" th:text="${memberNickname}+'님의 거래 내역'">
     </div>
   </div>
   <div class="deal-content-container">
     <div class="deal-request-List">
+      <div class="deal-history-all-body">
+        <div class="deal-history-body">
+        <h2 class="deal-requestLabel">요청 일자</h2>
+        <h2 class="deal-requestLabel">완료 일자</h2>
+        <h2 class="deal-requestLabel">거래 상태</h2>
+        <h2 class="deal-requestLabel">거래 상세 보기</h2>
+      </div>
+      </div>
       <div th:each="dealHistoryDto : ${dealHistoryResponseDto}" class="deal-card">
-        <div class="deal-card-body">
-          <h2 th:text="${dealHistoryDto.createdTime()} +'거래 요청 날짜'" class="deal-nickname"></h2>
-          <h2 th:text="${dealHistoryDto.completedDealTime()} +'거래 완료 날짜'" class="deal-nickname"></h2>
-          <h2 th:text="${dealHistoryDto.dealStatus().getName()}" class="deal-status"></h2>
-          <a th:href="@{/deals/{dealId}(dealId=${dealHistoryDto.id()})}" class="deal-button">거래 요청 보기</a>
+        <div class="deal-card2-body">
+         <div style="width: 200px;"><h2 class="deal-createdTime" th:text="${#temporals.format(dealHistoryDto.createdTime(), 'yyyy-MM-dd')}"></h2></div>
+          <div style="width: 200px; margin-left: 170px;"><h2 th:if="${dealHistoryDto.completedDealTime != null}" th:text="${#temporals.format(dealHistoryDto.completedDealTime, 'yyyy-MM-dd')}"></h2></div>
+          <div style="width: 100px; margin-left: 235px; text-align: center;"><h2 th:text="${dealHistoryDto.dealStatus().getName()}"></h2></div>
+          <div style="width: 100px; margin-left: 300px;"><a th:href="@{/deals/{dealId}(dealId=${dealHistoryDto.id()})}" class="deal-button">거래 상세 보기</a></div>
         </div>
       </div>
     </div>

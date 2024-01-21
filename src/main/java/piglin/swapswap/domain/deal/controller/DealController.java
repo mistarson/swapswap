@@ -31,14 +31,14 @@ public class DealController {
 
     private final DealService dealService;
     private final PostService postService;
-
+    @ResponseBody
     @PostMapping
-    public String createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
+    public ResponseEntity<?> createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
             @AuthMember Member member) {
 
         Long dealId = dealService.createDeal(member, requestDto);
 
-        return "redirect:/deals/" + dealId;
+        return ResponseEntity.ok().body(dealId);
     }
 
     @GetMapping("/request")
