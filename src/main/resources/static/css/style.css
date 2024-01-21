@@ -1435,7 +1435,9 @@ input[type="number"] {
   margin-left: 350px; /* 원하는 간격으로 조정하세요. */
   /* 원하는 스타일 속성을 추가하세요. */
 }
-
+.deal-detail-status{
+  margin-left: 20px;
+}
 .deal-button {
   border: 2px solid #ccc;
   border-radius: 40px;
@@ -1779,7 +1781,7 @@ input[type="number"] {
 .deal-detail-request-list .deal-acceptance-buttons {
   position: absolute;
   bottom: 10px; /* 아래쪽에서 10px 오프셋 */
-  right: 0; /* 오른쪽 정렬 */
+  right: 25px; /* 오른쪽 정렬 */
   width: 100%; /* 전체 너비 */
 }
 
