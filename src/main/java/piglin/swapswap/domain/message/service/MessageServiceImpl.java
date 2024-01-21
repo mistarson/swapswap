@@ -6,30 +6,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 import piglin.swapswap.domain.chatroom.mapper.ChatRoomMapper;
-import piglin.swapswap.domain.chatroom.repository.ChatRoomRepository;
-import piglin.swapswap.domain.chatroom_member.repository.ChatRoomMemberRepository;
+import piglin.swapswap.domain.chatroom.service.ChatRoomServiceImpl;
+import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberServiceImpl;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
 import piglin.swapswap.domain.message.dto.response.MessageResponseDto;
 import piglin.swapswap.domain.message.entity.Message;
 import piglin.swapswap.domain.message.mapper.MessageMapper;
 import piglin.swapswap.domain.message.repository.MessageRepository;
-import piglin.swapswap.global.exception.common.BusinessException;
-import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ChatRoomServiceImpl chatRoomService;
+    private final ChatRoomMemberServiceImpl chatRoomMemberService;
 
     @Override
     @Transactional
     public void saveMessage(MessageRequestDto requestDto) {
 
-        ChatRoom chatRoom = getChatRoomByMessageDto(requestDto);
+        ChatRoom chatRoom = chatRoomService.findChatRoomByMessageDto(requestDto);
 
         Message message = createMessageAndUpdateLastMessage(chatRoom, requestDto);
 
@@ -46,17 +44,10 @@ public class MessageServiceImpl implements MessageService {
         return MessageMapper.messageToMessageDto(messageList);
     }
 
-    private ChatRoom getChatRoomById(Long roomId) {
+    @Override
+    public void messageIsDeletedToTrue(ChatRoom chatRoom) {
 
-        return chatRoomRepository.findById(roomId).orElseThrow(() ->
-                new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
-    }
-
-    private ChatRoom getChatRoomByMessageDto(MessageRequestDto requestDto) {
-
-        return chatRoomRepository.findById(requestDto.getChatRoomId()).orElseThrow(() ->
-                new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION)
-        );
+        messageRepository.messageIsDeletedToTrue(chatRoom);
     }
 
     private Message createMessageAndUpdateLastMessage(ChatRoom chatRoom, MessageRequestDto requestDto) {
@@ -69,10 +60,9 @@ public class MessageServiceImpl implements MessageService {
 
     private void validateMember(Member member, Long roomId) {
 
-        ChatRoom chatRoom = getChatRoomById(roomId);
+        ChatRoom chatRoom = chatRoomService.findChatRoom(roomId);
 
-        chatRoomMemberRepository.findByChatRoomAndMember(chatRoom, member).orElseThrow(() ->
-                new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION));
+        chatRoomMemberService.findByChatRoomAndMember(chatRoom, member);
     }
 
 }
