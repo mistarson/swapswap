@@ -124,6 +124,7 @@ public class DealServiceImplV1 implements DealService {
             for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
                 postIdList.add(deal.getSecondPostIdList().get(i));
             }
+            
             postService.updatePostStatusByPostIdList(postIdList, DealStatus.DEALING);
         }
     }
