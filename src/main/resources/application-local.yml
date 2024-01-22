@@ -53,4 +53,4 @@ cloud:
 kakao:
   client:
     id: ENC(DmCqicA7Pa7EFxu5XTVtBxYl3K6fHeM1nSl090T2k+aJXj/JxcAnC1++VMpiz2ZU)
-  redirect-uri: http://localhost:8080/login/kakao/callback
+  redirect-uri: http://swapswap.shop//login/kakao/callback
