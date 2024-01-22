@@ -74,10 +74,6 @@ public class Post extends BaseTime {
     @Column(nullable = false)
     private LocalDateTime modifiedUpTime;
 
-    public void upViewCnt() {
-        this.viewCnt++;
-    }
-
     public void updatePost(String title, String content, Map<Integer, Object> imageUrl,
             Category category, City city) {
         this.title = title;

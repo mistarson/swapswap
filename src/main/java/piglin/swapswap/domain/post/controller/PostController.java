@@ -87,7 +87,7 @@ public class PostController {
             Model model
     ) {
 
-        model.addAttribute("PostGetListResponseDto", postService.getPostList(member, cursorTime));
+        model.addAttribute("postGetListResponseDto", postService.getPostList(member, cursorTime));
 
         return "post/postList";
     }
@@ -101,7 +101,7 @@ public class PostController {
 
         List<PostGetListResponseDto> postList = postService.getPostListMore(member, cursorTime);
 
-        model.addAttribute("PostGetListResponseDto", postList);
+        model.addAttribute("postGetListResponseDto", postList);
 
         return "post/postListFragment";
     }
@@ -177,7 +177,7 @@ public class PostController {
             Model model
     ) {
 
-        model.addAttribute("PostGetListResponseDto",
+        model.addAttribute("postGetListResponseDto",
                 postService.searchPost(title, category, city, member, cursorTime));
 
         return "post/postSearchList";
@@ -200,7 +200,7 @@ public class PostController {
             throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
         }
 
-        model.addAttribute("PostGetListResponseDto", postList);
+        model.addAttribute("postGetListResponseDto", postList);
 
         return "post/postListFragment";
     }

@@ -152,6 +152,31 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime) {
+
+        return queryFactory
+                .select(Projections.constructor(PostGetListResponseDto.class,
+                        post.id,
+                        post.member.id,
+                        post.city,
+                        post.dealStatus,
+                        post.title,
+                        post.imageUrl,
+                        post.modifiedUpTime,
+                        post.viewCnt,
+                        favorite.post.count(),
+                        favoriteStatus(member)))
+                .from(post)
+                .where(isNotDeleted(), lessThanCursorTime(cursorTime), post.member.id.eq(member.getId()))
+                .leftJoin(favorite)
+                .on(favorite.post.eq(post))
+                .groupBy(post.id)
+                .orderBy(post.modifiedUpTime.desc(), post.id.desc())
+                .limit(12)
+                .fetch();
+    }
+
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {
 
         return cursorTime != null ? post.modifiedUpTime.lt(cursorTime) : null;

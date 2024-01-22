@@ -231,6 +231,23 @@ public class PostServiceImplV1 implements PostService {
         return responseDtoList;
     }
 
+    @Override
+    public List<PostGetListResponseDto> getMyPostList(Member member, LocalDateTime cursorTime) {
+
+        return postRepository.findAllMyPostList(member, cursorTime);
+    }
+
+    @Override
+    public List<PostGetListResponseDto> getMyPostListMore(Member member, LocalDateTime cursorTime) {
+
+        List<PostGetListResponseDto> postList = postRepository.findAllMyPostList(member,
+                cursorTime);
+
+        isEmptyPostList(postList);
+
+        return postList;
+    }
+
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
 
         Map<Integer, Object> imageUrlMap = new HashMap<>();

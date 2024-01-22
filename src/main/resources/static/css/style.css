@@ -293,7 +293,7 @@ img {
   margin-right: 0;
 }
 
-.deal-status {
+.post-deal-status {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -305,11 +305,11 @@ img {
   text-align: center;
 }
 
-.deal-status.dealing {
+.post-deal-status.dealing {
   background-color: #FFA500; /* 거래 진행 중일 때의 색상 */
 }
 
-.deal-status.completed {
+.post-deal-status.completed {
   background-color: #28a745; /* 거래 완료일 때의 색상 */
 }
 
