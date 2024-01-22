@@ -338,6 +338,14 @@ img {
   text-align: center;
 }
 
+.image-upload-guide {
+  font-size: 12px; /* 작은 글씨 크기 */
+  color: #707070; /* 회색 계열 색상 */
+  margin-top: 5px; /* input 태그와의 간격 조정 */
+  text-align: center; /* 중앙 정렬 */
+}
+
+
 .write-bar-title-input {
   flex-grow: 1;
   height: 80%;
