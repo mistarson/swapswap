@@ -22,9 +22,9 @@
         th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
         type="button"
     ></button>
-    <div class="deal-status">
-      <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="deal-status dealing"> 거래 진행 중 </div>
-      <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="deal-status completed"> 거래 완료 </div>
+    <div class="post-deal-status">
+      <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
+      <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
     </div>
   </div>
 </body>
