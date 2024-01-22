@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
@@ -17,9 +18,9 @@ import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
@@ -221,14 +222,25 @@ public class PostServiceImplV1 implements PostService {
             Map<Integer, Long> postIdList) {
 
         List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
-
         for(int i = 0; i < postIdList.size(); i++) {
+
             Long postId = postIdList.get(i);
+
             Post post = findPost(postId);
+
             responseDtoList.add(PostMapper.getPostSimpleInfoListByPost(post));
         }
 
         return responseDtoList;
+    }
+
+    @Override
+    public void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus) {
+
+        for (Long postId : postIdList) {
+            Post post = findPost(postId);
+            post.updatePostDealStatus(dealStatus);
+        }
     }
 
     @Override
