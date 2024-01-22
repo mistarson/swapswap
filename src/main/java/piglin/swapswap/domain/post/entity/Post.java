@@ -93,4 +93,9 @@ public class Post extends BaseTime {
         this.upCnt++;
         this.modifiedUpTime = LocalDateTime.now();
     }
+
+    public void updatePostDealStatus(DealStatus dealStatus) {
+
+        this.dealStatus = dealStatus;
+    }
 }
