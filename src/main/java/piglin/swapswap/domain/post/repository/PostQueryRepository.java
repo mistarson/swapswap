@@ -22,4 +22,6 @@ public interface PostQueryRepository {
 
     List<PostGetListResponseDto> findAllMyFavoritePost(Member member,
             LocalDateTime cursorTime);
+
+    List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime);
 }

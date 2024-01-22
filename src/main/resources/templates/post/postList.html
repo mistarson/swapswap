@@ -23,7 +23,7 @@
     <a href="#ETC">기타중고물품</a>
   </div>
   <div class="post-container">
-    <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+    <div th:each="postDto : ${postGetListResponseDto}" class="post-card"
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">

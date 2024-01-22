@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-  <div th:each="postDto : ${PostGetListResponseDto}" class="post-card"
+  <div th:each="postDto : ${postGetListResponseDto}" class="post-card"
        th:data-modified-time="${postDto.modifiedUpTime}">
     <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
       <div class="post-image-container">
