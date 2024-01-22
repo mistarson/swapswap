@@ -15,6 +15,8 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -25,6 +27,7 @@ public class DealServiceImplV1 implements DealService {
 
     private final DealRepository dealRepository;
     private final MemberRepository memberRepository;
+    private final PostService postService;
 
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
@@ -113,6 +116,7 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstAllow() && deal.getSecondAllow()) {
             deal.updateDealStatus(DealStatus.DEALING);
+            postService.getPostIdList(deal);
         }
     }
 

@@ -1,5 +1,7 @@
 package piglin.swapswap.domain.post.service;
 
+import static piglin.swapswap.domain.post.entity.QPost.post;
+
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import piglin.swapswap.domain.deal.constant.DealStatus;
+import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
@@ -221,14 +225,37 @@ public class PostServiceImplV1 implements PostService {
             Map<Integer, Long> postIdList) {
 
         List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
-
         for(int i = 0; i < postIdList.size(); i++) {
+
             Long postId = postIdList.get(i);
+
             Post post = findPost(postId);
+
             responseDtoList.add(PostMapper.getPostSimpleInfoListByPost(post));
         }
 
         return responseDtoList;
+    }
+
+    @Override
+    public List<Post> getPostIdList(Deal deal) {
+
+        List<Post> postIdList = new ArrayList<>();
+
+        for (int i = 0; i<deal.getFirstPostIdList().size(); i++){
+
+            Post post = findPost(deal.getFirstPostIdList().get(i));
+            postIdList.add(post);
+            post.updatePostDealStatus(deal.getDealStatus());
+        }
+        for (int i = 0; i<deal.getSecondPostIdList().size(); i++){
+
+            Post secondPost = findPost(deal.getSecondPostIdList().get(i));
+            postIdList.add(secondPost);
+            secondPost.updatePostDealStatus(deal.getDealStatus());
+        }
+
+        return postIdList;
     }
 
     @Override
