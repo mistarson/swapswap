@@ -3,6 +3,7 @@ package piglin.swapswap.domain.post.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
@@ -102,5 +103,5 @@ public interface PostService {
 
     List<PostGetListResponseDto> getMyPostListMore(Member member, LocalDateTime cursorTime);
 
-    List<Post> getPostIdList(Deal deal);
+    void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus);
 }

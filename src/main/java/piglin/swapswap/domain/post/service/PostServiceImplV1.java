@@ -238,24 +238,12 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<Post> getPostIdList(Deal deal) {
+    public void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus) {
 
-        List<Post> postIdList = new ArrayList<>();
-
-        for (int i = 0; i<deal.getFirstPostIdList().size(); i++){
-
-            Post post = findPost(deal.getFirstPostIdList().get(i));
-            postIdList.add(post);
-            post.updatePostDealStatus(deal.getDealStatus());
+        for (Long postId : postIdList) {
+            Post post = findPost(postId);
+            post.updatePostDealStatus(dealStatus);
         }
-        for (int i = 0; i<deal.getSecondPostIdList().size(); i++){
-
-            Post secondPost = findPost(deal.getSecondPostIdList().get(i));
-            postIdList.add(secondPost);
-            secondPost.updatePostDealStatus(deal.getDealStatus());
-        }
-
-        return postIdList;
     }
 
     @Override

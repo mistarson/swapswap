@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.deal.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -115,7 +117,15 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstAllow() && deal.getSecondAllow()) {
             deal.updateDealStatus(DealStatus.DEALING);
-            postService.getPostIdList(deal);
+
+            List<Long> postIdList = new ArrayList<>();
+            for(int i = 0; i<deal.getFirstPostIdList().size(); i++){
+                postIdList.add(deal.getFirstPostIdList().get(i));
+            }
+            for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
+                postIdList.add(deal.getSecondPostIdList().get(i));
+            }
+            postService.updatePostStatusByPostIdList(postIdList, DealStatus.DEALING);
         }
     }
 
@@ -139,7 +149,16 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstTake() && deal.getSecondTake()) {
             deal.updateDealStatus(DealStatus.COMPLETED);
-            postService.getPostIdList(deal);
+
+            List<Long> postIdList = new ArrayList<>();
+            for(int i = 0; i<deal.getFirstPostIdList().size(); i++){
+                postIdList.add(deal.getFirstPostIdList().get(i));
+            }
+            for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
+                postIdList.add(deal.getSecondPostIdList().get(i));
+            }
+
+            postService.updatePostStatusByPostIdList(postIdList, DealStatus.COMPLETED);
         }
 
         if(!deal.getFirstTake() || !deal.getSecondTake()) {
