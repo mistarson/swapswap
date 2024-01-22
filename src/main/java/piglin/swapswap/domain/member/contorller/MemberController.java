@@ -32,9 +32,9 @@ import piglin.swapswap.global.jwt.JwtCookieManager;
 public class MemberController {
 
     private final KakaoServiceImpl kakaoServiceImpl;
-  
+
     private final MemberService memberService;
-  
+
     private final PostService postService;
 
     private final MemberCouponService memberCouponService;
@@ -83,11 +83,13 @@ public class MemberController {
     @GetMapping("/members/coupon")
     public String getMyCouponList(@AuthMember Member member, Model model) {
 
-        List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(member);
+        List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(
+                member);
         model.addAttribute("myCouponGetResponseDtoList", myCouponGetResponseDtoList);
 
         return "/member/myCouponList";
     }
+
     @GetMapping("/members/swap-money")
     public String getMySwapMoney(@AuthMember Member member, Model model) {
 
@@ -98,7 +100,8 @@ public class MemberController {
     }
 
     @GetMapping("/members/favorites")
-    public String getMyFavoriteList(@AuthMember Member member,@RequestParam(required = false) LocalDateTime cursorTime, Model model) {
+    public String getMyFavoriteList(@AuthMember Member member,
+            @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
 
         List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostList(
                 member, cursorTime);
@@ -108,10 +111,35 @@ public class MemberController {
     }
 
     @GetMapping("/members/favorites/more")
-    public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime, Model model) {
+    public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime,
+            Model model) {
 
         List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostListMore(
                 member, cursorTime);
+        model.addAttribute("postGetListResponseDto", responseDtoList);
+
+        return "post/postListFragment";
+    }
+
+    @GetMapping("/members/posts")
+    public String getMyPostList(@AuthMember Member member,
+            @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
+
+        List<PostGetListResponseDto> responseDtoList = postService.getMyPostList(member,
+                cursorTime);
+
+        model.addAttribute("postGetListResponseDto", responseDtoList);
+
+        return "member/myPostList";
+    }
+
+    @GetMapping("/members/posts/more")
+    public String getMyPostListMore(@AuthMember Member member, LocalDateTime cursorTime,
+            Model model) {
+
+        List<PostGetListResponseDto> responseDtoList = postService.getMyPostListMore(member,
+                cursorTime);
+
         model.addAttribute("postGetListResponseDto", responseDtoList);
 
         return "post/postListFragment";
