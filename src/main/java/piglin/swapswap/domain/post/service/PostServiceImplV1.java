@@ -1,7 +1,5 @@
 package piglin.swapswap.domain.post.service;
 
-import static piglin.swapswap.domain.post.entity.QPost.post;
-
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import piglin.swapswap.domain.deal.constant.DealStatus;
-import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
@@ -21,9 +18,9 @@ import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;

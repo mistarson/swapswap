@@ -4,14 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
-import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
-import piglin.swapswap.domain.post.entity.Post;
 
 public interface PostService {
 
