@@ -140,6 +140,7 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstTake() && deal.getSecondTake()) {
             deal.updateDealStatus(DealStatus.COMPLETED);
+            postService.getPostIdList(deal);
         }
 
         if(!deal.getFirstTake() || !deal.getSecondTake()) {
