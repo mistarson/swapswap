@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import piglin.swapswap.domain.common.BaseTime;
-import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
 
 @Entity
 @Getter
@@ -40,8 +39,8 @@ public class ChatRoom extends BaseTime {
         isDeleted = true;
     }
 
-    public void updateChatRoom(MessageRequestDto requestDto) {
-        this.lastMessage = requestDto.text();
+    public void updateChatRoom(String lastMessage) {
+        this.lastMessage = lastMessage;
         this.lastMessageTime = LocalDateTime.now();
     }
 }

@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.chatroom.service;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    @Transactional
     public void saveMessage(MessageRequestDto requestDto) {
 
         ChatRoom chatRoom = getChatRoomByMessageDto(requestDto);
@@ -99,7 +101,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private Message createMessageAndUpdateLastMessage(ChatRoom chatRoom, MessageRequestDto requestDto) {
 
         Message message = MessageMapper.createMessage(requestDto, chatRoom);
-        ChatRoomMapper.updateChatRoom(chatRoom, requestDto);
+        chatRoom.updateChatRoom(requestDto.text());
 
         return message;
     }

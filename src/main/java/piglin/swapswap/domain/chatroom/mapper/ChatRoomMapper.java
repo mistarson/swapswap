@@ -1,8 +1,6 @@
 package piglin.swapswap.domain.chatroom.mapper;
 
-import java.util.UUID;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
-import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
 
 public class ChatRoomMapper {
 
@@ -11,11 +9,6 @@ public class ChatRoomMapper {
         return ChatRoom.builder()
                 .isDeleted(false)
                 .build();
-    }
-
-    public static void updateChatRoom(ChatRoom chatRoom, MessageRequestDto requestDto) {
-
-        chatRoom.updateChatRoom(requestDto);
     }
 
 }
