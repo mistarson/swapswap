@@ -554,17 +554,12 @@ img {
   border-radius: 20px;
 }
 
-.post-author-favorite-section {
+.post-button-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   background-color: #ffffff;
-}
-
-.author-details .author-name {
-  font-weight: bold;
-  color: #333;
 }
 
 .favorite-action button {
@@ -580,7 +575,7 @@ img {
   border: 1px solid #00AADC;
 }
 
-.post-up-button a, .post-update-button a, .post-delete-button a, .post-request-button a {
+.post-button-section a {
   padding: 5px 15px;
   border-radius: 20px;
   text-decoration: none;
@@ -593,26 +588,25 @@ img {
   display: inline-block;
 }
 
-/* 수정 버튼 스타일 */
-.post-update-button a {
-  background-color: #ffffff; /* 녹색 배경 */
+.post-button-section a:hover {
+  color: white;
+  background-color: #00AADC;
 }
 
 .post-update-button a:hover {
   color: white;
-  background-color: #45a049; /* 호버 시 색상 변경 */
-}
-
-/* 삭제 버튼 스타일 */
-.post-delete-button a {
-  background-color: #ffffff;
+  background-color: #45a049;
 }
 
 .post-delete-button a:hover {
   color: white;
-  background-color: #da190b; /* 호버 시 색상 변경 */
+  background-color: #da190b;
 }
 
+.author-details .author-name {
+  font-weight: bold;
+  color: #333;
+}
 
 .post-title-meta-section {
   padding: 20px;
