@@ -61,16 +61,22 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         Long swapMoney = 0L;
 
         if (deal.getFirstUserId().equals(member.getId())) {
-            swapMoney = dealWallet.getFirstSwapMoney();
+            if (!(dealWallet.getFirstSwapMoney() == null)) {
+                swapMoney = dealWallet.getFirstSwapMoney();
+            }
             dealWallet.updateFirstSwapMoney(null);
         }
 
         if (deal.getSecondUserId().equals(member.getId())) {
-            swapMoney = dealWallet.getSecondSwapMoney();
+            if (!(dealWallet.getSecondSwapMoney() == null)) {
+                swapMoney = dealWallet.getSecondSwapMoney();
+            }
             dealWallet.updateSecondSwapMoney(null);
         }
 
-        walletService.depositSwapMoney(swapMoney, HistoryType.DEAL_DEPOSIT, member.getId());
+        if(!(swapMoney == 0L)) {
+            walletService.depositSwapMoney(swapMoney, HistoryType.DEAL_DEPOSIT, member.getId());
+        }
     }
 
     @Override
@@ -103,6 +109,12 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         }
 
         dealWalletRepository.delete(dealWallet);
+    }
+
+    @Override
+    public Boolean existsDealWallet(Long dealId) {
+
+        return dealWalletRepository.existsByDealId(dealId);
     }
 
     private DealWallet getDealWallet(Deal deal) {
