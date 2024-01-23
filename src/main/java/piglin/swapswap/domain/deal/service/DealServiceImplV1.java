@@ -84,6 +84,11 @@ public class DealServiceImplV1 implements DealService {
             throw new RuntimeException("딜을 수정할 수 없는 상태입니다~");
         }
 
+        if (dealWalletService.existsDealWallet(dealId)) {
+
+            dealWalletService.withdrawMemberSwapMoneyAtDealUpdate(deal);
+        }
+
         if (deal.getFirstUserId().equals(memberId)) {
             DealMapper.updateDealFirst(deal, requestDto);
         }
@@ -202,7 +207,7 @@ public class DealServiceImplV1 implements DealService {
         if(deal.getFirstTake() && deal.getSecondTake()) {
 
             dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
-            
+
             deal.updateDealStatus(DealStatus.COMPLETED);
 
             List<Long> postIdList = new ArrayList<>();

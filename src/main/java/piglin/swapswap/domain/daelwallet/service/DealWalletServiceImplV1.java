@@ -40,15 +40,14 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void updateDealWallet(Deal deal, Member member, Long swapMoney) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId()).orElseThrow(
-                () -> new RuntimeException("")
-        );
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(() -> new RuntimeException(""));
 
-        if(deal.getFirstUserId().equals(member.getId())) {
+        if (deal.getFirstUserId().equals(member.getId())) {
             dealWallet.updateFirstSwapMoney(swapMoney);
         }
 
-        if(deal.getSecondUserId().equals(member.getId())) {
+        if (deal.getSecondUserId().equals(member.getId())) {
             dealWallet.updateSecondSwapMoney(swapMoney);
         }
 
@@ -58,18 +57,17 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void withdrawMemberSwapMoneyAtUpdate(Deal deal, Member member) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId()).orElseThrow(
-                () -> new RuntimeException("")
-        );
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(() -> new RuntimeException(""));
 
         Long swapMoney = 0L;
 
-        if(deal.getFirstUserId().equals(member.getId())) {
+        if (deal.getFirstUserId().equals(member.getId())) {
             swapMoney = dealWallet.getFirstSwapMoney();
             dealWallet.updateFirstSwapMoney(null);
         }
 
-        if(deal.getSecondUserId().equals(member.getId())) {
+        if (deal.getSecondUserId().equals(member.getId())) {
             swapMoney = dealWallet.getSecondSwapMoney();
             dealWallet.updateSecondSwapMoney(null);
         }
@@ -80,12 +78,35 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void withdrawMemberSwapMoneyAtComplete(Deal deal) {
 
-        DealWallet dealWallet  = dealWalletRepository.findByDealId(deal.getId()).orElseThrow(
-                () -> new RuntimeException("")
-        );
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(() -> new RuntimeException(""));
 
-        walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(),HistoryType.DEAL_DEPOSIT , deal.getSecondUserId());
-        walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),HistoryType.DEAL_DEPOSIT , deal.getFirstUserId());
+        if (!(dealWallet.getFirstSwapMoney() == null)) {
+            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
+                    deal.getSecondUserId());
+        }
+        if (!(dealWallet.getSecondSwapMoney() == null)) {
+            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
+                    HistoryType.DEAL_DEPOSIT, deal.getFirstUserId());
+        }
+    }
+
+    @Override
+    public void withdrawMemberSwapMoneyAtDealUpdate(Deal deal) {
+
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(() -> new RuntimeException(""));
+
+        if (!(dealWallet.getFirstSwapMoney() == null)) {
+            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
+                    deal.getFirstUserId());
+        }
+        if (!(dealWallet.getSecondSwapMoney() == null)) {
+            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
+                    HistoryType.DEAL_DEPOSIT, deal.getSecondUserId());
+        }
+
+        dealWalletRepository.delete(dealWallet);
     }
 
     @Override
