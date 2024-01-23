@@ -23,6 +23,9 @@
           <div class="deal-take-status">인수 상태:
             <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
           </div>
+          <div class="deal-swap-pay-status">스왑페이 사용여부:
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
+          </div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
@@ -42,8 +45,11 @@
           <div class="deal-detail-allow "th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
           </div>
             <div class="deal-take-status">인수 상태:
-          <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
+          <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
             </div>
+          <div class="deal-swap-pay-status">스왑페이 사용여부:
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
+          </div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
