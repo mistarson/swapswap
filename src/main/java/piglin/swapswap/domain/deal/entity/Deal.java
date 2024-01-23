@@ -48,11 +48,11 @@ public class Deal extends BaseTime {
     @Column(columnDefinition = "json")
     private Map<Integer, Long> secondPostIdList;
 
-    @Column(nullable = false)
-    private int firstExtraFee;
+    @Column
+    private Long firstExtraFee;
 
-    @Column(nullable = false)
-    private int secondExtraFee;
+    @Column
+    private Long secondExtraFee;
 
     @Column(nullable = false)
     private Boolean firstAllow;
@@ -66,10 +66,16 @@ public class Deal extends BaseTime {
     @Column(nullable = false)
     private Boolean secondTake;
 
+    @Column(nullable = false)
+    private Boolean isFirstSwapMoneyUsed;
+
+    @Column(nullable = false)
+    private Boolean isSecondSwapMoneyUsed;
+
     @Column
     private LocalDateTime completedDealTime;
 
-    public void updateDealFirst(int firstExtraFee, Map<Integer, Long> firstPostIdMap) {
+    public void updateDealFirst(Long firstExtraFee, Map<Integer, Long> firstPostIdMap) {
 
         this.firstExtraFee = firstExtraFee;
         this.firstPostIdList = firstPostIdMap;
@@ -77,7 +83,7 @@ public class Deal extends BaseTime {
         this.secondAllow = false;
     }
 
-    public void updateDealSecond(int secondExtraFee, Map<Integer, Long> secondPostIdMap) {
+    public void updateDealSecond(Long secondExtraFee, Map<Integer, Long> secondPostIdMap) {
 
         this.secondExtraFee = secondExtraFee;
         this.secondPostIdList = secondPostIdMap;
@@ -103,6 +109,16 @@ public class Deal extends BaseTime {
     public void updateDealSecondMemberTake() {
 
         secondTake = true;
+    }
+
+    public void updateDealFirstMemberSwapMoneyUsing() {
+
+        isFirstSwapMoneyUsed = !isFirstSwapMoneyUsed;
+    }
+
+    public void updateDealSecondMemberSwapMoneyUsing() {
+
+        isSecondSwapMoneyUsed = !isSecondSwapMoneyUsed;
     }
 
     public void updateDealStatus(DealStatus dealStatus) {

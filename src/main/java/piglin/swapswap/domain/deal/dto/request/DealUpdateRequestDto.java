@@ -5,7 +5,7 @@ import java.util.List;
 
 public record DealUpdateRequestDto (
         @PositiveOrZero
-        int extraFee,
+        Long extraFee,
         List<Long> postIdList
 ) {
 }

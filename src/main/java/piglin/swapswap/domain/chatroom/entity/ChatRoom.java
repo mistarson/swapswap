@@ -41,7 +41,7 @@ public class ChatRoom extends BaseTime {
     }
 
     public void updateChatRoom(MessageRequestDto requestDto) {
-        this.lastMessage = requestDto.getText();
+        this.lastMessage = requestDto.text();
         this.lastMessageTime = LocalDateTime.now();
     }
 }

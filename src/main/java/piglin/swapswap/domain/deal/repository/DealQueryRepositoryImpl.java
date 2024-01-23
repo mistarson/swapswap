@@ -72,7 +72,9 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
                                 deal.firstAllow,
                                 deal.secondAllow,
                                 deal.firstTake,
-                                deal.secondTake))
+                                deal.secondTake,
+                                deal.isFirstSwapMoneyUsed,
+                                deal.isSecondSwapMoneyUsed))
                 .from(deal)
                 .where(deal.id.eq(dealId))
                 .fetchOne();

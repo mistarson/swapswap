@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import piglin.swapswap.domain.daelwallet.service.DealWalletService;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
@@ -27,6 +28,7 @@ public class DealServiceImplV1 implements DealService {
 
     private final DealRepository dealRepository;
     private final MemberRepository memberRepository;
+    private final DealWalletService dealWalletService;
     private final PostService postService;
 
     @Override
@@ -79,6 +81,11 @@ public class DealServiceImplV1 implements DealService {
             throw new RuntimeException("딜을 수정할 수 없는 상태입니다~");
         }
 
+        if (dealWalletService.existsDealWallet(dealId)) {
+
+            dealWalletService.withdrawMemberSwapMoneyAtDealUpdate(deal);
+        }
+
         if (deal.getFirstUserId().equals(memberId)) {
             DealMapper.updateDealFirst(deal, requestDto);
         }
@@ -107,14 +114,73 @@ public class DealServiceImplV1 implements DealService {
         }
 
         if(deal.getFirstUserId().equals(member.getId())) {
+
             deal.updateDealFirstMemberAllow();
+
+            Long firstExtraFee = null;
+
+            if(deal.getFirstExtraFee() != null) {
+                firstExtraFee = deal.getFirstExtraFee();
+            }
+
+            if(deal.getIsFirstSwapMoneyUsed()) {
+                if (dealWalletService.existsDealWallet(dealId) ) {
+
+                    if (deal.getFirstAllow()) {
+                        dealWalletService.updateDealWallet(deal, member, firstExtraFee);
+                    }
+
+                    if (!deal.getFirstAllow()) {
+                        dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
+                    }
+                }
+
+                if (!dealWalletService.existsDealWallet(dealId)) {
+
+                    if (deal.getFirstAllow()) {
+                        if (deal.getFirstExtraFee() != null) {
+                            dealWalletService.createDealWallet(deal, member, firstExtraFee);
+                        }
+                    }
+                }
+            }
         }
 
         if(deal.getSecondUserId().equals(member.getId())) {
+
             deal.updateDealSecondMemberAllow();
+
+            Long secondExtraFee = null;
+
+            if(deal.getSecondExtraFee() != null) {
+                secondExtraFee = deal.getSecondExtraFee();
+            }
+
+            if(deal.getIsSecondSwapMoneyUsed()) {
+                if (dealWalletService.existsDealWallet(dealId) ) {
+
+                    if (deal.getSecondAllow()) {
+                        dealWalletService.updateDealWallet(deal, member, secondExtraFee);
+                    }
+
+                    if (!deal.getSecondAllow()) {
+                        dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
+                    }
+                }
+
+                if (!dealWalletService.existsDealWallet(dealId)) {
+
+                    if (deal.getSecondAllow()) {
+                        if (deal.getSecondExtraFee() != null) {
+                            dealWalletService.createDealWallet(deal, member, secondExtraFee);
+                        }
+                    }
+                }
+            }
         }
 
         if(deal.getFirstAllow() && deal.getSecondAllow()) {
+
             deal.updateDealStatus(DealStatus.DEALING);
 
             List<Long> postIdList = new ArrayList<>();
@@ -124,7 +190,7 @@ public class DealServiceImplV1 implements DealService {
             for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
                 postIdList.add(deal.getSecondPostIdList().get(i));
             }
-            
+
             postService.updatePostStatusByPostIdList(postIdList, DealStatus.DEALING);
         }
     }
@@ -148,6 +214,9 @@ public class DealServiceImplV1 implements DealService {
         }
 
         if(deal.getFirstTake() && deal.getSecondTake()) {
+
+            dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
+
             deal.updateDealStatus(DealStatus.COMPLETED);
 
             List<Long> postIdList = new ArrayList<>();
@@ -165,6 +234,31 @@ public class DealServiceImplV1 implements DealService {
             deal.updateDealStatus(DealStatus.DEALING);
         }
     }
+
+    @Override
+    @Transactional
+    public void updateDealSwapMoneyIsUsing(Long dealId, Member member){
+        Deal deal = findDeal(dealId);
+
+        if (!deal.getDealStatus().equals(DealStatus.REQUESTED)) {
+            throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
+        }
+
+        if(deal.getFirstUserId().equals(member.getId())) {
+            if(deal.getFirstAllow()) {
+                throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
+            }
+            deal.updateDealFirstMemberSwapMoneyUsing();
+        }
+
+        if(deal.getSecondUserId().equals(member.getId())) {
+            if(deal.getSecondAllow()) {
+                throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
+            }
+            deal.updateDealSecondMemberSwapMoneyUsing();
+        }
+    }
+
 
     @Override
     public List<DealHistoryResponseDto> getDealHistoryList(Long memberId) {

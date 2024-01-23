@@ -33,7 +33,7 @@ public class Member extends BaseTime {
     @Column(nullable = false, length = 40)
     private String email;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 15)
     private String nickname;
 
     @Enumerated(value = EnumType.STRING)

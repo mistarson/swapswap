@@ -1,84 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout=http://www.ultraq.net.nz/thymeleaf/layout
+      layout:decorate="~{common/layout/layout}">
 <head>
   <meta charset="UTF-8">
-  <style>
-    .section--chat {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .inner {
-      width: 500px;
-      height: 800px;
-      display: flex;
-      background: #dcdcdc;
-      flex-direction: column;
-    }
-
-    .header {
-      width: 100%;
-      height: 50px;
-      font-size: 25px;
-      color: #fff;
-      background: #00AADC;
-      text-align: center;
-      padding-top: 10px;
-      box-sizing: border-box;
-    }
-
-    .chat-container {
-      width: 100%;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .chat {
-      display: flex;
-      align-items: flex-start;
-      padding: 20px;
-    }
-
-    .chat .textbox {
-      position: relative;
-      display: inline-block;
-      max-width: calc(100% - 70px);
-      padding: 10px;
-      margin-top: 7px;
-      font-size: 13px;
-      border-radius: 10px;
-    }
-
-    .ch1 .textbox {
-      margin-left: 20px;
-      background-color: #fff;
-    }
-
-    .wrap .ch1 .textbox::before {
-      left: -15px;
-      content: "◀";
-      color: #ddd;
-    }
-
-    .ch2 {
-      flex-direction: row-reverse;
-    }
-
-    .ch2 .textbox {
-      margin-right: 20px;
-      background-color: #F9EB54;
-    }
-
-    .ch2 .textbox::before {
-      right: -15px;
-      content: "▶";
-      color: #F9EB54;
-    }
-  </style>
-  <title>SWAPSWAP</title>
 </head>
 <body>
+<div layout:fragment="content">
 <section class="section--chat">
   <div class="inner">
     <div class="header">채팅</div>
@@ -89,10 +17,9 @@
         Connecting...
       </div>
 
-      <div th:each="message : ${messageList}" class="chat ch1">
-        <div class="sender" th:text="${message.senderNickname}"></div>
+      <div th:each="message : ${messageList}" th:class="${message.senderNickname == #authentication.principal.nickname} ? 'chat ch2' : 'chat ch1'">
+        <div class="sender" th:if="${message.senderNickname != #authentication.principal.nickname}" th:text="${message.senderNickname}"></div>
         <div class="textbox" th:text="${message.text}"></div>
-
       </div>
 
     </div>
@@ -172,8 +99,9 @@
     senderDiv.classList.add('sender');
     textBoxDiv.classList.add('textbox');
 
-    if (message.senderId === currentUserId) {
+    if (message.senderNickname === senderNickname) {
       messageElement.classList.add('ch2');
+      senderDiv.style.display = 'none';
     } else {
       messageElement.classList.add('ch1');
     }
@@ -183,7 +111,6 @@
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
-
   function leaveChatRoom(roomId) {
     $.ajax({
       url: '/chats/leave',
@@ -198,5 +125,6 @@
 
   messageForm.addEventListener('submit', sendMessage, true);
 </script>
+</div>
 </body>
 </html>

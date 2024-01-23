@@ -144,4 +144,11 @@ public class MemberController {
 
         return "post/postListFragment";
     }
+
+    @ResponseBody
+    @GetMapping("/members/checkNickname")
+    public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
+        boolean nicknameExists = memberService.checkNicknameExists(nickname);
+        return ResponseEntity.ok(nicknameExists);
+    }
 }

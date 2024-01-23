@@ -33,9 +33,10 @@ public class MemberServiceImplV1 implements MemberService {
     @Transactional
     public void deleteMember(Member loginMember) {
 
-        Member member = memberRepository.findByIdAndIsDeletedIsFalse(loginMember.getId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
-        );
+        Member member = memberRepository.findByIdAndIsDeletedIsFalse(loginMember.getId())
+                .orElseThrow(
+                        () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
+                );
 
         member.deleteMember();
     }
@@ -60,5 +61,10 @@ public class MemberServiceImplV1 implements MemberService {
 
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+    }
+
+    @Override
+    public boolean checkNicknameExists(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 }

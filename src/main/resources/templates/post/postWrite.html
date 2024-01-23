@@ -16,7 +16,19 @@
       event.target.classList.add('active')
     }
 
+    function uploadForm() {
+
+      if(confirm("게시글 등록하시겠습니까?") == true) {
+
+        return validateForm();
+      } else {
+
+        return false;
+      }
+    }
+
     function validateForm() {
+
       var titleInput = document.querySelector('.write-bar-title-input');
       var imageInput = document.querySelector('.write-bar-image-input');
       var categoryInput = document.getElementById('categoryInput');
@@ -28,34 +40,41 @@
 
       if (title.length === 0 || title.length > 50) {
         alert('제목은 1글자 이상 50글자 이하이어야 합니다.');
+
         return false;
       }
 
       if (imageInput.files.length === 0) {
         alert('사진을 첨부해주세요');
+
         return false;
       }
 
       if (cityInput.value.trim() === '') {
         alert('도시를 선택해주세요');
+
         return false;
       }
 
       if (categoryInput.value.trim() === '') {
         alert('카테고리를 선택하여 주세요');
+
         return false;
       }
 
       if (content.length === 0 || content.length > 1000) {
         alert('글 내용은 1글자 이상 1000글자 이하이어야 합니다.');
+
         return false;
       }
 
       return true;
     }
+
+
   </script>
   <form action="#" th:action="@{/posts/write}" th:object="${PostCreateRequestDto}" method="post"
-        enctype="multipart/form-data" onsubmit="return validateForm()">
+        enctype="multipart/form-data" onsubmit="return uploadForm()">
     <div class="write-bar-container">
       <div class="write-bar">
         <div class="write-bar-explain"> 이미지</div>

@@ -9,8 +9,12 @@
   <div class="post-content-container">
     <div class="post-content-image-container">
       <div class="post-deal-status">
-        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
-        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
+        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}"
+             class="post-deal-status dealing"> 거래 진행 중
+        </div>
+        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}"
+             class="post-deal-status completed"> 거래 완료
+        </div>
       </div>
       <div class="post-content-image-slider">
         <img th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
@@ -21,36 +25,57 @@
     </div>
     <div>
       <div class="post-content-details">
-        <div class="post-author-favorite-section">
+        <div class="post-button-section">
           <div class="author-details">
             <input class="author-id" type="hidden" th:value="${postGetResponseDto.memberId}">
             <span class="author-name" th:text="${postGetResponseDto.author}"></span>
           </div>
-          <div th:if="${isWriter}" class="post-update-button"><a th:href="@{/posts/{postId}/write(postId=${postId})}" sec:authorize="isAuthenticated()">수정하기</a>
+          <div class="post-update-button"
+               th:if="${isWriter}">
+            <a th:href="@{/posts/{postId}/write(postId=${postId})}"
+               sec:authorize="isAuthenticated()">
+              수정하기
+            </a>
           </div>
           <div class="chat-request-button"
+               th:if="${!isWriter}"
                th:data-member-id="${postGetResponseDto.memberId}"
-               th:onclick="requestChat(this.getAttribute('data-member-id'))">
-            <a>채팅하기</a>
+               th:onclick="requestChat(this.getAttribute('data-member-id'))"
+               sec:authorize="isAuthenticated()">
+            <a>
+              채팅하기
+            </a>
           </div>
-          <div class="post-request-button">
-            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}" sec:authorize="isAuthenticated()" th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED}">요청하기</a>
+          <div class="post-request-button"
+               sec:authorize="isAuthenticated()"
+               th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED} and ${!isWriter}"
+          >
+            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}">
+              요청하기
+            </a>
           </div>
           <div class="post-up-button"
                th:if="${isWriter}"
                th:data-post-id="${postId}"
-               th:onclick="upPost(this.getAttribute('data-post-id'))"><a sec:authorize="isAuthenticated()">업하기</a></div>
+               th:onclick="upPost(this.getAttribute('data-post-id'))">
+            <a sec:authorize="isAuthenticated()">
+              업하기
+            </a>
+          </div>
           <div class="post-delete-button"
                th:if="${isWriter}"
                th:data-post-id="${postId}"
                th:onclick="deletePost(this.getAttribute('data-post-id'))">
-            <a sec:authorize="isAuthenticated()">삭제하기</a>
+            <a sec:authorize="isAuthenticated()">
+              삭제하기
+            </a>
           </div>
           <div class="favorite-action">
             <button
                 th:data-post-id="${postId}"
                 th:onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-                th:text="${postGetResponseDto.favoriteStatus} == true ? '💙' : '🤍'"></button>
+                th:text="${postGetResponseDto.favoriteStatus} == true ? '💙' : '🤍'">
+            </button>
           </div>
         </div>
         <div class="post-title-meta-section">
@@ -124,32 +149,42 @@
     }
 
     function deletePost(postId) {
-      $.ajax({
-        url: '/posts/' + postId,
-        type: 'DELETE',
-        contentType: 'application/json; charset=utf-8',
-        success: function () {
-          location.href = '/'
-        }
-      });
+
+      if(confirm("게시글을 삭제하시겠습니까?") === true) {
+        $.ajax({
+          url: '/posts/' + postId,
+          type: 'DELETE',
+          contentType: 'application/json; charset=utf-8',
+          success: function () {
+            location.href = '/'
+          }
+        });
+      } else {
+        return false;
+      }
     }
 
     function upPost(postId) {
-      $.ajax({
-        url: '/posts/' + postId + '/up',
-        type: 'PATCH',
-        contentType: 'application/json; charset=utf-8',
-        success: function () {
-          location.reload()
-        }
-      });
+
+      if(confirm("게시글을 업 하시겠습니까?\n등록한지 24시간 이상 된 게시글 / 업 한지 24시간 이상 된 게시글만 업 할 수 있습니다.") === true) {
+        $.ajax({
+          url: '/posts/' + postId + '/up',
+          type: 'PATCH',
+          contentType: 'application/json; charset=utf-8',
+          success: function () {
+            location.reload()
+          }
+        });
+      } else {
+        return false;
+      }
     }
 
     function requestChat(userId) {
       $.ajax({
         url: '/chats/create',
         type: 'POST',
-        data: { secondMemberId: userId },
+        data: {secondMemberId: userId},
 
         success: function (response) {
           console.log(response);

@@ -28,7 +28,7 @@ import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 import piglin.swapswap.global.exception.post.NoMorePostListException;
-import piglin.swapswap.global.s3.S3ImageServiceImplV1;
+import piglin.swapswap.global.s3.S3ImageService;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class PostServiceImplV1 implements PostService {
 
     private final FavoriteService favoriteService;
     private final PostRepository postRepository;
-    private final S3ImageServiceImplV1 s3ImageServiceImplV1;
+    private final S3ImageService s3ImageService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
@@ -272,7 +272,7 @@ public class PostServiceImplV1 implements PostService {
 
     private List<String> saveAndGetImageUrlList(List<MultipartFile> imageUrlList) {
 
-        return s3ImageServiceImplV1.saveImageUrlList(imageUrlList);
+        return s3ImageService.saveImageUrlList(imageUrlList);
     }
 
     private void checkModifiedUpTime(Post post) {

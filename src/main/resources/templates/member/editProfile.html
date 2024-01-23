@@ -17,37 +17,55 @@
       var originalNickname = nicknameSpan.innerText.trim();
 
       document.querySelector('#nicknameLink').addEventListener('click', function (event) {
-
         var newNickname = nicknameSpan.innerText.trim();
+
         if (newNickname === originalNickname) {
           event.preventDefault();
           alert('변경하려는 닉네임이 현재 닉네임과 같습니다');
-        } else if (newNickname.length >= 2 && newNickname.length <= 10 && /^[a-zA-Z0-9가-힣]+$/.test(newNickname)) {
+        } else if (newNickname.length >= 2 && newNickname.length <= 15 && /^[a-zA-Z0-9가-힣]+$/.test(
+            newNickname)) {
           var xhr = new XMLHttpRequest();
-          xhr.open('PATCH', '/members/nickname', true);
-          xhr.setRequestHeader('Content-Type', 'application/json');
-
-          alert('닉네임이 정상적으로 변경되었습니다');
-          originalNickname = newNickname;
+          xhr.open('GET', '/members/checkNickname?nickname=' + newNickname, true);
           xhr.onload = function () {
             if (xhr.status === 200) {
-              console.log("success")
-              window.location.href = '/myPage';
+              var isDuplicate = JSON.parse(xhr.responseText);
+              if (isDuplicate) {
+                alert('이미 존재하는 닉네임입니다.');
+              } else {
+                var xhrPatch = new XMLHttpRequest();
+                xhrPatch.open('PATCH', '/members/nickname', true);
+                xhrPatch.setRequestHeader('Content-Type', 'application/json');
 
+                alert('닉네임이 정상적으로 변경되었습니다');
+                originalNickname = newNickname;
+                xhrPatch.onload = function () {
+                  if (xhrPatch.status === 200) {
+                    console.log("success")
+                    window.location.href = '/myPage';
+                  } else {
+                    console.error('닉네임 업데이트 오류:', xhrPatch.statusText);
+                  }
+                };
+
+                xhrPatch.onerror = function () {
+                  console.error('요청 실패');
+                  console.error(xhrPatch);
+                };
+
+                xhrPatch.send(JSON.stringify({nickname: newNickname}));
+              }
             } else {
-              console.error('닉네임 업데이트 오류:', xhr.statusText);
+              console.error('닉네임 중복 확인 오류:', xhr.statusText);
             }
           };
-
           xhr.onerror = function () {
             console.error('요청 실패');
             console.error(xhr);
           };
-
-          xhr.send(JSON.stringify({nickname: newNickname}));
+          xhr.send();
         } else {
           event.preventDefault();
-          alert('닉네임은 특수 문자를 제외한 2자 이상 10자 이내로 설정해주세요');
+          alert('닉네임은 특수 문자를 제외한 2자 이상 15자 이내로 설정해주세요');
         }
       });
     });
