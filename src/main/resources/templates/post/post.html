@@ -147,25 +147,35 @@
     }
 
     function deletePost(postId) {
-      $.ajax({
-        url: '/posts/' + postId,
-        type: 'DELETE',
-        contentType: 'application/json; charset=utf-8',
-        success: function () {
-          location.href = '/'
-        }
-      });
+
+      if(confirm("게시글을 삭제하시겠습니까?") === true) {
+        $.ajax({
+          url: '/posts/' + postId,
+          type: 'DELETE',
+          contentType: 'application/json; charset=utf-8',
+          success: function () {
+            location.href = '/'
+          }
+        });
+      } else {
+        return false;
+      }
     }
 
     function upPost(postId) {
-      $.ajax({
-        url: '/posts/' + postId + '/up',
-        type: 'PATCH',
-        contentType: 'application/json; charset=utf-8',
-        success: function () {
-          location.reload()
-        }
-      });
+
+      if(confirm("게시글을 업 하시겠습니까?\n등록한지 24시간 이상 된 게시글 / 업 한지 24시간 이상 된 게시글만 업 할 수 있습니다.") === true) {
+        $.ajax({
+          url: '/posts/' + postId + '/up',
+          type: 'PATCH',
+          contentType: 'application/json; charset=utf-8',
+          success: function () {
+            location.reload()
+          }
+        });
+      } else {
+        return false;
+      }
     }
 
     function requestChat(userId) {
