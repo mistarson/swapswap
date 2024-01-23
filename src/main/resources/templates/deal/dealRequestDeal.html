@@ -6,22 +6,25 @@
 <body>
 <div layout:fragment="content">
   <input type="hidden" th:value="${dealId}" class="deal-id">
-  <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
   <div class="deal-detail-card">
     <div class="deal-detail-card-body">
       <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
           class="deal-detail-nickname"></h2>
+      <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
     </div>
     <div class="deal-detail-content-container">
       <div class="deal-detail-request-list">
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
-          <div th:text="'추가금: ' + ${dealDetailResponseDto.firstExtraFee()}" class="deal-detail-ExtraFee"></div>
+          <div th:text="${dealDetailResponseDto.firstExtraFee() != null ? '추가금: ' + dealDetailResponseDto.firstExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
           <div class="deal-detail-allow" th:text="${dealDetailResponseDto.firstAllow} ? '수락 완료' : '수락 대기'"></div>
           </div>
           <div class="deal-take-status">인수 상태:
             <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
+          </div>
+          <div class="deal-swap-pay-status">스왑페이 사용여부:
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
           </div>
             <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
@@ -30,25 +33,30 @@
           </a>
           </div>
           <div class="deal-acceptance-buttons">
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstUserId()&&dealDetailResponseDto.firstExtraFee() != null}" th:text="${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
-          <div th:text="'추가금: ' + ${dealDetailResponseDto.secondExtraFee}" class="deal-detail-ExtraFee"></div>
+          <div th:text="${dealDetailResponseDto.secondExtraFee() != null ? '추가금: ' + dealDetailResponseDto.secondExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
           <div class="deal-detail-allow "th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
           </div>
             <div class="deal-take-status">인수 상태:
-          <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
+          <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
             </div>
+          <div class="deal-swap-pay-status">스왑페이 사용여부:
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
+          </div>
               <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
                th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
             수정하기</a>
           </div>
           <div class="deal-acceptance-buttons">
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondUserId()&&dealDetailResponseDto.secondExtraFee() != null}" th:text="${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
@@ -61,7 +69,7 @@
   <script th:inline="javascript">
     const dealIdElement = document.querySelector('.deal-id');
     const dealId = +dealIdElement.value;
-
+    var swapMoneyUrl = '/deals/' + dealId + '/swapmoney'
     var allowUrl = '/deals/' + dealId + '/allow'
     var takeUrl = '/deals/' + dealId + '/take'
 
@@ -71,7 +79,7 @@
       var statusName = element.textContent.trim();
       var statusColors = {
         '요청 중': '#FF0000',
-        '거래 중': '#00AADC',
+        '거래 진행 중': '#00AADC',
         '거래 완료': '#000000'
       };
 
@@ -91,6 +99,21 @@
         error: function (xhr, status, error) {
           // 에러 처리
           alert("수락 할 수 없는 상태입니다.")
+          console.error("Update failed:", status, error);
+        }
+      })
+    }
+
+    function swapMoneyUse() {
+      $.ajax({
+        url: swapMoneyUrl,
+        type: 'PATCH',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          // 에러 처리
+          alert("스왑페이 사용여부를 변경 할 수 없는 상태입니다.")
           console.error("Update failed:", status, error);
         }
       })

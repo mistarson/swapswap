@@ -1346,32 +1346,28 @@ input[type="number"] {
 }
 
 .deal-card {
-  width: 1375px;
+  width: 80%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin-left: 500px;
-  margin-right: 50px;
-  margin-top: 100px;
+  margin: 0 auto;
 }
 
 .deal-response-card {
-  width: 1375px;
+  width: 80%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin-right: 50px;
-  margin-top: 100px;
+  margin: 0 auto;
 }
 
 .deal-card-body {
-  margin-left: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  margin: 0 auto;
 }
 
 .deal-response-card-body {
-  margin-left: 20px;
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1392,12 +1388,13 @@ input[type="number"] {
 .deal-request-List {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
 
 .deal-response-List {
   display: flex;
   flex-direction: column;
-  margin-left: 500px;
+  margin: 0 auto;
 }
 
 .swap-money-body {
@@ -1454,23 +1451,63 @@ input[type="number"] {
 }
 
 .deal-status {
-  margin-left: 350px; /* 원하는 간격으로 조정하세요. */
+  margin-left: auto;
+  margin-right: 10px;/* 원하는 간격으로 조정하세요. */
   /* 원하는 스타일 속성을 추가하세요. */
 }
+
 .deal-detail-status{
-  margin-left: 20px;
+  background-color: white;
+  border-radius: 30px;
+  margin-left: auto;
+  padding: 15px;
 }
+
+.deal-detail-nickname{
+  padding: 15px;
+}
+
 .deal-button {
   border: 2px solid #ccc;
   border-radius: 40px;
   padding: 10px;
   display: inline-block;
   background-color: #00aadc;
-  width: 110px;
+  width: 5%;
   color: white;
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
-  margin-left: 10px;
   text-decoration: none;
+  height: 5%;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.deal-history-button {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  color: white;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  text-decoration: none;
+  height: 5%;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.deal-responseList-button {
+  border: 2px solid #ccc;
+  border-radius: 40px;
+  padding: 10px;
+  display: inline-block;
+  background-color: #00aadc;
+  width: 5%;
+  color: white;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
+  text-decoration: none;
+  height: 5%;
+  text-align: center;
 }
 
 .deal-card-body a:hover {
@@ -1479,9 +1516,9 @@ input[type="number"] {
 }
 
 .deal-list {
-  width: 1500px;
+  width: 80%;
   border-bottom: solid #808080;
-  margin-left: 500px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
 }
@@ -1506,7 +1543,6 @@ input[type="number"] {
   box-shadow: 2px 2px 20px rgba(0, 0, 0, .3);
   text-decoration: none;
   margin-left: auto;
-  margin-right: 10px;
   height: 20px;
 }
 
@@ -1624,6 +1660,7 @@ input[type="number"] {
   color: #fff; /* Example header text color */
   padding: 20px;
   font-size: 1.5rem;
+  display: flex;
 }
 
 /* Flex container for deal content */
@@ -1822,56 +1859,49 @@ input[type="number"] {
 }
 
 .deal-history-all-body {
-  width: 1375px;
+  width: 80%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  margin-left: 500px;
-  margin-right: 50px;
-  margin-top: 100px;
+  margin: 0 auto;
+  margin-top: 50px;
 }
 
-.deal-history-all-body .deal-history-body {
-  margin-left: 20px;
+.deal-history-body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
 }
 
-.deal-history-all-body .deal-history-body h2 {
+.deal-history-body h2 {
   margin: 0;
 }
 
 
 .deal-card2-body{
-  margin-left: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.deal-content{
-  margin-left: 10%;
+  justify-content: space-between;
 }
 
 .deal-history-created{
-  width: 200px;
+  width: 210px;
 }
 
 .deal-history-completed{
-  width: 200px;
-  margin-left: 170px;
+  width: 210px;
+  margin-right: 38px;
 }
 
 .deal-history-status {
   width: 100px;
-  margin-left: 235px;
-  text-align: center;
+  margin-right: 190px;
 }
 
 .deal-history-detail {
-  width: 100px;
-  margin-left: 300px;
+  width: 134px;
 }
 
 /* 채팅 목록 페이지 */

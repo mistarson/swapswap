@@ -38,7 +38,7 @@ public class PostMapper {
 
     public static List<PostSimpleResponseDto> getPostSimpleInfoListByPostList(List<Post> postList) {
 
-        return postList.stream().map((post) -> PostSimpleResponseDto.builder()
+        return  postList.stream().filter(post -> post.getDealStatus().equals(DealStatus.REQUESTED)).map((post) -> PostSimpleResponseDto.builder()
                         .postId(post.getId())
                         .postTitle(post.getTitle())
                         .imageUrl(post.getImageUrl().get(0).toString())

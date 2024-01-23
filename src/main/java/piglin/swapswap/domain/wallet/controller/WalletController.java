@@ -58,9 +58,11 @@ public class WalletController {
             WithdrawSwapMoneyRequestDto withdrawSwapMoneyRequestDto,
             @AuthMember Member member) {
 
-        walletService.withdrawSwapMoney(withdrawSwapMoneyRequestDto.swapMoney(),
-                HistoryType.NORMAL_WITHDRAW,
-                member.getId());
+        if (withdrawSwapMoneyRequestDto.swapMoney() != null) {
+            walletService.withdrawSwapMoney(withdrawSwapMoneyRequestDto.swapMoney(),
+                    HistoryType.NORMAL_WITHDRAW,
+                    member.getId());
+        }
 
         return "redirect:/members/swap-money";
     }
