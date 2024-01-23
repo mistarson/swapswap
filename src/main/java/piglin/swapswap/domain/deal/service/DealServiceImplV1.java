@@ -19,7 +19,6 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.service.WalletService;
-import piglin.swapswap.domain.wallethistory.constant.HistoryType;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -32,7 +31,6 @@ public class DealServiceImplV1 implements DealService {
     private final MemberRepository memberRepository;
     private final DealWalletService dealWalletService;
     private final PostService postService;
-    private final WalletService walletService;
 
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
