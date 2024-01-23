@@ -16,5 +16,6 @@ public interface DealWalletService {
      void withdrawMemberSwapMoneyAtComplete(Deal deal);
 
      void withdrawMemberSwapMoneyAtDealUpdate(Deal deal);
+
      Boolean existsDealWallet(Long dealId);
 }

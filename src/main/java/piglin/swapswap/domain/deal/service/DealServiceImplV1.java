@@ -18,7 +18,6 @@ import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.post.service.PostService;
-import piglin.swapswap.domain.wallet.service.WalletService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -121,18 +120,18 @@ public class DealServiceImplV1 implements DealService {
             Long firstExtraFee = deal.getFirstExtraFee();
 
             if(deal.getIsFirstSwapMoneyUsed()) {
-                if (dealWalletService.existsDealWallet(dealId) ) { // Deal Wallet 이 있다면
+                if (dealWalletService.existsDealWallet(dealId) ) {
 
-                    if (deal.getFirstAllow()) { // 스왑머니를 사용하고, Allow 가 True로 바뀌었으면
+                    if (deal.getFirstAllow()) {
                         dealWalletService.updateDealWallet(deal, member, firstExtraFee);
                     }
 
-                    if (!deal.getFirstAllow()) { // 스왑머니를 사용하고, Allow가 False 로 바뀌었으면
+                    if (!deal.getFirstAllow()) {
                         dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
                     }
                 }
 
-                if (!dealWalletService.existsDealWallet(dealId)) { // Deal Wallet 이 없다면
+                if (!dealWalletService.existsDealWallet(dealId)) {
 
                     if (deal.getFirstAllow()) {
                         dealWalletService.createDealWallet(deal, member, firstExtraFee);
@@ -148,18 +147,18 @@ public class DealServiceImplV1 implements DealService {
             Long secondExtraFee = deal.getSecondExtraFee();
 
             if(deal.getIsSecondSwapMoneyUsed()) {
-                if (dealWalletService.existsDealWallet(dealId) ) { // Deal Wallet 이 있다면
+                if (dealWalletService.existsDealWallet(dealId) ) {
 
-                    if (deal.getSecondAllow()) { // 스왑머니를 사용하고, Allow 가 True로 바뀌었으면
+                    if (deal.getSecondAllow()) {
                         dealWalletService.updateDealWallet(deal, member, secondExtraFee);
                     }
 
-                    if (!deal.getSecondAllow()) { // 스왑머니를 사용하고, Allow가 False 로 바뀌었으면
+                    if (!deal.getSecondAllow()) {
                         dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
                     }
                 }
 
-                if (!dealWalletService.existsDealWallet(dealId)) { // Deal Wallet 이 없다면
+                if (!dealWalletService.existsDealWallet(dealId)) {
 
                     if (deal.getSecondAllow()) {
                         dealWalletService.createDealWallet(deal, member, secondExtraFee);
@@ -278,9 +277,4 @@ public class DealServiceImplV1 implements DealService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
     }
-
-//    private Boolean firstMemberSwapMoneyIsUsing(Deal deal){
-//
-//        return  deal.getFirstAllow() && deal.getFirstSwapMoneyIsUsing();
-//    }
 }

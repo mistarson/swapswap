@@ -40,8 +40,7 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void updateDealWallet(Deal deal, Member member, Long swapMoney) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
-                .orElseThrow(() -> new RuntimeException(""));
+        DealWallet dealWallet = findDealWalletByDeal(deal);
 
         if (deal.getFirstUserId().equals(member.getId())) {
             dealWallet.updateFirstSwapMoney(swapMoney);
@@ -57,8 +56,7 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void withdrawMemberSwapMoneyAtUpdate(Deal deal, Member member) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
-                .orElseThrow(() -> new RuntimeException(""));
+        DealWallet dealWallet = findDealWalletByDeal(deal);
 
         Long swapMoney = 0L;
 
@@ -78,8 +76,7 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void withdrawMemberSwapMoneyAtComplete(Deal deal) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
-                .orElseThrow(() -> new RuntimeException(""));
+        DealWallet dealWallet = findDealWalletByDeal(deal);
 
         if (!(dealWallet.getFirstSwapMoney() == null)) {
             walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
@@ -94,8 +91,7 @@ public class DealWalletServiceImplV1 implements DealWalletService {
     @Override
     public void withdrawMemberSwapMoneyAtDealUpdate(Deal deal) {
 
-        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
-                .orElseThrow(() -> new RuntimeException(""));
+        DealWallet dealWallet = getDealWallet(deal);
 
         if (!(dealWallet.getFirstSwapMoney() == null)) {
             walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
@@ -109,9 +105,13 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         dealWalletRepository.delete(dealWallet);
     }
 
-    @Override
-    public Boolean existsDealWallet(Long dealId) {
+    private DealWallet getDealWallet(Deal deal) {
+        return findDealWalletByDeal(deal);
+    }
 
-        return dealWalletRepository.existsByDealId(dealId);
+    private DealWallet findDealWalletByDeal(Deal deal) {
+
+        return dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(() -> new RuntimeException(""));
     }
 }

@@ -56,7 +56,7 @@ public class DealController {
         model.addAttribute("memberId", member.getId());
 
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
-                0L, 0L, null, null, null));
+                null, null, null, null, null));
 
         return "deal/dealCreateForm";
     }
@@ -115,7 +115,7 @@ public class DealController {
         model.addAttribute("memberId", memberId);
         model.addAttribute("dealId",dealId);
         model.addAttribute("dealUpdateRequestDto", new DealUpdateRequestDto(
-                0L, null));
+                null, null));
 
         return "deal/dealUpdateForm";
     }
