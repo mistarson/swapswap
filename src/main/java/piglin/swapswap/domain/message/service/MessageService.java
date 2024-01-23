@@ -6,7 +6,7 @@ import piglin.swapswap.domain.message.entity.Message;
 
 public interface MessageService {
 
-    List<Message> findAllByChatRoom_Id(Long roomId);
+    List<Message> findAllByChatRoomId(Long roomId);
 
     void saveMessage(Message message);
 

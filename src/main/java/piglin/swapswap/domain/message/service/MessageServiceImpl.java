@@ -14,7 +14,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
 
     @Override
-    public List<Message> findAllByChatRoom_Id(Long roomId) {
+    public List<Message> findAllByChatRoomId(Long roomId) {
 
         return messageRepository.findAllByChatRoom_Id(roomId);
     }
