@@ -215,7 +215,9 @@ public class DealServiceImplV1 implements DealService {
 
         if(deal.getFirstTake() && deal.getSecondTake()) {
 
-            dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
+            if (dealWalletService.existsDealWallet(dealId)) {
+                dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
+            }
 
             deal.updateDealStatus(DealStatus.COMPLETED);
 
