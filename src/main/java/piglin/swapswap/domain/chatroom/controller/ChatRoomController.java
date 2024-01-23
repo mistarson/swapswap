@@ -15,7 +15,6 @@ import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.service.ChatRoomServiceImpl;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.message.dto.response.MessageResponseDto;
-import piglin.swapswap.domain.message.service.MessageServiceImpl;
 import piglin.swapswap.global.annotation.AuthMember;
 
 @Controller
@@ -23,7 +22,6 @@ import piglin.swapswap.global.annotation.AuthMember;
 public class ChatRoomController {
 
     private final ChatRoomServiceImpl chatRoomService;
-    private final MessageServiceImpl messageService;
 
     @GetMapping("/chats")
     public String getChatRoomList(@AuthMember Member member, Model model) {
@@ -37,7 +35,7 @@ public class ChatRoomController {
     @GetMapping("/chats/room/{roomId}")
     public String getChatRoom(@PathVariable Long roomId, @AuthMember Member member, Model model) {
 
-        List<MessageResponseDto> messageList = messageService.getMessageByChatRoomId(roomId, member);
+        List<MessageResponseDto> messageList = chatRoomService.getMessageByChatRoomId(roomId, member);
 
         model.addAttribute("messageList", messageList);
         model.addAttribute("roomId", roomId);
