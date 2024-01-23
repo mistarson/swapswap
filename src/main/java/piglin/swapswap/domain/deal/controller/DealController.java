@@ -139,7 +139,7 @@ public class DealController {
     }
 
     @ResponseBody
-    @PatchMapping("/{dealId}/use")
+    @PatchMapping("/{dealId}/swapmoney")
     public ResponseEntity<?> updateDealSwapMoneyIsUsing(@PathVariable Long dealId, @AuthMember Member member) {
 
         dealService.updateDealSwapMoneyIsUsing(dealId, member);

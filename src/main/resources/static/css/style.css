@@ -1461,9 +1461,18 @@ input[type="number"] {
   margin-right: 10px;/* 원하는 간격으로 조정하세요. */
   /* 원하는 스타일 속성을 추가하세요. */
 }
+
 .deal-detail-status{
-  margin-left: 20px;
+  background-color: white;
+  border-radius: 30px;
+  margin-left: auto;
+  padding: 15px;
 }
+
+.deal-detail-nickname{
+  padding: 15px;
+}
+
 .deal-button {
   border: 2px solid #ccc;
   border-radius: 40px;
@@ -1657,6 +1666,7 @@ input[type="number"] {
   color: #fff; /* Example header text color */
   padding: 20px;
   font-size: 1.5rem;
+  display: flex;
 }
 
 /* Flex container for deal content */

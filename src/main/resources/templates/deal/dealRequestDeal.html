@@ -6,11 +6,11 @@
 <body>
 <div layout:fragment="content">
   <input type="hidden" th:value="${dealId}" class="deal-id">
-  <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
   <div class="deal-detail-card">
     <div class="deal-detail-card-body">
       <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
           class="deal-detail-nickname"></h2>
+      <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
     </div>
     <div class="deal-detail-content-container">
       <div class="deal-detail-request-list">
@@ -69,7 +69,7 @@
   <script th:inline="javascript">
     const dealIdElement = document.querySelector('.deal-id');
     const dealId = +dealIdElement.value;
-    var useUrl = '/deals/' + dealId + '/use'
+    var swapMoneyUrl = '/deals/' + dealId + '/swapmoney'
     var allowUrl = '/deals/' + dealId + '/allow'
     var takeUrl = '/deals/' + dealId + '/take'
 
@@ -106,7 +106,7 @@
 
     function swapMoneyUse() {
       $.ajax({
-        url: useUrl,
+        url: swapMoneyUrl,
         type: 'PATCH',
         success: function () {
           location.reload();
