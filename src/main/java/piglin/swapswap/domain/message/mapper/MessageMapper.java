@@ -11,9 +11,9 @@ public class MessageMapper {
     public static Message createMessage(MessageRequestDto messageDto, ChatRoom chatRoom) {
 
         return Message.builder()
-                .type(messageDto.getType())
-                .senderNickname(messageDto.getSenderNickname())
-                .text(messageDto.getText())
+                .type(messageDto.type())
+                .senderNickname(messageDto.senderNickname())
+                .text(messageDto.text())
                 .isDeleted(false)
                 .chatRoom(chatRoom)
                 .build();
