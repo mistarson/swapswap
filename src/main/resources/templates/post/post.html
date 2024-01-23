@@ -45,10 +45,11 @@
               채팅하기
             </a>
           </div>
-          <div class="post-request-button">
-            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}"
+          <div class="post-request-button"
                sec:authorize="isAuthenticated()"
-               th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED}">
+               th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED} and ${!isWriter}"
+          >
+            <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}">
               요청하기
             </a>
           </div>
