@@ -3,7 +3,6 @@ package piglin.swapswap.domain.chatroom.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 import piglin.swapswap.domain.chatroom.mapper.ChatRoomMapper;
@@ -49,7 +48,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         validateMember(member, roomId);
 
-        List<Message> messageList = messageService.findAllByChatRoom_Id(roomId);
+        List<Message> messageList = messageService.findAllByChatRoomId(roomId);
 
         return MessageMapper.messageToMessageDto(messageList);
     }
