@@ -557,9 +557,9 @@ img {
 .post-button-section {
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #bcbcbc;
   align-items: center;
   padding: 10px 20px;
-  background-color: #ffffff;
 }
 
 .favorite-action button {
