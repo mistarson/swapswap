@@ -1997,11 +1997,11 @@ input[type="number"] {
   background-color: #fff;
 }
 
-.wrap .ch1 .textbox::before {
-  left: -15px;
-  content: "◀";
-  color: #ddd;
-}
+/*.ch1 .textbox::before {*/
+/*  left: -15px;*/
+/*  content: "◀";*/
+/*  color: #ddd;*/
+/*}*/
 
 .ch2 {
   flex-direction: row-reverse;
@@ -2012,8 +2012,8 @@ input[type="number"] {
   background-color: #F9EB54;
 }
 
-.ch2 .textbox::before {
-  right: -15px;
-  content: "▶";
-  color: #F9EB54;
-}
+/*.ch2 .textbox::before {*/
+/*  right: -15px;*/
+/*  content: "▶";*/
+/*  color: #F9EB54;*/
+/*}*/

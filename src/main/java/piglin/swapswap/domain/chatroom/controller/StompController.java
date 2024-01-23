@@ -23,4 +23,3 @@ public class StompController {
         sendingOperations.convertAndSend(destination, message);
     }
 }
-

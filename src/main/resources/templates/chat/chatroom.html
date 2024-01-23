@@ -100,7 +100,7 @@
     senderDiv.classList.add('sender');
     textBoxDiv.classList.add('textbox');
 
-    if (message.senderId === currentUserId) {
+    if (message.senderNickname === senderNickname) {
       messageElement.classList.add('ch2');
     } else {
       messageElement.classList.add('ch1');
@@ -111,7 +111,6 @@
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
-
   function leaveChatRoom(roomId) {
     $.ajax({
       url: '/chats/leave',
