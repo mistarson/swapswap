@@ -17,10 +17,9 @@
         Connecting...
       </div>
 
-      <div th:each="message : ${messageList}" class="chat ch1">
-        <div class="sender" th:text="${message.senderNickname}"></div>
+      <div th:each="message : ${messageList}" th:class="${message.senderNickname == #authentication.principal.nickname} ? 'chat ch2' : 'chat ch1'">
+        <div class="sender" th:if="${message.senderNickname != #authentication.principal.nickname}" th:text="${message.senderNickname}"></div>
         <div class="textbox" th:text="${message.text}"></div>
-
       </div>
 
     </div>
@@ -100,8 +99,9 @@
     senderDiv.classList.add('sender');
     textBoxDiv.classList.add('textbox');
 
-    if (message.senderId === currentUserId) {
+    if (message.senderNickname === senderNickname) {
       messageElement.classList.add('ch2');
+      senderDiv.style.display = 'none';
     } else {
       messageElement.classList.add('ch1');
     }
@@ -111,7 +111,6 @@
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
-
   function leaveChatRoom(roomId) {
     $.ajax({
       url: '/chats/leave',
