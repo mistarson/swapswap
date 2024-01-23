@@ -5,9 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.AccessLevel;
@@ -17,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import piglin.swapswap.domain.common.BaseTime;
+import piglin.swapswap.domain.daelwallet.entity.DealWallet;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 
 @Entity
@@ -49,10 +53,10 @@ public class Deal extends BaseTime {
     private Map<Integer, Long> secondPostIdList;
 
     @Column(nullable = false)
-    private int firstExtraFee;
+    private Long firstExtraFee;
 
     @Column(nullable = false)
-    private int secondExtraFee;
+    private Long secondExtraFee;
 
     @Column(nullable = false)
     private Boolean firstAllow;
@@ -66,10 +70,16 @@ public class Deal extends BaseTime {
     @Column(nullable = false)
     private Boolean secondTake;
 
+    @Column(nullable = false)
+    private Boolean isFirstSwapMoneyUsed;
+
+    @Column(nullable = false)
+    private Boolean isSecondSwapMoneyUsed;
+
     @Column
     private LocalDateTime completedDealTime;
 
-    public void updateDealFirst(int firstExtraFee, Map<Integer, Long> firstPostIdMap) {
+    public void updateDealFirst(Long firstExtraFee, Map<Integer, Long> firstPostIdMap) {
 
         this.firstExtraFee = firstExtraFee;
         this.firstPostIdList = firstPostIdMap;
@@ -77,7 +87,7 @@ public class Deal extends BaseTime {
         this.secondAllow = false;
     }
 
-    public void updateDealSecond(int secondExtraFee, Map<Integer, Long> secondPostIdMap) {
+    public void updateDealSecond(Long secondExtraFee, Map<Integer, Long> secondPostIdMap) {
 
         this.secondExtraFee = secondExtraFee;
         this.secondPostIdList = secondPostIdMap;
@@ -103,6 +113,16 @@ public class Deal extends BaseTime {
     public void updateDealSecondMemberTake() {
 
         secondTake = true;
+    }
+
+    public void updateDealFirstMemberSwapMoneyUsing() {
+
+        isFirstSwapMoneyUsed = !isFirstSwapMoneyUsed;
+    }
+
+    public void updateDealSecondMemberSwapMoneyUsing() {
+
+        isSecondSwapMoneyUsed = !isSecondSwapMoneyUsed;
     }
 
     public void updateDealStatus(DealStatus dealStatus) {

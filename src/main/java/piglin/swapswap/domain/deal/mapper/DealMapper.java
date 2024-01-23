@@ -24,6 +24,8 @@ public class DealMapper {
                 .secondAllow(false)
                 .firstTake(false)
                 .secondTake(false)
+                .isFirstSwapMoneyUsed(false)
+                .isSecondSwapMoneyUsed(false)
                 .firstPostIdList(firstPostIdListMap)
                 .secondPostIdList(secondPostIdListMap)
                 .firstExtraFee(requestDto.firstExtraFee())

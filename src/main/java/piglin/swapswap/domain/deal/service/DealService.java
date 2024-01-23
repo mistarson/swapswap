@@ -26,5 +26,7 @@ public interface DealService {
 
     void takeDeal(Long deal, Member member);
 
+    void updateDealSwapMoneyIsUsing(Long dealId, Member member);
+
     List<DealHistoryResponseDto> getDealHistoryList(Long memberId);
 }

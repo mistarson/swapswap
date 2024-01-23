@@ -5,9 +5,9 @@ import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 public record DealCreateRequestDto (
         @PositiveOrZero
-        int firstExtraFee,
+        Long firstExtraFee,
         @PositiveOrZero
-        int secondExtraFee,
+        Long secondExtraFee,
         List<Long> firstPostIdList,
         List<Long> secondPostIdList,
         @NotNull

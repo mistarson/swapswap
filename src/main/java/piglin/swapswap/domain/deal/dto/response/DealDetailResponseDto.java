@@ -20,9 +20,9 @@ public record DealDetailResponseDto(
 
          Map<Integer, Long> secondPostIdList,
 
-         int firstExtraFee,
+         Long firstExtraFee,
 
-         int secondExtraFee,
+         Long secondExtraFee,
 
          Boolean firstAllow,
 
@@ -30,7 +30,11 @@ public record DealDetailResponseDto(
 
          Boolean firstTake,
 
-         Boolean secondTake
+         Boolean secondTake,
+
+         Boolean isFirstSwapMoneyUsed,
+
+         Boolean isSecondSwapMoneyUsed
 ) {
 
 }

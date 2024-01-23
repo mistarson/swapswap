@@ -56,7 +56,7 @@ public class DealController {
         model.addAttribute("memberId", member.getId());
 
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
-                0, 0, null, null, null));
+                0L, 0L, null, null, null));
 
         return "deal/dealCreateForm";
     }
@@ -115,7 +115,7 @@ public class DealController {
         model.addAttribute("memberId", memberId);
         model.addAttribute("dealId",dealId);
         model.addAttribute("dealUpdateRequestDto", new DealUpdateRequestDto(
-                0, null));
+                0L, null));
 
         return "deal/dealUpdateForm";
     }
@@ -134,6 +134,15 @@ public class DealController {
     public ResponseEntity<?> takeDeal(@PathVariable Long dealId, @AuthMember Member member) {
 
         dealService.takeDeal(dealId, member);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @PatchMapping("/{dealId}/use")
+    public ResponseEntity<?> updateDealSwapMoneyIsUsing(@PathVariable Long dealId, @AuthMember Member member) {
+
+        dealService.updateDealSwapMoneyIsUsing(dealId, member);
 
         return ResponseEntity.ok().build();
     }
