@@ -20,7 +20,7 @@ public class DealMapper {
                 .dealStatus(DealStatus.REQUESTED)
                 .firstUserId(firstUserId)
                 .secondUserId(requestDto.secondMemberId())
-                .firstAllow(true)
+                .firstAllow(false)
                 .secondAllow(false)
                 .firstTake(false)
                 .secondTake(false)

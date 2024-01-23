@@ -200,6 +200,9 @@ public class DealServiceImplV1 implements DealService {
         }
 
         if(deal.getFirstTake() && deal.getSecondTake()) {
+
+            dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
+            
             deal.updateDealStatus(DealStatus.COMPLETED);
 
             List<Long> postIdList = new ArrayList<>();
