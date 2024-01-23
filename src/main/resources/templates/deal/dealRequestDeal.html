@@ -30,6 +30,7 @@
           </a>
           </div>
           <div class="deal-acceptance-buttons">
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstUserId()}" th:text="${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
@@ -49,6 +50,7 @@
             수정하기</a>
           </div>
           <div class="deal-acceptance-buttons">
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondUserId()}" th:text="${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
@@ -61,7 +63,7 @@
   <script th:inline="javascript">
     const dealIdElement = document.querySelector('.deal-id');
     const dealId = +dealIdElement.value;
-
+    var useUrl = '/deals/' + dealId + '/use'
     var allowUrl = '/deals/' + dealId + '/allow'
     var takeUrl = '/deals/' + dealId + '/take'
 
@@ -91,6 +93,21 @@
         error: function (xhr, status, error) {
           // 에러 처리
           alert("수락 할 수 없는 상태입니다.")
+          console.error("Update failed:", status, error);
+        }
+      })
+    }
+
+    function swapMoneyUse() {
+      $.ajax({
+        url: useUrl,
+        type: 'PATCH',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          // 에러 처리
+          alert("스왑페이 사용여부를 변경 할 수 없는 상태입니다.")
           console.error("Update failed:", status, error);
         }
       })
