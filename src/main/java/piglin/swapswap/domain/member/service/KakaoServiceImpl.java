@@ -17,6 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import piglin.swapswap.domain.member.constant.AnimalAdjective;
+import piglin.swapswap.domain.member.constant.AnimalName;
 import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
@@ -116,22 +118,27 @@ public class KakaoServiceImpl implements SocialService {
             throw new RuntimeException(e);
         }
         Long id = jsonNode.get("id").asLong();
-        String originalNickname = jsonNode.get("properties")
-                .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
-        String uniqueNumbers = UUID.randomUUID().toString().substring(0, 4);
-        String nickname = originalNickname + uniqueNumbers;
+        AnimalAdjective randomAdjective = getRandomEnum(AnimalAdjective.class);
+        AnimalName randomAnimalName = getRandomEnum(AnimalName.class);
+
+        String nickname = randomAdjective.getAdjective() + randomAnimalName.getName() + UUID.randomUUID().toString().substring(0, 4);
 
         while (memberRepository.existsByNickname(nickname)) {
-            String uniqueNumber = UUID.randomUUID().toString().substring(0, 4);
-            nickname = originalNickname + uniqueNumber;
+            nickname = randomAdjective.getAdjective() + randomAnimalName.getName() + UUID.randomUUID().toString().substring(0, 4);
         }
 
         log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
 
         return SocialUserInfo.createSocialUserInfo(id, nickname, email);
+    }
+
+    private <T extends Enum<?>> T getRandomEnum(Class<T> enumClass) {
+        T[] enumConstants = enumClass.getEnumConstants();
+        int randomIndex = (int) (Math.random() * enumConstants.length);
+        return enumConstants[randomIndex];
     }
 
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {

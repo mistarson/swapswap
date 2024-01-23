@@ -22,7 +22,7 @@
         if (newNickname === originalNickname) {
           event.preventDefault();
           alert('변경하려는 닉네임이 현재 닉네임과 같습니다');
-        } else if (newNickname.length >= 2 && newNickname.length <= 10 && /^[a-zA-Z0-9가-힣]+$/.test(
+        } else if (newNickname.length >= 2 && newNickname.length <= 15 && /^[a-zA-Z0-9가-힣]+$/.test(
             newNickname)) {
           var xhr = new XMLHttpRequest();
           xhr.open('GET', '/members/checkNickname?nickname=' + newNickname, true);
@@ -65,7 +65,7 @@
           xhr.send();
         } else {
           event.preventDefault();
-          alert('닉네임은 특수 문자를 제외한 2자 이상 10자 이내로 설정해주세요');
+          alert('닉네임은 특수 문자를 제외한 2자 이상 15자 이내로 설정해주세요');
         }
       });
     });
