@@ -15,4 +15,5 @@ public interface MemberService {
 
     Member getMember(Long memberId);
 
+    boolean checkNicknameExists(String nickname);
 }

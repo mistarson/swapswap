@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,10 +116,18 @@ public class KakaoServiceImpl implements SocialService {
             throw new RuntimeException(e);
         }
         Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
+        String originalNickname = jsonNode.get("properties")
                 .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
+
+        String uniqueNumbers = UUID.randomUUID().toString().substring(0, 4);
+        String nickname = originalNickname + uniqueNumbers;
+
+        while (memberRepository.existsByNickname(nickname)) {
+            String uniqueNumber = UUID.randomUUID().toString().substring(0, 4);
+            nickname = originalNickname + uniqueNumber;
+        }
 
         log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
 
