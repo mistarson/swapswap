@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 import piglin.swapswap.domain.message.constant.MessageType;
 
-@Getter
-@Setter
 @Builder
-public class MessageResponseDto {
-    private Long id;
-    private MessageType type;
-    private String senderNickname;
-    private String text;
-    private Long chatRoomId;
-    private LocalDateTime createdTime;
+public record MessageResponseDto (
+        Long id,
+        MessageType type,
+        String senderNickname,
+        String text,
+        Long chatRoomId,
+        LocalDateTime createdTime
+) {
+
 }

@@ -4,22 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import piglin.swapswap.domain.chatroom.service.ChatRoomServiceImpl;
 import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
-import piglin.swapswap.domain.message.service.MessageServiceImpl;
 
 @Controller
 @RequiredArgsConstructor
 public class StompController {
 
-    private final MessageServiceImpl messageService;
+    private final ChatRoomServiceImpl chatRoomService;
     private final SimpMessageSendingOperations sendingOperations;
 
     @MessageMapping("/chat/message")
     public void enter(MessageRequestDto message) {
 
-        messageService.saveMessage(message);
+        chatRoomService.saveMessage(message);
 
-        String destination = "/queue/chat/room" + message.getChatRoomId();
+        String destination = "/queue/chat/room" + message.chatRoomId();
         sendingOperations.convertAndSend(destination, message);
     }
 }
