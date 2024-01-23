@@ -17,10 +17,9 @@
         Connecting...
       </div>
 
-      <div th:each="message : ${messageList}" class="chat ch1">
+      <div th:each="message : ${messageList}" th:class="${message.senderNickname == #authentication.principal.nickname} ? 'chat ch2' : 'chat ch1'">
         <div class="sender" th:text="${message.senderNickname}"></div>
         <div class="textbox" th:text="${message.text}"></div>
-
       </div>
 
     </div>
