@@ -48,10 +48,10 @@ public class Deal extends BaseTime {
     @Column(columnDefinition = "json")
     private Map<Integer, Long> secondPostIdList;
 
-    @Column(nullable = false)
+    @Column
     private Long firstExtraFee;
 
-    @Column(nullable = false)
+    @Column
     private Long secondExtraFee;
 
     @Column(nullable = false)

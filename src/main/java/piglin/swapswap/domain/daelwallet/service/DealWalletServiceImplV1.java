@@ -61,14 +61,14 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         Long swapMoney = 0L;
 
         if (deal.getFirstUserId().equals(member.getId())) {
-            if (!(dealWallet.getFirstSwapMoney() == null)) {
+            if (dealWallet.getFirstSwapMoney() != null) {
                 swapMoney = dealWallet.getFirstSwapMoney();
             }
             dealWallet.updateFirstSwapMoney(null);
         }
 
         if (deal.getSecondUserId().equals(member.getId())) {
-            if (!(dealWallet.getSecondSwapMoney() == null)) {
+            if (dealWallet.getSecondSwapMoney() != null) {
                 swapMoney = dealWallet.getSecondSwapMoney();
             }
             dealWallet.updateSecondSwapMoney(null);
@@ -84,11 +84,11 @@ public class DealWalletServiceImplV1 implements DealWalletService {
 
         DealWallet dealWallet = findDealWalletByDeal(deal);
 
-        if (!(dealWallet.getFirstSwapMoney() == null)) {
+        if (dealWallet.getFirstSwapMoney() != null) {
             walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
                     deal.getSecondUserId());
         }
-        if (!(dealWallet.getSecondSwapMoney() == null)) {
+        if (dealWallet.getSecondSwapMoney() != null) {
             walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
                     HistoryType.DEAL_DEPOSIT, deal.getFirstUserId());
         }
@@ -99,11 +99,11 @@ public class DealWalletServiceImplV1 implements DealWalletService {
 
         DealWallet dealWallet = getDealWallet(deal);
 
-        if (!(dealWallet.getFirstSwapMoney() == null)) {
+        if (dealWallet.getFirstSwapMoney() != null) {
             walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
                     deal.getFirstUserId());
         }
-        if (!(dealWallet.getSecondSwapMoney() == null)) {
+        if (dealWallet.getSecondSwapMoney() != null) {
             walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
                     HistoryType.DEAL_DEPOSIT, deal.getSecondUserId());
         }

@@ -7,9 +7,9 @@ public interface DealWalletService {
 
 
 
-     void createDealWallet(Deal deal, Member member, Long firstSwapMoney);
+     void createDealWallet(Deal deal, Member member, Long swapMoney);
 
-     void updateDealWallet(Deal deal, Member member, Long firstSwapMoney);
+     void updateDealWallet(Deal deal, Member member, Long swapMoney);
 
      void withdrawMemberSwapMoneyAtUpdate(Deal deal, Member member);
 

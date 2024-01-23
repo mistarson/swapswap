@@ -117,7 +117,11 @@ public class DealServiceImplV1 implements DealService {
 
             deal.updateDealFirstMemberAllow();
 
-            Long firstExtraFee = deal.getFirstExtraFee();
+            Long firstExtraFee = null;
+
+            if(deal.getFirstExtraFee() != null) {
+                firstExtraFee = deal.getFirstExtraFee();
+            }
 
             if(deal.getIsFirstSwapMoneyUsed()) {
                 if (dealWalletService.existsDealWallet(dealId) ) {
@@ -134,7 +138,9 @@ public class DealServiceImplV1 implements DealService {
                 if (!dealWalletService.existsDealWallet(dealId)) {
 
                     if (deal.getFirstAllow()) {
-                        dealWalletService.createDealWallet(deal, member, firstExtraFee);
+                        if (deal.getFirstExtraFee() != null) {
+                            dealWalletService.createDealWallet(deal, member, firstExtraFee);
+                        }
                     }
                 }
             }
@@ -144,7 +150,11 @@ public class DealServiceImplV1 implements DealService {
 
             deal.updateDealSecondMemberAllow();
 
-            Long secondExtraFee = deal.getSecondExtraFee();
+            Long secondExtraFee = null;
+
+            if(deal.getSecondExtraFee() != null) {
+                secondExtraFee = deal.getSecondExtraFee();
+            }
 
             if(deal.getIsSecondSwapMoneyUsed()) {
                 if (dealWalletService.existsDealWallet(dealId) ) {
@@ -161,7 +171,9 @@ public class DealServiceImplV1 implements DealService {
                 if (!dealWalletService.existsDealWallet(dealId)) {
 
                     if (deal.getSecondAllow()) {
-                        dealWalletService.createDealWallet(deal, member, secondExtraFee);
+                        if (deal.getSecondExtraFee() != null) {
+                            dealWalletService.createDealWallet(deal, member, secondExtraFee);
+                        }
                     }
                 }
             }
