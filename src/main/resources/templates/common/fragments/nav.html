@@ -13,8 +13,8 @@
       </a>
     </div>
     <div class="nav-container">
-      <a href="/chats">채팅방</a>
-      <a href="#cs">고객센터</a>
+      <a href="/chats" sec:authorize="isAuthenticated()">채팅방</a>
+      <a onclick="csCenter()">고객센터</a>
       <div class="swapswap-search-container">
         <input type="text" class="swapswap-search-input" placeholder="물품을 검색해보세요">
         <button class="swapswap-search-button">검색</button>
@@ -232,6 +232,11 @@
     setInterval(updateRainbowColor, 1000); // 매 1초마다 색상을 업데이트합니다.
 
   });
+
+  function csCenter() {
+
+    alert("미구현된 기능입니다.")
+  }
 </script>
 </body>
 </html>
