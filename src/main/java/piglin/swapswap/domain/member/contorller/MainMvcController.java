@@ -13,11 +13,6 @@ public class MainMvcController {
         return "/member/login";
     }
 
-    @GetMapping("/main")
-    public String mainPage() {
-        return "main";
-    }
-
     @GetMapping("/myPage")
     public String myPage() {
         return "/member/myPage";
