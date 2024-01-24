@@ -3,7 +3,6 @@ package piglin.swapswap.domain.post.repository;
 import static piglin.swapswap.domain.favorite.entity.QFavorite.favorite;
 import static piglin.swapswap.domain.post.entity.QPost.post;
 
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -213,5 +212,29 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .from(favorite)
                 .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
                 .exists();
+    }
+
+    @Override
+    public void deleteAllPostByMember(Member loginMember) {
+        queryFactory
+                .update(post)
+                .set(post.isDeleted, true)
+                .where(post.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void reRegisterPostByMember(Member loginMember) {
+        queryFactory
+                .update(post)
+                .set(post.isDeleted, false)
+                .where(post.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
     }
 }

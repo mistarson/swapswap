@@ -24,4 +24,8 @@ public interface PostQueryRepository {
             LocalDateTime cursorTime);
 
     List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime);
+
+    void deleteAllPostByMember(Member loginMember);
+
+    void reRegisterPostByMember(Member loginMember);
 }
