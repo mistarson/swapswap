@@ -32,7 +32,7 @@ public class Scheduler {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
-    @Scheduled(cron = "0 5 4 * * *")
+    @Scheduled(cron = "0 10 4 * * *")
     public void deleteExpiredWalletHistory() {
 
         LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
@@ -43,11 +43,10 @@ public class Scheduler {
         favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         List<String> postImageUrlListToDelete = new ArrayList<>();
-        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusMinutes(1);
 
-        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
-        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         for(Post post : postListToDelete) {
 
@@ -60,7 +59,7 @@ public class Scheduler {
 
         postRepository.deleteAll(postListToDelete);
 
-        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         walletRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
