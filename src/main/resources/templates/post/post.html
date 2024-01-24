@@ -84,7 +84,12 @@
             <span th:text="${postGetResponseDto.city.getProvince.getName}"></span> /
             <span th:text="${postGetResponseDto.city.getName}"></span> ・
             <span th:text="${postGetResponseDto.category.getName}"></span> ・
-            <span th:text="${postGetResponseDto.modifiedUpTime}"></span>
+            <span
+                th:if="${#temporals.format(postGetResponseDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, 'HH:mm')}"></span>
+            <span
+                th:unless="${#temporals.format(postGetResponseDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, 'yyyy.MM.dd.')}"></span>
           </div>
         </div>
         <div class="post-content-body">
@@ -150,7 +155,7 @@
 
     function deletePost(postId) {
 
-      if(confirm("게시글을 삭제하시겠습니까?") === true) {
+      if (confirm("게시글을 삭제하시겠습니까?") === true) {
         $.ajax({
           url: '/posts/' + postId,
           type: 'DELETE',
@@ -166,7 +171,8 @@
 
     function upPost(postId) {
 
-      if(confirm("게시글을 업 하시겠습니까?\n등록한지 24시간 이상 된 게시글 / 업 한지 24시간 이상 된 게시글만 업 할 수 있습니다.") === true) {
+      if (confirm("게시글을 업 하시겠습니까?\n등록한지 24시간 이상 된 게시글 / 업 한지 24시간 이상 된 게시글만 업 할 수 있습니다.")
+          === true) {
         $.ajax({
           url: '/posts/' + postId + '/up',
           type: 'PATCH',
