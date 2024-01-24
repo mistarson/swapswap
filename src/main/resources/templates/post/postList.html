@@ -27,7 +27,12 @@
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
-          <img th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
+          <img th:unless="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image activeDeal">
+          <img th:if="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
+          <div class="post-deal-status">
+            <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
+            <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
+          </div>
         </div>
         <h2 th:text="${postDto.title}" class="post-title"></h2>
         <div class="post-stats">
@@ -49,10 +54,6 @@
           th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
           type="button"
       ></button>
-      <div class="post-deal-status">
-        <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
-        <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
-      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
