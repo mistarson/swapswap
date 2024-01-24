@@ -8,20 +8,18 @@
 <div layout:fragment="content">
   <div class="post-content-container">
     <div class="post-content-image-container">
-      <div class="post-deal-status">
-        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}"
-             class="post-deal-status dealing"> 거래 진행 중
-        </div>
-        <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}"
-             class="post-deal-status completed"> 거래 완료
-        </div>
-      </div>
       <div class="post-content-image-slider">
-        <img th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
+        <img th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED}"
+             th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
              th:alt="'Image '+ ${entry.key}" class="post-content-image">
+        <img th:unless="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED}"
+             th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
+             th:alt="'Image '+ ${entry.key}" class="post-content-image activeDeal">
       </div>
       <button class="post-slider-button post-prev-button" onclick="moveSlide(-1)">＜</button>
       <button class="post-slider-button post-next-button" onclick="moveSlide(1)">＞</button>
+      <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
+      <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
     </div>
     <div>
       <div class="post-content-details">
@@ -142,7 +140,16 @@
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
+
+    const isMemberLogged = [[${isMemberLogged}]];
+
     function toggleFavorite(postId) {
+
+      if(!isMemberLogged) {
+        alert("로그인이 필요합니다.")
+        return;
+      }
+
       $.ajax({
         url: '/posts/' + postId + '/favorite',
         type: 'PATCH',

@@ -1,20 +1,14 @@
-package piglin.swapswap.domain.favorite.service;
+package piglin.swapswap.domain.favorite.repository;
 
 import java.util.List;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.entity.Post;
 
-public interface FavoriteService {
-
-    boolean isFavorite(Post post, Member member);
-
-    void updateFavorite(Member member, Post post);
-
-    void deleteFavoritesByPostId(Long postId);
+public interface FavoriteQueryRepository {
 
     void deleteAllFavoriteByMember(Member loginMember);
 
-    void deleteAllFavoriteByPostList(List<Post> post);
+    void deleteAllFavoriteByPostList(List<Post> postList);
 
     void reRegisterFavoriteByMember(Member loginMember);
 

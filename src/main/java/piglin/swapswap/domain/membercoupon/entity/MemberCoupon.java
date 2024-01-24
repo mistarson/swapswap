@@ -47,4 +47,7 @@ public class MemberCoupon extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
 }

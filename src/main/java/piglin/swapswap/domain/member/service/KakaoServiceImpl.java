@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,14 +18,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberService;
+import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.constant.AnimalAdjective;
 import piglin.swapswap.domain.member.constant.AnimalName;
 import piglin.swapswap.domain.member.dto.SocialUserInfo;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.mapper.MemberMapper;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
+import piglin.swapswap.domain.post.entity.Post;
+import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.domain.wallet.service.WalletService;
+import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
@@ -40,6 +47,11 @@ public class KakaoServiceImpl implements SocialService {
 
     private final WalletService walletService;
     private final MemberRepository memberRepository;
+    private final PostService postService;
+    private final ChatRoomMemberService chatRoomMemberService;
+    private final MemberCouponService memberCouponService;
+    private final WalletHistoryService walletHistoryService;
+    private final FavoriteService favoriteService;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
@@ -147,7 +159,7 @@ public class KakaoServiceImpl implements SocialService {
         return memberRepository.findByEmail(kakaoEmail)
                 .map(existingMember -> {
                     if (isWithdrawnMember(existingMember)) {
-                        existingMember.reRegisterMember();
+                        reRegisterAssociatedEntities(existingMember);
                     }
                     return existingMember;
                 })
@@ -158,8 +170,29 @@ public class KakaoServiceImpl implements SocialService {
                 });
     }
 
-    public boolean isWithdrawnMember(Member member) {
-        return member.getIsDeleted();
+    private void reRegisterAssociatedEntities(Member member) {
+
+        member.reRegisterMember();
+
+        member.getWallet().reRegisterWallet();
+
+        walletHistoryService.reRegisterWalletHistoryByWallet(member.getWallet());
+
+        chatRoomMemberService.reRegisterChatroomByMember(member);
+
+        memberCouponService.reRegisterCouponByMember(member);
+
+        favoriteService.reRegisterFavoriteByMember(member);
+
+        List<Post> post = postService.findByMemberId(member.getId());
+
+        favoriteService.reRegisterFavoriteByPost(post);
+
+        postService.reRegisterPostByMember(member);
     }
 
+    public boolean isWithdrawnMember(Member member) {
+
+        return member.getIsDeleted();
+    }
 }

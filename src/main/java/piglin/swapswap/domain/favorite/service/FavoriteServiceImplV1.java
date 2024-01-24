@@ -26,12 +26,6 @@ public class FavoriteServiceImplV1 implements FavoriteService {
     }
 
     @Override
-    public Long getPostFavoriteCnt(Post post) {
-
-        return favoriteRepository.countByPost(post);
-    }
-
-    @Override
     @Transactional
     public void updateFavorite(Member member, Post post) {
 
@@ -53,4 +47,26 @@ public class FavoriteServiceImplV1 implements FavoriteService {
             favorite.deleteFavorite();
         }
     }
+
+    @Override
+    public void deleteAllFavoriteByMember(Member loginMember) {
+        favoriteRepository.deleteAllFavoriteByMember(loginMember);
+    }
+
+    @Override
+    public void deleteAllFavoriteByPostList(List<Post> postList) {
+        favoriteRepository.deleteAllFavoriteByPostList(postList);
+    }
+
+    @Override
+    public void reRegisterFavoriteByMember(Member loginMember) {
+        favoriteRepository.reRegisterFavoriteByMember(loginMember);
+    }
+
+    @Override
+    public void reRegisterFavoriteByPost(List<Post> postList) {
+        favoriteRepository.reRegisterFavoriteByPost(postList);
+    }
+
+
 }

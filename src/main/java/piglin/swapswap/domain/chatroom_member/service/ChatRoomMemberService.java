@@ -14,4 +14,8 @@ public interface ChatRoomMemberService {
     void addMemberToChatRoom(ChatRoom chatRoom, Member member1, Member member2);
 
     ChatRoomMember findByChatRoomAndMember(ChatRoom chatRoom, Member member);
+
+    void deleteAllChatroomByMember(Member loginMember);
+
+    void reRegisterChatroomByMember(Member loginMember);
 }
