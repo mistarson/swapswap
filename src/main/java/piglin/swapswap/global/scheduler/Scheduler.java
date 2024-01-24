@@ -43,11 +43,9 @@ public class Scheduler {
         favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         List<String> postImageUrlListToDelete = new ArrayList<>();
-        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusMinutes(1);
 
-        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
 
-        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         for(Post post : postListToDelete) {
 
@@ -60,7 +58,7 @@ public class Scheduler {
 
         postRepository.deleteAll(postListToDelete);
 
-        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         walletRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
