@@ -45,4 +45,14 @@ public class ChatRoomMemberServiceImpl implements ChatRoomMemberService {
         return chatRoomMemberRepository.findByChatRoomAndMember(chatRoom, member).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION));
     }
+
+    @Override
+    public void deleteAllChatroomByMember(Member loginMember) {
+        chatRoomMemberRepository.deleteAllChatroomByMember(loginMember);
+    }
+
+    @Override
+    public void reRegisterChatroomByMember(Member loginMember) {
+        chatRoomMemberRepository.reRegisterChatroomByMember(loginMember);
+    }
 }

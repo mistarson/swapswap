@@ -29,4 +29,28 @@ public class ChatRoomMemberQueryRepositoryImpl implements ChatRoomMemberQueryRep
                 .where(chatRoomMember.member.eq(member))
                 .fetch();
     }
+
+    @Override
+    public void deleteAllChatroomByMember(Member loginMember) {
+        queryFactory
+                .update(chatRoomMember)
+                .set(chatRoomMember.member.isDeleted, true)
+                .where(chatRoomMember.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void reRegisterChatroomByMember(Member loginMember) {
+        queryFactory
+                .update(chatRoomMember)
+                .set(chatRoomMember.member.isDeleted, false)
+                .where(chatRoomMember.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
 }
