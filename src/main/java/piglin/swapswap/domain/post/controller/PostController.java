@@ -75,6 +75,7 @@ public class PostController {
             seeMemberNickname = member.getNickname();
         }
 
+        model.addAttribute("isMemberLogged", member != null);
         model.addAttribute("isWriter", responseDto.author().equals(seeMemberNickname));
 
         return "post/post";
