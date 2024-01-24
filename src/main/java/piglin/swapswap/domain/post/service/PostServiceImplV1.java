@@ -319,4 +319,20 @@ public class PostServiceImplV1 implements PostService {
             throw new NoMorePostListException();
         }
     }
+
+    @Override
+    public List<Post> findByMemberId(Long memberId) {
+
+        return postRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    public void deleteAllPostByMember(Member loginMember) {
+        postRepository.deleteAllPostByMember(loginMember);
+    }
+
+    @Override
+    public void reRegisterPostByMember(Member loginMember) {
+        postRepository.reRegisterPostByMember(loginMember);
+    }
 }

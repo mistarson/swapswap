@@ -15,4 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryRepo
     List<Post> findAllByMemberIdAndIsDeletedIsFalse(Long memberId);
 
     List<Post> findByIsDeletedIsTrueAndModifiedTimeBefore(LocalDateTime fourTeenDaysAgo);
+
+    List<Post> findByMemberId(Long id);
 }

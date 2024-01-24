@@ -227,4 +227,28 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .where(favorite.member.id.eq(member.getId()), favorite.post.id.eq(post.id))
                 .exists();
     }
+
+    @Override
+    public void deleteAllPostByMember(Member loginMember) {
+        queryFactory
+                .update(post)
+                .set(post.isDeleted, true)
+                .where(post.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
+
+    @Override
+    public void reRegisterPostByMember(Member loginMember) {
+        queryFactory
+                .update(post)
+                .set(post.isDeleted, false)
+                .where(post.member.eq(loginMember))
+                .execute();
+
+        em.flush();
+        em.clear();
+    }
 }
