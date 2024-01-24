@@ -15,13 +15,11 @@
         <img th:unless="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED}"
              th:each="entry:${postGetResponseDto.imageUrl.entrySet}" th:src="${entry.value}"
              th:alt="'Image '+ ${entry.key}" class="post-content-image activeDeal">
-        <div class="post-deal-status">
-          <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
-          <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
-        </div>
       </div>
       <button class="post-slider-button post-prev-button" onclick="moveSlide(-1)">＜</button>
       <button class="post-slider-button post-next-button" onclick="moveSlide(1)">＞</button>
+      <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
+      <div th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
     </div>
     <div>
       <div class="post-content-details">
