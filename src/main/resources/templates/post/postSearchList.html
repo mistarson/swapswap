@@ -27,15 +27,25 @@
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
-          <img th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
+          <img th:unless="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image activeDeal">
+          <img th:if="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
+          <div class="post-deal-status">
+            <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
+            <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
+          </div>
         </div>
         <h2 th:text="${postDto.title}" class="post-title"></h2>
         <div class="post-stats">
           <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
           <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
           <span class="post-city"><span th:text="${postDto.city.getProvince.getName}"></span> / <span th:text="${postDto.city.getName}"></span></span>
-          <span class="modified-date">올린 날짜 <span
-              th:text="${postDto.modifiedUpTime}"></span></span>
+          <span class="modified-date"><span
+              th:if="${#temporals.format(postDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+              th:text="${#temporals.format(postDto.modifiedUpTime, 'HH:mm')}"></span>
+          <span
+              th:unless="${#temporals.format(postDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+              th:text="${#temporals.format(postDto.modifiedUpTime, 'yyyy.MM.dd.')}"></span>
+          </span>
         </div>
       </a>
       <button
@@ -44,15 +54,12 @@
           th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
           type="button"
       ></button>
-      <div class="post-deal-status">
-        <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
-        <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
-      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
 
+    const isMemberLogged = [[${isMemberLogged}]];
     let isLoading = false;
     let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
     let isLast = false;
@@ -124,6 +131,12 @@
     }
 
     function toggleFavorite(postId) {
+
+      if(!isMemberLogged) {
+        alert("로그인이 필요합니다.")
+        return;
+      }
+
       $.ajax({
         url: '/posts/' + postId + '/favorite',
         type: 'PATCH',

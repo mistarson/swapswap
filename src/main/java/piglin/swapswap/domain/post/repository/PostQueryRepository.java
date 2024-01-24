@@ -2,6 +2,7 @@ package piglin.swapswap.domain.post.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.City;
@@ -24,6 +25,8 @@ public interface PostQueryRepository {
             LocalDateTime cursorTime);
 
     List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime);
+
+    void updatePostListStatus(List<Long> postIdList, DealStatus dealStatus);
 
     void deleteAllPostByMember(Member loginMember);
 

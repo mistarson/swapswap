@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.post.constant.Category;
@@ -174,6 +175,19 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .orderBy(post.modifiedUpTime.desc(), post.id.desc())
                 .limit(12)
                 .fetch();
+    }
+
+    @Override
+    public void updatePostListStatus(List<Long> postIdList, DealStatus dealStatus) {
+
+        queryFactory
+                .update(post)
+                .set(post.dealStatus, dealStatus)
+                .where(post.id.in(postIdList))
+                .execute();
+
+        em.flush();
+        em.clear();
     }
 
     private BooleanExpression lessThanCursorTime(LocalDateTime cursorTime) {

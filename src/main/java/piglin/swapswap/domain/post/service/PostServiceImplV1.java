@@ -237,10 +237,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus) {
 
-        for (Long postId : postIdList) {
-            Post post = findPost(postId);
-            post.updatePostDealStatus(dealStatus);
-        }
+        postRepository.updatePostListStatus(postIdList, dealStatus);
     }
 
     @Override
