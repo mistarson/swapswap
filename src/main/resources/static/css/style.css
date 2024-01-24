@@ -536,6 +536,10 @@ img {
   object-fit: scale-down; /* 이미지가 컨테이너를 채우도록 하면서 비율을 유지 */
 }
 
+.post-content-image.activeDeal {
+  filter: brightness(40%);
+}
+
 /* 슬라이더의 이전/다음 버튼 */
 .post-slider-button {
   position: absolute;
