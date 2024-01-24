@@ -75,6 +75,7 @@ public class PostController {
             seeMemberNickname = member.getNickname();
         }
 
+        model.addAttribute("isMemberLogged", member != null);
         model.addAttribute("isWriter", responseDto.author().equals(seeMemberNickname));
 
         return "post/post";
@@ -88,6 +89,7 @@ public class PostController {
     ) {
 
         model.addAttribute("postGetListResponseDto", postService.getPostList(member, cursorTime));
+        model.addAttribute("isMemberLogged", member != null);
 
         return "post/postList";
     }
@@ -179,6 +181,7 @@ public class PostController {
 
         model.addAttribute("postGetListResponseDto",
                 postService.searchPost(title, category, city, member, cursorTime));
+        model.addAttribute("isMemberLogged", member != null);
 
         return "post/postSearchList";
     }
