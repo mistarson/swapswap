@@ -20,7 +20,7 @@
 
       if(confirm("게시글 등록하시겠습니까?") == true) {
 
-        return validateForm();
+        return true;
       } else {
 
         return false;
@@ -68,13 +68,12 @@
         return false;
       }
 
-      return true;
+      return uploadForm();
     }
-
 
   </script>
   <form action="#" th:action="@{/posts/write}" th:object="${PostCreateRequestDto}" method="post"
-        enctype="multipart/form-data" onsubmit="return uploadForm()">
+        enctype="multipart/form-data" onsubmit="return validateForm()">
     <div class="write-bar-container">
       <div class="write-bar">
         <div class="write-bar-explain"> 이미지</div>
