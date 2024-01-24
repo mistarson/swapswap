@@ -45,4 +45,14 @@ public class Wallet extends BaseTime {
                 .isDeleted(false)
                 .build();
     }
+
+    public void deleteWallet() {
+        isDeleted = true;
+    }
+
+    public void reRegisterWallet() {
+
+        isDeleted = false;
+    }
+
 }
