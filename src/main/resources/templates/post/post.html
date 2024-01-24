@@ -86,10 +86,10 @@
             <span th:text="${postGetResponseDto.category.getName}"></span> ・
             <span
                 th:if="${#temporals.format(postGetResponseDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
-                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, '금일 HH:mm')}"></span>
+                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, 'HH:mm')}"></span>
             <span
                 th:unless="${#temporals.format(postGetResponseDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
-                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, 'yyyy월 MM월 dd일')}"></span>
+                th:text="${#temporals.format(postGetResponseDto.modifiedUpTime, 'yyyy.MM.dd.')}"></span>
           </div>
         </div>
         <div class="post-content-body">
