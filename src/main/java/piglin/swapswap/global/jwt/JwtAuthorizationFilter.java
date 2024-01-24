@@ -19,7 +19,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 
-@Slf4j(topic = "JWT 검증 및 인가")
 @AllArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -34,7 +33,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(tokenValue)) {
             tokenValue = jwtUtil.substringToken(tokenValue);
-            log.info(tokenValue);
 
             if (!jwtUtil.validateToken(tokenValue)) {
                 throw new JwtInvalidException();
@@ -46,8 +44,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try {
                 setAuthentication(email);
             } catch (Exception e) {
-                log.error(e.getMessage());
-
                 throw e;
             }
         }
@@ -57,7 +53,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     public void setAuthentication(String email) {
 
-        log.info("JwtAuthorizationFilter-setAuthentication");
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(email);
         context.setAuthentication(authentication);

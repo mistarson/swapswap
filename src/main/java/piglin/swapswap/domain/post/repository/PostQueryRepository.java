@@ -27,4 +27,8 @@ public interface PostQueryRepository {
     List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime);
 
     void updatePostListStatus(List<Long> postIdList, DealStatus dealStatus);
+
+    void deleteAllPostByMember(Member loginMember);
+
+    void reRegisterPostByMember(Member loginMember);
 }

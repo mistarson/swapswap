@@ -16,6 +16,7 @@ public class MemberCouponMapper {
                 .discountPercentage(coupon.getDiscountPercentage())
                 .expiredTime(coupon.getExpiredTime())
                 .member(member)
+                .isDeleted(false)
                 .build();
     }
 

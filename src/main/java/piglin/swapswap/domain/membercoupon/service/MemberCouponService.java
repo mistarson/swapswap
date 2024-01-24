@@ -10,4 +10,8 @@ public interface MemberCouponService {
     void saveMemberCoupon(Member member, Coupon coupon);
 
     List<MyCouponGetResponseDto> getMycouponList(Member member);
+
+    void deleteAllMemberCouponByMember(Member loginMember);
+
+    void reRegisterCouponByMember(Member loginMember);
 }
