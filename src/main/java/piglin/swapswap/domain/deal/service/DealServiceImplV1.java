@@ -109,87 +109,22 @@ public class DealServiceImplV1 implements DealService {
 
         Deal deal = findDeal(dealId);
 
-        if (!deal.getDealStatus().equals(DealStatus.REQUESTED)) {
+        if (isNotDealStatusRequested(deal.getDealStatus())) {
             throw new BusinessException(ErrorCode.CAN_NOT_UPDATE_ALLOW_STATUS);
         }
 
-        if(deal.getFirstUserId().equals(member.getId())) {
-
-            deal.updateDealFirstMemberAllow();
-
-            Long firstExtraFee = null;
-
-            if(deal.getFirstExtraFee() != null) {
-                firstExtraFee = deal.getFirstExtraFee();
-            }
-
-            if(deal.getIsFirstSwapMoneyUsed()) {
-                if (dealWalletService.existsDealWallet(dealId) ) {
-
-                    if (deal.getFirstAllow()) {
-                        dealWalletService.updateDealWallet(deal, member, firstExtraFee);
-                    }
-
-                    if (!deal.getFirstAllow()) {
-                        dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
-                    }
-                }
-
-                if (!dealWalletService.existsDealWallet(dealId)) {
-
-                    if (deal.getFirstAllow()) {
-                        if (deal.getFirstExtraFee() != null) {
-                            dealWalletService.createDealWallet(deal, member, firstExtraFee);
-                        }
-                    }
-                }
-            }
+        if (isFirstMember(deal.getFirstUserId(), member.getId())) {
+            updateFirstMemberToAllow(deal, member);
         }
 
-        if(deal.getSecondUserId().equals(member.getId())) {
-
-            deal.updateDealSecondMemberAllow();
-
-            Long secondExtraFee = null;
-
-            if(deal.getSecondExtraFee() != null) {
-                secondExtraFee = deal.getSecondExtraFee();
-            }
-
-            if(deal.getIsSecondSwapMoneyUsed()) {
-                if (dealWalletService.existsDealWallet(dealId) ) {
-
-                    if (deal.getSecondAllow()) {
-                        dealWalletService.updateDealWallet(deal, member, secondExtraFee);
-                    }
-
-                    if (!deal.getSecondAllow()) {
-                        dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
-                    }
-                }
-
-                if (!dealWalletService.existsDealWallet(dealId)) {
-
-                    if (deal.getSecondAllow()) {
-                        if (deal.getSecondExtraFee() != null) {
-                            dealWalletService.createDealWallet(deal, member, secondExtraFee);
-                        }
-                    }
-                }
-            }
+        if (isSecondMember(deal.getSecondUserId(), member.getId())) {
+            updateSecondMemberToAllow(deal, member);
         }
 
-        if(deal.getFirstAllow() && deal.getSecondAllow()) {
-
+        if(isBothAllow(deal)) {
             deal.updateDealStatus(DealStatus.DEALING);
 
-            List<Long> postIdList = new ArrayList<>();
-            for(int i = 0; i<deal.getFirstPostIdList().size(); i++){
-                postIdList.add(deal.getFirstPostIdList().get(i));
-            }
-            for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
-                postIdList.add(deal.getSecondPostIdList().get(i));
-            }
+            List<Long> postIdList = getDealPostIdList(deal);
 
             postService.updatePostStatusByPostIdList(postIdList, DealStatus.DEALING);
         }
@@ -290,5 +225,104 @@ public class DealServiceImplV1 implements DealService {
         if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_EXCEPTION);
         }
+    }
+
+    private boolean isNotDealStatusRequested(DealStatus dealStatus) {
+
+        return !dealStatus.equals(DealStatus.REQUESTED);
+    }
+
+    private boolean isFirstMember(Long firstMemberId, Long loginMemberId) {
+
+        return firstMemberId.equals(loginMemberId);
+    }
+
+    private boolean isSecondMember(Long secondMemberId, Long loginMemberId) {
+
+        return secondMemberId.equals(loginMemberId);
+    }
+
+    private void updateFirstMemberToAllow(Deal deal, Member member) {
+
+        deal.updateDealFirstMemberAllow();
+
+        Long firstExtraFee = null;
+
+        if(deal.getFirstExtraFee() != null) {
+            firstExtraFee = deal.getFirstExtraFee();
+        }
+
+        if(deal.getIsFirstSwapMoneyUsed()) {
+            if (dealWalletService.existsDealWallet(deal.getId()) ) {
+
+                if (deal.getFirstAllow()) {
+                    dealWalletService.updateDealWallet(deal, member, firstExtraFee);
+                }
+
+                if (!deal.getFirstAllow()) {
+                    dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
+                }
+            }
+
+            if (!dealWalletService.existsDealWallet(deal.getId())) {
+
+                if (deal.getFirstAllow()) {
+                    if (deal.getFirstExtraFee() != null) {
+                        dealWalletService.createDealWallet(deal, member, firstExtraFee);
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateSecondMemberToAllow(Deal deal, Member member) {
+
+        deal.updateDealSecondMemberAllow();
+
+        Long secondExtraFee = null;
+
+        if(deal.getSecondExtraFee() != null) {
+            secondExtraFee = deal.getSecondExtraFee();
+        }
+
+        if(deal.getIsSecondSwapMoneyUsed()) {
+            if (dealWalletService.existsDealWallet(deal.getId()) ) {
+
+                if (deal.getSecondAllow()) {
+                    dealWalletService.updateDealWallet(deal, member, secondExtraFee);
+                }
+
+                if (!deal.getSecondAllow()) {
+                    dealWalletService.withdrawMemberSwapMoneyAtUpdate(deal, member);
+                }
+            }
+
+            if (!dealWalletService.existsDealWallet(deal.getId())) {
+
+                if (deal.getSecondAllow()) {
+                    if (deal.getSecondExtraFee() != null) {
+                        dealWalletService.createDealWallet(deal, member, secondExtraFee);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isBothAllow(Deal deal) {
+
+        return deal.getFirstAllow() && deal.getSecondAllow();
+    }
+
+    private List<Long> getDealPostIdList(Deal deal) {
+
+        List<Long> postIdList = new ArrayList<>();
+        for(int i = 0; i<deal.getFirstPostIdList().size(); i++){
+            postIdList.add(deal.getFirstPostIdList().get(i));
+        }
+        for(int i = 0; i<deal.getSecondPostIdList().size(); i++){
+            postIdList.add(deal.getSecondPostIdList().get(i));
+        }
+
+        return postIdList;
     }
 }

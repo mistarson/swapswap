@@ -630,6 +630,10 @@ img {
   line-height: 1.6;
 }
 
+.post-content-body p {
+  white-space: pre-line;
+}
+
 .post-content-stats {
   font-size: 0.9em;
   color: #666;
