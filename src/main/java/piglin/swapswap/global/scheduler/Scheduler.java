@@ -32,7 +32,7 @@ public class Scheduler {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
-    @Scheduled(cron = "0 28 0 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 33 0 * * *", zone = "Asia/Seoul")
     public void deleteExpiredWalletHistory() {
 
         LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
