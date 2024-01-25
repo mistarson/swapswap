@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import piglin.swapswap.domain.wallet.repository.WalletRepository;
 import piglin.swapswap.domain.wallethistory.repository.WalletHistoryRepository;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class Scheduler {
 
@@ -34,6 +36,9 @@ public class Scheduler {
     @Transactional
     @Scheduled(cron = "*/10 * * * * *")
     public void deleteExpiredWalletHistory() {
+
+        log.info("현재 시간: {}", LocalDateTime.now());
+
 
         LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
 
