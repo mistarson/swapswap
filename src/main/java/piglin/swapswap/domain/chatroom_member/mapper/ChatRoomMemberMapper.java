@@ -11,6 +11,7 @@ public class ChatRoomMemberMapper {
         return ChatRoomMember.builder()
                 .chatRoom(chatRoom)
                 .member(member)
+                .isDeleted(false)
                 .build();
     }
 
