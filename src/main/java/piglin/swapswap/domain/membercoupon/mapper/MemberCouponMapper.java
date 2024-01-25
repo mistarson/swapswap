@@ -25,11 +25,12 @@ public class MemberCouponMapper {
 
         return memberCouponList.stream().map(memberCoupon ->
                 MyCouponGetResponseDto.builder()
-                .couponName(memberCoupon.getName())
-                .couponType(memberCoupon.getCouponType())
-                .discountPercentage(memberCoupon.getDiscountPercentage())
-                .expiredTime(memberCoupon.getExpiredTime())
-                .build()).toList();
+                        .couponId(memberCoupon.getId())
+                        .couponName(memberCoupon.getName())
+                        .couponType(memberCoupon.getCouponType())
+                        .discountPercentage(memberCoupon.getDiscountPercentage())
+                        .expiredTime(memberCoupon.getExpiredTime())
+                        .build()).toList();
     }
 
 }

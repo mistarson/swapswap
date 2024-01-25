@@ -7,6 +7,7 @@ import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 
 public interface DealService {
 
@@ -29,4 +30,6 @@ public interface DealService {
     void updateDealSwapMoneyIsUsing(Long dealId, Member member);
 
     List<DealHistoryResponseDto> getDealHistoryList(Long memberId);
+
+    List<MyCouponGetResponseDto> showMyCouponList(Member member);
 }

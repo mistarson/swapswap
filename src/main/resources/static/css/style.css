@@ -307,7 +307,7 @@ img {
   padding: 5px 10px;
   align-items: center;
   justify-content: center;
-  width: 50%;  /* 필요에 따라 조정 */
+  width: 50%; /* 필요에 따라 조정 */
   text-align: center;
   border-radius: 5px;
   color: white;
@@ -1470,18 +1470,18 @@ input[type="number"] {
 
 .deal-status {
   margin-left: auto;
-  margin-right: 10px;/* 원하는 간격으로 조정하세요. */
+  margin-right: 10px; /* 원하는 간격으로 조정하세요. */
   /* 원하는 스타일 속성을 추가하세요. */
 }
 
-.deal-detail-status{
+.deal-detail-status {
   background-color: white;
   border-radius: 30px;
   margin-left: auto;
   padding: 15px;
 }
 
-.deal-detail-nickname{
+.deal-detail-nickname {
   padding: 15px;
 }
 
@@ -1869,11 +1869,11 @@ input[type="number"] {
   }
 
 
-.deal-detail-first-user-edit-button,
-.deal-detail-second-user-edit-button {
-  position: static; /* 작은 화면에서는 정적 위치 사용 */
-  margin: 10px 0; /* 상단 및 하단 여백 조정 */
-}
+  .deal-detail-first-user-edit-button,
+  .deal-detail-second-user-edit-button {
+    position: static; /* 작은 화면에서는 정적 위치 사용 */
+    margin: 10px 0; /* 상단 및 하단 여백 조정 */
+  }
 }
 
 .deal-history-all-body {
@@ -1897,18 +1897,18 @@ input[type="number"] {
 }
 
 
-.deal-card2-body{
+.deal-card2-body {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.deal-history-created{
+.deal-history-created {
   width: 210px;
 }
 
-.deal-history-completed{
+.deal-history-completed {
   width: 210px;
   margin-right: 38px;
 }
@@ -2046,4 +2046,34 @@ input[type="number"] {
 .ch2 .textbox {
   margin-right: 20px;
   background-color: #F9EB54;
+}
+
+.coupon-card {
+  background-color: #c7f1ff;
+}
+
+.coupon-card:hover {
+  background-color: #00c6ff;
+}
+
+.select-coupon {
+  background-color: #00c6ff;
+}
+
+.coupon-use-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.coupon-btn {
+  margin: 60px;
+  background-color: #28a745;
+  color: white;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 10px;
 }

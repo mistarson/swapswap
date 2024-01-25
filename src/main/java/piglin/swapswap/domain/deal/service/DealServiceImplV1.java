@@ -17,6 +17,8 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -30,6 +32,7 @@ public class DealServiceImplV1 implements DealService {
     private final MemberRepository memberRepository;
     private final DealWalletService dealWalletService;
     private final PostService postService;
+    private final MemberCouponService memberCouponService;
 
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
@@ -204,6 +207,13 @@ public class DealServiceImplV1 implements DealService {
                 memberId, memberId);
 
         return DealMapper.getDealHistory(dealList);
+    }
+
+    @Override
+    public List<MyCouponGetResponseDto> showMyCouponList(Member member) {
+
+        return memberCouponService.getMycouponList(member);
+
     }
 
     private Deal findDeal(Long dealId) {

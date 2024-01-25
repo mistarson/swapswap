@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.deal.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.request.DealRedeemCouponRequestDto;
 import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.exception.common.BusinessException;
@@ -34,7 +37,7 @@ public class DealController {
 
     @ResponseBody
     @PostMapping
-        public ResponseEntity<?> createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
+    public ResponseEntity<?> createDeal(@Valid @RequestBody DealCreateRequestDto requestDto,
             @AuthMember Member member) {
 
         Long dealId = dealService.createDeal(member, requestDto);
@@ -62,11 +65,12 @@ public class DealController {
     }
 
     @GetMapping("/request/list")
-    public String  getRequestDealList(
+    public String getRequestDealList(
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyRequestDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealRequestDealListForm";
@@ -77,7 +81,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyResponseDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyResponseDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealResponseDealListForm";
@@ -91,16 +96,18 @@ public class DealController {
         DealDetailResponseDto responseDto = dealService.getDeal(dealId, member);
 
         model.addAttribute("dealDetailResponseDto", responseDto);
-        model.addAttribute("firstMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.firstPostIdList()));
-        model.addAttribute("secondMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
+        model.addAttribute("firstMemberPostList",
+                postService.getPostSimpleInfoListByPostIdList(responseDto.firstPostIdList()));
+        model.addAttribute("secondMemberPostList",
+                postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
         model.addAttribute("memberId", member.getId());
 
-        return  "deal/dealRequestDeal";
+        return "deal/dealRequestDeal";
     }
 
     @PutMapping("/{dealId}/member/{memberId}")
     public ResponseEntity<?> updateDeal(@Valid @AuthMember Member member, @PathVariable Long dealId,
-            @PathVariable Long memberId, @RequestBody DealUpdateRequestDto requestDto){
+            @PathVariable Long memberId, @RequestBody DealUpdateRequestDto requestDto) {
 
         dealService.updateDeal(member, dealId, memberId, requestDto);
 
@@ -113,7 +120,7 @@ public class DealController {
 
         dealService.checkDeal(dealId);
         model.addAttribute("memberId", memberId);
-        model.addAttribute("dealId",dealId);
+        model.addAttribute("dealId", dealId);
         model.addAttribute("dealUpdateRequestDto", new DealUpdateRequestDto(
                 null, null));
 
@@ -140,7 +147,8 @@ public class DealController {
 
     @ResponseBody
     @PatchMapping("/{dealId}/swapmoney")
-    public ResponseEntity<?> updateDealSwapMoneyIsUsing(@PathVariable Long dealId, @AuthMember Member member) {
+    public ResponseEntity<?> updateDealSwapMoneyIsUsing(@PathVariable Long dealId,
+            @AuthMember Member member) {
 
         dealService.updateDealSwapMoneyIsUsing(dealId, member);
 
@@ -149,11 +157,33 @@ public class DealController {
 
     @GetMapping("/history")
     public String getDealHistory(@AuthMember Member member,
-    Model model) {
+            Model model) {
 
-        model.addAttribute("dealHistoryResponseDto",dealService.getDealHistoryList(member.getId()));
+        model.addAttribute("dealHistoryResponseDto",
+                dealService.getDealHistoryList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealHistory";
     }
+
+    @GetMapping("/{dealId}/coupons")
+    public String showMyCouponList(@PathVariable Long dealId, @AuthMember Member member,
+            Model model) {
+
+        List<MyCouponGetResponseDto> myCouponResponseDtoList = dealService.showMyCouponList(member);
+
+        model.addAttribute("dealId", dealId);
+        model.addAttribute("myCouponResponseDtoList", myCouponResponseDtoList);
+
+        return "deal/dealCouponList";
+    }
+
+    @ResponseBody
+    @PostMapping("/{dealId}/coupons")
+    public ResponseEntity<?> redeemCoupons(@PathVariable Long dealId, @AuthMember Member member,
+            @Valid @RequestBody DealRedeemCouponRequestDto dealRedeemCouponRequestDto) {
+
+        return ResponseEntity.ok("쿠폰 사용 성공");
+    }
+
 }
