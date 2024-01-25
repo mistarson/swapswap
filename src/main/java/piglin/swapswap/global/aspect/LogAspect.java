@@ -21,8 +21,8 @@ public class LogAspect {
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
-        log.info("\nIP - {} | Browser - {} | Cookie - {} \nMethod - {}", getRemoteAddr(req), getBrowser(req),
-                getCookie(req), joinPoint.getSignature().getName());
+        log.info("\nMethod - {} | IP - {} | Browser - {}\n▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ Cookie ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼\n{} \n▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲",joinPoint.getSignature().getName(), getRemoteAddr(req), getBrowser(req),
+                getCookie(req));
     }
 
     private static String getCookie(HttpServletRequest req) {
@@ -34,7 +34,7 @@ public class LogAspect {
                 String cookieName = cookie.getName();
                 String cookieValue = cookie.getValue();
 
-                cookieDetail.append(cookieName).append(" / ").append(cookieValue);
+                cookieDetail.append("CookieName: ").append(cookieName).append("\n").append("CookieValue: ").append(cookieValue);
             }
         }
 
