@@ -8,7 +8,7 @@ import piglin.swapswap.domain.favorite.entity.Favorite;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.entity.Post;
 
-public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+public interface FavoriteRepository extends JpaRepository<Favorite, Long> , FavoriteQueryRepository{
 
     Optional<Favorite> findByMemberAndPost(Member member, Post post);
 

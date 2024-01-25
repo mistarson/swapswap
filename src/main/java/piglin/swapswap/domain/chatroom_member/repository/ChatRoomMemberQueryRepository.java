@@ -7,4 +7,8 @@ import piglin.swapswap.domain.member.entity.Member;
 public interface ChatRoomMemberQueryRepository {
 
     List<ChatRoomMember> findAllByMemberWithChatRoom(Member member);
+
+    void deleteAllChatroomByMember(Member loginMember);
+
+    void reRegisterChatroomByMember(Member loginMember);
 }

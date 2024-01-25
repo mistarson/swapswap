@@ -26,9 +26,19 @@ public class MemberCouponServiceImplV1 implements MemberCouponService{
     @Override
     public List<MyCouponGetResponseDto> getMycouponList(Member member) {
 
-        List<MemberCoupon> memberCouponList = memberCouponRepository.findAllByMemberId(
+        List<MemberCoupon> memberCouponList = memberCouponRepository.findByMemberIdAndIsDeletedIsFalse(
                 member.getId());
 
         return MemberCouponMapper.memberCouponListToMyCouponResponseDtoList(memberCouponList);
     }
+
+    public void deleteAllMemberCouponByMember(Member loginMember) {
+        memberCouponRepository.deleteAllMemberCouponByMember(loginMember);
+    }
+
+    @Override
+    public void reRegisterCouponByMember(Member loginMember) {
+        memberCouponRepository.reRegisterCouponByMember(loginMember);
+    }
+
 }

@@ -8,13 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import piglin.swapswap.domain.chatroom.repository.ChatRoomRepository;
 import piglin.swapswap.domain.favorite.repository.FavoriteRepository;
-import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.membercoupon.repository.MemberCouponRepository;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.event.DeleteImageUrlListEvent;
 import piglin.swapswap.domain.post.repository.PostRepository;
-import piglin.swapswap.global.s3.S3ImageService;
+import piglin.swapswap.domain.wallet.repository.WalletRepository;
+import piglin.swapswap.domain.wallethistory.repository.WalletHistoryRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -23,26 +25,27 @@ public class Scheduler {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final FavoriteRepository favoriteRepository;
+    private final WalletRepository walletRepository;
+    private final MemberCouponRepository memberCouponRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final WalletHistoryRepository walletHistoryRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    @Scheduled(cron = "0 0 0 * * *")
-    public void deleteExpiredMember() {
-
-        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
-
-        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
-    }
 
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
-    public void deletePostComplete() {
+    public void deleteExpiredWalletHistory() {
+
+        LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
+
+        walletHistoryRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
+        memberCouponRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
+        chatRoomRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
+        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         List<String> postImageUrlListToDelete = new ArrayList<>();
-        LocalDateTime fourTeenDaysAgo = LocalDateTime.now().minusDays(14);
 
-        favoriteRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
 
-        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourTeenDaysAgo);
+        List<Post> postListToDelete = postRepository.findByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
 
         for(Post post : postListToDelete) {
 
@@ -54,5 +57,10 @@ public class Scheduler {
         applicationEventPublisher.publishEvent(new DeleteImageUrlListEvent(postImageUrlListToDelete));
 
         postRepository.deleteAll(postListToDelete);
+
+        memberRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
+
+        walletRepository.deleteAllByIsDeletedIsTrueAndModifiedTimeBefore(fourteenDaysAgo);
+
     }
 }

@@ -48,14 +48,17 @@ public class Member extends BaseTime {
     private Wallet wallet;
 
     public void updateMember(String nickname) {
+
         this.nickname = nickname;
     }
 
     public void deleteMember() {
+
         isDeleted = true;
     }
 
     public void reRegisterMember() {
+
         isDeleted = false;
     }
 }

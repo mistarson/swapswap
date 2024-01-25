@@ -10,6 +10,7 @@ import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
 import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
+import piglin.swapswap.domain.post.entity.Post;
 
 public interface PostService {
 
@@ -102,4 +103,10 @@ public interface PostService {
     List<PostGetListResponseDto> getMyPostListMore(Member member, LocalDateTime cursorTime);
 
     void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus);
+
+    List<Post> findByMemberId(Long memberId);
+
+    void deleteAllPostByMember(Member loginMember);
+
+    void reRegisterPostByMember(Member loginMember);
 }
