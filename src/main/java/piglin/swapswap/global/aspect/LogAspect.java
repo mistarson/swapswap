@@ -1,10 +1,11 @@
 package piglin.swapswap.global.aspect;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -12,21 +13,32 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 @Aspect
-@Slf4j
+@Slf4j(topic = "log")
 public class LogAspect {
 
-    @Around("@annotation(piglin.swapswap.global.annotation.SwapLog)")
-    public Object swapLog(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Before("@annotation(piglin.swapswap.global.annotation.SwapLog)")
+    public void swapLog(JoinPoint joinPoint){
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        log.info("IP {}", getRemoteAddr(req));
 
-        try {
-            Object result = joinPoint.proceed();
-            return result;
-        } finally {
-            log.info("");
+        log.info("\nIP - {} | Browser - {} | Cookie - {} \nMethod - {}", getRemoteAddr(req), getBrowser(req),
+                getCookie(req), joinPoint.getSignature().getName());
+    }
+
+    private static String getCookie(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        StringBuilder cookieDetail = new StringBuilder();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String cookieName = cookie.getName();
+                String cookieValue = cookie.getValue();
+
+                cookieDetail.append(cookieName).append(" / ").append(cookieValue);
+            }
         }
+
+        return cookieDetail.toString();
     }
 
     public static String getRemoteAddr(HttpServletRequest request) {
@@ -57,6 +69,27 @@ public class LogAspect {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    public static String getBrowser(HttpServletRequest request) {
+        // 에이전트
+        String agent = request.getHeader("User-Agent");
+        // 브라우져 구분
+        String browser = null;
+        if (agent != null) {
+            if (agent.indexOf("Trident") > -1) {
+                browser = "MSIE";
+            } else if (agent.indexOf("Chrome") > -1) {
+                browser = "Chrome";
+            } else if (agent.indexOf("Opera") > -1) {
+                browser = "Opera";
+            } else if (agent.indexOf("iPhone") > -1 && agent.indexOf("Mobile") > -1) {
+                browser = "iPhone";
+            } else if (agent.indexOf("Android") > -1 && agent.indexOf("Mobile") > -1) {
+                browser = "Android";
+            }
+        }
+        return browser;
     }
 
 }
