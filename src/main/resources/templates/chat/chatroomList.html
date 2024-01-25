@@ -5,27 +5,34 @@
 
 <body>
 <div layout:fragment="content">
-<section class="section--message">
-  <div class="inner">
-    <div class="header">채팅방 목록</div>
-    <div class="room-container">
+  <section class="section--message">
+    <div class="inner">
+      <div class="header">채팅방 목록</div>
+      <div class="room-container">
 
-      <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
-        <div class="other-username" th:text="${chatRoom.username} + '님과의 채팅방'">
-          <span>와의 채팅방</span>
+
+        <div class="room-container" th:if="${#lists.isEmpty(chatRoomList)}">
+          <p>현재 대화 중인 채팅방이 없습니다.</p>
         </div>
-        <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
-        <div class="modifiedAt">
+
+        <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id}, nickname=${chatRoom.nickname})}" class="room">
+
+          <div class="other-username" th:text="${chatRoom.nickname + '님과의 채팅방'}">
+            <span>와의 채팅방</span>
+          </div>
+
+          <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
+          <div class="modifiedAt">
           <span th:if="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
                 th:text="${#temporals.format(chatRoom.lastMessageTime, 'HH:mm')}">Today</span>
-          <span th:unless="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
-                th:text="${#temporals.format(chatRoom.lastMessageTime, 'yyyy-MM-dd')}"></span>
-        </div>
-      </a>
+            <span th:unless="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+                  th:text="${#temporals.format(chatRoom.lastMessageTime, 'yyyy-MM-dd')}"></span>
+          </div>
+        </a>
 
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 </div>
 </body>
 </html>

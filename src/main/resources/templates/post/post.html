@@ -142,6 +142,7 @@
   <script th:inline="javascript">
 
     const isMemberLogged = [[${isMemberLogged}]];
+    const postAuthor = [[${postGetResponseDto.author}]];
 
     function toggleFavorite(postId) {
 
@@ -201,11 +202,10 @@
 
         success: function (response) {
           console.log(response);
-          window.location.href = '/chats/room/' + response;
+          window.location.href = '/chats/room/' + response + '?nickname=' + postAuthor;
         },
       });
     }
-
 
   </script>
 </div>

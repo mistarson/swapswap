@@ -1,17 +1,12 @@
 package piglin.swapswap.domain.chatroom.repository;
 
 import static piglin.swapswap.domain.chatroom.entity.QChatRoom.chatRoom;
-import static piglin.swapswap.domain.chatroom_member.entity.QChatRoomMember.chatRoomMember;
-import static piglin.swapswap.domain.member.entity.QMember.member;
 
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 
 public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
@@ -26,50 +21,29 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
     }
 
     @Override
-    public List<ChatRoomResponseDto> findAllByMemberIdWithMember(Long memberId){
+    public List<ChatRoom> findAllByMemberId(Long memberId) {
+
         return queryFactory
-                .select(Projections.constructor(ChatRoomResponseDto.class,
-                        chatRoom.id,
-                        member.nickname,
-                        chatRoom.lastMessage,
-                        chatRoom.lastMessageTime))
-                .from(chatRoomMember)
-                .join(chatRoom).on(chatRoomMember.chatRoom.id.eq(chatRoom.id))
-                .join(member).on(chatRoomMember.member.id.eq(member.id))
-                .where(chatRoomIdIn(memberId),memberIdNotEq(memberId))
+                .selectFrom(chatRoom)
+                .where(chatRoom.firstMemberId.eq(memberId).or(chatRoom.secondMemberId.eq(memberId)))
                 .fetch();
     }
 
     @Override
-    public Optional<ChatRoom> findByMyMemberIdAndOpponentMemberId(Long memberId, Long secondMemberId) {
-        return Optional.ofNullable(queryFactory
-                .selectFrom(chatRoom)
-                .join(chatRoomMember).on(chatRoom.id.eq(chatRoomMember.chatRoom.id))
-                .where(memberIdEq(memberId), chatRoom.id.in(JPAExpressions
-                        .select(chatRoomMember.chatRoom.id)
-                                .from(chatRoomMember)
-                        .where(memberIdEq(secondMemberId))))
-                .fetchFirst()
+    public Optional<ChatRoom> findChatRoomByMemberIds(Long firstMemberId, Long secondMemberId) {
+        BooleanBuilder conditions = new BooleanBuilder();
+
+        conditions.andAnyOf(
+                chatRoom.firstMemberId.eq(firstMemberId).and(chatRoom.secondMemberId.eq(secondMemberId)),
+                chatRoom.firstMemberId.eq(secondMemberId).and(chatRoom.secondMemberId.eq(firstMemberId))
+        );
+
+        return Optional.ofNullable(
+                queryFactory.selectFrom(chatRoom)
+                        .where(conditions)
+                        .fetchOne()
         );
     }
-
-    private BooleanExpression memberIdNotEq(Long memberId) {
-
-        return member.id.ne(memberId);
-    }
-
-    private BooleanExpression memberIdEq(Long memberId) {
-
-        return chatRoomMember.member.id.eq(memberId);
-    }
-
-    private BooleanExpression chatRoomIdIn(Long memberId) {
-        return chatRoom.id.in(JPAExpressions
-                .select(chatRoomMember.chatRoom.id)
-                .from(chatRoomMember)
-                .where(memberIdEq(memberId)));
-    }
-
 
 
 }

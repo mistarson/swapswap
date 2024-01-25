@@ -8,11 +8,9 @@ import piglin.swapswap.domain.message.constant.MessageType;
 
 @Builder
 public record MessageResponseDto (
-        Long id,
+        Long senderId,
         MessageType type,
-        String senderNickname,
         String text,
-        Long chatRoomId,
         LocalDateTime createdTime
 ) {
 

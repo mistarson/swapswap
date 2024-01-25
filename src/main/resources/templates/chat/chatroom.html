@@ -7,124 +7,118 @@
 </head>
 <body>
 <div layout:fragment="content">
-<section class="section--chat">
-  <div class="inner">
-    <div class="header">채팅</div>
-    <div id="chatContainer" class="chat-container">
-      <div id="chatRoomId" th:text="${roomId}" style="display: none;"></div>
-      <div id="currentUserId" style="display: none;" th:text="${#authentication.principal.nickname}"></div>
-      <div class="connecting">
-        Connecting...
-      </div>
-
-      <div th:each="message : ${messageList}" th:class="${message.senderNickname == #authentication.principal.nickname} ? 'chat ch2' : 'chat ch1'">
-        <div class="sender" th:if="${message.senderNickname != #authentication.principal.nickname}" th:text="${message.senderNickname}"></div>
-        <div class="textbox" th:text="${message.text}"></div>
-      </div>
-
-    </div>
-    <form id="messageForm" name="messageForm" nameForm="messageForm">
-      <div class="form-group">
-        <div class="input-group clearfix">
-          <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
-          <button type="submit" >보내기</button>
-          <button class="leave" th:data-room-id="${roomId}" th:onclick="leaveChatRoom(this.getAttribute('data-room-id'))">채팅방 나가기</button>
+  <section class="section--chat">
+    <div class="inner">
+      <div class="header" th:text="${nickname}"></div>
+      <div id="chatContainer" class="chat-container">
+        <div id="chatRoomId" th:text="${roomId}" style="display: none;"></div>
+        <div id="currentMemberId" style="display: none;" th:text="${#authentication.principal.memberId}"></div>
+        <div class="connecting">
+          Connecting...
         </div>
+
+        <div th:each="message : ${messageList}" th:class="${message.senderId == #authentication.principal.memberId} ? 'chat ch2' : 'chat ch1'">
+          <div class="textbox" th:text="${message.text}"></div>
+        </div>
+
       </div>
-    </form>
-  </div>
-</section>
+      <form id="messageForm" name="messageForm" nameForm="messageForm">
+        <div class="form-group">
+          <div class="input-group clearfix">
+            <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+            <button type="submit" >보내기</button>
+            <button class="leave" th:data-room-id="${roomId}" th:onclick="leaveChatRoom(this.getAttribute('data-room-id'))">채팅방 나가기</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script th:inline="javascript">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script th:inline="javascript">
 
-  const chatRoomId = [[${roomId}]];
-  const messageForm = document.querySelector('#messageForm');
-  const messageInput = document.querySelector('#message');
-  const connectingElement = document.querySelector('.connecting');
-  const currentUserIdElement = document.getElementById('currentUserId');
-  const senderNickname = currentUserIdElement.textContent;
-  const chatContainer = document.getElementById('chatContainer');
-  let stompClient = null;
+    const chatRoomId = [[${roomId}]];
+    const messageForm = document.querySelector('#messageForm');
+    const messageInput = document.querySelector('#message');
+    const connectingElement = document.querySelector('.connecting');
+    const currentMemberId = document.getElementById('currentMemberId');
+    const senderId = currentMemberId.textContent;
+    const chatContainer = document.getElementById('chatContainer');
+    let stompClient = null;
 
-  window.onload = function connect() {
-    let socket = new SockJS('/ws/chat')
-    stompClient = Stomp.over(socket);
+    window.onload = function connect() {
+      let socket = new SockJS('/ws/chat')
+      stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, onConnected, onError);
-  }
-
-  function onConnected() {
-    stompClient.subscribe('/queue/chat/room' + chatRoomId, onMessageReceived);
-    connectingElement.parentNode.removeChild(connectingElement);
-
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-
-  function onError(error) {
-    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-    connectingElement.style.color = 'red';
-  }
-
-  function sendMessage(event) {
-    let messageContent = messageInput.value.trim();
-
-    if (messageContent && stompClient) {
-      let chatMessage = {
-        chatRoomId: chatRoomId,
-        senderNickname: senderNickname,
-        text: messageInput.value,
-        type: 'CHAT'
-      };
-
-      stompClient.send('/app/chat/message', {}, JSON.stringify(chatMessage));
-      messageInput.value = '';
-      messageInput.focus();
-    }
-    event.preventDefault();
-  }
-
-  function onMessageReceived(payload) {
-    let message = JSON.parse(payload.body);
-    let messageElement = document.createElement('div');
-
-    let senderDiv = document.createElement('div');
-    senderDiv.textContent = message.senderNickname;
-    let textBoxDiv = document.createElement('div');
-    textBoxDiv.textContent = message.text;
-
-    messageElement.classList.add('chat');
-    senderDiv.classList.add('sender');
-    textBoxDiv.classList.add('textbox');
-
-    if (message.senderNickname === senderNickname) {
-      messageElement.classList.add('ch2');
-      senderDiv.style.display = 'none';
-    } else {
-      messageElement.classList.add('ch1');
+      stompClient.connect({}, onConnected, onError);
     }
 
-    messageElement.appendChild(senderDiv);
-    messageElement.appendChild(textBoxDiv);
-    chatContainer.appendChild(messageElement);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-  function leaveChatRoom(roomId) {
-    $.ajax({
-      url: '/chats/leave',
-      type: 'DELETE',
-      data: { roomId : roomId },
+    function onConnected() {
+      stompClient.subscribe('/queue/chat/room' + chatRoomId, onMessageReceived);
+      connectingElement.parentNode.removeChild(connectingElement);
 
-      success: function () {
-        window.location.href = '/chats'
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function onError(error) {
+      connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+      connectingElement.style.color = 'red';
+    }
+
+    function sendMessage(event) {
+      let messageContent = messageInput.value.trim();
+
+      if (messageContent && stompClient) {
+        let chatMessage = {
+          chatRoomId: chatRoomId,
+          type: 'CHAT',
+          senderId: senderId,
+          text: messageInput.value
+        };
+
+        stompClient.send('/app/chat/message', {}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+        messageInput.focus();
       }
-    })
-  }
+      event.preventDefault();
+    }
 
-  messageForm.addEventListener('submit', sendMessage, true);
-</script>
+    function onMessageReceived(payload) {
+      let message = JSON.parse(payload.body);
+      let messageElement = document.createElement('div');
+
+      let textBoxDiv = document.createElement('div');
+      textBoxDiv.textContent = message.text;
+
+      messageElement.classList.add('chat');
+      textBoxDiv.classList.add('textbox');
+
+      if (message.senderId.toString() === senderId.toString()) {
+        messageElement.classList.add('ch2');
+      } else {
+        messageElement.classList.add('ch1');
+      }
+
+      messageElement.appendChild(textBoxDiv);
+      chatContainer.appendChild(messageElement);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    function leaveChatRoom(roomId) {
+      $.ajax({
+        url: '/chats/leave',
+        type: 'DELETE',
+        data: { roomId : roomId },
+
+        success: function () {
+          window.location.href = '/chats'
+        }
+      })
+    }
+
+    messageForm.addEventListener('submit', sendMessage, true);
+  </script>
 </div>
 </body>
 </html>

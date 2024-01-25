@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.message.constant.MessageType;
@@ -30,11 +29,11 @@ public class Message extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long memberId;
+
     @Enumerated(EnumType.STRING)
     private MessageType type;
-
-    @Column(nullable = false)
-    private String senderNickname;
 
     @Column(nullable = false)
     private String text;

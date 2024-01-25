@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import piglin.swapswap.domain.common.BaseTime;
+import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Entity
 @Getter
@@ -25,6 +28,12 @@ public class ChatRoom extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = true)
+    private Long firstMemberId;
+
+    @Column(nullable = true)
+    private Long secondMemberId;
 
     @Column(nullable = true)
     private String lastMessage;
@@ -42,5 +51,19 @@ public class ChatRoom extends BaseTime {
     public void updateChatRoom(String lastMessage) {
         this.lastMessage = lastMessage;
         this.lastMessageTime = LocalDateTime.now();
+    }
+
+    public void leaveChatRoom(Member member) {
+
+        if (member.getId().equals(firstMemberId)) {
+
+            firstMemberId = null;
+        } else if (member.getId().equals(secondMemberId)) {
+
+            secondMemberId = null;
+        } else {
+
+            throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);
+        }
     }
 }

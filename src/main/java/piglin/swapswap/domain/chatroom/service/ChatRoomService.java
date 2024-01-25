@@ -17,5 +17,4 @@ public interface ChatRoomService {
     void saveMessage(MessageRequestDto requestDto);
 
     void leaveChatRoom(Member member, Long roomId);
-
 }

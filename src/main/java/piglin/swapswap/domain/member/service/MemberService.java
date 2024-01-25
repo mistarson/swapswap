@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.member.service;
 
+import java.util.List;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 
@@ -16,4 +17,6 @@ public interface MemberService {
     Member getMember(Long memberId);
 
     boolean checkNicknameExists(String nickname);
+
+    List<Member> getMembers(List<Long> memberIds);
 }
