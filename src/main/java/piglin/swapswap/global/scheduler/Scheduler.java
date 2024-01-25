@@ -34,11 +34,8 @@ public class Scheduler {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 25 10 * * *")
     public void deleteExpiredWalletHistory() {
-
-
-        log.info("현재 시간: {}", LocalDateTime.now());
 
         LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
 
