@@ -37,8 +37,8 @@ public class Scheduler {
     @Scheduled(cron = "*/10 * * * * *")
     public void deleteExpiredWalletHistory() {
 
-        log.info("현재 시간: {}", LocalDateTime.now());
 
+        log.info("현재 시간: {}", LocalDateTime.now());
 
         LocalDateTime fourteenDaysAgo = LocalDateTime.now().minusDays(14);
 
