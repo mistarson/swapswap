@@ -16,9 +16,14 @@
         </div>
 
         <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
-          <div class="other-username" th:text="${chatRoom.username} + '님과의 채팅방'">
+
+          <div class="other-username" th:if="${#authentication.principal.nickname != chatRoom.member1}" th:text="${chatRoom.member1 + '님과의 채팅방'}">
             <span>와의 채팅방</span>
           </div>
+          <div class="other-username" th:if="${#authentication.principal.nickname != chatRoom.member2}" th:text="${chatRoom.member2 + '님과의 채팅방'}">
+            <span>와의 채팅방</span>
+          </div>
+
           <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
           <div class="modifiedAt">
           <span th:if="${#temporals.format(chatRoom.lastMessageTime, 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"

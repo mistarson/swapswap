@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberService;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
@@ -26,7 +25,6 @@ public class MemberServiceImplV1 implements MemberService {
     private final MemberCouponService memberCouponService;
     private final WalletHistoryService walletHistoryService;
     private final FavoriteService favoriteService;
-    private final ChatRoomMemberService chatRoomMemberService;
 
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
@@ -53,10 +51,6 @@ public class MemberServiceImplV1 implements MemberService {
         wallet.deleteWallet();
 
         walletHistoryService.deleteAllWalletHistoriesByWallet(member.getWallet());
-
-
-
-        chatRoomMemberService.deleteAllChatroomByMember(loginMember);
 
         memberCouponService.deleteAllMemberCouponByMember(loginMember);
 
@@ -95,5 +89,12 @@ public class MemberServiceImplV1 implements MemberService {
     @Override
     public boolean checkNicknameExists(String nickname) {
         return memberRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public Member getMemberByNickname(String nickname) {
+
+        return memberRepository.findByNickname(nickname).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
 }

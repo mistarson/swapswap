@@ -2,13 +2,13 @@ package piglin.swapswap.domain.chatroom.repository;
 
 import java.util.List;
 import java.util.Optional;
-import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
+import piglin.swapswap.domain.member.entity.Member;
 
 public interface ChatRoomQueryRepository {
 
-    List<ChatRoomResponseDto> findAllByMemberIdWithMember(Long memberId);
+    List<ChatRoom> findAllByMember(Member member);
 
-    Optional<ChatRoom> findByMyMemberIdAndOpponentMemberId(Long myMemberId, Long OpponentMemberId);
+    Optional<ChatRoom> findChatRoomByMembers(Member member1, Member member2);
 
 }

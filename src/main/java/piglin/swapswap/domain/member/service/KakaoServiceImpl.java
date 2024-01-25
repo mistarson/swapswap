@@ -18,7 +18,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberService;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
 import piglin.swapswap.domain.member.constant.AnimalAdjective;
 import piglin.swapswap.domain.member.constant.AnimalName;
@@ -48,7 +47,6 @@ public class KakaoServiceImpl implements SocialService {
     private final WalletService walletService;
     private final MemberRepository memberRepository;
     private final PostService postService;
-    private final ChatRoomMemberService chatRoomMemberService;
     private final MemberCouponService memberCouponService;
     private final WalletHistoryService walletHistoryService;
     private final FavoriteService favoriteService;
@@ -177,8 +175,6 @@ public class KakaoServiceImpl implements SocialService {
         member.getWallet().reRegisterWallet();
 
         walletHistoryService.reRegisterWalletHistoryByWallet(member.getWallet());
-
-        chatRoomMemberService.reRegisterChatroomByMember(member);
 
         memberCouponService.reRegisterCouponByMember(member);
 
