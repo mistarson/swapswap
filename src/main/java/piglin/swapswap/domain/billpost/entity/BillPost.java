@@ -1,4 +1,4 @@
-package piglin.swapswap.domain.billpostlist.entity;
+package piglin.swapswap.domain.billpost.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
