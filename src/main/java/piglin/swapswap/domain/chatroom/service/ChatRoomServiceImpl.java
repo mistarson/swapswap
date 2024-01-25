@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.chatroom.service;
 
 import jakarta.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -129,20 +130,23 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         Map<Long, String> otherMemberIdToNicknameMap = otherMembers.stream().collect(Collectors.toMap(Member::getId, Member::getNickname));
 
-        return chatRoomList.stream().map(chatRoom -> {
+        return chatRoomList.stream()
 
-            Long otherMemberId = getOtherMemberId(chatRoom, memberId);
-            String otherMemberNickname = otherMemberIdToNicknameMap.get(otherMemberId);
+                .sorted(Comparator.comparing(ChatRoom::getLastMessageTime).reversed()) // 내림차순 정렬
+                .map(chatRoom -> {
+                    Long otherMemberId = getOtherMemberId(chatRoom, memberId);
+                    String otherMemberNickname = otherMemberIdToNicknameMap.get(otherMemberId);
 
-            return ChatRoomResponseDto.builder()
-                    .id(chatRoom.getId())
-                    .nickname(otherMemberNickname)
-                    .lastMessage(chatRoom.getLastMessage())
-                    .lastMessageTime(chatRoom.getLastMessageTime())
-                    .build();
-
-        }).toList();
+                    return ChatRoomResponseDto.builder()
+                            .id(chatRoom.getId())
+                            .nickname(otherMemberNickname)
+                            .lastMessage(chatRoom.getLastMessage())
+                            .lastMessageTime(chatRoom.getLastMessageTime())
+                            .build();
+                })
+                .toList();
     }
+
 
     private Long getOtherMemberId(ChatRoom chatRoom, Long memberId) {
         if (chatRoom.getFirstMemberId().equals(memberId)) {
