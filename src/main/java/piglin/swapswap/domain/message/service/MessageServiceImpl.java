@@ -16,7 +16,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> findAllByChatRoomId(Long roomId) {
 
-        return messageRepository.findAllByChatRoom_Id(roomId);
+        return messageRepository.findAllByChatRoomId(roomId);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public void deleteMessage(ChatRoom chatRoom) {
 
-        messageRepository.deleteMessage(chatRoom);
+        messageRepository.deleteAllChatRoomMessage(chatRoom);
     }
 }

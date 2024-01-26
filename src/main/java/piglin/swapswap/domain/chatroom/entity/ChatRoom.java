@@ -13,6 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import piglin.swapswap.domain.common.BaseTime;
+import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Entity
 @Getter
@@ -25,6 +28,18 @@ public class ChatRoom extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private Long firstMemberId;
+
+    @Column(nullable = false)
+    private Long secondMemberId;
+
+    @Column(nullable = false)
+    private boolean isLeaveFirstMember;
+
+    @Column(nullable = false)
+    private boolean isLeaveSecondMember;
 
     @Column(nullable = true)
     private String lastMessage;
@@ -40,7 +55,33 @@ public class ChatRoom extends BaseTime {
     }
 
     public void updateChatRoom(String lastMessage) {
+        this.isLeaveFirstMember = false;
+        this.isLeaveSecondMember = false;
         this.lastMessage = lastMessage;
         this.lastMessageTime = LocalDateTime.now();
+    }
+
+    public void reentryFirstMember() {
+        isLeaveFirstMember = false;
+    }
+
+    public void reentrySecondMember() {
+        isLeaveSecondMember = false;
+    }
+
+    public void leaveChatRoom(Member member) {
+
+        if (member.getId().equals(firstMemberId)) {
+
+            isLeaveFirstMember = true;
+
+        } else if (member.getId().equals(secondMemberId)) {
+
+            isLeaveSecondMember = true;
+
+        } else {
+
+            throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);
+        }
     }
 }
