@@ -1,37 +1,46 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-  <div th:each="postDto : ${postListResponseDto.postList}" class="post-card"
-       th:data-modified-time="${postDto.modifiedUpTime}">
-    <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
-      <div class="post-image-container">
-        <img th:unless="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image activeDeal">
-        <img th:if="${postDto.dealStatus == postDto.dealStatus.REQUESTED}" th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
-        <div class="post-deal-status">
-          <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}" class="post-deal-status dealing"> 거래 진행 중 </div>
-          <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}" class="post-deal-status completed"> 거래 완료 </div>
+<input type="hidden" class="is-last" th:value="${postListResponseDto.isLast}" />
+<div th:each="postDto : ${postListResponseDto.postList}" class="post-card"
+     th:data-modified-time="${postDto.modifiedUpTime}">
+  <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
+    <div class="post-image-container">
+      <img th:unless="${postDto.dealStatus == postDto.dealStatus.REQUESTED}"
+           th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image"
+           class="post-image activeDeal">
+      <img th:if="${postDto.dealStatus == postDto.dealStatus.REQUESTED}"
+           th:src="${postDto.imageUrl.get(0).toString}" alt="Post Image" class="post-image">
+      <div class="post-deal-status">
+        <div th:if="${postDto.dealStatus == postDto.dealStatus.DEALING}"
+             class="post-deal-status dealing"> 거래 진행 중
+        </div>
+        <div th:if="${postDto.dealStatus == postDto.dealStatus.COMPLETED}"
+             class="post-deal-status completed"> 거래 완료
         </div>
       </div>
-      <h2 th:text="${postDto.title}" class="post-title"></h2>
-      <div class="post-stats">
-        <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
-        <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
-        <span class="post-city"><span th:text="${postDto.city.getProvince.getName}"></span> / <span th:text="${postDto.city.getName}"></span></span>
-        <span class="modified-date"><span
-            th:if="${#temporals.format(postDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
-            th:text="${#temporals.format(postDto.modifiedUpTime, 'HH:mm')}"></span>
+    </div>
+    <h2 th:text="${postDto.title}" class="post-title"></h2>
+    <div class="post-stats">
+      <span class="view-count">조회수 <span th:text="${postDto.viewCnt}"></span></span>
+      <span class="favorite-count">찜 <span th:text="${postDto.favoriteCnt}"></span></span>
+      <span class="post-city"><span th:text="${postDto.city.getProvince.getName}"></span> / <span
+          th:text="${postDto.city.getName}"></span></span>
+      <span class="modified-date"><span
+          th:if="${#temporals.format(postDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
+          th:text="${#temporals.format(postDto.modifiedUpTime, 'HH:mm')}"></span>
           <span
               th:unless="${#temporals.format(postDto.modifiedUpTime(), 'yyyyMMdd') == #temporals.format(#temporals.createNow(), 'yyyyMMdd')}"
               th:text="${#temporals.format(postDto.modifiedUpTime, 'yyyy.MM.dd.')}"></span>
           </span>
-      </div>
-    </a>
-    <button
-        th:data-post-id="${postDto.postId}"
-        onclick="toggleFavorite(this.getAttribute('data-post-id'))"
-        th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
-        type="button"
-    ></button>
-  </div>
+    </div>
+  </a>
+  <button
+      th:data-post-id="${postDto.postId}"
+      onclick="toggleFavorite(this.getAttribute('data-post-id'))"
+      th:text="${postDto.favoriteStatus} == true ? '💙' : '🤍'"
+      type="button"
+  ></button>
+</div>
 </body>
 </html>
