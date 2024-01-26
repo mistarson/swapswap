@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.chatroom.dto.ChatRoomResponseDto;
 import piglin.swapswap.domain.chatroom.entity.ChatRoom;
@@ -13,6 +14,7 @@ import piglin.swapswap.domain.chatroom.mapper.ChatRoomMapper;
 import piglin.swapswap.domain.chatroom.repository.ChatRoomRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.MemberServiceImplV1;
+import piglin.swapswap.domain.message.constant.MessageType;
 import piglin.swapswap.domain.message.dto.request.MessageRequestDto;
 import piglin.swapswap.domain.message.dto.response.MessageResponseDto;
 import piglin.swapswap.domain.message.entity.Message;
@@ -28,6 +30,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberServiceImplV1 memberService;
     private final MessageServiceImpl messageService;
+    private final SimpMessageSendingOperations sendingOperations;
 
     @Override
     public ChatRoomResponseDto getChatRoomResponseDto(Long roomId, Long memberId) {
@@ -55,7 +58,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findChatRoomByMemberIds(member.getId(), member2.getId()).orElseGet(() ->
                 createChatRoom(member, member2));
 
-        reentryMember(member.getId(), chatRoom);
+        reentryMember(member, chatRoom);
 
         return chatRoom.getId();
     }
@@ -96,6 +99,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             chatRoom.deleteChatRoom();
             messageService.deleteMessage(chatRoom);
         }
+
+        sendLeaveMessage(member, chatRoom);
     }
 
     private ChatRoom getChatRoom(Long roomId) {
@@ -134,17 +139,35 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
     }
 
-    private void reentryMember(Long memberId, ChatRoom chatRoom) {
+    private void reentryMember(Member member, ChatRoom chatRoom) {
 
-        if (memberId.equals(chatRoom.getFirstMemberId())) {
+        if (member.getId().equals(chatRoom.getFirstMemberId()) && chatRoom.isLeaveFirstMember()) {
 
+            sendEnterMessage(member, chatRoom);
             chatRoom.reentryFirstMember();
         }
 
-        if (memberId.equals(chatRoom.getSecondMemberId())) {
+        if (member.getId().equals(chatRoom.getSecondMemberId()) && chatRoom.isLeaveSecondMember()) {
 
+            sendEnterMessage(member, chatRoom);
             chatRoom.reentrySecondMember();
         }
+    }
+
+    private void sendEnterMessage(Member member,ChatRoom chatRoom) {
+
+        sendingOperations.convertAndSend(
+                "/queue/chat/room" + chatRoom.getId(),
+                MessageMapper.createMessageRequestDto(chatRoom.getId(), member.getId(), MessageType.ENTER, member.getNickname() + "님이 입장하셨습니다.")
+        );
+    }
+
+    private void sendLeaveMessage(Member member,ChatRoom chatRoom) {
+
+        sendingOperations.convertAndSend(
+                "/queue/chat/room" + chatRoom.getId(),
+                MessageMapper.createMessageRequestDto(chatRoom.getId(), member.getId(), MessageType.LEAVE, member.getNickname() + "님이 나갔습니다.")
+        );
     }
 
     private List<ChatRoomResponseDto> getChatRoomResponseDtoList(List<ChatRoom> chatRoomList, Long memberId) {
