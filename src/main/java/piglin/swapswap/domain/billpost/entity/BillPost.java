@@ -1,36 +1,36 @@
-package piglin.swapswap.domain.deal.entity;
+package piglin.swapswap.domain.billpost.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.common.BaseTime;
-import piglin.swapswap.domain.deal.constant.DealStatus;
+import piglin.swapswap.domain.post.entity.Post;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Deal extends BaseTime {
+public class BillPost extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private DealStatus dealStatus;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    @Column
-    private LocalDateTime completedDealTime;
+    @ManyToOne
+    @JoinColumn(name = "bill_id")
+    private Bill bill;
 }

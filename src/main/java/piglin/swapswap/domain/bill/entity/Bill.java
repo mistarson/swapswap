@@ -1,36 +1,44 @@
-package piglin.swapswap.domain.deal.entity;
+package piglin.swapswap.domain.bill.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import piglin.swapswap.domain.common.BaseTime;
-import piglin.swapswap.domain.deal.constant.DealStatus;
+import piglin.swapswap.domain.member.entity.Member;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Deal extends BaseTime {
+public class Bill extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
-    private DealStatus dealStatus;
-
     @Column
-    private LocalDateTime completedDealTime;
+    private Long extrafee;
+
+    @Column(nullable = false)
+    private Boolean isAllowed;
+
+    @Column(nullable = false)
+    private Boolean isTaked;
+
+    @Column(nullable = false)
+    private Boolean isSwapMoneyUsed;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 }
