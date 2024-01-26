@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.bill.mapper;
 
-import piglin.swapswap.domain.bill.dto.request.BillCreateRequestDto;
 import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.member.entity.Member;
 
