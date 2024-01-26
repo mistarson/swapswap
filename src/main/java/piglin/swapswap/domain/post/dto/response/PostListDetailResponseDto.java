@@ -5,7 +5,7 @@ import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.post.constant.City;
 
-public record PostGetListResponseDto(
+public record PostListDetailResponseDto(
         Long postId,
 
         Long memberId,
