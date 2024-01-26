@@ -8,7 +8,7 @@
     💙 내 찜 목록 💙
   </div>
   <div class="post-container">
-    <div th:each="postDto : ${postGetListResponseDto}" class="post-card"
+    <div th:each="postDto : ${postListResponseDto.postList}" class="post-card"
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
@@ -44,10 +44,10 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
 
+    const isLast = [[${postListResponseDto.isLast}]];
     const isMemberLogged = [[${isMemberLogged}]];
     let isLoading = false;
     let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
-    let isLast = false;
 
     window.addEventListener("scroll", function () {
 
@@ -83,8 +83,7 @@
             isLoading = false;
           },
           error: function() {
-            alert('더 이상 로드할 게시물이 없습니다.')
-            isLast = true;
+
             isLoading = false;
           }
         });

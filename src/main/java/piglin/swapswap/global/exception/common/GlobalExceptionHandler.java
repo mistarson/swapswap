@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
 import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
-import piglin.swapswap.global.exception.post.NoMorePostListException;
 
 
 @Slf4j
@@ -98,15 +97,6 @@ public class GlobalExceptionHandler {
         log.error("HttpMediaTypeNotSupportedException", e);
 
         return new RedirectView("/error/errorpage");
-    }
-
-    @ResponseBody
-    @ExceptionHandler(NoMorePostListException.class)
-    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
-
-        log.error("NoMorePostListException", e);
-
-        return ResponseEntity.status(e.getStatus()).build();
     }
 
     @ExceptionHandler(Exception.class)

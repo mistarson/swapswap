@@ -21,7 +21,8 @@ import piglin.swapswap.domain.member.service.KakaoServiceImpl;
 import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.domain.member.service.MemberService;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.jwt.JwtCookieManager;
@@ -103,9 +104,9 @@ public class MemberController {
     public String getMyFavoriteList(@AuthMember Member member,
             @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
 
-        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostList(
+        PostListResponseDto responseDtoList = postService.getMyFavoritePostList(
                 member, cursorTime);
-        model.addAttribute("postGetListResponseDto", responseDtoList);
+        model.addAttribute("postListResponseDto", responseDtoList);
 
         return "post/postFavoriteList";
     }
@@ -114,9 +115,9 @@ public class MemberController {
     public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime,
             Model model) {
 
-        List<PostGetListResponseDto> responseDtoList = postService.getMyFavoritePostListMore(
+        PostListResponseDto responseDtoList = postService.getMyFavoritePostList(
                 member, cursorTime);
-        model.addAttribute("postGetListResponseDto", responseDtoList);
+        model.addAttribute("postListResponseDto", responseDtoList);
 
         return "post/postListFragment";
     }
@@ -125,10 +126,10 @@ public class MemberController {
     public String getMyPostList(@AuthMember Member member,
             @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
 
-        List<PostGetListResponseDto> responseDtoList = postService.getMyPostList(member,
+        PostListResponseDto responseDtoList = postService.getMyPostList(member,
                 cursorTime);
 
-        model.addAttribute("postGetListResponseDto", responseDtoList);
+        model.addAttribute("postListResponseDto", responseDtoList);
 
         return "member/myPostList";
     }
@@ -137,10 +138,10 @@ public class MemberController {
     public String getMyPostListMore(@AuthMember Member member, LocalDateTime cursorTime,
             Model model) {
 
-        List<PostGetListResponseDto> responseDtoList = postService.getMyPostListMore(member,
+        PostListResponseDto responseDtoList = postService.getMyPostList(member,
                 cursorTime);
 
-        model.addAttribute("postGetListResponseDto", responseDtoList);
+        model.addAttribute("postListResponseDto", responseDtoList);
 
         return "post/postListFragment";
     }
