@@ -43,8 +43,7 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
 
         return Optional.ofNullable(
                 queryFactory.selectFrom(chatRoom)
-                        .where(conditions)
-                        .where(chatRoom.isDeleted.eq(false))
+                        .where(conditions.and(chatRoom.isDeleted.eq(false)))
                         .fetchOne()
         );
     }
