@@ -8,6 +8,7 @@ import piglin.swapswap.domain.message.dto.response.MessageResponseDto;
 
 public interface ChatRoomService {
 
+    ChatRoomResponseDto getChatRoomResponseDto(Long roomId, Long memberId);
     List<ChatRoomResponseDto> getChatRoomList(Member member);
 
     List<MessageResponseDto> getMessageByChatRoomId(Long roomId, Member member);

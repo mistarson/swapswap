@@ -9,7 +9,7 @@
 <div layout:fragment="content">
   <section class="section--chat">
     <div class="inner">
-      <div class="header" th:text="${nickname}"></div>
+      <div class="header" th:text="${chatRoom.nickname}"></div>
       <div id="chatContainer" class="chat-container">
         <div id="chatRoomId" th:text="${roomId}" style="display: none;"></div>
         <div id="currentMemberId" style="display: none;" th:text="${#authentication.principal.memberId}"></div>

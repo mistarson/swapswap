@@ -38,15 +38,14 @@ public class ChatRoomController {
     @GetMapping("/chats/room/{roomId}")
     public String getChatRoom(
             @PathVariable Long roomId,
-            @RequestParam(name = "nickname", required = false) String nickname,
             @AuthMember Member member,
             Model model
     ) {
 
         List<MessageResponseDto> messageList = chatRoomService.getMessageByChatRoomId(roomId, member);
+        ChatRoomResponseDto chatRoom = chatRoomService.getChatRoomResponseDto(roomId, member.getId());
 
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("nickname", nickname);
+        model.addAttribute("chatRoom", chatRoom);
         model.addAttribute("messageList", messageList);
 
         return "chat/chatroom";

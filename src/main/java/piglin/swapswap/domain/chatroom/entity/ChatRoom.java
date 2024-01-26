@@ -29,11 +29,17 @@ public class ChatRoom extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Long firstMemberId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Long secondMemberId;
+
+    @Column(nullable = false)
+    private boolean isLeaveFirstMember;
+
+    @Column(nullable = false)
+    private boolean isLeaveSecondMember;
 
     @Column(nullable = true)
     private String lastMessage;
@@ -53,14 +59,24 @@ public class ChatRoom extends BaseTime {
         this.lastMessageTime = LocalDateTime.now();
     }
 
+    public void reentryFirstMember() {
+        isLeaveFirstMember = false;
+    }
+
+    public void reentrySecondMember() {
+        isLeaveSecondMember = false;
+    }
+
     public void leaveChatRoom(Member member) {
 
         if (member.getId().equals(firstMemberId)) {
 
-            firstMemberId = null;
+            isLeaveFirstMember = true;
+
         } else if (member.getId().equals(secondMemberId)) {
 
-            secondMemberId = null;
+            isLeaveSecondMember = true;
+
         } else {
 
             throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);

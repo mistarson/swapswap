@@ -15,11 +15,9 @@
           <p>현재 대화 중인 채팅방이 없습니다.</p>
         </div>
 
-        <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id}, nickname=${chatRoom.nickname})}" class="room">
+        <a th:each="chatRoom : ${chatRoomList}" th:href="@{/chats/room/{roomId}(roomId=${chatRoom.id})}" class="room">
 
-          <div class="other-username" th:text="${chatRoom.nickname + '님과의 채팅방'}">
-            <span>와의 채팅방</span>
-          </div>
+          <div class="other-username" th:text="${chatRoom.nickname + '님과의 채팅방'}"></div>
 
           <div class="lastChatMessage" th:text="${chatRoom.lastMessage}"></div>
           <div class="modifiedAt">

@@ -46,8 +46,7 @@
           </div>
           <div class="post-request-button"
                sec:authorize="isAuthenticated()"
-               th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED} and ${!isWriter}"
-          >
+               th:if="${postGetResponseDto.dealStatus == postGetResponseDto.dealStatus.REQUESTED} and ${!isWriter}">
             <a th:href="@{/deals/request(secondMemberId=${postGetResponseDto.memberId},memberName=${postGetResponseDto.author})}">
               요청하기
             </a>
@@ -142,7 +141,6 @@
   <script th:inline="javascript">
 
     const isMemberLogged = [[${isMemberLogged}]];
-    const postAuthor = [[${postGetResponseDto.author}]];
 
     function toggleFavorite(postId) {
 
@@ -202,7 +200,7 @@
 
         success: function (response) {
           console.log(response);
-          window.location.href = '/chats/room/' + response + '?nickname=' + postAuthor;
+          window.location.href = '/chats/room/' + response;
         },
       });
     }

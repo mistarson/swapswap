@@ -22,10 +22,13 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
 
     @Override
     public List<ChatRoom> findAllByMemberId(Long memberId) {
+        BooleanBuilder conditions = new BooleanBuilder();
+        conditions.and(chatRoom.firstMemberId.eq(memberId).and(chatRoom.isLeaveFirstMember.isFalse()));
+        conditions.or(chatRoom.secondMemberId.eq(memberId).and(chatRoom.isLeaveSecondMember.isFalse()));
 
         return queryFactory
                 .selectFrom(chatRoom)
-                .where(chatRoom.firstMemberId.eq(memberId).or(chatRoom.secondMemberId.eq(memberId)))
+                .where(chatRoom.firstMemberId.eq(memberId).or(chatRoom.secondMemberId.eq(memberId)).and(conditions), chatRoom.isDeleted.isFalse())
                 .fetch();
     }
 
@@ -41,9 +44,9 @@ public class ChatRoomQueryRepositoryImpl implements ChatRoomQueryRepository{
         return Optional.ofNullable(
                 queryFactory.selectFrom(chatRoom)
                         .where(conditions)
+                        .where(chatRoom.isDeleted.eq(false))
                         .fetchOne()
         );
     }
-
 
 }

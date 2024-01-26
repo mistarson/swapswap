@@ -30,6 +30,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final MessageServiceImpl messageService;
 
     @Override
+    public ChatRoomResponseDto getChatRoomResponseDto(Long roomId, Long memberId) {
+
+        ChatRoom chatRoom = getChatRoom(roomId);
+        String nickname = memberService.getMember(getOtherMemberId(chatRoom, memberId)).getNickname();
+
+        return ChatRoomMapper.getChatRoomResponseDto(chatRoom, nickname);
+    }
+
+    @Override
     public List<ChatRoomResponseDto> getChatRoomList(Member member) {
 
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByMemberId(member.getId());
@@ -38,12 +47,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    @Transactional
     public Long createChatroom(Member member, Long secondMemberId) {
 
         Member member2 = memberService.getMember(secondMemberId);
 
         ChatRoom chatRoom = chatRoomRepository.findChatRoomByMemberIds(member.getId(), member2.getId()).orElseGet(() ->
                 createChatRoom(member, member2));
+
+        reentryMember(member.getId(), chatRoom);
 
         return chatRoom.getId();
     }
@@ -79,7 +91,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         chatRoom.leaveChatRoom(member);
 
-        if (chatRoom.getFirstMemberId() == null && chatRoom.getSecondMemberId() == null) {
+        if (chatRoom.isLeaveFirstMember() && chatRoom.isLeaveSecondMember()) {
 
             chatRoom.deleteChatRoom();
             messageService.deleteMessage(chatRoom);
@@ -88,7 +100,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     private ChatRoom getChatRoom(Long roomId) {
 
-        return chatRoomRepository.findById(roomId).orElseThrow(() ->
+        return chatRoomRepository.findByIdAndIsDeletedFalse(roomId).orElseThrow(() ->
                 new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
     }
 
@@ -116,9 +128,22 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     private void validateMember(Member member, ChatRoom chatRoom) {
 
-        if (!(member.getId().equals(chatRoom.getFirstMemberId()) || member.getId().equals(chatRoom.getSecondMemberId()))) {
+        if (!(member.getId().equals(chatRoom.getFirstMemberId()) && !chatRoom.isLeaveFirstMember()) && !(member.getId().equals(chatRoom.getSecondMemberId()) && !chatRoom.isLeaveSecondMember())) {
 
             throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);
+        }
+    }
+
+    private void reentryMember(Long memberId, ChatRoom chatRoom) {
+
+        if (memberId.equals(chatRoom.getFirstMemberId())) {
+
+            chatRoom.reentryFirstMember();
+        }
+
+        if (memberId.equals(chatRoom.getSecondMemberId())) {
+
+            chatRoom.reentrySecondMember();
         }
     }
 
@@ -131,8 +156,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         Map<Long, String> otherMemberIdToNicknameMap = otherMembers.stream().collect(Collectors.toMap(Member::getId, Member::getNickname));
 
         return chatRoomList.stream()
-
-                .sorted(Comparator.comparing(ChatRoom::getLastMessageTime).reversed()) // 내림차순 정렬
+                .sorted(Comparator.comparing(ChatRoom::getLastMessageTime, Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(chatRoom -> {
                     Long otherMemberId = getOtherMemberId(chatRoom, memberId);
                     String otherMemberNickname = otherMemberIdToNicknameMap.get(otherMemberId);
@@ -146,7 +170,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 })
                 .toList();
     }
-
 
     private Long getOtherMemberId(ChatRoom chatRoom, Long memberId) {
         if (chatRoom.getFirstMemberId().equals(memberId)) {
