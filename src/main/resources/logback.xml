@@ -1,0 +1,20 @@
+<configuration scan="true">
+  <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} %clr(%-5level) [%35thread] %50logger{36} - %clr(%msg){blue}%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.FileAppender">
+    <file>myApp.log</file>
+    <encoder>
+      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} %-5level [%35thread] %50logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="LOGFILE"/>
+  </root>
+</configuration>
