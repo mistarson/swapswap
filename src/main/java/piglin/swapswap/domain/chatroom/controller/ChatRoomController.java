@@ -58,7 +58,9 @@ public class ChatRoomController {
             @RequestParam Long secondMemberId
     ) {
 
-        return chatRoomService.createChatroom(member, secondMemberId);
+        Long chatRoomId = chatRoomService.createChatroom(member, secondMemberId);
+
+        return chatRoomId;
     }
 
     @ResponseBody

@@ -55,6 +55,8 @@ public class ChatRoom extends BaseTime {
     }
 
     public void updateChatRoom(String lastMessage) {
+        this.isLeaveFirstMember = false;
+        this.isLeaveSecondMember = false;
         this.lastMessage = lastMessage;
         this.lastMessageTime = LocalDateTime.now();
     }

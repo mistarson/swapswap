@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -51,14 +52,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     @Transactional
-    public Long createChatroom(Member member, Long secondMemberId) {
+    public Long createChatroom(Member firstMember, Long secondMemberId) {
 
-        Member member2 = memberService.getMember(secondMemberId);
+        Member secondMember = memberService.getMember(secondMemberId);
 
-        ChatRoom chatRoom = chatRoomRepository.findChatRoomByMemberIds(member.getId(), member2.getId()).orElseGet(() ->
-                createChatRoom(member, member2));
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomByMemberIds(firstMember.getId(), secondMember.getId())
+                .orElseGet(() -> chatRoomRepository.save(ChatRoomMapper.createChatRoom(firstMember, secondMember)));
 
-        reentryMember(member, chatRoom);
+        reentryMember(firstMember, chatRoom);
 
         return chatRoom.getId();
     }
@@ -78,10 +79,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Transactional
     public void saveMessage(MessageRequestDto requestDto) {
 
-        ChatRoom chatRoom = getChatRoomById(requestDto.chatRoomId());
+        ChatRoom chatRoom = getChatRoom(requestDto.chatRoomId());
         Member member = memberService.getMember(requestDto.senderId());
 
-        Message message = createMessageAndUpdateLastMessage(chatRoom, requestDto, member);
+        Message message = MessageMapper.createMessage(member, chatRoom, requestDto);
+        chatRoom.updateChatRoom(requestDto.text());
 
         messageService.saveMessage(message);
     }
@@ -99,8 +101,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             chatRoom.deleteChatRoom();
             messageService.deleteMessage(chatRoom);
         }
-
-        sendLeaveMessage(member, chatRoom);
     }
 
     private ChatRoom getChatRoom(Long roomId) {
@@ -109,31 +109,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION));
     }
 
-    private ChatRoom getChatRoomById(Long roomId) {
-
-        return chatRoomRepository.findById(roomId).orElseThrow(() ->
-                new BusinessException(ErrorCode.NOT_FOUND_CHATROOM_EXCEPTION)
-        );
-    }
-
-    private ChatRoom createChatRoom(Member member1, Member member2) {
-
-        ChatRoom chatRoom = ChatRoomMapper.createChatRoom(member1, member2);
-
-        return chatRoomRepository.save(chatRoom);
-    }
-
-    private Message createMessageAndUpdateLastMessage(ChatRoom chatRoom, MessageRequestDto requestDto, Member member) {
-
-        Message message = MessageMapper.createMessage(member, chatRoom, requestDto);
-        chatRoom.updateChatRoom(requestDto.text());
-
-        return message;
-    }
-
     private void validateMember(Member member, ChatRoom chatRoom) {
 
-        if (!(member.getId().equals(chatRoom.getFirstMemberId()) && !chatRoom.isLeaveFirstMember()) && !(member.getId().equals(chatRoom.getSecondMemberId()) && !chatRoom.isLeaveSecondMember())) {
+        if (!(member.getId().equals(chatRoom.getFirstMemberId()) && !chatRoom.isLeaveFirstMember()) &&
+                !(member.getId().equals(chatRoom.getSecondMemberId()) && !chatRoom.isLeaveSecondMember())) {
 
             throw new BusinessException(ErrorCode.NOT_CHAT_ROOM_MEMBER_EXCEPTION);
         }
@@ -159,14 +138,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         sendingOperations.convertAndSend(
                 "/queue/chat/room" + chatRoom.getId(),
                 MessageMapper.createMessageRequestDto(chatRoom.getId(), member.getId(), MessageType.ENTER, member.getNickname() + "님이 입장하셨습니다.")
-        );
-    }
-
-    private void sendLeaveMessage(Member member,ChatRoom chatRoom) {
-
-        sendingOperations.convertAndSend(
-                "/queue/chat/room" + chatRoom.getId(),
-                MessageMapper.createMessageRequestDto(chatRoom.getId(), member.getId(), MessageType.LEAVE, member.getNickname() + "님이 나갔습니다.")
         );
     }
 
