@@ -1,4 +1,4 @@
-package piglin.swapswap.domain.billpostlist.entity;
+package piglin.swapswap.domain.billpost.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,7 @@ import piglin.swapswap.domain.post.entity.Post;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BillPostList extends BaseTime {
+public class BillPost extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

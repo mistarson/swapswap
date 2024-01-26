@@ -29,6 +29,9 @@ public class Bill extends BaseTime {
     @Column
     private Long extrafee;
 
+    @Column
+    private Long commission;
+
     @Column(nullable = false)
     private Boolean isAllowed;
 
@@ -38,7 +41,7 @@ public class Bill extends BaseTime {
     @Column(nullable = false)
     private Boolean isSwapMoneyUsed;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 }

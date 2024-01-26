@@ -39,6 +39,7 @@ public enum ErrorCode {
     UP_IS_NEED_ONE_DAY(400, "게시된지 하루, 업 한지 하루 이상 된 게시글만 업 할 수 있습니다."),
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
     NO_MORE_POST_LIST(400, "더이상 불러올 게시글이 없습니다."),
+    ALERADY_DELING_POST_EXCEPTION(400, "이미 진행 중인 게시글입니다."),
 
     // 채팅
     NOT_FOUND_CHATROOM_EXCEPTION(401, "채팅방을 찾을 수 없습니다."),
