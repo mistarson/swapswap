@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.bill.entity.Bill;
+import piglin.swapswap.domain.billpost.entity.BillPost;
 import piglin.swapswap.domain.billpost.mapper.BillPostMapper;
 import piglin.swapswap.domain.billpost.repository.BillPostRepository;
 import piglin.swapswap.domain.deal.constant.DealStatus;
@@ -26,6 +27,7 @@ public class BillPostServiceImplV1 implements BillPostService{
             if (!post.getDealStatus().equals(DealStatus.REQUESTED)) {
                 throw new AlreadyDealingPostException();
             }
+
             billPostRepository.save(BillPostMapper.createBillPost(bill, post));
         }
     }

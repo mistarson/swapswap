@@ -2,6 +2,8 @@ package piglin.swapswap.domain.deal.mapper;
 
 import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.deal.constant.DealStatus;
+import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
+import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 public class DealMapper {

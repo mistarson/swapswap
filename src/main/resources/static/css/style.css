@@ -5,6 +5,20 @@
   font-style: normal;
 }
 
+.swal-title {
+  font-size: 18px;
+}
+
+.swal-text {
+  font-size: 25px;
+  text-align: center;
+}
+
+.swal-button {
+  font-size: 16px;
+  background-color: #00AADC;
+}
+
 body {
   font-family: 'S-CoreDream-3Light';
 }
