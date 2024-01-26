@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.deal.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.deal.constant.DealStatus;

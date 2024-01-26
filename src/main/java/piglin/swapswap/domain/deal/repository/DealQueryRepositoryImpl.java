@@ -1,15 +1,12 @@
 package piglin.swapswap.domain.deal.repository;
 
-import static piglin.swapswap.domain.bill.entity.QBill.*;
 import static piglin.swapswap.domain.deal.entity.QDeal.deal;
-import static piglin.swapswap.domain.member.entity.QMember.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import piglin.swapswap.domain.bill.entity.QBill;
 import piglin.swapswap.domain.deal.entity.Deal;
-import piglin.swapswap.domain.deal.entity.QDeal;
 import piglin.swapswap.domain.member.entity.QMember;
 
 public class DealQueryRepositoryImpl implements DealQueryRepository {
