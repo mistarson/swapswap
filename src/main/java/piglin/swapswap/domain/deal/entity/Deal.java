@@ -2,6 +2,8 @@ package piglin.swapswap.domain.deal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,11 +31,12 @@ public class Deal extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private LocalDateTime completedDealTime;
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private DealStatus dealStatus;
 
     @Column
-    private DealStatus dealStatus;
+    private LocalDateTime completedDealTime;
 
     @JoinColumn(name = "first_member_bill_id")
     @ManyToOne(fetch = FetchType.LAZY)
