@@ -7,8 +7,8 @@ import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 
@@ -38,17 +38,7 @@ public interface PostService {
      * @param cursorTime
      * @return List 형식의 PostGetListResponseDto 가 들어갑니다.
      */
-    List<PostGetListResponseDto> getPostList(Member member,
-            LocalDateTime cursorTime);
-
-    /**
-     * 게시글 목록 조회 메소드입니다.
-     * 예외 처리를 위해 따로 분리하였습니다.
-     * @param member     favorite 상태를 나타내기 위한 member 매개변수 입니다.
-     * @param cursorTime
-     * @return List 형식의 PostGetListResponseDto 가 들어갑니다.
-     */
-    List<PostGetListResponseDto> getPostListMore(Member member,
+    PostListResponseDto getPostList(Member member,
             LocalDateTime cursorTime);
 
     /**
@@ -73,34 +63,21 @@ public interface PostService {
      * @param cursorTime
      * @return
      */
-    List<PostGetListResponseDto> searchPost(String title, String category, String city, Member member,
+    PostListResponseDto searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime);
 
-    /**
-     * 게시글 검색 기능입니다
-     * 예외 처리를 위해 따로 분리 하였습니다.
-     * @param title
-     * @param category
-     * @param member
-     * @param cursorTime
-     * @return
-     */
-    List<PostGetListResponseDto> searchPostMore(String title, String category, String city, Member member,
-            LocalDateTime cursorTime);
 
     void upPost(Long postId, Member member);
 
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 
-    List<PostGetListResponseDto> getMyFavoritePostList(Member member, LocalDateTime cursorTime);
+    PostListResponseDto getMyFavoritePostList(Member member, LocalDateTime cursorTime);
 
-    List<PostGetListResponseDto> getMyFavoritePostListMore(Member member, LocalDateTime cursorTime);
 
     List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(Map<Integer, Long> postIdList);
 
-    List<PostGetListResponseDto> getMyPostList(Member member, LocalDateTime cursorTime);
+    PostListResponseDto getMyPostList(Member member, LocalDateTime cursorTime);
 
-    List<PostGetListResponseDto> getMyPostListMore(Member member, LocalDateTime cursorTime);
 
     void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus);
 
