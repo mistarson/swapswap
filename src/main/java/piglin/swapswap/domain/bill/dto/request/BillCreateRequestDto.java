@@ -1,8 +1,4 @@
 package piglin.swapswap.domain.bill.dto.request;
 
-public record BillCreateRequestDto (
-
-        Long extrafee
-        ) {
-
+public record BillCreateRequestDto (Long extraFee) {
 }

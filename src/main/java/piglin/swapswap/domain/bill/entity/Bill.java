@@ -29,6 +29,9 @@ public class Bill extends BaseTime {
     @Column
     private Long extrafee;
 
+    @Column
+    private Long commission;
+
     @Column(nullable = false)
     private Boolean isAllowed;
 

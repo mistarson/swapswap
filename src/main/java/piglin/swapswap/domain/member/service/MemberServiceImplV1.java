@@ -59,7 +59,7 @@ public class MemberServiceImplV1 implements MemberService {
     @Override
     public Member getMember(Long memberId) {
 
-        return memberRepository.findById(memberId).orElseThrow(
+        return memberRepository.findByIdAndIsDeletedIsFalse(memberId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
 

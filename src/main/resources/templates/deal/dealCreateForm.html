@@ -8,13 +8,11 @@
   <input class="secondMemberId" type="hidden" th:value="${secondMemberId}">
   <!--   게시물 목록 부분 -->
   <div class="author-name">사용자님의 스왑물품</div>
-  <div id="postContent">
-    <input type="number" id="firstExtraFee" placeholder="나의 추가 요금 입력">
-  </div>
+  <div id="postContent"></div>
+  <input type="number" id="firstExtraFee" placeholder="나의 추가 요금 입력">
   <div class="author-name" th:text="${secondMemberName}+ '의 스왑물품'"></div>
-  <div id="postSecondContent">
-    <input type="number" id="secondExtraFee" placeholder="상대 추가 요금 입력">
-  </div>
+  <div id="postSecondContent"></div>
+  <input type="number" id="secondExtraFee" placeholder="상대 추가 요금 입력">
   <button id="editButton" onclick="loadPosts()">내 교환물품 수정</button>
 
   <button id="editButton2" onclick="loadSecondPosts()">상대 교환물품 수정</button>
@@ -65,7 +63,7 @@
       popup.document.write('  if(target.classList.contains(\'active\')) {');
       popup.document.write('    target.classList.remove(\'active\');');
       popup.document.write('  } else {');
-      popup.document.write('    target.classList.add(\'active\');'); // 이 부분에서 event.target가 아닌 target으로 수정
+      popup.document.write('    target.classList.add(\'active\');');
       popup.document.write('  }}');
 
       popup.document.write('function closePopup() {');
@@ -137,7 +135,7 @@
       popup.document.write('  if(target.classList.contains(\'active\')) {');
       popup.document.write('    target.classList.remove(\'active\');');
       popup.document.write('  } else {');
-      popup.document.write('    target.classList.add(\'active\');'); // 이 부분에서 event.target가 아닌 target으로 수정
+      popup.document.write('    target.classList.add(\'active\');');
       popup.document.write('  }}');
 
       popup.document.write('function closePopup() {');
