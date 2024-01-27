@@ -8,14 +8,14 @@
   <input type="hidden" th:value="${dealId}" class="deal-id">
   <div class="deal-detail-card">
     <div class="deal-detail-card-body">
-      <h2 th:text="${dealDetailResponseDto.firstUserNickname}+'의 스왑 요청 !'"
+      <h2 th:text="${dealDetailResponseDto.firstMemberNickname}+'의 스왑 요청 !'"
           class="deal-detail-nickname"></h2>
       <h2 th:text="${dealDetailResponseDto.dealStatus.getName}" class="deal-detail-status"></h2>
     </div>
     <div class="deal-detail-content-container">
       <div class="deal-detail-request-list">
         <div class="deal-detail-list-container">
-          <div th:text="${dealDetailResponseDto.firstUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <div th:text="${dealDetailResponseDto.firstMemberNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
           <div th:text="${dealDetailResponseDto.firstExtraFee() != null ? '추가금: ' + dealDetailResponseDto.firstExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
           <div class="deal-detail-allow" th:text="${dealDetailResponseDto.firstAllow} ? '수락 완료' : '수락 대기'"></div>
@@ -24,41 +24,41 @@
             <div  class="deal-detail-take" th:text=" ${dealDetailResponseDto.firstTake} ? '인수 완료' : '인수 대기'"></div>
           </div>
           <div class="deal-swap-pay-status">스왑페이 사용여부:
-            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
           </div>
-            <img th:each="firstMemberPost : ${firstMemberPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
+            <img th:each="firstMemberPost : ${dealDetailResponseDto.firstDealPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
-               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstUserId})}">
+               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstMemberId})}">
             수정하기
           </a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstUserId()&&dealDetailResponseDto.firstExtraFee() != null}" th:text="${dealDetailResponseDto.isFirstSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstMemberId()&&dealDetailResponseDto.firstExtraFee() != null}" th:text="${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
         <div class="deal-detail-list-container">
-          <div th:text="${dealDetailResponseDto.secondUserNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <div th:text="${dealDetailResponseDto.secondMemberNickname()}+'님의 스왑 물품'" class="deal-detail-post"></div>
           <div th:text="${dealDetailResponseDto.secondExtraFee() != null ? '추가금: ' + dealDetailResponseDto.secondExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
-          <div class="deal-detail-allow "th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
+          <div class="deal-detail-allow" th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
           </div>
             <div class="deal-take-status">인수 상태:
           <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.secondTake} ? '인수 완료' : '인수 대기'"></div>
             </div>
           <div class="deal-swap-pay-status">스왑페이 사용여부:
-            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
+            <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
           </div>
-              <img th:each="secondMemberPost : ${secondMemberPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
+              <img th:each="secondMemberPost : ${dealDetailResponseDto.secondDealPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
-               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondUserId})}">
+               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondMemberId})}">
             수정하기</a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondUserId()&&dealDetailResponseDto.secondExtraFee() != null}" th:text="${dealDetailResponseDto.isSecondSwapMoneyUsed()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondUserId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondMemberId()&&dealDetailResponseDto.secondExtraFee() != null}" th:text="${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
       </div>
