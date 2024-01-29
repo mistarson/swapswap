@@ -104,12 +104,16 @@
       let url = '/search/posts/more?cursorTime=' + lastModifiedTime + '&';
       var searchValue = localStorage.getItem('searchValue') || '';
       var selectedCategory = localStorage.getItem('selectedCategory') || '';
+      var selectedCity = navCityInput.value;
 
       if (searchValue) {
         url += 'title=' + encodeURIComponent(searchValue);
       }
       if (selectedCategory) {
         url += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
+      if (selectedCity) {
+        url += (searchValue || selectedCategory ? '&' : '') + 'city=' + encodeURIComponent(selectedCity);
       }
 
       if(!isLast) {
