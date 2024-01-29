@@ -197,7 +197,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     private BooleanExpression titleContains(String titleCond) {
 
-        return titleCond != null ? post.title.contains(titleCond) : null;
+        return titleCond != null ? Expressions.stringTemplate("function('replace',{0},{1},{2})",post.title," ","").contains(titleCond) : null;
     }
 
     private BooleanExpression categoryEq(Category categoryCond) {

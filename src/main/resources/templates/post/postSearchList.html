@@ -6,6 +6,7 @@
 <div layout:fragment="content">
   <div class="category-bar">
     <!-- 카테고리 링크 -->
+    <a href="#">전체보기</a>
     <a href="#HOME_ELECTRONICS">가전제품</a>
     <a href="#ELECTRONICS">전자제품</a>
     <a href="#FASHION_MISCELLANEOUS">패션의류/잡화</a>
@@ -103,12 +104,16 @@
       let url = '/search/posts/more?cursorTime=' + lastModifiedTime + '&';
       var searchValue = localStorage.getItem('searchValue') || '';
       var selectedCategory = localStorage.getItem('selectedCategory') || '';
+      var selectedCity = navCityInput.value;
 
       if (searchValue) {
         url += 'title=' + encodeURIComponent(searchValue);
       }
       if (selectedCategory) {
         url += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
+      }
+      if (selectedCity) {
+        url += (searchValue || selectedCategory ? '&' : '') + 'city=' + encodeURIComponent(selectedCity);
       }
 
       if(!isLast) {
@@ -156,8 +161,12 @@
     function toggleFavorite(postId) {
 
       if(!isMemberLogged) {
-        alert("로그인이 필요합니다.")
-        return;
+        if (confirm("로그인이 필요한 기능입니다. 로그인 하시겠습니까?") === true) {
+          location.href = "/login"
+        } else {
+
+          return;
+        }
       }
 
       $.ajax({

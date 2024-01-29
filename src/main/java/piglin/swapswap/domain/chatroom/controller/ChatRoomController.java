@@ -24,7 +24,10 @@ public class ChatRoomController {
     private final ChatRoomServiceImpl chatRoomService;
 
     @GetMapping("/chats")
-    public String getChatRoomList(@AuthMember Member member, Model model) {
+    public String getChatRoomList(
+            @AuthMember Member member,
+            Model model
+    ) {
 
         List<ChatRoomResponseDto> chatRoomList = chatRoomService.getChatRoomList(member);
         model.addAttribute("chatRoomList", chatRoomList);
@@ -33,12 +36,17 @@ public class ChatRoomController {
     }
 
     @GetMapping("/chats/room/{roomId}")
-    public String getChatRoom(@PathVariable Long roomId, @AuthMember Member member, Model model) {
+    public String getChatRoom(
+            @PathVariable Long roomId,
+            @AuthMember Member member,
+            Model model
+    ) {
 
         List<MessageResponseDto> messageList = chatRoomService.getMessageByChatRoomId(roomId, member);
+        ChatRoomResponseDto chatRoom = chatRoomService.getChatRoomResponseDto(roomId, member.getId());
 
+        model.addAttribute("chatRoom", chatRoom);
         model.addAttribute("messageList", messageList);
-        model.addAttribute("roomId", roomId);
 
         return "chat/chatroom";
     }
@@ -50,7 +58,9 @@ public class ChatRoomController {
             @RequestParam Long secondMemberId
     ) {
 
-        return chatRoomService.createChatroom(member, secondMemberId);
+        Long chatRoomId = chatRoomService.createChatroom(member, secondMemberId);
+
+        return chatRoomId;
     }
 
     @ResponseBody

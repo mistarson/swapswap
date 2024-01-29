@@ -36,6 +36,10 @@ public class UserDetailsImpl implements UserDetails {
         return this.member;
     }
 
+    public Long getMemberId() {
+        return member.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         MemberRole role = member.getRole();

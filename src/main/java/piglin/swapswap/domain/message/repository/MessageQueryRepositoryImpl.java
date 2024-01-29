@@ -19,7 +19,7 @@ public class MessageQueryRepositoryImpl implements MessageQueryRepository {
     }
 
     @Override
-    public void deleteMessage(ChatRoom chatRoom) {
+    public void deleteAllChatRoomMessage(ChatRoom chatRoom) {
 
         queryFactory.update(message)
                 .set(message.isDeleted, true)
