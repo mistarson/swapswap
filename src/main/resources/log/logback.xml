@@ -7,11 +7,14 @@
     </encoder>
   </appender>
 
-  <appender name="LOGFILE" class="ch.qos.logback.core.FileAppender">
-    <file>./log/swapswap.log</file>
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+      <fileNamePattern>./log/swapswap.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+    </rollingPolicy>
     <encoder>
-      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
-    </encoder>
+    <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
+    </encoder>>
   </appender>
 
   <root level="info">
@@ -19,3 +22,12 @@
     <appender-ref ref="LOGFILE"/>
   </root>
 </configuration>
+
+
+  <!--TODO 파일 저장 형식 - RollingFileAppender / DailyRollingFileAppender-->
+
+  <!--TODO p6spy sql 문 보이게-->
+
+  <!--TODO local 환경 / prod 환경 프로필 나누기-->
+
+  <!--TODO xml import-->
