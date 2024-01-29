@@ -1,15 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
   <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} %clr(%-5level) [%35thread] %50logger{36} - %clr(%msg){blue}%n</pattern>
+      <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} [%35thread] [traceId=%X{traceId}] %clr(%-5level) %50logger{36} - %clr(%msg){blue}%n</pattern>
     </encoder>
   </appender>
 
   <appender name="LOGFILE" class="ch.qos.logback.core.FileAppender">
-    <file>myApp.log</file>
+    <file>./log/swapswap.log</file>
     <encoder>
-      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} %-5level [%35thread] %50logger{36} - %msg%n</pattern>
+      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
     </encoder>
   </appender>
 
