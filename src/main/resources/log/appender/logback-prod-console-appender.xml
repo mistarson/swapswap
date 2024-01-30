@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+  <appender name="PROD_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} [%35thread] [traceId=%X{traceId}] %clr(%-5level) %50logger{36} - %clr(%msg){blue}%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>./log/swapswap.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+</included>
