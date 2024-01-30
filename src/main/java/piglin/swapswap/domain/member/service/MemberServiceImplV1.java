@@ -37,7 +37,8 @@ public class MemberServiceImplV1 implements MemberService {
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
 
-        log.info("\nupdateNickname - memberCurrentNickname: {} | memberNicknameWillBe: {}", member.getNickname(), requestDto.nickname());
+        log.info("\nupdateNickname - memberId: {} | memberEmail: {} | memberCurrentNickname: {} | memberNicknameWillBe: {}",
+                member.getId(), member.getEmail(), member.getNickname(), requestDto.nickname());
         checkMemberExists(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
@@ -53,7 +54,8 @@ public class MemberServiceImplV1 implements MemberService {
     @Transactional
     public void deleteMember(Member member) {
 
-        log.info("\ndeleteMember - memberId: {} | memberEmail: {}", member.getId(), member.getEmail());
+        log.info("\ndeleteMember - memberId: {} | memberEmail: {}", member.getId(),
+                member.getEmail());
         member = getMemberWithWallet(member.getId());
         log.info("\nmemberWalletId: {}", member.getWallet().getId());
         Wallet wallet = member.getWallet();
@@ -75,7 +77,8 @@ public class MemberServiceImplV1 implements MemberService {
 
         postService.deleteAllPostByMember(member);
 
-        log.info("\nmemberIsDeleted: {} | walletIsDeleted: {}", member.getIsDeleted(), wallet.isDeleted());
+        log.info("\nmemberIsDeleted: {} | walletIsDeleted: {}", member.getIsDeleted(),
+                wallet.isDeleted());
     }
 
     @Override
@@ -114,7 +117,7 @@ public class MemberServiceImplV1 implements MemberService {
     public void checkMemberExists(Long memberId) {
 
         if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
-           throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
         }
     }
 }
