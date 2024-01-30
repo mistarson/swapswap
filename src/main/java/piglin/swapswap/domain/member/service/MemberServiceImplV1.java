@@ -33,11 +33,12 @@ public class MemberServiceImplV1 implements MemberService {
 
 
     @SwapLog
+    @Override
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
 
         log.info("\nupdateNickname - memberCurrentNickname: {} | memberNicknameWillBe: {}", member.getNickname(), requestDto.nickname());
-        checkExistsMember(member.getId());
+        checkMemberExists(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.ALREADY_EXIST_USER_NAME_EXCEPTION);
@@ -47,11 +48,14 @@ public class MemberServiceImplV1 implements MemberService {
         log.info("\nmemberChangedNickname: {}", member.getNickname());
     }
 
-
+    @SwapLog
+    @Override
     @Transactional
-    public void deleteMember(Member loginMember) {
+    public void deleteMember(Member member) {
 
-        Member member = getMemberWithWallet(loginMember.getId());
+        log.info("\ndeleteMember - memberId: {} | memberEmail: {}", member.getId(), member.getEmail());
+        member = getMemberWithWallet(member.getId());
+        log.info("\nmemberWalletId: {}", member.getWallet().getId());
         Wallet wallet = member.getWallet();
 
         member.deleteMember();
@@ -59,17 +63,19 @@ public class MemberServiceImplV1 implements MemberService {
 
         walletHistoryService.deleteAllWalletHistoriesByWallet(member.getWallet());
 
-        chatRoomMemberService.deleteAllChatroomByMember(loginMember);
+        chatRoomMemberService.deleteAllChatroomByMember(member);
 
-        memberCouponService.deleteAllMemberCouponByMember(loginMember);
+        memberCouponService.deleteAllMemberCouponByMember(member);
 
-        favoriteService.deleteAllFavoriteByMember(loginMember);
+        favoriteService.deleteAllFavoriteByMember(member);
 
-        List<Post> post = postService.findByMemberId(loginMember.getId());
+        List<Post> post = postService.findByMemberId(member.getId());
 
         favoriteService.deleteAllFavoriteByPostList(post);
 
-        postService.deleteAllPostByMember(loginMember);
+        postService.deleteAllPostByMember(member);
+
+        log.info("\nmemberIsDeleted: {} | walletIsDeleted: {}", member.getIsDeleted(), wallet.isDeleted());
     }
 
     @Override
@@ -105,7 +111,7 @@ public class MemberServiceImplV1 implements MemberService {
         return memberRepository.findByIdIn(memberIds);
     }
 
-    public void checkExistsMember(Long memberId) {
+    public void checkMemberExists(Long memberId) {
 
         if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
            throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
