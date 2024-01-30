@@ -11,6 +11,7 @@ import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
+import piglin.swapswap.domain.notification.service.NotificationService;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.entity.Wallet;
@@ -30,6 +31,7 @@ public class MemberServiceImplV1 implements MemberService {
     private final WalletHistoryService walletHistoryService;
     private final FavoriteService favoriteService;
     private final ChatRoomMemberService chatRoomMemberService;
+    private final NotificationService notificationService;
 
 
     @SwapLog
@@ -65,6 +67,8 @@ public class MemberServiceImplV1 implements MemberService {
             throw new BusinessException(ErrorCode.FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY);
         }
 
+        notificationService.deleteAllByNotifications(member);
+
         member.deleteMember();
         wallet.deleteWallet();
 
@@ -97,6 +101,7 @@ public class MemberServiceImplV1 implements MemberService {
 
     @Override
     public Member getMemberWithWallet(Long memberId) {
+
         return memberRepository.findByIdWithWallet(memberId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
@@ -111,11 +116,13 @@ public class MemberServiceImplV1 implements MemberService {
 
     @Override
     public boolean checkNicknameExists(String nickname) {
+
         return memberRepository.existsByNickname(nickname);
     }
 
     @Override
     public List<Member> getMembers(List<Long> memberIds) {
+
         return memberRepository.findByIdIn(memberIds);
     }
 
