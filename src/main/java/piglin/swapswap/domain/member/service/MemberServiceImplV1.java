@@ -96,4 +96,9 @@ public class MemberServiceImplV1 implements MemberService {
     public boolean checkNicknameExists(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
+
+    @Override
+    public List<Member> getMembers(List<Long> memberIds) {
+        return memberRepository.findByIdIn(memberIds);
+    }
 }

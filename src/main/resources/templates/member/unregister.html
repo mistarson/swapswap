@@ -9,27 +9,56 @@
   <link rel="shortcut icon" th:href="@{/favicon.ico}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
 
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script th:inline="javascript">
-    $(document).ready(function() {
-      $("#cancelMembership").on("click", function(e) {
-        var confirmResult = confirm("회원 탈퇴를 하시겠습니까?");
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
-        if (confirmResult) {
-          $.ajax({
-            type: "DELETE",
-            url: "/members",
-            success: function (data) {
-              console.log("성공적으로 탈퇴되었습니다");
-              window.location.href = "/";
-            },
-            error: function (xhr, status, error) {
-              console.error("회원 탈퇴 실패:", error);
-            }
-          });
-        } else {
-          event.preventDefault();
-        }
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="/static/js/message.js"></script>
+
+  <script th:inline="javascript">
+    $(document).ready(function () {
+      $("#cancelMembership").on("click", function (e) {
+        e.preventDefault();
+
+
+        Swal.fire({
+          title: '알림',
+          text: '회원탈퇴 시 유의 사항을 확인하셨나요?',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#00AADC',
+          cancelButtonColor: '#cdcdcd',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소'
+        }).then((Result) => {
+          if (Result.isConfirmed) {
+            Swal.fire({
+              title: '회원 탈퇴',
+              text: '정말로 회원 탈퇴를 하시겠습니까?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#00AADC',
+              cancelButtonColor: '#cdcdcd',
+              confirmButtonText: '확인',
+              cancelButtonText: '취소'
+            }).then((withdrawalResult) => {
+              if (withdrawalResult.isConfirmed) {
+                $.ajax({
+                  type: "DELETE",
+                  url: "/members",
+                  success: function (data) {
+                    console.log("성공적으로 탈퇴되었습니다");
+                    window.location.href = "/";
+                  },
+                  error: function (xhr, status, error) {
+                    console.error("회원 탈퇴 실패:", error);
+                  }
+                });
+              }
+            });
+          }
+        });
       });
     });
   </script>
@@ -44,10 +73,10 @@
     <ul>
       <li>회원탈퇴 시 회원전용 웹 서비스 이용이 불가합니다.</li>
       <li>회원정보의 경우, 회원탈퇴 후 2주동안 보관된 이후에 삭제됩니다.</li>
-      <li>유효기간이 경과되지 않은 미사용 쿠폰관련 정보는 유효기간 만료일까지 보관되며, 탈퇴 후에도 유효기간 내 사용하실 수 있습니다.</li>
-      <li>보유하셨던 스왑머니는 탈퇴와 함께 삭제되며 환불되지 않습니다.</li>
-      <li>회원탈퇴 시 스왑스왑에 입력하신 게시글은 자동으로 삭제됩니다.
-      </li>
+      <li>회원탈퇴 시 스왑스왑에 업로드하신 게시글, 보유 스왑머니, 보유 쿠폰도 보관된 이후 2주 뒤에 자동으로 삭제됩니다.</li>
+      <li>2주가 지난 후에는 어떠한 환불이나 복구를 요청하실 수 없습니다.</li>
+      <li>단, 2주 안에 기존의 회원정보로 로그인을 하시면 재가입이 가능합니다.</li>
+      <li>재가입 시 작성하셨던 게시글이 복구가 되고 보유하고 있던 스왑머니, 쿠폰도 정상적으로 사용하실 수 있습니다.</li>
     </ul>
   </div>
   <div class="unregister-buttons">

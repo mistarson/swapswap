@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
@@ -88,7 +89,7 @@ public class PostController {
             Model model
     ) {
 
-        model.addAttribute("postGetListResponseDto", postService.getPostList(member, cursorTime));
+        model.addAttribute("postListResponseDto", postService.getPostList(member, cursorTime));
         model.addAttribute("isMemberLogged", member != null);
 
         return "post/postList";
@@ -101,9 +102,7 @@ public class PostController {
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.getPostListMore(member, cursorTime);
-
-        model.addAttribute("postGetListResponseDto", postList);
+        model.addAttribute("postListResponseDto", postService.getPostList(member, cursorTime));
 
         return "post/postListFragment";
     }
@@ -179,7 +178,7 @@ public class PostController {
             Model model
     ) {
 
-        model.addAttribute("postGetListResponseDto",
+        model.addAttribute("postListResponseDto",
                 postService.searchPost(title, category, city, member, cursorTime));
         model.addAttribute("isMemberLogged", member != null);
 
@@ -196,14 +195,8 @@ public class PostController {
             Model model
     ) {
 
-        List<PostGetListResponseDto> postList = postService.searchPostMore(title, category, city, member,
-                cursorTime);
-
-        if (postList.isEmpty()) {
-            throw new RuntimeException("더 이상 불러올 게시글이 없습니다");
-        }
-
-        model.addAttribute("postGetListResponseDto", postList);
+        model.addAttribute("postListResponseDto", postService.searchPost(title, category, city, member,
+                cursorTime));
 
         return "post/postListFragment";
     }

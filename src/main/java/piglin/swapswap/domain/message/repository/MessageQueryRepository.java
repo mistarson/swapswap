@@ -4,6 +4,6 @@ import piglin.swapswap.domain.chatroom.entity.ChatRoom;
 
 public interface MessageQueryRepository {
 
-    void deleteMessage(ChatRoom chatRoom);
+    void deleteAllChatRoomMessage(ChatRoom chatRoom);
 }
 

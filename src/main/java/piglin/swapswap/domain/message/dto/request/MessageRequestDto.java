@@ -7,10 +7,11 @@ import piglin.swapswap.domain.message.constant.MessageType;
 
 @Builder
 public record MessageRequestDto (
+        Long chatRoomId,
+        Long senderId,
         MessageType type,
-        String senderNickname,
-        String text,
-        Long chatRoomId
+        String text
 ) {
 
 }
+

@@ -17,7 +17,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.City;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 
 @Repository
@@ -33,11 +33,11 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> findPostListWithFavoriteByCursor(
+    public List<PostListDetailResponseDto> findPostListWithFavoriteByCursor(
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory
-                .select(Projections.constructor(PostGetListResponseDto.class,
+                .select(Projections.constructor(PostListDetailResponseDto.class,
                         post.id,
                         post.member.id,
                         post.city,
@@ -59,12 +59,12 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPostListWithFavorite(String titleCond,
+    public List<PostListDetailResponseDto> searchPostListWithFavorite(String titleCond,
             Category categoryCond, City cityCond,
             Member member, LocalDateTime cursorTime) {
 
         return queryFactory.select(post)
-                .select(Projections.constructor(PostGetListResponseDto.class,
+                .select(Projections.constructor(PostListDetailResponseDto.class,
                         post.id,
                         post.member.id,
                         post.city,
@@ -125,10 +125,10 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> findAllMyFavoritePost(Member member,
+    public List<PostListDetailResponseDto> findAllMyFavoritePost(Member member,
             LocalDateTime cursorTime) {
 
-        return queryFactory.select(Projections.constructor(PostGetListResponseDto.class,
+        return queryFactory.select(Projections.constructor(PostListDetailResponseDto.class,
                         post.id,
                         post.member.id,
                         post.city,
@@ -153,10 +153,10 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
     }
 
     @Override
-    public List<PostGetListResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime) {
+    public List<PostListDetailResponseDto> findAllMyPostList(Member member, LocalDateTime cursorTime) {
 
         return queryFactory
-                .select(Projections.constructor(PostGetListResponseDto.class,
+                .select(Projections.constructor(PostListDetailResponseDto.class,
                         post.id,
                         post.member.id,
                         post.city,
@@ -197,7 +197,7 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
 
     private BooleanExpression titleContains(String titleCond) {
 
-        return titleCond != null ? post.title.contains(titleCond) : null;
+        return titleCond != null ? Expressions.stringTemplate("function('replace',{0},{1},{2})",post.title," ","").contains(titleCond) : null;
     }
 
     private BooleanExpression categoryEq(Category categoryCond) {

@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
 import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
-import piglin.swapswap.global.exception.post.NoMorePostListException;
 
 
 @Slf4j
@@ -29,7 +28,7 @@ public class GlobalExceptionHandler {
 
         log.error("ValidationException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(NoJwtException.class)
@@ -37,7 +36,7 @@ public class GlobalExceptionHandler {
 
         log.error("NoJwtException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(UnsupportedGrantTypeException.class)
@@ -46,7 +45,7 @@ public class GlobalExceptionHandler {
 
         log.error("UnSupportedGrantTypeException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(JwtInvalidException.class)
@@ -54,7 +53,7 @@ public class GlobalExceptionHandler {
 
         log.error("JwtInvalidException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(BindException.class)
@@ -62,7 +61,7 @@ public class GlobalExceptionHandler {
 
         log.error("handleBindException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -71,7 +70,7 @@ public class GlobalExceptionHandler {
 
         log.error("HttpRequestMethodNotSupportedException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -79,7 +78,7 @@ public class GlobalExceptionHandler {
 
         log.error("BusinessException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(HttpMessageConversionException.class)
@@ -88,7 +87,7 @@ public class GlobalExceptionHandler {
 
         log.error("HttpMessageConversionException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
@@ -97,16 +96,7 @@ public class GlobalExceptionHandler {
 
         log.error("HttpMediaTypeNotSupportedException", e);
 
-        return new RedirectView("/error/errorpage");
-    }
-
-    @ResponseBody
-    @ExceptionHandler(NoMorePostListException.class)
-    protected ResponseEntity<?> handleNoMorePostListException(NoMorePostListException e) {
-
-        log.error("NoMorePostListException", e);
-
-        return ResponseEntity.status(e.getStatus()).build();
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(Exception.class)
@@ -114,40 +104,40 @@ public class GlobalExceptionHandler {
 
         log.error("Exception", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(DataAccessException.class)
     protected RedirectView handleDataAccessException(DataAccessException e) {
         log.error("DataAccessException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(NullPointerException.class)
     protected RedirectView handleNullPointerException(NullPointerException e) {
         log.error("NullPointerException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected RedirectView handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException", e);
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(SecurityException.class)
     protected RedirectView handleSecurityException(SecurityException e) {
         log.error("SecurityException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     protected RedirectView handlerNoSuchElementFoundException(NoSuchElementException e) {
         log.error("NoSuchElementFoundException", e);
 
-        return new RedirectView("/error/errorpage");
+        return new RedirectView("error/errorpage");
     }
 }

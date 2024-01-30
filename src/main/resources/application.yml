@@ -1,7 +1,6 @@
 spring:
   profiles:
-    default: local
-
+    default: prod
 
 logging:
   config: classpath:log/logback.xml

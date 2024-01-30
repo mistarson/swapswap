@@ -9,8 +9,10 @@
 
   <link rel="shortcut icon" th:href="@{/favicon.ico}">
   <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
       var nicknameSpan = document.querySelector('.edit_nickname');
@@ -20,28 +22,39 @@
         var newNickname = nicknameSpan.innerText.trim();
 
         if (newNickname === originalNickname) {
-          event.preventDefault();
-          alert('변경하려는 닉네임이 현재 닉네임과 같습니다');
-        } else if (newNickname.length >= 2 && newNickname.length <= 15 && /^[a-zA-Z0-9가-힣]+$/.test(
-            newNickname)) {
+          swal({
+            title: '알림',
+            text: '변경하려는 닉네임이 \n현재 닉네임과 같습니다',
+            icon: 'error'
+          });
+        } else if (newNickname.length >= 2 && newNickname.length <= 15 && /^[a-zA-Z0-9가-힣]+$/.test(newNickname)) {
           var xhr = new XMLHttpRequest();
           xhr.open('GET', '/members/checkNickname?nickname=' + newNickname, true);
           xhr.onload = function () {
             if (xhr.status === 200) {
               var isDuplicate = JSON.parse(xhr.responseText);
               if (isDuplicate) {
-                alert('이미 존재하는 닉네임입니다.');
+                swal({
+                  title: '알림',
+                  text: '이미 존재하는 닉네임입니다',
+                  icon: 'error'
+                });
               } else {
                 var xhrPatch = new XMLHttpRequest();
                 xhrPatch.open('PATCH', '/members/nickname', true);
                 xhrPatch.setRequestHeader('Content-Type', 'application/json');
 
-                alert('닉네임이 정상적으로 변경되었습니다');
                 originalNickname = newNickname;
                 xhrPatch.onload = function () {
                   if (xhrPatch.status === 200) {
-                    console.log("success")
-                    window.location.href = '/myPage';
+                    console.log("success");
+                    swal({
+                      title: '알림',
+                      text: '닉네임이 정상적으로 변경되었습니다',
+                      icon: 'success'
+                    }).then(() => {
+                      window.location.href = '/myPage';
+                    });
                   } else {
                     console.error('닉네임 업데이트 오류:', xhrPatch.statusText);
                   }
@@ -52,7 +65,7 @@
                   console.error(xhrPatch);
                 };
 
-                xhrPatch.send(JSON.stringify({nickname: newNickname}));
+                xhrPatch.send(JSON.stringify({ nickname: newNickname }));
               }
             } else {
               console.error('닉네임 중복 확인 오류:', xhr.statusText);
@@ -64,12 +77,30 @@
           };
           xhr.send();
         } else {
-          event.preventDefault();
-          alert('닉네임은 특수 문자를 제외한 2자 이상 15자 이내로 설정해주세요');
+          swal({
+            title: '알림',
+            text: '닉네임은 특수 문자를 제외한 \n2자 이상 15자 이내로 설정해주세요',
+            icon: 'error'
+          });
         }
       });
     });
   </script>
+  <style>
+    .swal-title {
+      font-size: 18px;
+    }
+
+    .swal-text {
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .swal-button {
+      font-size: 16px;
+      background-color: #00AADC;
+    }
+  </style>
 </head>
 
 <body>

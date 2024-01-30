@@ -10,32 +10,32 @@ public class MainMvcController {
 
     @GetMapping("/login")
     public String login() {
-        return "/member/login";
+        return "member/login";
     }
 
     @GetMapping("/myPage")
     public String myPage() {
-        return "/member/myPage";
+        return "member/myPage";
     }
 
     @GetMapping("/editProfile")
     public String editProfile() {
-        return "/member/editProfile";
+        return "member/editProfile";
     }
 
     @GetMapping("/unregister")
     public String unregister() {
-        return "/member/unregister";
+        return "member/unregister";
     }
 
     @GetMapping("/error/errorpage")
     public String handleError() {
-        return "/error/errorpage";
+        return "error/errorpage";
     }
 
     @GetMapping("/error/accessdenied")
     public String handleAccessError() {
-        return "/error/accessdenied";
+        return "error/accessdenied";
     }
 
 }

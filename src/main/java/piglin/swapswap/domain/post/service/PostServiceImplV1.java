@@ -18,8 +18,9 @@ import piglin.swapswap.domain.post.constant.City;
 import piglin.swapswap.domain.post.constant.PostConstant;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostGetListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
+import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
@@ -27,7 +28,6 @@ import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
-import piglin.swapswap.global.exception.post.NoMorePostListException;
 import piglin.swapswap.global.s3.S3ImageService;
 
 @Service
@@ -70,22 +70,13 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetListResponseDto> getPostList(Member member,
+    public PostListResponseDto getPostList(Member member,
             LocalDateTime cursorTime) {
 
-        return postRepository.findPostListWithFavoriteByCursor(
-                member, cursorTime);
-    }
-
-    @Override
-    public List<PostGetListResponseDto> getPostListMore(Member member, LocalDateTime cursorTime) {
-
-        List<PostGetListResponseDto> postList = postRepository.findPostListWithFavoriteByCursor(
+        List<PostListDetailResponseDto> postList = postRepository.findPostListWithFavoriteByCursor(
                 member, cursorTime);
 
-        isEmptyPostList(postList);
-
-        return postList;
+        return createPostListResponseDtoWithIsLast(postList);
     }
 
     @Override
@@ -141,7 +132,7 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetListResponseDto> searchPost(String title, String category, String city, Member member,
+    public PostListResponseDto searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime) {
 
         Category categoryCond = null;
@@ -155,30 +146,10 @@ public class PostServiceImplV1 implements PostService {
             cityCond = Enum.valueOf(City.class, city);
         }
 
-        return postRepository.searchPostListWithFavorite(title, categoryCond, cityCond, member, cursorTime);
-    }
-
-    @Override
-    public List<PostGetListResponseDto> searchPostMore(String title, String category, String city, Member member,
-            LocalDateTime cursorTime) {
-
-        Category categoryCond = null;
-        City cityCond = null;
-
-        if (category != null) {
-            categoryCond = Enum.valueOf(Category.class, category);
-        }
-
-        if (city != null) {
-            cityCond = Enum.valueOf(City.class, city);
-        }
-
-        List<PostGetListResponseDto> postList = postRepository.searchPostListWithFavorite(
+        List<PostListDetailResponseDto> postList = postRepository.searchPostListWithFavorite(
                 title, categoryCond, cityCond, member, cursorTime);
 
-        isEmptyPostList(postList);
-
-        return postList;
+        return createPostListResponseDtoWithIsLast(postList);
     }
 
     @Override
@@ -193,28 +164,20 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId){
+    public List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId) {
 
-        return PostMapper.getPostSimpleInfoListByPostList(postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
+        return PostMapper.getPostSimpleInfoListByPostList(
+                postRepository.findAllByMemberIdAndIsDeletedIsFalse(memberId));
     }
 
     @Override
-    public List<PostGetListResponseDto> getMyFavoritePostList(Member member,
+    public PostListResponseDto getMyFavoritePostList(Member member,
             LocalDateTime cursorTime) {
 
-        return postRepository.findAllMyFavoritePost(member, cursorTime);
-    }
-
-    @Override
-    public List<PostGetListResponseDto> getMyFavoritePostListMore(Member member,
-            LocalDateTime cursorTime) {
-
-        List<PostGetListResponseDto> postList = postRepository.findAllMyFavoritePost(
+        List<PostListDetailResponseDto> postList = postRepository.findAllMyFavoritePost(
                 member, cursorTime);
 
-        isEmptyPostList(postList);
-
-        return postList;
+        return createPostListResponseDtoWithIsLast(postList);
     }
 
     @Override
@@ -222,7 +185,7 @@ public class PostServiceImplV1 implements PostService {
             Map<Integer, Long> postIdList) {
 
         List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
-        for(int i = 0; i < postIdList.size(); i++) {
+        for (int i = 0; i < postIdList.size(); i++) {
 
             Long postId = postIdList.get(i);
 
@@ -241,20 +204,12 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostGetListResponseDto> getMyPostList(Member member, LocalDateTime cursorTime) {
+    public PostListResponseDto getMyPostList(Member member, LocalDateTime cursorTime) {
 
-        return postRepository.findAllMyPostList(member, cursorTime);
-    }
-
-    @Override
-    public List<PostGetListResponseDto> getMyPostListMore(Member member, LocalDateTime cursorTime) {
-
-        List<PostGetListResponseDto> postList = postRepository.findAllMyPostList(member,
+        List<PostListDetailResponseDto> postList = postRepository.findAllMyPostList(member,
                 cursorTime);
 
-        isEmptyPostList(postList);
-
-        return postList;
+        return createPostListResponseDtoWithIsLast(postList);
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
@@ -313,11 +268,16 @@ public class PostServiceImplV1 implements PostService {
         }
     }
 
-    private void isEmptyPostList(List<PostGetListResponseDto> postList) {
+    private PostListResponseDto createPostListResponseDtoWithIsLast(
+            List<PostListDetailResponseDto> postList) {
+
+        boolean isLast = false;
 
         if (postList.isEmpty()) {
-            throw new NoMorePostListException();
+            isLast = true;
         }
+
+        return new PostListResponseDto(postList, isLast);
     }
 
     @Override

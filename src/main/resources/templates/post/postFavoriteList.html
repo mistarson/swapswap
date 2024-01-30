@@ -8,7 +8,7 @@
     💙 내 찜 목록 💙
   </div>
   <div class="post-container">
-    <div th:each="postDto : ${postGetListResponseDto}" class="post-card"
+    <div th:each="postDto : ${postListResponseDto.postList}" class="post-card"
          th:data-modified-time="${postDto.modifiedUpTime}">
       <a th:href="@{/posts/{postId}(postId=${postDto.postId})}">
         <div class="post-image-container">
@@ -42,12 +42,25 @@
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script th:inline="javascript">
 
+    let isLast = [[${postListResponseDto.isLast}]];
     const isMemberLogged = [[${isMemberLogged}]];
     let isLoading = false;
     let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
-    let isLast = false;
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'bottom-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
 
     window.addEventListener("scroll", function () {
 
@@ -62,7 +75,8 @@
       const SCROLLED_HEIGHT = window.scrollY;
       const WINDOW_HEIGHT = window.innerHeight;
       const DOC_TOTAL_HEIGHT = document.body.offsetHeight;
-      const IS_BOTTOM = (WINDOW_HEIGHT + SCROLLED_HEIGHT > DOC_TOTAL_HEIGHT);
+      const OFFSET = 200;
+      const IS_BOTTOM = (WINDOW_HEIGHT + SCROLLED_HEIGHT > DOC_TOTAL_HEIGHT - OFFSET);
 
       if (IS_BOTTOM && !isLoading) {
         loadMorePosts();
@@ -74,19 +88,27 @@
       let url = '/members/favorites/more?cursorTime=' + lastModifiedTime;
 
       if(!isLast) {
+
         $.ajax({
           url: url,
           type: 'GET',
           success: function(htmlFragment) {
             $('.post-container').append(htmlFragment);
+            const isLastValue = $('.post-container .is-last').last().val() === 'true';
+            isLast = isLastValue;
             updateLastModifiedTime(htmlFragment);
             isLoading = false;
           },
           error: function() {
-            alert('더 이상 로드할 게시물이 없습니다.')
-            isLast = true;
             isLoading = false;
           }
+        });
+      }
+
+      if(isLast) {
+        Toast.fire({
+          title: '더 이상\n불러올 게시글이 없습니다!',
+          icon: 'error'
         });
       }
 
