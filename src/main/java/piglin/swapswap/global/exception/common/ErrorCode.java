@@ -24,6 +24,7 @@ public enum ErrorCode {
     NO_AUTHORIZATION_EXCEPTION(400, "접근 권한이 없습니다"),
     MISMATCHED_PASSWORD_EXCEPTION(401, "비밀번호가 일치하지 않습니다."),
     FAILED_LOGIN_EXCEPTION(401, "닉네임 또는 패스워드를 확인해주세요."),
+    FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY(400, "스왑 머니를 전부 출금 후 다시 진행해주세요."),
 
     // 이메일 인증
     MISMATCHED_AUTH_CODE_EXCEPTION(401, "인증번호가 일치하지 않습니다."),

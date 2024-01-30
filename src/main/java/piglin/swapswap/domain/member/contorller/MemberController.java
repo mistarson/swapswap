@@ -21,8 +21,6 @@ import piglin.swapswap.domain.member.service.KakaoServiceImpl;
 import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.domain.member.service.MemberService;
-import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
@@ -77,6 +75,26 @@ public class MemberController {
         memberService.updateNickname(member, requestDto);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/myPage")
+    public String myPage() {
+
+        return "member/myPage";
+    }
+
+    @GetMapping("/editProfile")
+    public String editProfile() {
+
+        return "member/editProfile";
+    }
+
+    @GetMapping("/unregister")
+    public String unregister(@AuthMember Member member, Model model) {
+
+        model.addAttribute("currentSwapMoney", memberService.getMySwapMoney(member.getId()));
+
+        return "member/unregister";
     }
 
     @ResponseBody

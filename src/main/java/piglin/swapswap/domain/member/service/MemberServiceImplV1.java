@@ -61,6 +61,10 @@ public class MemberServiceImplV1 implements MemberService {
         Wallet wallet = member.getWallet();
         log.info("\nwalletId: {} | walletSwapMoney: {}", wallet.getId(), wallet.getSwapMoney());
 
+        if (wallet.getSwapMoney() > 0) {
+            throw new BusinessException(ErrorCode.FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY);
+        }
+
         member.deleteMember();
         wallet.deleteWallet();
 

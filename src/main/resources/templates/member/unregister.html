@@ -81,7 +81,8 @@
   </div>
   <div class="unregister-buttons">
     <a href="/myPage" class="unregister-cancel">취소</a>
-    <a href="/main" class="unregister-ok" id="cancelMembership">회원 탈퇴</a>
+    <a th:if="${currentSwapMoney} == 0" href="/main" class="unregister-ok" id="cancelMembership">회원 탈퇴</a>
+    <a th:if="${currentSwapMoney} != 0" href="/members/swap-money" class="unregister-no">스왑머니를 전부 출금한 후 진행해주세요</a>
   </div>
 </div>
 </body>
