@@ -15,6 +15,7 @@ import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
+import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -30,6 +31,8 @@ public class MemberServiceImplV1 implements MemberService {
     private final FavoriteService favoriteService;
     private final ChatRoomMemberService chatRoomMemberService;
 
+
+    @SwapLog
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
 
