@@ -3,6 +3,7 @@ package piglin.swapswap.domain.member.service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberService;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
@@ -18,6 +19,7 @@ import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImplV1 implements MemberService {
 
@@ -31,15 +33,15 @@ public class MemberServiceImplV1 implements MemberService {
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
 
-        member = memberRepository.findById(member.getId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
-        );
+        log.info("\nupdateNickname - memberCurrentNickname: {} | memberNicknameWillBe: {}", member.getNickname(), requestDto.nickname());
+        checkExistsMember(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.ALREADY_EXIST_USER_NAME_EXCEPTION);
         }
 
         member.updateMember(requestDto.nickname());
+        log.info("\nmemberChangedNickname: {}", member.getNickname());
     }
 
 
@@ -54,8 +56,6 @@ public class MemberServiceImplV1 implements MemberService {
 
         walletHistoryService.deleteAllWalletHistoriesByWallet(member.getWallet());
 
-
-
         chatRoomMemberService.deleteAllChatroomByMember(loginMember);
 
         memberCouponService.deleteAllMemberCouponByMember(loginMember);
@@ -67,7 +67,6 @@ public class MemberServiceImplV1 implements MemberService {
         favoriteService.deleteAllFavoriteByPostList(post);
 
         postService.deleteAllPostByMember(loginMember);
-
     }
 
     @Override
@@ -88,8 +87,9 @@ public class MemberServiceImplV1 implements MemberService {
     @Override
     public Member getMember(Long memberId) {
 
-        return memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+        return memberRepository.findByIdAndIsDeletedIsFalse(memberId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
+        );
     }
 
     @Override
@@ -100,5 +100,12 @@ public class MemberServiceImplV1 implements MemberService {
     @Override
     public List<Member> getMembers(List<Long> memberIds) {
         return memberRepository.findByIdIn(memberIds);
+    }
+
+    public void checkExistsMember(Long memberId) {
+
+        if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
+           throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
+        }
     }
 }
