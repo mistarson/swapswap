@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,10 +27,12 @@ import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
+import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 import piglin.swapswap.global.s3.S3ImageService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostServiceImplV1 implements PostService {
@@ -39,19 +42,19 @@ public class PostServiceImplV1 implements PostService {
     private final S3ImageService s3ImageService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    @SwapLog
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
+        log.info("createPost - memberId: {} | memberEmail: {} | title: {} | content: {}",
+                member.getId(), member.getEmail(), requestDto.title(), requestDto.content());
+
         checkImageUrlListSize(requestDto.imageUrlList());
-
-        if (member == null) {
-            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
-        }
-
         List<String> imageUrlList = saveAndGetImageUrlList(requestDto.imageUrlList());
 
         Post post = PostMapper.createPost(requestDto, createImageUrlMap(imageUrlList), member);
         postRepository.save(post);
+        log.info("\npostId: {}", post.getId());
 
         return post.getId();
     }
@@ -88,9 +91,12 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
+    @SwapLog
     @Transactional
     public void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto) {
 
+        log.info("updatePost - memberId: {} | memberEmail: {} | postId: {} | updateTitle: {} | updateContent: {}",
+                member.getId(), member.getEmail(), postId, requestDto.title(), requestDto.content());
         Post post = findPost(postId);
 
         if (member == null) {
