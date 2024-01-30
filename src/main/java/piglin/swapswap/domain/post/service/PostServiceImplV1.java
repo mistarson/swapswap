@@ -95,8 +95,8 @@ public class PostServiceImplV1 implements PostService {
     @Transactional
     public void updatePost(Long postId, Member member, PostUpdateRequestDto requestDto) {
 
-        log.info("updatePost - postId: {} | updateTitle: {} | updateContent: {}",
-                postId, requestDto.title(), requestDto.content());
+        log.info("updatePost - memberId: {} | memberEmail: {} | postId: {} | updateTitle: {} | updateContent: {}",
+                member.getId(), member.getEmail(), postId, requestDto.title(), requestDto.content());
         Post post = findPost(postId);
 
         if (member == null) {
