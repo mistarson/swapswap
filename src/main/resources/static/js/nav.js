@@ -188,7 +188,7 @@ function fetchAndDisplayNotifications() {
 }
 
 function checkNotificationPermission() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (Notification.permission === 'granted') {
       resolve(true);
     } else {
@@ -287,6 +287,7 @@ function markNotificationAsRead(notificationId) {
     url: '/notification/read/' + notificationId,
     type: 'POST',
     success: function (response) {
+      console.log(response);
       fetchNotifications();
     },
     error: function (xhr, status, error) {
