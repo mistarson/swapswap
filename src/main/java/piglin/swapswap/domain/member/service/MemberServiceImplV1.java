@@ -57,8 +57,9 @@ public class MemberServiceImplV1 implements MemberService {
         log.info("\ndeleteMember - memberId: {} | memberEmail: {}", member.getId(),
                 member.getEmail());
         member = getMemberWithWallet(member.getId());
-        log.info("\nmemberWalletId: {}", member.getWallet().getId());
+
         Wallet wallet = member.getWallet();
+        log.info("\nwalletId: {} | walletSwapMoney: {}", wallet.getId(), wallet.getSwapMoney());
 
         member.deleteMember();
         wallet.deleteWallet();
