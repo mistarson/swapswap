@@ -46,7 +46,7 @@ public class PostServiceImplV1 implements PostService {
     @Override
     public Long createPost(Member member, PostCreateRequestDto requestDto) {
 
-        log.info("createPost - memberId: {} | memberEmail: {} | title: {}, content: {}",
+        log.info("createPost - memberId: {} | memberEmail: {} | title: {} | content: {}",
                 member.getId(), member.getEmail(), requestDto.title(), requestDto.content());
 
         checkImageUrlListSize(requestDto.imageUrlList());
