@@ -97,8 +97,6 @@ public class NotificationServiceImpl implements NotificationService {
                     emitterRepository.saveEventCache(key, notification);
                     sendNotification(emitter, eventId, key,
                             NotificationMapper.createResponseDto(notification));
-                    sendNotification(emitter, eventId, key,
-                            NotificationMapper.createResponseDto(notification));
                 }
         );
     }

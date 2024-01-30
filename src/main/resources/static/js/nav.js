@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (getToken()) {
     subscribeToNotifications();
-    fetchAndDisplayNotifications();
     getCountOfUnreadNotifications();
   }
 
@@ -184,7 +183,7 @@ function subscribeToNotifications() {
 
 function fetchAndDisplayNotifications() {
   fetchNotifications();
-  getCountOfUnreadNotifications();
+  // getCountOfUnreadNotifications();
 }
 
 function checkNotificationPermission() {
