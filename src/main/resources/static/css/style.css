@@ -1072,6 +1072,17 @@ li {
   color: #fff;
 }
 
+.unregister-no {
+  background-color: #ef0000;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-align: center;
+  width: 300px;
+  margin: 10px;
+}
+
 .unregister .unregister-buttons {
   display: flex;
   flex-direction: row;
