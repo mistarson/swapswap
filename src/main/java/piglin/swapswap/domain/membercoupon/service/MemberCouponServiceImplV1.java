@@ -2,6 +2,7 @@ package piglin.swapswap.domain.membercoupon.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.coupon.entity.Coupon;
 import piglin.swapswap.domain.member.entity.Member;
@@ -11,6 +12,7 @@ import piglin.swapswap.domain.membercoupon.mapper.MemberCouponMapper;
 import piglin.swapswap.domain.membercoupon.repository.MemberCouponRepository;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberCouponServiceImplV1 implements MemberCouponService{
 
@@ -20,6 +22,8 @@ public class MemberCouponServiceImplV1 implements MemberCouponService{
     public void saveMemberCoupon(Member member, Coupon coupon) {
 
         MemberCoupon memberCoupon = MemberCouponMapper.createMemberCoupon(member, coupon);
+        log.info("\nmemberCouponSave - member: {}, memberCouponName: {}, memberCouponType: {}",
+                memberCoupon.getMember().getEmail(), memberCoupon.getName(), memberCoupon.getCouponType());
         memberCouponRepository.save(memberCoupon);
     }
 
