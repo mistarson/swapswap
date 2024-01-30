@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
-  <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+  <conversionRule conversionWord="clr"
+    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+  <appender name="PROD_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} [%35thread] [traceId=%X{traceId}] %clr(%-5level) %50logger{36} - %clr(%msg){blue}%n</pattern>
     </encoder>
   </appender>
 
+  <appender name="LOCAL_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%clr(%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%ex</pattern>
+    </encoder>
+  </appender>
+
   <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-
       <fileNamePattern>./log/swapswap.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
     </rollingPolicy>
     <encoder>
-    <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
-    </encoder>>
+      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
+    </encoder>
   </appender>
 
-  <root level="info">
-    <appender-ref ref="STDOUT"/>
-    <appender-ref ref="LOGFILE"/>
-  </root>
+  <springProfile name="prod">
+    <root level="info">
+      <appender-ref ref="PROD_CONSOLE"/>
+      <appender-ref ref="LOGFILE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="local">
+    <root level="debug">
+      <appender-ref ref="LOCAL_CONSOLE"/>
+    </root>
+  </springProfile>
 </configuration>
-
-
-  <!--TODO 파일 저장 형식 - RollingFileAppender / DailyRollingFileAppender-->
-
-  <!--TODO p6spy sql 문 보이게-->
-
-  <!--TODO local 환경 / prod 환경 프로필 나누기-->
 
   <!--TODO xml import-->
