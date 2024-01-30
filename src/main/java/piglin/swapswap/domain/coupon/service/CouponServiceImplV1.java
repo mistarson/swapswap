@@ -71,7 +71,7 @@ public class CouponServiceImplV1 implements CouponService {
     @Override
     public void issueEventCouponByOptimisticLock(Long couponId, Member member) {
 
-        log.info("\ncouponIssueStart - Member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
+        log.info("\ncouponIssue - member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
                 TransactionSynchronizationManager.isActualTransactionActive());
 
         Coupon coupon = couponRepository.findByIdWithOptimisticLock(couponId)
