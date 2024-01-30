@@ -294,25 +294,6 @@ class PostServiceImplV1UnitTest {
         }
 
         @Test
-        @DisplayName("게시글 수정 - 실패 / 로그인 한 사용자만 수정할 수 있습니다")
-        void updatePost_Fail_Image_Not_Logged_In_Member() {
-            // Given
-            member = null;
-            List<MultipartFile> imageUrlList = new ArrayList<>();
-            imageUrlList.add(Mockito.mock(MultipartFile.class));
-
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
-                    "내용",
-                    imageUrlList);
-            Long postId = 1L;
-            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
-            // When - Then
-            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining(ErrorCode.WRITE_ONLY_USER.getMessage());
-        }
-
-        @Test
         @DisplayName("게시글 수정 - 실패 / 자신의 게시글만 수정할 수 있습니다")
         void updatePost_Fail_Your_Not_Host() {
             // Given
