@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
 import piglin.swapswap.domain.coupon.dto.response.CouponGetResponseDto;
 import piglin.swapswap.domain.coupon.entity.Coupon;
@@ -12,6 +13,7 @@ import piglin.swapswap.domain.coupon.repository.CouponRepository;
 import piglin.swapswap.domain.coupon.validator.CouponValidator;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
+import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -47,27 +49,40 @@ public class CouponServiceImplV1 implements CouponService {
     }
 
     @Override
+    @SwapLog
     @Transactional
     public void issueEventCouponByPessimisticLock(Long couponId, Member member) {
 
+        log.info("\ncouponIssueStart - Member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
+                TransactionSynchronizationManager.isActualTransactionActive());
+
         Coupon coupon = couponRepository.findByIdWithPessimisticLock(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
+        log.info("\ncouponName: {} | couponType: {} | couponCountBeforeIssue: {}", coupon.getName(), coupon.getCouponType(), coupon.getCount());
 
+        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon));
         if (issueCouponPossible(coupon)) {
             memberCouponService.saveMemberCoupon(member, coupon);
             coupon.issueCoupon();
+            log.info("\ncouponCountAfterIssue: {}", coupon.getCount());
         }
     }
 
     @Override
     public void issueEventCouponByOptimisticLock(Long couponId, Member member) {
 
+        log.info("\ncouponIssueStart - Member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
+                TransactionSynchronizationManager.isActualTransactionActive());
+
         Coupon coupon = couponRepository.findByIdWithOptimisticLock(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
+        log.info("\ncouponName: {} | couponType: {} | couponCountBeforeIssue: {}", coupon.getName(), coupon.getCouponType(), coupon.getCount());
 
+        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon));
         if (issueCouponPossible(coupon)) {
             memberCouponService.saveMemberCoupon(member, coupon);
             coupon.issueCoupon();
+            log.info("\ncouponCountAfterIssue: {}", coupon.getCount());
         }
     }
 
