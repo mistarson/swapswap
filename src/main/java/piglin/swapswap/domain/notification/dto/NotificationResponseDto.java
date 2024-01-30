@@ -11,14 +11,5 @@ public record NotificationResponseDto(
         String content,
         boolean status
 ) {
-    public static NotificationResponseDto create(Notification notification) {
-
-        return new NotificationResponseDto(
-                notification.getId(),
-                notification.getUrl(),
-                notification.getContent(),
-                notification.isRead()
-        );
-    }
 
 }
