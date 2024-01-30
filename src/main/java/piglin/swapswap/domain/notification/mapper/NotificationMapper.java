@@ -2,6 +2,7 @@ package piglin.swapswap.domain.notification.mapper;
 
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.notification.constant.NotificationType;
+import piglin.swapswap.domain.notification.dto.NotificationResponseDto;
 import piglin.swapswap.domain.notification.entity.Notification;
 
 public class NotificationMapper {
@@ -14,6 +15,16 @@ public class NotificationMapper {
                 .content(content)
                 .url(url)
                 .isRead(false)
+                .build();
+    }
+
+    public static NotificationResponseDto createResponseDto(Notification notification) {
+
+        return NotificationResponseDto.builder()
+                .id(notification.getId())
+                .url(notification.getUrl())
+                .content(notification.getContent())
+                .status(notification.isRead())
                 .build();
     }
 }

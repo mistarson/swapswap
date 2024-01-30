@@ -9,7 +9,6 @@ import piglin.swapswap.domain.notification.dto.NotificationCountDto;
 import piglin.swapswap.domain.notification.dto.NotificationResponseDto;
 import piglin.swapswap.domain.notification.entity.Notification;
 
-@Service
 public interface NotificationService {
 
     SseEmitter subscribe(Long id, String lastEventId);
@@ -28,7 +27,7 @@ public interface NotificationService {
 
     void readNotification(Long notificationId);
 
-    void deleteAllByNotifications(Member member);
+    void deleteAllByNotifications(Long memberId);
 
     void deleteByNotifications(Long notificationId);
 

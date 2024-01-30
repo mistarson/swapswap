@@ -284,7 +284,7 @@ function displayNotifications(notifications) {
 
 function markNotificationAsRead(notificationId) {
   $.ajax({
-    url: '/notification/read/' + notificationId,
+    url: '/notification/' + notificationId,
     type: 'POST',
     success: function (response) {
       console.log(response);
@@ -298,7 +298,7 @@ function markNotificationAsRead(notificationId) {
 
 function deleteNotification(notificationId) {
   $.ajax({
-    url: '/notifications/delete/' + notificationId,
+    url: '/notifications/' + notificationId,
     type: 'DELETE',
     success: function (response) {
       console.log('알림 삭제 성공:', response);
@@ -312,7 +312,7 @@ function deleteNotification(notificationId) {
 
 function deleteAllNotifications() {
   $.ajax({
-    url: '/notifications/delete',
+    url: '/notifications',
     type: 'DELETE',
     success: function (response) {
       console.log('All notifications deleted:', response);

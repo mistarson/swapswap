@@ -67,7 +67,7 @@ public class MemberServiceImplV1 implements MemberService {
             throw new BusinessException(ErrorCode.FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY);
         }
 
-        notificationService.deleteAllByNotifications(member);
+        notificationService.deleteAllByNotifications(member.getId());
 
         member.deleteMember();
         wallet.deleteWallet();

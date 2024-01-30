@@ -26,7 +26,7 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationServiceImpl implements NotificationService{
+public class NotificationServiceImpl implements NotificationService {
 
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
     private final NotificationRepository notificationRepository;
@@ -46,7 +46,8 @@ public class NotificationServiceImpl implements NotificationService{
 
         String eventId = memberId + "_" + System.currentTimeMillis();
 
-        sendNotification(emitter, eventId, emitterId, "EventStream Created. [memberId=" + memberId + "]");
+        sendNotification(emitter, eventId, emitterId,
+                "EventStream Created. [memberId=" + memberId + "]");
 
         if (!lastEventId.isEmpty()) {
             sendLostData(lastEventId, memberId, emitterId, emitter);
@@ -55,15 +56,19 @@ public class NotificationServiceImpl implements NotificationService{
         return emitter;
     }
 
-    public void sendLostData(String lastEventId, Long memberId, String emitterId, SseEmitter emitter) {
+    public void sendLostData(String lastEventId, Long memberId, String emitterId,
+            SseEmitter emitter) {
 
-        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithById(String.valueOf(memberId));
+        Map<String, Object> eventCaches = emitterRepository.findAllEventCacheStartWithById(
+                String.valueOf(memberId));
         eventCaches.entrySet().stream()
                 .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-                .forEach(entry -> sendNotification(emitter, entry.getKey(), emitterId, entry.getValue()));
+                .forEach(entry -> sendNotification(emitter, entry.getKey(), emitterId,
+                        entry.getValue()));
     }
 
-    public void sendNotification(SseEmitter emitter, String eventId, String emitterId, Object data) {
+    public void sendNotification(SseEmitter emitter, String eventId, String emitterId,
+            Object data) {
 
         try {
             emitter.send(SseEmitter.event()
@@ -76,24 +81,32 @@ public class NotificationServiceImpl implements NotificationService{
     }
 
     @Async
-    public void send(Member receiver, NotificationType notificationType, String content, String url) {
+    public void send(Member receiver, NotificationType notificationType, String content,
+            String url) {
 
-        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url));
+        Notification notification = notificationRepository.save(
+                createNotification(receiver, notificationType, content, url));
 
         String receiverId = String.valueOf(receiver.getId());
         String eventId = receiverId + "_" + System.currentTimeMillis();
 
-        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithById(receiverId);
+        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithById(
+                receiverId);
         emitters.forEach(
                 (key, emitter) -> {
                     emitterRepository.saveEventCache(key, notification);
-                    sendNotification(emitter, eventId, key, NotificationResponseDto.create(notification));
+                    sendNotification(emitter, eventId, key,
+                            NotificationResponseDto.create(notification));
+                    sendNotification(emitter, eventId, key,
+                            NotificationMapper.createResponseDto(notification));
                 }
         );
     }
-    public Notification createNotification(Member receiver, NotificationType notificationType, String content, String url) {
 
-        return NotificationMapper.createNotification(receiver,notificationType,content,url);
+    public Notification createNotification(Member receiver, NotificationType notificationType,
+            String content, String url) {
+
+        return NotificationMapper.createNotification(receiver, notificationType, content, url);
     }
 
     @Transactional
@@ -101,7 +114,7 @@ public class NotificationServiceImpl implements NotificationService{
         List<Notification> notifications = notificationRepository.findAllByMemberId(memberId);
 
         return notifications.stream()
-                .map(NotificationResponseDto::create)
+                .map(NotificationMapper::createResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -116,21 +129,18 @@ public class NotificationServiceImpl implements NotificationService{
     @Transactional
     public void readNotification(Long notificationId) {
 
-        Optional<Notification> notification = notificationRepository.findById(notificationId);
-        Notification checkedNotification = notification.orElseThrow(()-> new BusinessException(
-                ErrorCode.NOT_EXIST_NOTIFICATION));
+        Notification checkedNotification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_EXIST_NOTIFICATION));
 
         checkedNotification.read();
 
         notificationRepository.save(checkedNotification);
-
     }
 
     @Transactional
-    public void deleteAllByNotifications(Member member) {
+    public void deleteAllByNotifications(Long memberId) {
 
-        Long receiverId = member.getId();
-        notificationRepository.deleteAllByReceiverId(receiverId);
+        notificationRepository.deleteAllByReceiverId(memberId);
     }
 
     @Transactional

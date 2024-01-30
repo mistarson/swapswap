@@ -38,7 +38,7 @@ public class NotificationController {
         return notificationService.findAllNotifications(member.getId());
     }
 
-    @PostMapping("/notification/read/{notificationId}")
+    @PostMapping("/notification/{notificationId}")
     public void readNotification(@PathVariable Long notificationId) {
 
         notificationService.readNotification(notificationId);
@@ -50,15 +50,15 @@ public class NotificationController {
         return notificationService.countUnReadNotifications(member.getId());
     }
 
-    @DeleteMapping("/notifications/delete")
+    @DeleteMapping("/notifications")
     public ResponseEntity<?> deleteNotifications(@AuthMember Member member) {
 
-        notificationService.deleteAllByNotifications(member);
+        notificationService.deleteAllByNotifications(member.getId());
 
         return ResponseEntity.ok().body("알림 목록 전체 삭제 성공");
     }
 
-    @DeleteMapping("/notifications/delete/{notificationId}")
+    @DeleteMapping("/notifications/{notificationId}")
     public ResponseEntity<?> deleteNotification(@PathVariable Long notificationId) {
 
         notificationService.deleteByNotifications(notificationId);
