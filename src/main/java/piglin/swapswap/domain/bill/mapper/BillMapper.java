@@ -1,5 +1,6 @@
 package piglin.swapswap.domain.bill.mapper;
 
+import piglin.swapswap.domain.bill.dto.response.BillSimpleResponseDto;
 import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.member.entity.Member;
 
@@ -16,4 +17,12 @@ public class BillMapper {
                 .build();
     }
 
+    public static BillSimpleResponseDto billToSimpleResponseDto(Bill bill) {
+
+        return BillSimpleResponseDto.builder()
+                                    .id(bill.getId())
+                                    .extraFee(bill.getExtrafee())
+                                    .commission(bill.getCommission())
+                                    .build();
+    }
 }

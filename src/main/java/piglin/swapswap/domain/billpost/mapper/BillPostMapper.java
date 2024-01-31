@@ -22,6 +22,7 @@ public class BillPostMapper {
                 .postId(post.getId())
                 .postTile(post.getTitle())
                 .imageUrl(post.getImageUrl().get(0).toString())
+                .postStatus(post.getDealStatus())
                 .build()).toList();
     }
 }
