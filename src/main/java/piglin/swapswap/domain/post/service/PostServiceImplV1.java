@@ -165,6 +165,7 @@ public class PostServiceImplV1 implements PostService {
         Post post = findPost(postId);
         checkPostWriter(member, post);
         checkModifiedUpTime(post);
+        checkPostDealStatus(post);
 
         post.upPost();
     }
@@ -216,6 +217,13 @@ public class PostServiceImplV1 implements PostService {
                 cursorTime);
 
         return createPostListResponseDtoWithIsLast(postList);
+    }
+
+    private void checkPostDealStatus(Post post) {
+
+        if (!post.getDealStatus().equals(DealStatus.REQUESTED)) {
+            throw new BusinessException(ErrorCode.CAN_NOT_UP_CAUSE_POST_DEAL_STATUS_IS_NOT_REQUESTED);
+        }
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
