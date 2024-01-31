@@ -28,8 +28,8 @@
             <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
           </div>
             <img th:each="firstMemberPost : ${dealDetailResponseDto.firstDealPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
-               th:href="@{/deals/{billId}/member/{memberId}(billId=${dealDetailResponseDto.firstMemberBillId()}, memberId=${dealDetailResponseDto.firstMemberId})}">
+          <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&dealDetailResponseDto.firstMemberId()==memberId}"> <a
+               th:href="@{/bills/{billId}/member/{memberId}(billId=${dealDetailResponseDto.firstMemberBillId()}, memberId=${dealDetailResponseDto.firstMemberId})}">
             수정하기
           </a>
           </div>
@@ -53,7 +53,7 @@
             <div class="deal-detail-take" th:text=" ${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용' : '스왑페이 미사용'"></div>
           </div>
               <img th:each="secondMemberPost : ${dealDetailResponseDto.secondDealPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
-          <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
+          <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&dealDetailResponseDto.secondMemberId()==memberId}"> <a
                th:href="@{/bills/{billId}/member/{memberId}(billId=${dealDetailResponseDto.secondMemberBillId()}, memberId=${dealDetailResponseDto.secondMemberId})}">
             수정하기</a>
           </div>
