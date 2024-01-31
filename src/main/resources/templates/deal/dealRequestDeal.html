@@ -156,7 +156,7 @@
 
       if (useSwapMoneySecondMember&&!secondAllow) {
         location.href = secondMemberUseSwapPayUrl
-      } else if(!useSwapMoneySecondMember&&!secondAllow) {
+      } else if(!useSwapMoneySecondMember) {
         $.ajax({
           url: secondMemberNotUseSwapPayUrl,
           type: 'PATCH',
