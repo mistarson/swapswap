@@ -2095,9 +2095,9 @@ input[type="number"] {
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
-  margin-left: 70%;
+  margin-left: 60%;
   margin-top: 4.5%;
-  width: 500px;
+  width: 700px;
 }
 
 .close {
@@ -2172,7 +2172,7 @@ input[type="number"] {
 }
 
 #notification-list li {
-  width: 275px;
+  width: 440px;
 }
 
 #notificationImg {
