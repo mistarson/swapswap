@@ -17,6 +17,8 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.notification.constant.NotificationType;
+import piglin.swapswap.domain.notification.service.NotificationService;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -30,6 +32,7 @@ public class DealServiceImplV1 implements DealService {
     private final MemberRepository memberRepository;
     private final DealWalletService dealWalletService;
     private final PostService postService;
+    private final NotificationService notificationService;
 
     @Override
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
@@ -38,9 +41,17 @@ public class DealServiceImplV1 implements DealService {
 
         Member firstMember = memberRepository.findById(member.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+        Member secondMember = memberRepository.findById(requestDto.secondMemberId())
+                .orElseThrow(() ->  new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
         Deal deal = DealMapper.createDeal(requestDto, firstMember.getId());
 
         Deal savedDeal = dealRepository.save(deal);
+
+        String Url = "http://swapswap.shop/deals/" + deal.getId();
+        String content = secondMember.getNickname()+"님! 거래 요청이 왔어요!";
+        notificationService.send(secondMember, NotificationType.DEAL,content,Url);
 
         return savedDeal.getId();
     }
@@ -141,11 +152,11 @@ public class DealServiceImplV1 implements DealService {
         }
 
         if(deal.getFirstUserId().equals(member.getId())) {
-                deal.updateDealFirstMemberTake();
+            deal.updateDealFirstMemberTake();
         }
 
         if(deal.getSecondUserId().equals(member.getId())) {
-                deal.updateDealSecondMemberTake();
+            deal.updateDealSecondMemberTake();
         }
 
         if(deal.getFirstTake() && deal.getSecondTake()) {

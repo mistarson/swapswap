@@ -52,6 +52,8 @@ body {
   text-align: center;
   font-weight: 500;
   transition: color 0.3s;
+  cursor: pointer;
+
 }
 
 .nav-container a:hover {
@@ -816,6 +818,12 @@ img {
   flex-direction: column;
   align-items: center;
 }
+.check_list a {
+  display: block; /* 블록 요소로 변경하여 영역을 확장합니다. */
+  text-decoration: none; /* 기본 텍스트에 밑줄을 제거합니다. */
+  color: inherit; /* 기본 링크 색상을 상속합니다. */
+  padding: 10px; /* 원하는 패딩 값을 지정합니다. */
+}
 
 .check_list > div {
   margin: 10px 0;
@@ -824,7 +832,7 @@ img {
 .check_list div {
   border: 2px solid #ccc;
   border-radius: 40px;
-  padding: 10px;
+  /*padding: 10px;*/
   display: inline-block;
   background-color: #00aadc;
   width: 250px;
@@ -840,22 +848,33 @@ img {
 
 .transaction_history:hover {
   background-color: #2980b9;
+  transition: background-color 0.3s;
+
 }
 
 .my_wallet:hover {
   background-color: #2980b9;
+  transition: background-color 0.3s;
 }
 
 .my-coupon:hover {
   background-color: #2980b9;
+  transition: background-color 0.3s;
+}
+
+.my-post:hover {
+  background-color: #2980b9;
+  transition: background-color 0.3s;
 }
 
 .favorite:hover {
   background-color: #2980b9;
+  transition: background-color 0.3s;
 }
 
 .myPage_edit_profile:hover {
   background-color: #2980b9;
+  transition: background-color 0.3s;
 }
 
 .check_list .unregister {
@@ -865,6 +884,8 @@ img {
 
 .check_list .unregister:hover {
   background-color: #444;
+  transition: background-color 0.3s;
+
 }
 
 .check_list a {
@@ -932,10 +953,7 @@ img {
   width: 150px;
   text-align: center;
   color: #808080;
-  cursor: pointer;
   border-bottom: 2px solid #808080;
-
-
 }
 
 .edit .buttons {
@@ -2057,4 +2075,108 @@ input[type="number"] {
 .ch2 .textbox {
   margin-right: 20px;
   background-color: #F9EB54;
+}
+
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  /*background-color: rgba(0, 0, 0, 0.4);*/
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  margin-left: 60%;
+  margin-top: 4.5%;
+  width: 700px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.read-notification-text {
+  color: #b7b7b7; /* 읽은 알림은 회색 */
+}
+
+.read-notification-text:hover {
+  cursor: pointer;
+  color: #b8d5dd;
+}
+
+.unread-notification-text {
+  color: black; /* 안 읽은 알림은 검은색 */
+}
+
+.unread-notification-text:hover {
+  cursor: pointer;
+  color: #54d7fd;
+}
+
+.delete-notification-btn {
+  margin-left: 2%;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-notification-btn:hover {
+  background-color: #00ABcc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#deleteAllNotificationsBtn {
+  float: right;
+  margin-right: 3%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 25px;
+  height: auto;
+}
+
+.read-notification-text {
+  margin-top: 3%;
+}
+
+#notification-list .no-notification {
+  color: grey; /* 회색으로 설정 */
+}
+
+.unread-notification-count {
+  position: absolute;
+  background-color: black;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+#notification-list li {
+  width: 440px;
+}
+
+#notificationImg {
+  width: 23px;
+  margin-top: 6px;
+  margin-right: -11px;
 }
