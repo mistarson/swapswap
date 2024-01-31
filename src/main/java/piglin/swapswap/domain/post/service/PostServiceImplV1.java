@@ -100,10 +100,6 @@ public class PostServiceImplV1 implements PostService {
                 member.getId(), member.getEmail(), postId, requestDto.title(), requestDto.content());
         Post post = findPost(postId);
 
-        if (member == null) {
-            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
-        }
-
         checkPostWriter(member, post);
         checkImageUrlListSize(requestDto.imageUrlList());
 
