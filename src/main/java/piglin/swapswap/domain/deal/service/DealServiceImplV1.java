@@ -10,7 +10,6 @@ import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
 import piglin.swapswap.domain.billcoupon.service.BillCouponService;
 import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
 import piglin.swapswap.domain.billpost.service.BillPostService;
-import piglin.swapswap.domain.daelwallet.service.DealWalletService;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
@@ -21,7 +20,6 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.MemberService;
-import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -73,7 +71,9 @@ public class DealServiceImplV1 implements DealService {
     @Override
     public DealDetailResponseDto getDeal(Long dealId, Member member) {
 
-        Deal deal = dealRepository.findDealByIdWithBillAndMember(dealId).orElseThrow();
+        Deal deal = dealRepository.findDealByIdWithBillAndMember(dealId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
 
         Bill requestMemberBill = deal.getFirstMemberbill();
         Bill receiveMemberBill = deal.getSecondMemberbill();
@@ -96,7 +96,7 @@ public class DealServiceImplV1 implements DealService {
     @Transactional
     public void bothAllowThenChangeDealing(Long billId) {
 
-        Deal deal = dealRepository.findByBillIdWithBill(billId);
+        Deal deal = getDealByBillIdWithBill(billId);
 
         if(deal.getFirstMemberbill().getIsAllowed() && deal.getSecondMemberbill().getIsAllowed()) {
 
@@ -115,15 +115,19 @@ public class DealServiceImplV1 implements DealService {
     }
 
     @Override
-    public Deal getDealByBillId(Long billId) {
+    public Deal getDealByBillIdWithBill(Long billId) {
 
-        return dealRepository.findByBillIdWithBill(billId);
+        return dealRepository.findByBillIdWithBill(billId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
     }
 
     @Override
     public Deal getDealByBillIdWithBillAndMember(Long billId) {
 
-        return dealRepository.findByBillIdWithBillAndMember(billId);
+        return dealRepository.findByBillIdWithBillAndMember(billId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
     }
 
 }

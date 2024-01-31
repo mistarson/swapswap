@@ -28,7 +28,7 @@ public class BillFacade {
 
         billService.updateBillAllowTrueWithSwapPay(billId, member);
         Long totalFee = billService.getTotalFee(billId);
-        Deal deal = dealService.getDealByBillId(billId);
+        Deal deal = dealService.getDealByBillIdWithBill(billId);
         dealWalletService.createDealWallet(deal, member, totalFee);
     }
 
@@ -36,7 +36,7 @@ public class BillFacade {
     public void updateBillAllowFalseWithSwapPay(Long billId, Member member) {
 
         billService.updateBillAllowFalseWithSwapPay(billId, member);
-        Deal deal = dealService.getDealByBillId(billId);
+        Deal deal = dealService.getDealByBillIdWithBill(billId);
         dealWalletService.rollbackTemporarySwapMoney(deal);
         billCouponService.initialBillCouponList(billId);
     }

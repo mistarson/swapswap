@@ -16,7 +16,7 @@ public interface DealQueryRepository {
 
     Optional<Deal> findDealByBillId(Long billId);
 
-    Deal findByBillIdWithBillAndMember(Long billId);
+    Optional<Deal> findByBillIdWithBillAndMember(Long billId);
 
-    Deal findByBillIdWithBill(Long billId);
+    Optional<Deal> findByBillIdWithBill(Long billId);
 }

@@ -22,7 +22,7 @@ public interface DealService {
 
     Long getDealIdByBillId(Long billId);
 
-    Deal getDealByBillId(Long billId);
+    Deal getDealByBillIdWithBill(Long billId);
 
     Deal getDealByBillIdWithBillAndMember(Long billId);
 }

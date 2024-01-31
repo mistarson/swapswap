@@ -101,35 +101,35 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     }
 
     @Override
-    public Deal findByBillIdWithBillAndMember(Long billId) {
+    public Optional<Deal> findByBillIdWithBillAndMember(Long billId) {
 
         QBill firstMemberBill = new QBill("firstMemberBill");
         QBill secondMemberBill = new QBill("secondMemberBill");
         QMember firstMember = new QMember("firstMember");
         QMember secondMember = new QMember("secondMember");
 
-        return queryFactory
+        return Optional.ofNullable(queryFactory
                 .selectFrom(deal)
                 .where(billIdEq(billId))
                 .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
                 .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
                 .join(firstMemberBill.member, firstMember).fetchJoin()
                 .join(secondMemberBill.member, secondMember).fetchJoin()
-                .fetchFirst();
+                .fetchFirst());
     }
 
     @Override
-    public Deal findByBillIdWithBill(Long billId) {
+    public Optional<Deal> findByBillIdWithBill(Long billId) {
 
         QBill firstMemberBill = new QBill("firstMemberBill");
         QBill secondMemberBill = new QBill("secondMemberBill");
 
-        return queryFactory.select(deal)
-                           .from(deal)
-                           .where(billIdEq(billId))
-                           .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                           .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
-                           .fetchFirst();
+        return Optional.ofNullable(queryFactory.select(deal)
+                .from(deal)
+                .where(billIdEq(billId))
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .fetchFirst());
     }
 
     private BooleanExpression billIdEq(Long billId) {
