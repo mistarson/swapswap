@@ -49,7 +49,7 @@ public class DealServiceImplV1 implements DealService {
 
         Deal savedDeal = dealRepository.save(deal);
 
-        String Url = "http://localhost:8080/deals/" + deal.getId();
+        String Url = "http://swapswap.shop/deals/" + deal.getId();
         String content = secondMember.getNickname()+"님! 거래 요청이 왔어요!";
         notificationService.send(secondMember, NotificationType.DEAL,content,Url);
 

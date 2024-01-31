@@ -92,7 +92,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         Member receiver = memberService.getMember(chatRoom.getSecondMemberId());
 
-        String Url = "http://localhost:8080/chats/room/" + chatRoom.getId();
+        String Url = "http://swapswap.shop/chats/room/" + chatRoom.getId();
         String content = receiver.getNickname()+"님! " + sender.getNickname() +"님으로부터 채팅이 왔어요!";
         notificationService.send(receiver, NotificationType.DEAL,content,Url);
     }
