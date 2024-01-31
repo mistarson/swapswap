@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
+import piglin.swapswap.global.exception.ajax.AjaxRequestException;
 import piglin.swapswap.global.exception.jwt.JwtInvalidException;
 import piglin.swapswap.global.exception.jwt.NoJwtException;
 import piglin.swapswap.global.exception.jwt.UnsupportedGrantTypeException;
@@ -37,6 +38,15 @@ public class GlobalExceptionHandler {
         log.error("NoJwtException", e);
 
         return new RedirectView("error/errorpage");
+    }
+
+    @ResponseBody
+    @ExceptionHandler(AjaxRequestException.class)
+    protected ResponseEntity<String> handleAjaxRequestException(AjaxRequestException e) {
+
+        log.error("AjaxRequestException", e);
+
+        return ResponseEntity.status(e.getStatus()).body(e.getMessage());
     }
 
     @ExceptionHandler(UnsupportedGrantTypeException.class)

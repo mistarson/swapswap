@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   navCityInput.addEventListener('change', function () {
     localStorage.setItem('selectedCity', this.value);
+    updateSearch()
   });
 
   const rainbowColors = ['red', 'orange', 'green', 'blue', 'indigo', 'violet'];
