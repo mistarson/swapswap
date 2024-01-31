@@ -43,9 +43,9 @@ public class MemberServiceImplV1 implements MemberService {
 
     @Override
     @Transactional
-    public Long getMySwapMoney(Long memberId) {
+    public Long getMySwapMoney(Member member) {
 
-        Member member = getMemberWithWallet(memberId);
+        member = getMemberWithWallet(member.getId());
 
         return member.getWallet().getSwapMoney();
     }

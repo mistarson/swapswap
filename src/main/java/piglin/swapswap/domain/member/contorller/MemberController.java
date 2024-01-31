@@ -93,7 +93,7 @@ public class MemberController {
     @GetMapping("/members/swap-money")
     public String getMySwapMoney(@AuthMember Member member, Model model) {
 
-        Long mySwapMoney = memberService.getMySwapMoney(member.getId());
+        Long mySwapMoney = memberService.getMySwapMoney(member);
         model.addAttribute("mySwapMoney", mySwapMoney);
 
         return "member/mySwapMoney";

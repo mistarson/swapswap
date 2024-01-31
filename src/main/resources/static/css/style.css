@@ -2047,3 +2047,103 @@ input[type="number"] {
   margin-right: 20px;
   background-color: #F9EB54;
 }
+
+.coupon-card {
+  background-color: #c7f1ff;
+}
+
+.coupon-card:hover {
+  background-color: #00c6ff;
+}
+
+.select-coupon {
+  background-color: #00c6ff;
+}
+
+.coupon-use-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.coupon-btn {
+  margin: 60px;
+  background-color: #28a745;
+  color: white;
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 10px;
+}
+.coupon-btn:hover {
+  background-color: #1b6c2f;
+}
+/** 결제창 **/
+
+.liquidate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.liquidate-content a {
+  margin-top: 10px; /* 링크와 위의 간격 조절 */
+}
+
+.liquidate-content div {
+  font-size: 18px; /* 글자 크기 조절 */
+  padding: 10px; /* 테두리 내부 간격 설정 */
+  margin: 10px 0; /* 요소간의 간격을 위아래로 설정 */
+  display: flex;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.deal-acceptance-button-liquidate {
+  padding: 10px 15px; /* 버튼 내부 패딩 */
+  margin-left: auto;
+  margin-bottom: 10px;
+  margin-right: 10px; /* 버튼 간 여백 */
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.deal-acceptance-button-liquidate:hover {
+  background-color: #218838; /* 호버 시 배경색 변경 */
+}
+
+.coupon-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.coupon-button:hover {
+  background-color: #1b6c2f;
+}
+
+.coupon-content {
+  margin-left: 20px;
+}
+
+.swap-pay-title-liquidate {
+  background-color: #45baff;
+}
+
