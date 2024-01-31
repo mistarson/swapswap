@@ -12,4 +12,6 @@ public interface DealQueryRepository {
     List<Deal> findAllMyReceiveDeal(Long memberId);
 
     Optional<Deal> findDealByIdWithBillAndMember(Long dealId);
+
+    Optional<Deal> findDealByIdWithBill(Long billId);
 }

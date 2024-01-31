@@ -1,16 +1,13 @@
 package piglin.swapswap.domain.deal.repository;
 
-import static piglin.swapswap.domain.bill.entity.QBill.*;
 import static piglin.swapswap.domain.deal.entity.QDeal.deal;
-import static piglin.swapswap.domain.member.entity.QMember.*;
 
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import piglin.swapswap.domain.bill.entity.QBill;
-import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.QMember;
 
@@ -71,10 +68,32 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(deal)
+                .where(deal.id.eq(dealId))
                 .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
                 .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
                 .join(firstMemberBill.member, firstMember).fetchJoin()
                 .join(secondMemberBill.member, secondMember).fetchJoin()
                 .fetchOne());
+    }
+
+    @Override
+    public Optional<Deal> findDealByIdWithBill(Long dealId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+        QMember firstMember = new QMember("firstMember");
+        QMember secondMember = new QMember("secondMember");
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(deal)
+                .where(deal.id.eq(dealId))
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .fetchOne());
+    }
+
+    private BooleanExpression billIdEq(Long billId) {
+
+        return deal.firstMemberbill.id.eq(billId).or(deal.secondMemberbill.id.eq(billId));
     }
 }

@@ -6,17 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import piglin.swapswap.domain.bill.service.BillService;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.post.service.PostService;
+import piglin.swapswap.domain.member.service.MemberService;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -28,7 +31,9 @@ import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 public class DealController {
 
     private final DealService dealService;
-    private final PostService postService;
+    private final BillService billService;
+    private final MemberCouponService memberCouponService;
+    private final MemberService memberService;
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,
@@ -64,11 +69,12 @@ public class DealController {
     }
 
     @GetMapping("/request/list")
-    public String  getRequestDealList(
+    public String getRequestDealList(
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyRequestDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealRequestDealListForm";
@@ -79,7 +85,8 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyReceiveDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyReceiveDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealResponseDealListForm";
@@ -95,6 +102,66 @@ public class DealController {
         model.addAttribute("dealDetailResponseDto", responseDto);
         model.addAttribute("memberId", member.getId());
 
-        return  "deal/dealRequestDeal";
+        return "deal/dealRequestDeal";
     }
+
+    @PatchMapping("/{dealId}/swap-pay")
+    public ResponseEntity<?> updateUseSwapPay(
+            @PathVariable Long dealId,
+            @AuthMember Member member
+    ) {
+
+        billService.updateUsedSwapPay(dealId, member);
+
+        return ResponseEntity.ok("스왑페이 사용 등록 성공");
+    }
+
+    @PatchMapping("/{dealId}/allow/no-swap-pay")
+    public ResponseEntity<?> updateAllowWithoutSwapPay(
+            @PathVariable Long dealId,
+            @AuthMember Member member
+    ) {
+
+        dealService.updateDealAllowWithoutSwapPay(dealId, member);
+
+        return ResponseEntity.ok("거래 수락 성공");
+    }
+
+    @GetMapping("/{dealId}/allow/swap-pay/true")
+    public String showUpdateAllowWithSwapPayForm(
+            @PathVariable Long dealId,
+            @AuthMember Member member,
+            Model model
+    ) {
+
+        billService.initialCommission(dealId, member);
+        model.addAttribute("myBill", billService.getMyBillDto(dealId, member));
+        model.addAttribute("mySwapMoney", memberService.getMySwapMoney(member));
+        model.addAttribute("dealId", dealId);
+
+        return "deal/dealAllowWithSwapPay";
+    }
+
+    @PatchMapping("/{dealId}/allow/swap-pay")
+    public ResponseEntity<?> updateAllowTrueWithSwapPay(
+            @PathVariable Long dealId,
+            @AuthMember Member member
+    ) {
+
+        dealService.updateDealAllowTrueWithSwapPay(dealId, member);
+
+        return ResponseEntity.ok("결제 성공!");
+    }
+
+    @PatchMapping("/{dealId}/allow/swap-pay/false")
+    public ResponseEntity<?> updateAllowFalseWithSwapPay(
+            @PathVariable Long dealId,
+            @AuthMember Member member
+    ) {
+
+        dealService.updateDealAllowFalseWithSwapPay(dealId, member);
+
+        return ResponseEntity.ok("결제 취소 성공!");
+    }
+
 }

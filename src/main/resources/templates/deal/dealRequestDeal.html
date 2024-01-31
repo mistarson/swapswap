@@ -33,8 +33,8 @@
           </a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstMemberId()&&dealDetailResponseDto.firstExtraFee() != null}" th:text="${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstMemberId()&&dealDetailResponseDto.firstExtraFee() != null&&!dealDetailResponseDto.firstAllow()}" th:text="${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealfirstAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
@@ -56,8 +56,8 @@
             수정하기</a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondMemberId()&&dealDetailResponseDto.secondExtraFee() != null}" th:text="${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
-            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealAllow()"></button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondMemberId()&&dealDetailResponseDto.secondExtraFee() != null&&!dealDetailResponseDto.secondAllow()}" th:text="${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealSecondAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
@@ -69,10 +69,11 @@
   <script th:inline="javascript">
     const dealIdElement = document.querySelector('.deal-id');
     const dealId = +dealIdElement.value;
-    var swapMoneyUrl = '/deals/' + dealId + '/swapmoney'
-    var allowUrl = '/deals/' + dealId + '/allow'
+    var swapMoneyUrl = '/deals/' + dealId +'/swap-pay'
+    var useSwapPayUrl = '/deals/' + dealId + '/allow'+'/swap-pay'+'/true'
+    var notUseSwapPayUrl = '/deals/' + dealId + '/allow'+'/no-swap-pay'
+    var cancelAllowUrl = '/deals/'+ dealId + '/allow' + '/swap-pay' + '/false'
     var takeUrl = '/deals/' + dealId + '/take'
-
     var statusElements = document.querySelectorAll('.deal-detail-status');
 
     statusElements.forEach(function (element) {
@@ -88,20 +89,76 @@
         element.style.color = color;
       }
     });
-    var firstAllow = /*[[${dealDetailResponseDto.firstAllow}]]*/ false;
-    function dealAllow() {
-      $.ajax({
-        url: allowUrl,
-        type: 'PATCH',
-        success: function () {
-          location.reload();
-        },
-        error: function (xhr, status, error) {
-          // 에러 처리
-          alert("수락 할 수 없는 상태입니다.")
-          console.error("Update failed:", status, error);
-        }
-      })
+
+    function dealfirstAllow() {
+      var useSwapMoneyFirstMember = /*[[${dealDetailResponseDto.useSwapMoneyFirstMember()}]]*/ false;
+      var firstAllow = /*[[${dealDetailResponseDto.firstAllow}]]*/ false;
+
+      if (useSwapMoneyFirstMember&&firstAllow) {
+        $.ajax({
+          url: cancelAllowUrl,
+          type: 'PATCH',
+          success: function () {
+            location.reload()
+          },
+          error: function (xhr, status, error) {
+            alert("취소 할 수 없는 상태입니다.")
+            console.error("Update failed", status,error);
+          }
+        });
+      }
+      if (useSwapMoneyFirstMember&&!firstAllow) {
+        location.href = useSwapPayUrl
+      } else if(!useSwapMoneyFirstMember) {
+        $.ajax({
+          url: notUseSwapPayUrl,
+          type: 'PATCH',
+          success: function () {
+            location.reload();
+          },
+          error: function (xhr, status, error) {
+            // 에러 처리
+            alert("수락 할 수 없는 상태입니다.")
+            console.error("Update failed:", status, error);
+          }
+        });
+      }
+    }
+
+    function dealSecondAllow() {
+      var useSwapMoneySecondMember = /*[[${dealDetailResponseDto.useSwapMoneySecondMember()}]]*/ false;
+      var secondAllow = /*[[${dealDetailResponseDto.secondAllow}]]*/ false;
+      if (useSwapMoneySecondMember && secondAllow) {
+
+        $.ajax({
+          url: cancelAllowUrl,
+          type: 'PATCH',
+          success: function () {
+            location.reload()
+          },
+          error: function (xhr, status, error) {
+            alert("취소 할 수 없는 상태입니다.")
+            console.error("Update failed", status, error);
+          }
+        });
+      }
+
+      if (useSwapMoneySecondMember&&!secondAllow) {
+        location.href = useSwapPayUrl
+      } else if(!useSwapMoneySecondMember&&!secondAllow) {
+        $.ajax({
+          url: notUseSwapPayUrl,
+          type: 'PATCH',
+          success: function () {
+            location.reload();
+          },
+          error: function (xhr, status, error) {
+            // 에러 처리
+            alert("수락 할 수 없는 상태입니다.")
+            console.error("Update failed:", status, error);
+          }
+        });
+      }
     }
 
     function swapMoneyUse() {
