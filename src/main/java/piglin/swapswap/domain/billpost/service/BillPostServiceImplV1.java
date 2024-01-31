@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.bill.entity.Bill;
+import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
 import piglin.swapswap.domain.billpost.mapper.BillPostMapper;
 import piglin.swapswap.domain.billpost.repository.BillPostRepository;
 import piglin.swapswap.domain.deal.constant.DealStatus;
@@ -29,5 +30,19 @@ public class BillPostServiceImplV1 implements BillPostService{
 
             billPostRepository.save(BillPostMapper.createBillPost(bill, post));
         }
+    }
+
+    @Override
+    public List<BillPostResponseDto> getBillPostDtoList(Bill bill) {
+
+        List<Post> postList = billPostRepository.findPostFromBillPostByBill(bill);
+
+        return BillPostMapper.toBillPostResponseDto(postList);
+    }
+
+    @Override
+    public void deleteAllByBill(Bill bill) {
+
+        billPostRepository.deleteAllByBill(bill);
     }
 }

@@ -10,7 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,10 +41,20 @@ public class Deal extends BaseTime {
     private LocalDateTime completedDealTime;
 
     @JoinColumn(name = "first_member_bill_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Bill firstMemberbill;
 
     @JoinColumn(name = "second_member_bill_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Bill secondMemberbill;
+
+    public void updateDealStatus(DealStatus dealStatus) {
+
+        this.dealStatus = dealStatus;
+    }
+
+    public void completedTime() {
+
+        completedDealTime = LocalDateTime.now();
+    }
 }

@@ -9,7 +9,7 @@ public interface MemberService {
 
     void deleteMember(Member loginMember);
 
-    Long getMySwapMoney(Long memberId);
+    Long getMySwapMoney(Member member);
 
     Member getMemberWithWallet(Long memberId);
 

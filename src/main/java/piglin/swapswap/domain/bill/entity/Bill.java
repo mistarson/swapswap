@@ -1,5 +1,7 @@
 package piglin.swapswap.domain.bill.entity;
 
+import static piglin.swapswap.domain.bill.constant.BillConstant.SWAP_PAY_COMMISSION_PERCENT;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,4 +47,30 @@ public class Bill extends BaseTime {
     @ManyToOne(optional = false)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public void updateAllow() {
+
+        isAllowed = !isAllowed;
+    }
+
+    public void updateUsedSwapMoney() {
+
+        isSwapMoneyUsed = !isSwapMoneyUsed;
+    }
+
+    public void discountCommission(int commissionDiscountPercent) {
+
+        commission -= (long) (commission * commissionDiscountPercent * 0.01);
+    }
+
+    public void initialCommission() {
+
+        commission = (long)(extrafee * SWAP_PAY_COMMISSION_PERCENT);
+    }
+
+    public void updateExtraFee(Long extraFee) {
+
+        this.extrafee = extraFee;
+        this.commission = (long)(extrafee * SWAP_PAY_COMMISSION_PERCENT);
+    }
 }

@@ -6,7 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import piglin.swapswap.domain.bill.entity.Bill;
 import piglin.swapswap.domain.bill.service.BillService;
+import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
+import piglin.swapswap.domain.billcoupon.service.BillCouponService;
+import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
+import piglin.swapswap.domain.billpost.service.BillPostService;
+import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
@@ -14,6 +20,8 @@ import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.service.MemberService;
+import piglin.swapswap.global.exception.common.BusinessException;
+import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +29,8 @@ public class DealServiceImplV1 implements DealService {
 
     private final DealRepository dealRepository;
     private final BillService billService;
+    private final BillPostService billPostService;
+    private final BillCouponService billCouponService;
     private final MemberService memberService;
 
     @Override
@@ -31,10 +41,13 @@ public class DealServiceImplV1 implements DealService {
                 requestDto.firstPostIdList());
 
         Member secondMember = memberService.getMember(requestDto.secondMemberId());
+
         Bill secondMemberBill = billService.createBill(secondMember, requestDto.secondExtraFee(),
                 requestDto.secondPostIdList());
 
-        Deal deal = dealRepository.save(DealMapper.createDeal(firstMemberBill, secondMemberBill));
+        Deal deal = DealMapper.createDeal(firstMemberBill, secondMemberBill);
+
+        dealRepository.save(deal);
 
         return deal.getId();
     }
@@ -54,4 +67,67 @@ public class DealServiceImplV1 implements DealService {
 
         return DealMapper.toDealGetReceiveDtoList(myReceiveDealList);
     }
+
+    @Override
+    public DealDetailResponseDto getDeal(Long dealId, Member member) {
+
+        Deal deal = dealRepository.findDealByIdWithBillAndMember(dealId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
+
+        Bill requestMemberBill = deal.getFirstMemberbill();
+        Bill receiveMemberBill = deal.getSecondMemberbill();
+
+        List<BillPostResponseDto> requestBillPostDtoList = billPostService.getBillPostDtoList(
+                requestMemberBill);
+        List<BillPostResponseDto> receiveBillPostDtoList = billPostService.getBillPostDtoList(
+                receiveMemberBill);
+
+        List<BillCouponResponseDto> requestBillCouponDtoList = billCouponService.getBillCouponDtoList(
+                requestMemberBill);
+        List<BillCouponResponseDto> receiveBillCouponDtoList = billCouponService.getBillCouponDtoList(
+                receiveMemberBill);
+
+        return DealMapper.toDealDetailResponseDto(deal, requestBillPostDtoList,
+                receiveBillPostDtoList, requestBillCouponDtoList, receiveBillCouponDtoList);
+    }
+
+    @Override
+    @Transactional
+    public void bothAllowThenChangeDealing(Long billId) {
+
+        Deal deal = getDealByBillIdWithBill(billId);
+
+        if(deal.getFirstMemberbill().getIsAllowed() && deal.getSecondMemberbill().getIsAllowed()) {
+
+            deal.updateDealStatus(DealStatus.DEALING);
+        }
+    }
+
+    @Override
+    public Long getDealIdByBillId(Long billId) {
+
+        Deal deal = dealRepository.findDealByBillId(billId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
+
+        return deal.getId();
+    }
+
+    @Override
+    public Deal getDealByBillIdWithBill(Long billId) {
+
+        return dealRepository.findByBillIdWithBill(billId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
+    }
+
+    @Override
+    public Deal getDealByBillIdWithBillAndMember(Long billId) {
+
+        return dealRepository.findByBillIdWithBillAndMember(billId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
+        );
+    }
+
 }

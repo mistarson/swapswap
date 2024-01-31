@@ -6,14 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import piglin.swapswap.domain.bill.service.BillService;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
+import piglin.swapswap.domain.member.service.MemberService;
+import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -25,6 +30,9 @@ import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 public class DealController {
 
     private final DealService dealService;
+    private final BillService billService;
+    private final MemberCouponService memberCouponService;
+    private final MemberService memberService;
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,
@@ -60,11 +68,12 @@ public class DealController {
     }
 
     @GetMapping("/request/list")
-    public String  getRequestDealList(
+    public String getRequestDealList(
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyRequestDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealRequestDealListForm";
@@ -75,13 +84,14 @@ public class DealController {
             @AuthMember Member member,
             Model model) {
 
-        model.addAttribute("dealGetListResponseDto", dealService.getMyReceiveDealList(member.getId()));
+        model.addAttribute("dealGetListResponseDto",
+                dealService.getMyReceiveDealList(member.getId()));
         model.addAttribute("memberNickname", member.getNickname());
 
         return "deal/dealResponseDealListForm";
     }
 
-   /* @GetMapping("/{dealId}")
+    @GetMapping("/{dealId}")
     public String getDeal(
             @AuthMember Member member, @PathVariable Long dealId,
             Model model) {
@@ -89,11 +99,9 @@ public class DealController {
         DealDetailResponseDto responseDto = dealService.getDeal(dealId, member);
 
         model.addAttribute("dealDetailResponseDto", responseDto);
-        model.addAttribute("firstMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.firstPostIdList()));
-        model.addAttribute("secondMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
         model.addAttribute("memberId", member.getId());
 
-        return  "deal/dealRequestDeal";
+        return "deal/dealRequestDeal";
     }
-*/
+
 }

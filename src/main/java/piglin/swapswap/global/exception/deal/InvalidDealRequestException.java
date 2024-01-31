@@ -5,7 +5,5 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 
 public class InvalidDealRequestException extends BusinessException {
 
-    public InvalidDealRequestException(ErrorCode errorCode) {
-        super(errorCode);
-    }
+    public InvalidDealRequestException(ErrorCode errorCode) {super(errorCode);}
 }

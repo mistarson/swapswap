@@ -47,4 +47,14 @@ public class MemberCoupon extends BaseTime {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Column(nullable = false)
+    private Boolean isUsed;
+
+    public void useCoupon() {
+        isUsed = true;
+    }
+
+    public void rollbackCoupon() {
+        isUsed = false;
+    }
 }
