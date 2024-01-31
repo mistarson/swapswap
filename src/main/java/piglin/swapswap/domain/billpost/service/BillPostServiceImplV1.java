@@ -39,4 +39,11 @@ public class BillPostServiceImplV1 implements BillPostService{
 
         return BillPostMapper.toBillPostResponseDto(postList);
     }
+
+    @Override
+    public void deleteAllByBill(Bill bill) {
+
+        billPostRepository.deleteAllByBill(bill);
+    }
+
 }

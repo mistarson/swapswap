@@ -9,7 +9,6 @@ import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
-import piglin.swapswap.domain.member.entity.Member;
 
 public class DealMapper {
 
@@ -48,16 +47,18 @@ public class DealMapper {
             List<BillCouponResponseDto> requestBillCouponDtoList,
             List<BillCouponResponseDto> receiveBillCouponDtoList) {
 
-        Member requestMember = deal.getFirstMemberbill().getMember();
-        Member receiveMember = deal.getSecondMemberbill().getMember();
+        Bill firstMemberBill = deal.getFirstMemberbill();
+        Bill secondMemberBill = deal.getSecondMemberbill();
 
         return DealDetailResponseDto.builder()
                 .id(deal.getId())
                 .dealStatus(deal.getDealStatus())
-                .firstMemberId(requestMember.getId())
-                .secondMemberId(receiveMember.getId())
-                .firstMemberNickname(requestMember.getNickname())
-                .secondMemberNickname(receiveMember.getNickname())
+                .firstMemberBillId(firstMemberBill.getId())
+                .secondMemberBillId(secondMemberBill.getId())
+                .firstMemberId(firstMemberBill.getMember().getId())
+                .secondMemberId(secondMemberBill.getMember().getId())
+                .firstMemberNickname(firstMemberBill.getMember().getNickname())
+                .secondMemberNickname(secondMemberBill.getMember().getNickname())
                 .firstDealPostList(requestBillPostListDto)
                 .secondDealPostList(receiveBillPostListDto)
                 .firstExtraFee(deal.getFirstMemberbill().getExtrafee())
@@ -74,5 +75,4 @@ public class DealMapper {
                 .secondCouponList(receiveBillCouponDtoList)
                 .build();
     }
-
 }

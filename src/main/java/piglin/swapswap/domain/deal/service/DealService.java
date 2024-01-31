@@ -5,8 +5,8 @@ import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
+import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 
 public interface DealService {
 
@@ -18,9 +18,11 @@ public interface DealService {
 
     DealDetailResponseDto getDeal(Long dealId, Member member);
 
-    void updateDealAllowWithoutSwapPay(Long dealId, Member member);
+    void bothAllowThenChangeDealing(Long billId);
 
-    void updateDealAllowTrueWithSwapPay(Long dealId, Member member);
+    Long getDealIdByBillId(Long billId);
 
-    void updateDealAllowFalseWithSwapPay(Long dealId, Member member);
+    Deal getDealByBillId(Long billId);
+
+    Deal getDealByBillIdWithBillAndMember(Long billId);
 }

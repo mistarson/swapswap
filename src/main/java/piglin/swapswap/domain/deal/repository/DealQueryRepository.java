@@ -2,7 +2,6 @@ package piglin.swapswap.domain.deal.repository;
 
 import java.util.List;
 import java.util.Optional;
-import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 public interface DealQueryRepository {
@@ -13,5 +12,11 @@ public interface DealQueryRepository {
 
     Optional<Deal> findDealByIdWithBillAndMember(Long dealId);
 
-    Optional<Deal> findDealByIdWithBill(Long billId);
+    Optional<Deal> findDealByIdWithBill(Long dealId);
+
+    Optional<Deal> findDealByBillId(Long billId);
+
+    Deal findByBillIdWithBillAndMember(Long billId);
+
+    Deal findByBillIdWithBill(Long billId);
 }

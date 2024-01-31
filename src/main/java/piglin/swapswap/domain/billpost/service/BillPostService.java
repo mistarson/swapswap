@@ -10,4 +10,6 @@ public interface BillPostService {
 
     List<BillPostResponseDto> getBillPostDtoList(Bill bill);
 
+    void deleteAllByBill(Bill bill);
+
 }

@@ -9,12 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import piglin.swapswap.domain.bill.constant.BillConstant;
 import piglin.swapswap.domain.common.BaseTime;
 import piglin.swapswap.domain.member.entity.Member;
 
@@ -66,5 +66,11 @@ public class Bill extends BaseTime {
     public void initialCommission() {
 
         commission = (long)(extrafee * SWAP_PAY_COMMISSION_PERCENT);
+    }
+
+    public void updateExtraFee(Long extraFee) {
+
+        this.extrafee = extraFee;
+        this.commission = (long)(extrafee * SWAP_PAY_COMMISSION_PERCENT);
     }
 }

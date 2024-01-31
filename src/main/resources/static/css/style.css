@@ -2147,3 +2147,54 @@ input[type="number"] {
   background-color: #45baff;
 }
 
+.deal-update-post-container {
+  display: flex;
+}
+
+.post-item {
+  position: relative;
+  width: calc(33.333% - 40px);
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.deal-update-post-container img {
+  height: auto;
+}
+
+.post-item-title {
+  font-size: 20px;
+  text-align: center;
+}
+
+.post-select-button {
+  font-size: 16px; /* 글꼴 크기 */
+  color: white; /* 글꼴 색상 */
+  background-color: #4CAF50; /* 배경색 */
+  border: none; /* 테두리 없음 */
+  padding: 10px 20px; /* 상하, 좌우 패딩 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  text-decoration: none; /* 텍스트 밑줄 없음 */
+  display: inline-block; /* 인라인 블록 요소로 표시 */
+  margin: 4px 2px; /* 마진 */
+  cursor: pointer; /* 커서 스타일 */
+  border-radius: 5px; /* 테두리 둥글게 */
+  transition: background-color 0.3s, transform 0.3s; /* 배경색과 변형에 대한 전환 효과 */
+}
+
+.post-select-button:hover, .post-select-button.active:hover {
+  background-color: #397afc; /* 호버 시 또는 active + 호버 시 배경색 */
+  color: #FFFFFF; /* 호버 시 또는 active + 호버 시 글꼴 색상 */
+}
+
+.post-select-button.active {
+  background-color: #397afc; /* 호버 시 배경색 */
+  color: #FFF; /* active 상태일 때의 글꼴 색상 */
+  border: 1px solid #31708F; /* active 상태일 때의 테두리 */
+  transform: scale(1.1); /* active 상태일 때 약간 확대 */
+}

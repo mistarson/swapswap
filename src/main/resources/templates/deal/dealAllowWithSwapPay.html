@@ -6,7 +6,7 @@
 <body>
 <div layout:fragment="content">
   <input type="hidden" th:value="${dealId}" class="deal-id">
-  <input type="hidden" th:value="${myBill.id()}" class="bill-id">
+  <input type="hidden" th:value="${billId}" class="bill-id">
   <div class="liquidate-content">
 
   <div class="swap-pay-title-liquidate"> <h1>현재 사용자님의 결제 목록</h1> </div>
@@ -32,12 +32,14 @@
 </body>
 <script layout:fragment="script">
 
-  const dealIdElement = document.querySelector('.deal-id');
-  const dealId = +dealIdElement.value;
+  const billId = document.querySelector('.bill-id').value;
+  const dealId = document.querySelector('.deal-id').value;
+
   let couponId = null;
-  var liquidateUrl = '/deals/' + dealId +'/allow'+'/swap-pay'
+  var liquidateUrl = '/bills/' + billId +'/allow'+'/swap-pay'
 
   function liquidate() {
+    console.log(liquidateUrl);
 
     $.ajax({
       url: liquidateUrl,
@@ -48,7 +50,7 @@
       },
       error: function (xhr, status, error) {
         // 에러 처리
-        alert("결제할수 없는 상태입니다.")
+        alert("결제할 수 없는 상태입니다.")
         console.error("Update failed:", status, error);
       }
     })

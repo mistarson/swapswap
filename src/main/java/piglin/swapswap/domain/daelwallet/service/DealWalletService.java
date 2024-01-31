@@ -6,11 +6,11 @@ import piglin.swapswap.domain.member.entity.Member;
 
 public interface DealWalletService {
 
-     void createDealWallet(Deal deal, Member member, Long swapMoney);
+     void createDealWallet(Deal deal, Member member, Long totalFee);
 
-     void withdrawMemberSwapMoneyAtComplete(Deal deal);
+//     void withdrawMemberSwapMoneyAtComplete(Long billId);
 
-     void withdrawMemberSwapMoneyAtDealUpdate(Deal deal);
+     void rollbackTemporarySwapMoney(Deal deal);
 
-     void removeDealWallet(Long dealId, Long firstMemberId, Long secondMemberId, Long loginMemberId);
+     void removeDealWallet(Deal deal, Long loginMemberId);
 }

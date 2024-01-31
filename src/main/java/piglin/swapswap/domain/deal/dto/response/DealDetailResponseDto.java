@@ -13,6 +13,10 @@ public record DealDetailResponseDto(
 
     DealStatus dealStatus,
 
+    Long firstMemberBillId,
+
+    Long secondMemberBillId,
+
     Long firstMemberId,
 
     Long secondMemberId,

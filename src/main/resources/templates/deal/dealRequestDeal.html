@@ -16,6 +16,7 @@
       <div class="deal-detail-request-list">
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.firstMemberNickname}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <input type="hidden" th:value="${dealDetailResponseDto.firstMemberBillId()}" class="first-member-bill-id">
           <div th:text="${dealDetailResponseDto.firstExtraFee() != null ? '추가금: ' + dealDetailResponseDto.firstExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
           <div class="deal-detail-allow" th:text="${dealDetailResponseDto.firstAllow} ? '수락 완료' : '수락 대기'"></div>
@@ -28,18 +29,19 @@
           </div>
             <img th:each="firstMemberPost : ${dealDetailResponseDto.firstDealPostList}" th:src="${firstMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-first-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
-               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.firstMemberId})}">
+               th:href="@{/deals/{billId}/member/{memberId}(billId=${dealDetailResponseDto.firstMemberBillId()}, memberId=${dealDetailResponseDto.firstMemberId})}">
             수정하기
           </a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstMemberId()&&dealDetailResponseDto.firstExtraFee() != null&&!dealDetailResponseDto.firstAllow()}" th:text="${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.firstMemberId()&&dealDetailResponseDto.firstExtraFee() != null&&!dealDetailResponseDto.firstAllow()}" th:text="${dealDetailResponseDto.useSwapMoneyFirstMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="firstMemberSwapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.firstAllow} ? '수락취소하기' : '수락하기'"  onclick="dealfirstAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.firstMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
         </div>
         <div class="deal-detail-list-container">
           <div th:text="${dealDetailResponseDto.secondMemberNickname()}+'님의 스왑 물품'" class="deal-detail-post"></div>
+          <input type="hidden" th:value="${dealDetailResponseDto.secondMemberBillId()}" class="second-member-bill-id">
           <div th:text="${dealDetailResponseDto.secondExtraFee() != null ? '추가금: ' + dealDetailResponseDto.secondExtraFee() : '추가금: 0'}" class="deal-detail-ExtraFee"></div>
           <div class="deal-allow-status">수락 상태:
           <div class="deal-detail-allow" th:text= "${dealDetailResponseDto.secondAllow} ? '수락 완료' : '수락 대기'"></div>
@@ -52,11 +54,11 @@
           </div>
               <img th:each="secondMemberPost : ${dealDetailResponseDto.secondDealPostList}" th:src="${secondMemberPost.imageUrl}" alt="Post Image" class="deal-detail-post-image">
           <div class="deal-detail-second-user-edit-button" th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED}"> <a
-               th:href="@{/deals/{id}/member/{userId}(id=${dealDetailResponseDto.id}, userId=${dealDetailResponseDto.secondMemberId})}">
+               th:href="@{/bills/{billId}/member/{memberId}(billId=${dealDetailResponseDto.secondMemberBillId()}, memberId=${dealDetailResponseDto.secondMemberId})}">
             수정하기</a>
           </div>
           <div class="deal-acceptance-buttons">
-            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondMemberId()&&dealDetailResponseDto.secondExtraFee() != null&&!dealDetailResponseDto.secondAllow()}" th:text="${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="swapMoneyUse()"></button>
+            <button class="deal-acceptance-button" th:if="${memberId==dealDetailResponseDto.secondMemberId()&&dealDetailResponseDto.secondExtraFee() != null&&!dealDetailResponseDto.secondAllow()}" th:text="${dealDetailResponseDto.useSwapMoneySecondMember()} ? '스왑페이 사용 취소' : '스왑페이 사용'"  onclick="secondMemberSwapMoneyUse()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().REQUESTED&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" th:text="${dealDetailResponseDto.secondAllow()} ? '수락취소하기' : '수락하기'"  onclick="dealSecondAllow()"></button>
             <button th:if="${dealDetailResponseDto.dealStatus()==dealDetailResponseDto.dealStatus().DEALING&&memberId==dealDetailResponseDto.secondMemberId()}" class="deal-acceptance-button" onclick="dealTake()">거래 인수하기</button>
           </div>
@@ -69,10 +71,19 @@
   <script th:inline="javascript">
     const dealIdElement = document.querySelector('.deal-id');
     const dealId = +dealIdElement.value;
-    var swapMoneyUrl = '/deals/' + dealId +'/swap-pay'
-    var useSwapPayUrl = '/deals/' + dealId + '/allow'+'/swap-pay'+'/true'
-    var notUseSwapPayUrl = '/deals/' + dealId + '/allow'+'/no-swap-pay'
-    var cancelAllowUrl = '/deals/'+ dealId + '/allow' + '/swap-pay' + '/false'
+    const firstMemberBillIdElement = document.querySelector('.first-member-bill-id');
+    const firstMemberBillId = +firstMemberBillIdElement.value;
+    const secondMemberBillIdElement = document.querySelector('.second-member-bill-id');
+    const secondMemberBillId = +secondMemberBillIdElement.value;
+
+    var firstMemberSwapMoneyUrl = '/bills/' + firstMemberBillId +'/swap-pay'
+    var secondMemberSwapMoneyUrl = '/bills/' + secondMemberBillId +'/swap-pay'
+    var firstMemberUseSwapPayUrl = '/bills/' + firstMemberBillId + '/allow'+'/swap-pay'+'/true'
+    var secondMemberUseSwapPayUrl = '/bills/' + secondMemberBillId + '/allow'+'/swap-pay'+'/true'
+    var firstMemberNotUseSwapPayUrl = '/bills/' + firstMemberBillId + '/allow'+'/no-swap-pay'
+    var secondMemberNotUseSwapPayUrl = '/bills/' + secondMemberBillId + '/allow'+'/no-swap-pay'
+    var firstMemberCancelAllowUrl = '/bills/'+ firstMemberBillId + '/allow' + '/swap-pay' + '/false'
+    var secondMemberCancelAllowUrl = '/bills/'+ secondMemberBillId + '/allow' + '/swap-pay' + '/false'
     var takeUrl = '/deals/' + dealId + '/take'
     var statusElements = document.querySelectorAll('.deal-detail-status');
 
@@ -96,7 +107,7 @@
 
       if (useSwapMoneyFirstMember&&firstAllow) {
         $.ajax({
-          url: cancelAllowUrl,
+          url: firstMemberCancelAllowUrl,
           type: 'PATCH',
           success: function () {
             location.reload()
@@ -108,10 +119,10 @@
         });
       }
       if (useSwapMoneyFirstMember&&!firstAllow) {
-        location.href = useSwapPayUrl
+        location.href = firstMemberUseSwapPayUrl
       } else if(!useSwapMoneyFirstMember) {
         $.ajax({
-          url: notUseSwapPayUrl,
+          url: firstMemberNotUseSwapPayUrl,
           type: 'PATCH',
           success: function () {
             location.reload();
@@ -131,7 +142,7 @@
       if (useSwapMoneySecondMember && secondAllow) {
 
         $.ajax({
-          url: cancelAllowUrl,
+          url: secondMemberCancelAllowUrl,
           type: 'PATCH',
           success: function () {
             location.reload()
@@ -144,10 +155,10 @@
       }
 
       if (useSwapMoneySecondMember&&!secondAllow) {
-        location.href = useSwapPayUrl
+        location.href = secondMemberUseSwapPayUrl
       } else if(!useSwapMoneySecondMember&&!secondAllow) {
         $.ajax({
-          url: notUseSwapPayUrl,
+          url: secondMemberNotUseSwapPayUrl,
           type: 'PATCH',
           success: function () {
             location.reload();
@@ -161,9 +172,24 @@
       }
     }
 
-    function swapMoneyUse() {
+    function firstMemberSwapMoneyUse() {
       $.ajax({
-        url: swapMoneyUrl,
+        url: firstMemberSwapMoneyUrl,
+        type: 'PATCH',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, status, error) {
+          // 에러 처리
+          alert("스왑페이 사용여부를 변경 할 수 없는 상태입니다.")
+          console.error("Update failed:", status, error);
+        }
+      })
+    }
+
+    function secondMemberSwapMoneyUse() {
+      $.ajax({
+        url: secondMemberSwapMoneyUrl,
         type: 'PATCH',
         success: function () {
           location.reload();

@@ -5,5 +5,5 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 
 public class BillNotFoundException extends BusinessException {
 
-    public BillNotFoundException(ErrorCode errorCode) {super(errorCode);}
+    public BillNotFoundException() {super(ErrorCode.NOT_FOUND_BILL_EXCEPTION);}
 }

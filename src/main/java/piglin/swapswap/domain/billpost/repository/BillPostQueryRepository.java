@@ -8,4 +8,6 @@ public interface BillPostQueryRepository {
 
     List<Post> findPostFromBillPostByBill(Bill bill);
 
+    void deleteAllByBill(Bill bill);
+
 }

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -103,65 +102,6 @@ public class DealController {
         model.addAttribute("memberId", member.getId());
 
         return "deal/dealRequestDeal";
-    }
-
-    @PatchMapping("/{dealId}/swap-pay")
-    public ResponseEntity<?> updateUseSwapPay(
-            @PathVariable Long dealId,
-            @AuthMember Member member
-    ) {
-
-        billService.updateUsedSwapPay(dealId, member);
-
-        return ResponseEntity.ok("스왑페이 사용 등록 성공");
-    }
-
-    @PatchMapping("/{dealId}/allow/no-swap-pay")
-    public ResponseEntity<?> updateAllowWithoutSwapPay(
-            @PathVariable Long dealId,
-            @AuthMember Member member
-    ) {
-
-        dealService.updateDealAllowWithoutSwapPay(dealId, member);
-
-        return ResponseEntity.ok("거래 수락 성공");
-    }
-
-    @GetMapping("/{dealId}/allow/swap-pay/true")
-    public String showUpdateAllowWithSwapPayForm(
-            @PathVariable Long dealId,
-            @AuthMember Member member,
-            Model model
-    ) {
-
-        billService.initialCommission(dealId, member);
-        model.addAttribute("myBill", billService.getMyBillDto(dealId, member));
-        model.addAttribute("mySwapMoney", memberService.getMySwapMoney(member));
-        model.addAttribute("dealId", dealId);
-
-        return "deal/dealAllowWithSwapPay";
-    }
-
-    @PatchMapping("/{dealId}/allow/swap-pay")
-    public ResponseEntity<?> updateAllowTrueWithSwapPay(
-            @PathVariable Long dealId,
-            @AuthMember Member member
-    ) {
-
-        dealService.updateDealAllowTrueWithSwapPay(dealId, member);
-
-        return ResponseEntity.ok("결제 성공!");
-    }
-
-    @PatchMapping("/{dealId}/allow/swap-pay/false")
-    public ResponseEntity<?> updateAllowFalseWithSwapPay(
-            @PathVariable Long dealId,
-            @AuthMember Member member
-    ) {
-
-        dealService.updateDealAllowFalseWithSwapPay(dealId, member);
-
-        return ResponseEntity.ok("결제 취소 성공!");
     }
 
 }

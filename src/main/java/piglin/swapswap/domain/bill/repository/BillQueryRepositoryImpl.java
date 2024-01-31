@@ -2,13 +2,17 @@ package piglin.swapswap.domain.bill.repository;
 
 import static piglin.swapswap.domain.bill.entity.QBill.bill;
 import static piglin.swapswap.domain.deal.entity.QDeal.deal;
+import static piglin.swapswap.domain.member.entity.QMember.*;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 import piglin.swapswap.domain.bill.entity.Bill;
+import piglin.swapswap.domain.bill.entity.QBill;
+import piglin.swapswap.domain.member.entity.QMember;
 
 
 public class BillQueryRepositoryImpl implements  BillQueryRepository {
@@ -21,27 +25,18 @@ public class BillQueryRepositoryImpl implements  BillQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Optional<Bill> findBillByDealIdAndMemberId(Long dealId, Long memberId) {
-
-        BooleanExpression firstMemberCondition = bill.id.eq(
-                JPAExpressions
-                        .select(deal.firstMemberbill.id)
-                        .from(deal)
-                        .where(deal.id.eq(dealId).and(deal.firstMemberbill.member.id.eq(memberId)))
-        );
-
-        BooleanExpression secondMemberCondition = bill.id.eq(
-                JPAExpressions
-                        .select(deal.secondMemberbill.id)
-                        .from(deal)
-                        .where(deal.id.eq(dealId).and(deal.secondMemberbill.member.id.eq(memberId)))
-        );
-
-        Bill result = queryFactory
+    @Override
+    public Optional<Bill> findByIdWithMember(Long billId) {
+        return Optional.ofNullable(queryFactory
                 .selectFrom(bill)
-                .where(firstMemberCondition.or(secondMemberCondition))
-                .fetchOne();
+                .join(bill.member, member)
+                .where(billIdEq(billId))
+                .fetchOne());
 
-        return Optional.ofNullable(result);
+    }
+
+    private BooleanExpression billIdEq(Long billId) {
+
+        return bill.id.eq(billId);
     }
 }
