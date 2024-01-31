@@ -9,5 +9,4 @@ public interface BillCouponRepository extends JpaRepository<BillCoupon, Long>, B
     void deleteAllByBillId(Long billId);
 
     boolean existsByBillId(Long billId);
-
 }

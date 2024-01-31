@@ -21,5 +21,4 @@ public enum HistoryType {
         public static String TEMPORARY_WITHDRAW = "임시 출금";
         public static String CANCEL_WITHDRAW = "출금 취소";
     }
-    
 }

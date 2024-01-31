@@ -32,5 +32,4 @@ public class MemberCouponMapper {
                                       .expiredTime(memberCoupon.getExpiredTime())
                                       .build()).toList();
     }
-
 }

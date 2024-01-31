@@ -12,5 +12,4 @@ public interface BillCouponQueryRepository {
     List<BillCoupon> findByBillWithMemberCoupon(Bill bill);
 
     void deleteAllByBill(List<BillCoupon> billCouponList);
-
 }

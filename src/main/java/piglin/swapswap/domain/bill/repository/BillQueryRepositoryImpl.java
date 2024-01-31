@@ -32,7 +32,6 @@ public class BillQueryRepositoryImpl implements  BillQueryRepository {
                 .join(bill.member, member)
                 .where(billIdEq(billId))
                 .fetchOne());
-
     }
 
     private BooleanExpression billIdEq(Long billId) {

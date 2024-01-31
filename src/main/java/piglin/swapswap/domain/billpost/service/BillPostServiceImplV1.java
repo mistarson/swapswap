@@ -45,5 +45,4 @@ public class BillPostServiceImplV1 implements BillPostService{
 
         billPostRepository.deleteAllByBill(bill);
     }
-
 }

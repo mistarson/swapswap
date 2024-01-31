@@ -6,5 +6,4 @@ import piglin.swapswap.domain.bill.entity.Bill;
 public interface BillQueryRepository {
 
     Optional<Bill> findByIdWithMember(Long billId);
-
 }

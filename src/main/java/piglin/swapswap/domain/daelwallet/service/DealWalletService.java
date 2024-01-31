@@ -8,7 +8,7 @@ public interface DealWalletService {
 
      void createDealWallet(Deal deal, Member member, Long totalFee);
 
-//     void withdrawMemberSwapMoneyAtComplete(Long billId);
+//   void withdrawMemberSwapMoneyAtComplete(Long billId);
 
      void rollbackTemporarySwapMoney(Deal deal);
 

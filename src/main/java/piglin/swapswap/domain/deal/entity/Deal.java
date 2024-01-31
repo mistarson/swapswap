@@ -41,7 +41,7 @@ public class Deal extends BaseTime {
     private LocalDateTime completedDealTime;
 
     @JoinColumn(name = "first_member_bill_id")
-    @OneToOne()
+    @OneToOne(fetch = FetchType.LAZY)
     private Bill firstMemberbill;
 
     @JoinColumn(name = "second_member_bill_id")

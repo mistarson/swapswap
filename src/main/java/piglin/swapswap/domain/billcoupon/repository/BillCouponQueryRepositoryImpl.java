@@ -59,5 +59,4 @@ public class BillCouponQueryRepositoryImpl implements BillCouponQueryRepository 
 
         return billCoupon.bill.eq(bill);
     }
-
 }

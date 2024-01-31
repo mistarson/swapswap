@@ -10,5 +10,4 @@ public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Long
     List<MemberCoupon> findAllByMemberIdAndIsUsedIsFalse(Long memberId);
 
     Optional<MemberCoupon> findByIdAndIsUsedFalse(Long couponId);
-
 }
