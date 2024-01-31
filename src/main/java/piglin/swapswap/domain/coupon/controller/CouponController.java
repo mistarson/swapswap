@@ -35,7 +35,7 @@ public class CouponController {
     @PostMapping("/event")
     public ResponseEntity<?> issueEventCoupon(@AuthMember Member member) {
 
-        couponService.issueEventCouponByPessimisticLock(EVENT_COUPON_ID, member);
+        couponService.issueEventCoupon(EVENT_COUPON_ID, member);
 
         return ResponseEntity.ok("쿠폰 발급 성공");
     }
