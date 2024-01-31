@@ -30,7 +30,6 @@ import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
-import piglin.swapswap.global.exception.post.NoMorePostListException;
 import piglin.swapswap.global.exception.post.PostNotFoundException;
 import piglin.swapswap.global.s3.S3ImageService;
 

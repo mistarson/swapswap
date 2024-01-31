@@ -5,21 +5,15 @@ import static piglin.swapswap.domain.membercoupon.entity.QMemberCoupon.memberCou
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import piglin.swapswap.domain.member.entity.Member;
-
-public class MemberCouponQueryRepositoryImpl implements MemberCouponQueryRepository{
-    private final EntityManager em;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import piglin.swapswap.domain.member.entity.QMember;
 import piglin.swapswap.domain.membercoupon.entity.MemberCoupon;
 import piglin.swapswap.domain.membercoupon.entity.QMemberCoupon;
 
-public class MemberCouponQueryRepositoryImpl implements MemberCouponQueryRepository {
+public class MemberCouponQueryRepositoryImpl implements MemberCouponQueryRepository{
 
     private final EntityManager em;
-
     private final JPAQueryFactory queryFactory;
 
     public MemberCouponQueryRepositoryImpl(EntityManager em) {

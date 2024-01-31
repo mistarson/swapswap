@@ -30,9 +30,6 @@ import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 public class DealController {
 
     private final DealService dealService;
-    private final BillService billService;
-    private final MemberCouponService memberCouponService;
-    private final MemberService memberService;
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,

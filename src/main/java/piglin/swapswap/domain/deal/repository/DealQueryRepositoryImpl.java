@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import piglin.swapswap.domain.bill.entity.QBill;
 import piglin.swapswap.domain.deal.entity.Deal;
-import piglin.swapswap.domain.deal.entity.QDeal;
 import piglin.swapswap.domain.member.entity.QMember;
 
 public class DealQueryRepositoryImpl implements DealQueryRepository {

@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.membercoupon.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +46,6 @@ public class MemberCouponServiceImplV1 implements MemberCouponService{
     public void reRegisterCouponByMember(Member loginMember) {
         memberCouponRepository.reRegisterCouponByMember(loginMember);
     }
-
 
     @Override
     public MemberCoupon getMemberCouponById(Long memberCouponId) {
