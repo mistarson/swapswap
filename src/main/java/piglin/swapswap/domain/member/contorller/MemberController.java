@@ -130,8 +130,7 @@ public class MemberController {
             Model model
     ) {
 
-        Long mySwapMoney = memberService.getMySwapMoney(member.getId());
-
+        Long mySwapMoney = memberService.getMySwapMoney(member);
         model.addAttribute("mySwapMoney", mySwapMoney);
 
         return "member/mySwapMoney";

@@ -50,4 +50,14 @@ public class MemberCoupon extends BaseTime {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @Column(nullable = false)
+    private Boolean isUsed;
+
+    public void useCoupon() {
+        isUsed = true;
+    }
+
+    public void rollbackCoupon() {
+        isUsed = false;
+    }
 }

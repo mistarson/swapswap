@@ -1,20 +1,22 @@
 package piglin.swapswap.domain.deal.repository;
 
 import static piglin.swapswap.domain.deal.entity.QDeal.deal;
-import static piglin.swapswap.domain.member.entity.QMember.member;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
+
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
-import piglin.swapswap.domain.deal.dto.response.DealGetResponseDto;
+import java.util.Optional;
+import piglin.swapswap.domain.bill.entity.QBill;
+import piglin.swapswap.domain.deal.entity.Deal;
+import piglin.swapswap.domain.deal.entity.QDeal;
+import piglin.swapswap.domain.member.entity.QMember;
 
 public class DealQueryRepositoryImpl implements DealQueryRepository {
 
     private final EntityManager em;
-    private final JPAQueryFactory queryFactory;
 
+    private final JPAQueryFactory queryFactory;
 
     public DealQueryRepositoryImpl(EntityManager em) {
         this.em = em;
@@ -22,61 +24,116 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     }
 
     @Override
-    public List<DealGetResponseDto> findAllMyDealRequest(Long memberId) {
+    public List<Deal> findAllMyRequestDeal(Long memberId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+        QMember firstMember = new QMember("firstMember");
+        QMember secondMember = new QMember("secondMember");
 
         return queryFactory
-                .select(Projections.constructor(DealGetResponseDto.class,
-                        deal.id,
-                        member.nickname,
-                        deal.dealStatus))
-                .from(deal)
-                .where(deal.firstUserId.eq(memberId))
-                .join(member)
-                .on(deal.secondUserId.eq(member.id))
+                .selectFrom(deal)
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(firstMemberBill.member, firstMember).fetchJoin()
+                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .where(firstMember.id.eq(memberId))
                 .fetch();
     }
 
     @Override
-    public List<DealGetResponseDto> findAllMyDealResponse(Long memberId) {
+    public List<Deal> findAllMyReceiveDeal(Long memberId) {
 
-        return queryFactory
-                .select(Projections.constructor(DealGetResponseDto.class,
-                        deal.id,
-                        member.nickname,
-                        deal.dealStatus))
-                .from(deal)
-                .where(deal.secondUserId.eq(memberId))
-                .join(member)
-                .on(deal.firstUserId.eq(member.id))
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+        QMember firstMember = new QMember("firstMember");
+        QMember secondMember = new QMember("secondMember");
+
+        return  queryFactory
+                .selectFrom(deal)
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(firstMemberBill.member, firstMember).fetchJoin()
+                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .where(secondMember.id.eq(memberId))
                 .fetch();
     }
 
     @Override
-    public DealDetailResponseDto findDealByIdToDetailResponseDto(Long dealId) {
-        return queryFactory
-                .select(Projections.constructor(DealDetailResponseDto.class,
-                                deal.id,
-                                deal.dealStatus,
-                                deal.firstUserId,
-                                deal.secondUserId,
-                                JPAExpressions.select(member.nickname)
-                                        .from(member)
-                                        .where(member.id.eq(deal.firstUserId)),
-                                JPAExpressions.select(member.nickname)
-                                        .from(member)
-                                        .where(member.id.eq(deal.secondUserId)),
-                                deal.firstPostIdList,
-                                deal.secondPostIdList,
-                                deal.firstExtraFee,
-                                deal.secondExtraFee,
-                                deal.firstAllow,
-                                deal.secondAllow,
-                                deal.firstTake,
-                                deal.secondTake,
-                                deal.isFirstSwapMoneyUsed,
-                                deal.isSecondSwapMoneyUsed))
-                .from(deal)
+    public Optional<Deal> findDealByIdWithBillAndMember(Long dealId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+        QMember firstMember = new QMember("firstMember");
+        QMember secondMember = new QMember("secondMember");
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(deal)
                 .where(deal.id.eq(dealId))
-                .fetchOne();
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(firstMemberBill.member, firstMember).fetchJoin()
+                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Deal> findDealByBillId(Long billId) {
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(deal)
+                .where(billIdEq(billId))
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Deal> findDealByIdWithBill(Long dealId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(deal)
+                .where(deal.id.eq(dealId))
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<Deal> findByBillIdWithBillAndMember(Long billId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+        QMember firstMember = new QMember("firstMember");
+        QMember secondMember = new QMember("secondMember");
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(deal)
+                .where(billIdEq(billId))
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(firstMemberBill.member, firstMember).fetchJoin()
+                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .fetchFirst());
+    }
+
+    @Override
+    public Optional<Deal> findByBillIdWithBill(Long billId) {
+
+        QBill firstMemberBill = new QBill("firstMemberBill");
+        QBill secondMemberBill = new QBill("secondMemberBill");
+
+        return Optional.ofNullable(queryFactory.select(deal)
+                .from(deal)
+                .where(billIdEq(billId))
+                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
+                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .fetchFirst());
+    }
+
+    private BooleanExpression billIdEq(Long billId) {
+
+        return deal.firstMemberbill.id.eq(billId).or(deal.secondMemberbill.id.eq(billId));
     }
 }

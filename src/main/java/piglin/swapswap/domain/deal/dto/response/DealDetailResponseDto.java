@@ -1,40 +1,56 @@
 package piglin.swapswap.domain.deal.dto.response;
 
-import java.util.Map;
+import java.util.List;
+import lombok.Builder;
+import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
+import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 
+@Builder
 public record DealDetailResponseDto(
-         Long id,
 
-         DealStatus dealStatus,
+    Long id,
 
-         Long firstUserId,
+    DealStatus dealStatus,
 
-         Long secondUserId,
+    Long firstMemberBillId,
 
-         String firstUserNickname,
+    Long secondMemberBillId,
 
-         String secondUserNickname,
+    Long firstMemberId,
 
-         Map<Integer, Long> firstPostIdList,
+    Long secondMemberId,
 
-         Map<Integer, Long> secondPostIdList,
+    String firstMemberNickname,
 
-         Long firstExtraFee,
+    String secondMemberNickname,
 
-         Long secondExtraFee,
+    List<BillPostResponseDto> firstDealPostList,
 
-         Boolean firstAllow,
+    List<BillPostResponseDto> secondDealPostList,
 
-         Boolean secondAllow,
+    Long firstExtraFee,
 
-         Boolean firstTake,
+    Long secondExtraFee,
 
-         Boolean secondTake,
+    Boolean firstAllow,
 
-         Boolean isFirstSwapMoneyUsed,
+    Boolean secondAllow,
 
-         Boolean isSecondSwapMoneyUsed
-) {
+    Boolean firstTake,
 
+    Boolean secondTake,
+
+    Boolean useSwapMoneyFirstMember,
+
+    Boolean useSwapMoneySecondMember,
+
+    Long firstMemberCommission,
+
+    Long secondMemberCommission,
+
+    List<BillCouponResponseDto> firstCouponList,
+
+    List<BillCouponResponseDto> secondCouponList
+    ) {
 }

@@ -29,7 +29,7 @@ public interface PostService {
      * @param member 익명사용자와 로그인 사용자의 화면을 나누기 위한 member 매개변수 입니다.
      * @return PostGetResponseDto 를 반환하여 Model 로 화면에 그려줍니다.
      */
-    PostGetResponseDto getPost(Long postId, Member member);
+    PostGetResponseDto getPostWithFavorite(Long postId, Member member);
 
     /**
      * 게시글 목록 조회 메소드입니다.
@@ -66,6 +66,9 @@ public interface PostService {
     PostListResponseDto searchPost(String title, String category, String city, Member member,
             LocalDateTime cursorTime);
 
+
+
+    Post getPost(Long postId);
 
     void upPost(Long postId, Member member);
 

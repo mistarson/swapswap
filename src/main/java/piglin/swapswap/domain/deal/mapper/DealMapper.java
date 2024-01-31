@@ -1,72 +1,78 @@
 package piglin.swapswap.domain.deal.mapper;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import piglin.swapswap.domain.bill.entity.Bill;
+import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
+import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
 import piglin.swapswap.domain.deal.constant.DealStatus;
-import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
-import piglin.swapswap.domain.deal.dto.request.DealUpdateRequestDto;
-import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
+import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
+import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
+import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 public class DealMapper {
 
-    public static Deal createDeal(DealCreateRequestDto requestDto, Long firstUserId) {
-
-        Map<Integer, Long> firstPostIdListMap = postIdListToMap(requestDto.firstPostIdList());
-        Map<Integer, Long> secondPostIdListMap = postIdListToMap(requestDto.secondPostIdList());
+    public static Deal createDeal(Bill firstMemberbill, Bill secondMemberbill) {
 
         return Deal.builder()
                 .dealStatus(DealStatus.REQUESTED)
-                .firstUserId(firstUserId)
-                .secondUserId(requestDto.secondMemberId())
-                .firstAllow(false)
-                .secondAllow(false)
-                .firstTake(false)
-                .secondTake(false)
-                .isFirstSwapMoneyUsed(false)
-                .isSecondSwapMoneyUsed(false)
-                .firstPostIdList(firstPostIdListMap)
-                .secondPostIdList(secondPostIdListMap)
-                .firstExtraFee(requestDto.firstExtraFee())
-                .secondExtraFee(requestDto.secondExtraFee())
+                .firstMemberbill(firstMemberbill)
+                .secondMemberbill(secondMemberbill)
                 .build();
     }
 
-    public static List<DealHistoryResponseDto> getDealHistory(List<Deal> dealList) {
+    public static List<DealGetRequestDto> toDealGetRequestDtoList(List<Deal> myRequestDealList) {
 
-        return dealList.stream().map(deal ->
-                        DealHistoryResponseDto.builder()
-                                .id(deal.getId())
-                                .dealStatus(deal.getDealStatus())
-                                .createdTime(deal.getCreatedTime())
-                                .completedDealTime(deal.getCompletedDealTime())
-                                .build())
-                .toList();
+        return myRequestDealList.stream().map(deal -> DealGetRequestDto.builder()
+                .dealId(deal.getId())
+                .secondMemberNickname(deal.getSecondMemberbill().getMember().getNickname())
+                .dealStatus(deal.getDealStatus())
+                .build()).toList();
     }
 
-    public static void updateDealFirst(Deal deal, DealUpdateRequestDto requestDto) {
 
-        Map<Integer, Long> firstPostIdMap = postIdListToMap(requestDto.postIdList());
+    public static List<DealGetReceiveDto> toDealGetReceiveDtoList(List<Deal> myReceiveDealList) {
 
-        deal.updateDealFirst(requestDto.extraFee(), firstPostIdMap);
+        return myReceiveDealList.stream().map(deal -> DealGetReceiveDto.builder()
+                .dealId(deal.getId())
+                .firstMemberNickname(deal.getFirstMemberbill().getMember().getNickname())
+                .dealStatus(deal.getDealStatus())
+                .build()).toList();
     }
 
-    public static void updateDealSecond(Deal deal, DealUpdateRequestDto requestDto) {
+    public static DealDetailResponseDto toDealDetailResponseDto(
+            Deal deal,
+            List<BillPostResponseDto> requestBillPostListDto,
+            List<BillPostResponseDto> receiveBillPostListDto,
+            List<BillCouponResponseDto> requestBillCouponDtoList,
+            List<BillCouponResponseDto> receiveBillCouponDtoList) {
 
-        Map<Integer, Long> secondPostIdMap = postIdListToMap(requestDto.postIdList());
+        Bill firstMemberBill = deal.getFirstMemberbill();
+        Bill secondMemberBill = deal.getSecondMemberbill();
 
-        deal.updateDealSecond(requestDto.extraFee(), secondPostIdMap);
-    }
-
-    private static Map<Integer, Long> postIdListToMap(List<Long> postIdList) {
-
-        Map<Integer, Long> postIdListMap = new HashMap<>();
-
-        for (int i = 0; i < postIdList.size(); i++) {
-            postIdListMap.put(i, postIdList.get(i));
-        }
-
-        return postIdListMap;
+        return DealDetailResponseDto.builder()
+                .id(deal.getId())
+                .dealStatus(deal.getDealStatus())
+                .firstMemberBillId(firstMemberBill.getId())
+                .secondMemberBillId(secondMemberBill.getId())
+                .firstMemberId(firstMemberBill.getMember().getId())
+                .secondMemberId(secondMemberBill.getMember().getId())
+                .firstMemberNickname(firstMemberBill.getMember().getNickname())
+                .secondMemberNickname(secondMemberBill.getMember().getNickname())
+                .firstDealPostList(requestBillPostListDto)
+                .secondDealPostList(receiveBillPostListDto)
+                .firstExtraFee(deal.getFirstMemberbill().getExtrafee())
+                .secondExtraFee(deal.getSecondMemberbill().getExtrafee())
+                .firstAllow(deal.getFirstMemberbill().getIsAllowed())
+                .secondAllow(deal.getSecondMemberbill().getIsAllowed())
+                .firstTake(deal.getFirstMemberbill().getIsTaked())
+                .secondTake(deal.getSecondMemberbill().getIsTaked())
+                .useSwapMoneyFirstMember(deal.getFirstMemberbill().getIsSwapMoneyUsed())
+                .useSwapMoneySecondMember(deal.getSecondMemberbill().getIsSwapMoneyUsed())
+                .firstMemberCommission(deal.getFirstMemberbill().getCommission())
+                .secondMemberCommission(deal.getSecondMemberbill().getCommission())
+                .firstCouponList(requestBillCouponDtoList)
+                .secondCouponList(receiveBillCouponDtoList)
+                .build();
     }
 }

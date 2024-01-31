@@ -30,6 +30,8 @@ import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.post.NoMorePostListException;
+import piglin.swapswap.global.exception.post.PostNotFoundException;
 import piglin.swapswap.global.s3.S3ImageService;
 
 @Slf4j
@@ -61,7 +63,7 @@ public class PostServiceImplV1 implements PostService {
 
     @Override
     @Transactional
-    public PostGetResponseDto getPost(Long postId, Member member) {
+    public PostGetResponseDto getPostWithFavorite(Long postId, Member member) {
 
         PostGetResponseDto responseDto = postRepository.findPostWithFavorite(postId, member);
 
@@ -216,6 +218,11 @@ public class PostServiceImplV1 implements PostService {
                 cursorTime);
 
         return createPostListResponseDtoWithIsLast(postList);
+    }
+
+    @Override
+    public Post getPost(Long postId){
+        return postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow(PostNotFoundException::new);
     }
 
     private Map<Integer, Object> createImageUrlMap(List<String> imageUrlList) {
