@@ -26,11 +26,11 @@ public class BillPost extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "bill_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bill_id", nullable = false)
     private Bill bill;
 }

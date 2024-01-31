@@ -26,6 +26,7 @@ public class BillPostServiceImplV1 implements BillPostService{
             if (!post.getDealStatus().equals(DealStatus.REQUESTED)) {
                 throw new AlreadyDealingPostException();
             }
+
             billPostRepository.save(BillPostMapper.createBillPost(bill, post));
         }
     }

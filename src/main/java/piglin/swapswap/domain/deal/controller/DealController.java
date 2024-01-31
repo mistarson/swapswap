@@ -17,6 +17,7 @@ import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,16 +25,6 @@ import piglin.swapswap.global.exception.common.ErrorCode;
 public class DealController {
 
     private final DealService dealService;
-
-    @ResponseBody
-    @PostMapping
-        public ResponseEntity<?> createDeal(@AuthMember Member member,
-            @Valid @RequestBody DealCreateRequestDto requestDto) {
-
-        Long dealId = dealService.createDeal(member, requestDto);
-
-        return ResponseEntity.ok().body(dealId);
-    }
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,
@@ -54,4 +45,55 @@ public class DealController {
         return "deal/dealCreateForm";
     }
 
+    @ResponseBody
+    @PostMapping
+    public ResponseEntity<?> createDeal(@AuthMember Member member,
+            @Valid @RequestBody DealCreateRequestDto requestDto) {
+
+        if (requestDto.firstPostIdList().isEmpty() && requestDto.secondPostIdList().isEmpty()) {
+            throw new InvalidDealRequestException(ErrorCode.BOTH_POST_ID_LIST_EMPTY_EXCEPTION);
+        }
+
+        Long dealId = dealService.createDeal(member, requestDto);
+
+        return ResponseEntity.ok().body(dealId);
+    }
+
+    @GetMapping("/request/list")
+    public String  getRequestDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyRequestDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealRequestDealListForm";
+    }
+
+    @GetMapping("response/list")
+    public String getResponseDealList(
+            @AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealGetListResponseDto", dealService.getMyReceiveDealList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealResponseDealListForm";
+    }
+
+   /* @GetMapping("/{dealId}")
+    public String getDeal(
+            @AuthMember Member member, @PathVariable Long dealId,
+            Model model) {
+
+        DealDetailResponseDto responseDto = dealService.getDeal(dealId, member);
+
+        model.addAttribute("dealDetailResponseDto", responseDto);
+        model.addAttribute("firstMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.firstPostIdList()));
+        model.addAttribute("secondMemberPostList", postService.getPostSimpleInfoListByPostIdList(responseDto.secondPostIdList()));
+        model.addAttribute("memberId", member.getId());
+
+        return  "deal/dealRequestDeal";
+    }
+*/
 }
