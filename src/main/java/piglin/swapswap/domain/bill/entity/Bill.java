@@ -58,6 +58,11 @@ public class Bill extends BaseTime {
         isSwapMoneyUsed = !isSwapMoneyUsed;
     }
 
+    public void updateTake() {
+
+        isTaked = true;
+    }
+
     public void discountCommission(int commissionDiscountPercent) {
 
         commission -= (long) (commission * commissionDiscountPercent * 0.01);

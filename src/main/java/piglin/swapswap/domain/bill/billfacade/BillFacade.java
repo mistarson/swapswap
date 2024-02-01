@@ -29,7 +29,11 @@ public class BillFacade {
         billService.updateBillAllowTrueWithSwapPay(billId, member);
         Long totalFee = billService.getTotalFee(billId);
         Deal deal = dealService.getDealByBillIdWithBill(billId);
+        if(dealWalletService.existDealWalletByDealId(deal.getId())) {
+            dealWalletService.updateDealWallet(deal, member, totalFee);
+        }else {
         dealWalletService.createDealWallet(deal, member, totalFee);
+        }
     }
 
     @Transactional
@@ -57,5 +61,11 @@ public class BillFacade {
         billService.updateBill(member, billId, memberId, requestDto);
         billPostService.deleteAllByBill(bill);
         billPostService.createBillPost(bill, requestDto.postIdList());
+    }
+
+    @Transactional
+    public void updateBillTake(Long billId, Member member) {
+
+        billService.updateBillTake(billId, member);
     }
 }

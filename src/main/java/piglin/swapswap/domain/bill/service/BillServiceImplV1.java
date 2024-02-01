@@ -169,14 +169,31 @@ public class BillServiceImplV1 implements BillService {
         return bill.getExtrafee() + bill.getCommission();
     }
 
+    @Override
+    @Transactional
+    public void updateBillTake(Long billId, Member member) {
+
+        Bill bill = billRepository.findByIdWithMember(billId).orElseThrow(
+                BillNotFoundException::new);
+
+        validateModifyAuthority(bill.getMember(), member);
+
+        bill.updateTake();
+
+        updatePostListDealStatus(bill, getPostIdList(bill));
+    }
+
     private void updatePostListDealStatus(Bill bill, List<Long> postIdList) {
 
-        if (bill.getIsAllowed()) {
+        if (bill.getIsAllowed()&&!bill.getIsTaked()) {
             checkPostDealStatus(bill);
             postService.updatePostStatusByPostIdList(postIdList, DealStatus.DEALING);
         }
         if (!bill.getIsAllowed()) {
             postService.updatePostStatusByPostIdList(postIdList, DealStatus.REQUESTED);
+        }
+        if(bill.getIsTaked()) {
+            postService.updatePostStatusByPostIdList(postIdList, DealStatus.COMPLETED);
         }
     }
 

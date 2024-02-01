@@ -100,5 +100,4 @@ public class DealController {
 
         return "deal/dealRequestDeal";
     }
-
 }

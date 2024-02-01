@@ -30,4 +30,6 @@ public interface BillService {
     void updateBill(Member member, Long billId, Long memberId, BillUpdateRequestDto requestDto);
 
     Long getTotalFee(Long billId);
+
+    void updateBillTake(Long billId, Member member);
 }
