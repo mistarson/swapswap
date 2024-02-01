@@ -44,11 +44,6 @@ public class NotificationServiceImpl implements NotificationService {
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
         emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
-        String eventId = memberId + "_" + System.currentTimeMillis();
-
-        sendNotification(emitter, eventId, emitterId,
-                "EventStream Created. [memberId=" + memberId + "]");
-
         if (!lastEventId.isEmpty()) {
             sendLostData(lastEventId, memberId, emitterId, emitter);
         }
