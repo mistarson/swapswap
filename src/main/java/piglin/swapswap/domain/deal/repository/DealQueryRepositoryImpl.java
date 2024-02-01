@@ -107,20 +107,6 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     }
 
     @Override
-    public Optional<Deal> findDealByIdWithBill(Long dealId) {
-
-        QBill requestMemberBill = new QBill("requestMemberBill");
-        QBill receiveMemberBill = new QBill("receiveMemberBill");
-
-        return Optional.ofNullable(queryFactory
-                .selectFrom(deal)
-                .where(deal.id.eq(dealId))
-                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
-                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
-                .fetchOne());
-    }
-
-    @Override
     public Optional<Deal> findByBillIdWithBillAndMember(Long billId) {
 
         QBill requestMemberBill = new QBill("requestMemberBill");
