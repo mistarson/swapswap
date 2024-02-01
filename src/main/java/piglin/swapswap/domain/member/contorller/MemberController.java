@@ -24,6 +24,7 @@ import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.annotation.HttpRequestLog;
 import piglin.swapswap.global.jwt.JwtCookieManager;
 
 @Slf4j
@@ -39,6 +40,7 @@ public class MemberController {
 
     private final MemberCouponService memberCouponService;
 
+    @HttpRequestLog
     @GetMapping("/login/kakao/callback")
     public String kakaoLogin(
             @RequestParam String code,
@@ -65,6 +67,7 @@ public class MemberController {
         return "redirect:/";
     }
 
+    @HttpRequestLog
     @ResponseBody
     @PatchMapping("/members/nickname")
     public ResponseEntity<?> updateNickname(
@@ -97,6 +100,7 @@ public class MemberController {
         return "member/unregister";
     }
 
+    @HttpRequestLog
     @ResponseBody
     @DeleteMapping("/members")
     public ResponseEntity<?> unregister(

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.coupon.service.CouponService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.annotation.HttpRequestLog;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class CouponController {
     }
 
     @ResponseBody
+    @HttpRequestLog
     @PostMapping("/event")
     public ResponseEntity<?> issueEventCoupon(@AuthMember Member member) {
 
