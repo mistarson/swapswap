@@ -73,15 +73,16 @@
     <ul>
       <li>회원탈퇴 시 회원전용 웹 서비스 이용이 불가합니다.</li>
       <li>회원정보의 경우, 회원탈퇴 후 2주동안 보관된 이후에 삭제됩니다.</li>
-      <li>회원탈퇴 시 스왑스왑에 업로드하신 게시글, 보유 스왑머니, 보유 쿠폰도 보관된 이후 2주 뒤에 자동으로 삭제됩니다.</li>
+      <li>회원탈퇴 시 스왑스왑에 업로드하신 게시글, 보유 쿠폰이 보관된 이후 2주 뒤에 자동으로 삭제됩니다.</li>
       <li>2주가 지난 후에는 어떠한 환불이나 복구를 요청하실 수 없습니다.</li>
       <li>단, 2주 안에 기존의 회원정보로 로그인을 하시면 재가입이 가능합니다.</li>
-      <li>재가입 시 작성하셨던 게시글이 복구가 되고 보유하고 있던 스왑머니, 쿠폰도 정상적으로 사용하실 수 있습니다.</li>
+      <li>재가입 시 작성하셨던 게시글이 복구가 되고 보유하고 있던 쿠폰도 정상적으로 사용하실 수 있습니다.</li>
     </ul>
   </div>
   <div class="unregister-buttons">
     <a href="/myPage" class="unregister-cancel">취소</a>
-    <a href="/main" class="unregister-ok" id="cancelMembership">회원 탈퇴</a>
+    <a th:if="${currentSwapMoney} == 0" href="/main" class="unregister-ok" id="cancelMembership">회원 탈퇴</a>
+    <a th:if="${currentSwapMoney} != 0" href="/members/swap-money" class="unregister-no">스왑머니를 전부 출금한 후 진행해주세요</a>
   </div>
 </div>
 </body>

@@ -20,12 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
 import piglin.swapswap.domain.post.dto.request.PostUpdateRequestDto;
-import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
-import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.annotation.HttpRequestLog;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +32,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @HttpRequestLog
     @PostMapping("/posts/write")
     public String createPost(
             @Valid @ModelAttribute PostCreateRequestDto requestDto,
@@ -44,13 +44,8 @@ public class PostController {
 
     @GetMapping("/posts/write")
     public String getPostWriteForm(
-            @AuthMember Member member,
             Model model
     ) {
-
-        if (member == null) {
-            return "redirect:/";
-        }
 
         model.addAttribute("PostCreateRequestDto",
                 new PostCreateRequestDto(null, null, null, null, null));
@@ -64,6 +59,7 @@ public class PostController {
             @AuthMember Member member,
             Model model
     ) {
+
         PostGetResponseDto responseDto = postService.getPost(postId, member);
 
         model.addAttribute("postGetResponseDto", responseDto);
@@ -123,6 +119,7 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    @HttpRequestLog
     @PutMapping("/posts/{postId}/write")
     public String updatePost(
             @PathVariable Long postId,
@@ -214,7 +211,9 @@ public class PostController {
     }
 
     @GetMapping("/posts/member/{memberId}")
-    public ResponseEntity<?> getPostListByMemberId(@PathVariable Long memberId) {
+    public ResponseEntity<?> getPostListByMemberId(
+            @PathVariable Long memberId
+    ) {
 
         List<PostSimpleResponseDto> responseDtoList = postService.getPostSimpleInfoList(memberId);
 

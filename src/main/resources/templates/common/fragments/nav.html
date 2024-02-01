@@ -108,135 +108,35 @@
       <span sec:authorize="isAuthenticated()">
             <a href="/coupons/event" class="login-link coupon-event-link">쿠폰이벤트</a>
           </span>
-        <span sec:authorize="isAuthenticated()">
-          <a href="/posts/write">글쓰기</a>
+      <span sec:authorize="isAuthenticated()">
+          <a href="/posts/write" class="login-link">글쓰기</a>
           </span>
-        <span sec:authorize="isAuthenticated()">
+      <span sec:authorize="isAuthenticated()">
             <a href="/deals/request/list" class="login-link deal-request-list-link">스왑목록</a>
           </span>
-        <span sec:authorize="isAuthenticated()">
+      <span sec:authorize="isAuthenticated()">
             <a href="/myPage" class="login-link">마이페이지</a>
           </span>
-        <span sec:authorize="isAuthenticated()">
-            <a th:href="@{/members/logout}" id="logoutButton" >로그아웃</a>
+      <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/members/logout}" id="logoutButton" class="login-link">로그아웃</a>
           </span>
-        <span sec:authorize="!isAuthenticated()">
+      <span sec:authorize="isAuthenticated()">
+            <a href="#" id="notificationLink" class="login-link">
+              <img id="notificationImg" th:src="@{/images/notification-empty.png}" alt="알림">
+            </a>
+          </span>
+      <div id="notificationModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <img id="deleteAllNotificationsBtn" th:src="@{/images/trash-closed.jpg}" alt="모든 알림 삭제">
+          <ul id="notification-list"></ul>
+        </div>
+      </div>
+      <span sec:authorize="!isAuthenticated()">
             <a href="/login" class="login-link">로그인</a>
           </span>
     </div>
   </div>
 </header>
-<script th:fragment="search">
-  document.addEventListener('DOMContentLoaded', function() {
-    var logo = document.querySelector('.header-logo a');
-    var searchInput = document.querySelector('.swapswap-search-input');
-    var navCityInput = document.getElementById('navCityInput');
-    var categoryLinks = document.querySelectorAll('.category-bar a');
-
-    // URL에서 검색어와 카테고리 추출
-    var urlParams = new URLSearchParams(window.location.search);
-    var currentSearchValue = urlParams.get('title');
-    var currentCategory = urlParams.get('category');
-    var selectedCity = localStorage.getItem('selectedCity');
-
-    if (selectedCity) {
-      navCityInput.value = selectedCity;
-    }
-
-    // 검색란에 파라미터 title 추가
-    if (currentSearchValue) {
-      searchInput.value = currentSearchValue;
-    }
-
-    if (logo) {
-      logo.addEventListener('click', function() {
-        localStorage.removeItem('searchValue');
-        localStorage.removeItem('selectedCategory');
-        localStorage.removeItem('selectedCity');
-      });
-    }
-
-
-    categoryLinks.forEach(function(link) {
-
-      if (link.getAttribute('href').slice(1) === currentCategory) {
-        link.classList.add('active');
-      }
-
-      link.addEventListener('click', function(event) {
-        event.preventDefault();
-        localStorage.setItem('selectedCategory', this.getAttribute('href').slice(1));
-        updateSearch();
-      });
-    });
-
-    // 검색 입력 필드와 버튼
-    var searchInput = document.querySelector('.swapswap-search-input');
-    var searchButton = document.querySelector('.swapswap-search-button');
-
-    if (searchInput && searchButton) {
-      // 제목란에 입력할 때 카테고리 초기화
-      searchInput.addEventListener('input', function() {
-        localStorage.removeItem('selectedCategory');
-      });
-
-      // 검색 버튼 클릭 이벤트
-      searchButton.addEventListener('click', function() {
-        localStorage.setItem('searchValue', searchInput.value);
-        updateSearch();
-      });
-
-      // 검색 입력 필드의 엔터 키 이벤트
-      searchInput.addEventListener('keyup', function(event) {
-        if (event.keyCode === 13) {
-          localStorage.setItem('searchValue', searchInput.value);
-          updateSearch();
-        }
-      });
-    }
-
-    // 검색 실행 함수
-    function updateSearch() {
-      var searchValue = localStorage.getItem('searchValue') || '';
-      var selectedCategory = localStorage.getItem('selectedCategory') || '';
-      var selectedCity = navCityInput.value;
-
-      var searchQuery = '/search/posts?';
-      if (searchValue) {
-        searchQuery += 'title=' + encodeURIComponent(searchValue);
-      }
-      if (selectedCategory) {
-        searchQuery += (searchValue ? '&' : '') + 'category=' + encodeURIComponent(selectedCategory);
-      }
-      if (selectedCity) {
-        searchQuery += (searchValue || selectedCategory ? '&' : '') + 'city=' + encodeURIComponent(selectedCity);
-      }
-      window.location.href = searchQuery;
-    }
-
-    navCityInput.addEventListener('change', function() {
-      localStorage.setItem('selectedCity', this.value);
-    });
-
-    const rainbowColors = ['red', 'orange', 'green', 'blue', 'indigo', 'violet'];
-    let currentColorIndex = 0;
-
-    function updateRainbowColor() {
-      const element = document.querySelector('.header-nav .coupon-event-link');
-      if (element) {
-        element.style.color = rainbowColors[currentColorIndex];
-        currentColorIndex = (currentColorIndex + 1) % rainbowColors.length;
-      }
-    }
-
-    setInterval(updateRainbowColor, 1000); // 매 1초마다 색상을 업데이트합니다.
-
-  });
-
-  function csCenter() {
-
-    alert("미구현된 기능입니다.")
-  }
-</script>
 </body>
 </html>

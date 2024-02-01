@@ -3,6 +3,7 @@ package piglin.swapswap.domain.member.service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import piglin.swapswap.domain.chatroom_member.service.ChatRoomMemberService;
 import piglin.swapswap.domain.favorite.service.FavoriteService;
@@ -10,14 +11,17 @@ import piglin.swapswap.domain.member.dto.MemberNicknameDto;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.member.repository.MemberRepository;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
+import piglin.swapswap.domain.notification.service.NotificationService;
 import piglin.swapswap.domain.post.entity.Post;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
+import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImplV1 implements MemberService {
 
@@ -27,47 +31,63 @@ public class MemberServiceImplV1 implements MemberService {
     private final WalletHistoryService walletHistoryService;
     private final FavoriteService favoriteService;
     private final ChatRoomMemberService chatRoomMemberService;
+    private final NotificationService notificationService;
 
+
+    @SwapLog
+    @Override
     @Transactional
     public void updateNickname(Member member, MemberNicknameDto requestDto) {
 
-        member = memberRepository.findById(member.getId()).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
-        );
+        log.info("\nupdateNickname - memberId: {} | memberEmail: {} | memberCurrentNickname: {} | memberNicknameWillBe: {}",
+                member.getId(), member.getEmail(), member.getNickname(), requestDto.nickname());
+        checkMemberExists(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.ALREADY_EXIST_USER_NAME_EXCEPTION);
         }
 
         member.updateMember(requestDto.nickname());
+        log.info("\nmemberChangedNickname: {}", member.getNickname());
     }
 
-
+    @SwapLog
+    @Override
     @Transactional
-    public void deleteMember(Member loginMember) {
+    public void deleteMember(Member member) {
 
-        Member member = getMemberWithWallet(loginMember.getId());
+        log.info("\ndeleteMember - memberId: {} | memberEmail: {}", member.getId(),
+                member.getEmail());
+        member = getMemberWithWallet(member.getId());
+
         Wallet wallet = member.getWallet();
+        log.info("\nwalletId: {} | walletSwapMoney: {}", wallet.getId(), wallet.getSwapMoney());
+
+        if (wallet.getSwapMoney() > 0) {
+            throw new BusinessException(ErrorCode.FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY);
+        }
+
+        notificationService.deleteAllByNotifications(member.getId());
 
         member.deleteMember();
         wallet.deleteWallet();
 
         walletHistoryService.deleteAllWalletHistoriesByWallet(member.getWallet());
 
+        chatRoomMemberService.deleteAllChatroomByMember(member);
 
+        memberCouponService.deleteAllMemberCouponByMember(member);
 
-        chatRoomMemberService.deleteAllChatroomByMember(loginMember);
+        favoriteService.deleteAllFavoriteByMember(member);
 
-        memberCouponService.deleteAllMemberCouponByMember(loginMember);
-
-        favoriteService.deleteAllFavoriteByMember(loginMember);
-
-        List<Post> post = postService.findByMemberId(loginMember.getId());
+        List<Post> post = postService.findByMemberId(member.getId());
 
         favoriteService.deleteAllFavoriteByPostList(post);
 
-        postService.deleteAllPostByMember(loginMember);
+        postService.deleteAllPostByMember(member);
 
+        log.info("\nmemberIsDeleted: {} | walletIsDeleted: {}", member.getIsDeleted(),
+                wallet.isDeleted());
     }
 
     @Override
@@ -81,6 +101,7 @@ public class MemberServiceImplV1 implements MemberService {
 
     @Override
     public Member getMemberWithWallet(Long memberId) {
+
         return memberRepository.findByIdWithWallet(memberId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
     }
@@ -88,17 +109,27 @@ public class MemberServiceImplV1 implements MemberService {
     @Override
     public Member getMember(Long memberId) {
 
-        return memberRepository.findById(memberId).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION));
+        return memberRepository.findByIdAndIsDeletedIsFalse(memberId).orElseThrow(
+                () -> new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION)
+        );
     }
 
     @Override
     public boolean checkNicknameExists(String nickname) {
+
         return memberRepository.existsByNickname(nickname);
     }
 
     @Override
     public List<Member> getMembers(List<Long> memberIds) {
+
         return memberRepository.findByIdIn(memberIds);
+    }
+
+    public void checkMemberExists(Long memberId) {
+
+        if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
+        }
     }
 }

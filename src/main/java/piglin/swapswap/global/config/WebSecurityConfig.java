@@ -32,11 +32,8 @@ public class WebSecurityConfig {
             "/login/**",
             "/error/errorpage",
             "/",
-            "/posts/{postId}",
-            "/posts/{postId}/favorite",
-            "/posts/more",
+            "/posts/**",
             "/search/**",
-            "/posts/write",
     };
 
     @Bean
@@ -75,9 +72,11 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers(whiteList).permitAll()
                         .requestMatchers("/posts/write").authenticated()
+                        .requestMatchers("/posts/*/write").authenticated()
+                        .requestMatchers("/posts/*/favorite").authenticated()
                         .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
+                        .requestMatchers(whiteList).permitAll()
                         .anyRequest().authenticated()
         );
 

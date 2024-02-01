@@ -46,7 +46,6 @@
   <script th:inline="javascript">
 
     let isLast = [[${postListResponseDto.isLast}]];
-    const isMemberLogged = [[${isMemberLogged}]];
     let isLoading = false;
     let lastModifiedTime = null; // 마지막 게시물 수정 시간 초기화
 
@@ -130,11 +129,6 @@
     }
 
     function toggleFavorite(postId) {
-
-      if(!isMemberLogged) {
-        alert("로그인이 필요합니다.")
-        return;
-      }
 
       $.ajax({
         url: '/posts/' + postId + '/favorite',

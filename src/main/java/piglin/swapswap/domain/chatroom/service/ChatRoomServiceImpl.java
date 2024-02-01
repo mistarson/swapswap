@@ -21,6 +21,8 @@ import piglin.swapswap.domain.message.dto.response.MessageResponseDto;
 import piglin.swapswap.domain.message.entity.Message;
 import piglin.swapswap.domain.message.mapper.MessageMapper;
 import piglin.swapswap.domain.message.service.MessageServiceImpl;
+import piglin.swapswap.domain.notification.constant.NotificationType;
+import piglin.swapswap.domain.notification.service.NotificationService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -31,6 +33,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberServiceImplV1 memberService;
     private final MessageServiceImpl messageService;
+    private final NotificationService notificationService;
     private final SimpMessageSendingOperations sendingOperations;
 
     @Override
@@ -80,12 +83,18 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void saveMessage(MessageRequestDto requestDto) {
 
         ChatRoom chatRoom = getChatRoom(requestDto.chatRoomId());
-        Member member = memberService.getMember(requestDto.senderId());
+        Member sender = memberService.getMember(requestDto.senderId());
 
-        Message message = MessageMapper.createMessage(member, chatRoom, requestDto);
+        Message message = MessageMapper.createMessage(sender, chatRoom, requestDto);
         chatRoom.updateChatRoom(requestDto.text());
 
         messageService.saveMessage(message);
+
+        Member receiver = memberService.getMember(chatRoom.getSecondMemberId());
+
+        String Url = "http://swapswap.shop/chats/room/" + chatRoom.getId();
+        String content = receiver.getNickname()+"님! " + sender.getNickname() +"님으로부터 채팅이 왔어요!";
+        notificationService.send(receiver, NotificationType.DEAL,content,Url);
     }
 
     @Override

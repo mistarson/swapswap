@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
+import piglin.swapswap.domain.favorite.service.FavoriteServiceImplV1;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.constant.Category;
 import piglin.swapswap.domain.post.constant.City;
@@ -43,6 +44,9 @@ class PostServiceImplV1UnitTest {
 
     @Mock
     private PostRepository postRepository;
+
+    @Mock
+    private FavoriteServiceImplV1 favoriteService;
 
     @InjectMocks
     private PostServiceImplV1 postService;
@@ -294,25 +298,6 @@ class PostServiceImplV1UnitTest {
         }
 
         @Test
-        @DisplayName("게시글 수정 - 실패 / 로그인 한 사용자만 수정할 수 있습니다")
-        void updatePost_Fail_Image_Not_Logged_In_Member() {
-            // Given
-            member = null;
-            List<MultipartFile> imageUrlList = new ArrayList<>();
-            imageUrlList.add(Mockito.mock(MultipartFile.class));
-
-            PostUpdateRequestDto requestDto = new PostUpdateRequestDto(City.ANDONG, Category.ELECTRONICS, "제목",
-                    "내용",
-                    imageUrlList);
-            Long postId = 1L;
-            when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
-            // When - Then
-            assertThatThrownBy(() -> postService.updatePost(postId, member, requestDto))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining(ErrorCode.WRITE_ONLY_USER.getMessage());
-        }
-
-        @Test
         @DisplayName("게시글 수정 - 실패 / 자신의 게시글만 수정할 수 있습니다")
         void updatePost_Fail_Your_Not_Host() {
             // Given
@@ -329,6 +314,55 @@ class PostServiceImplV1UnitTest {
             when(postRepository.findByIdAndIsDeletedIsFalse(postId)).thenReturn(Optional.of(post));
             // When - Then
             assertThatThrownBy(() -> postService.updatePost(postId, anotherMember, requestDto))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION.getMessage());
+        }
+    }
+
+    @Nested
+    @DisplayName("게시글 삭제 테스트 모음")
+    class DeletePostTestList {
+
+        @Mock
+        private Post post;
+
+        @Test
+        @DisplayName("게시글 삭제 - 성공")
+        void deletePost_success() {
+            // Given
+            post = Post.builder().id(1L).member(member).isDeleted(false).build();
+            when(postRepository.findByIdAndIsDeletedIsFalse(memberId)).thenReturn(Optional.of(post));
+
+            // When
+            postService.deletePost(member, post.getId());
+
+            // Then
+            assertThat(post.getIsDeleted()).isTrue();
+        }
+
+        @Test
+        @DisplayName("게시글 삭제 - 실패 / 게시글이 이미 지워진 상태입니다.")
+        void deletePost_Fail_PostAlreadyDeleted() {
+            // Given
+            post = Post.builder().id(1L).member(member).isDeleted(true).build();
+            when(postRepository.findByIdAndIsDeletedIsFalse(memberId)).thenReturn(Optional.of(post));
+
+            // When - Then
+            assertThatThrownBy(() -> postService.deletePost(member, post.getId()))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining(ErrorCode.POST_ALREADY_DELETED.getMessage());
+        }
+
+        @Test
+        @DisplayName("게시글 삭제 - 실패 / 작성자만 수정 할 수 있습니다.")
+        void deletePost_Fail_PostWriterNotMatched() {
+            // Given
+            Member anotherMember = Member.builder().id(2L).build();
+            post = Post.builder().id(1L).member(member).isDeleted(true).build();
+            when(postRepository.findByIdAndIsDeletedIsFalse(post.getId())).thenReturn(Optional.of(post));
+
+            // When - Then
+            assertThatThrownBy(() -> postService.deletePost(anotherMember, post.getId()))
                     .isInstanceOf(BusinessException.class)
                     .hasMessageContaining(ErrorCode.REJECT_MODIFIYING_POST_EXCEPTION.getMessage());
         }

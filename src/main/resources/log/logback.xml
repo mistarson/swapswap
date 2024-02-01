@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+  <conversionRule conversionWord="clr"
+    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+  <include resource="./log/appender/logback-local-console-appender.xml" />
+  <include resource="./log/appender/logback-prod-console-appender.xml" />
+
+  <springProfile name="prod">
+    <root level="info">
+      <appender-ref ref="PROD_CONSOLE"/>
+      <appender-ref ref="LOGFILE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="local">
+    <root level="debug">
+      <appender-ref ref="LOCAL_CONSOLE"/>
+    </root>
+  </springProfile>
+
+</configuration>

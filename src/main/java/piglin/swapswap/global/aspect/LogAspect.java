@@ -2,10 +2,14 @@ package piglin.swapswap.global.aspect;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,15 +21,35 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LogAspect {
 
     @Before("@annotation(piglin.swapswap.global.annotation.SwapLog)")
-    public void swapLog(JoinPoint joinPoint){
+    public void swapLog(JoinPoint joinPoint) {
+
+        log.info("\nMethod - {} | Method Argument - {}",joinPoint.getSignature().getName(), joinPoint.getArgs());
+    }
+
+    @Before("@annotation(piglin.swapswap.global.annotation.HttpRequestLog)")
+    public void httpRequestLog(JoinPoint joinPoint) {
+
+        MDC.put("traceId", UUID.randomUUID().toString());
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
-        log.info("\nMethod - {} | Method Argument - {}\nIP - {} | Browser - {}\n▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ Cookie ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼\n{} \n▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲",joinPoint.getSignature().getName(), joinPoint.getArgs(), getRemoteAddr(req), getBrowser(req),
-                getCookie(req));
+        log.info("\nIP - {} | Browser - {}\n▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ Cookie ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼ ▼\n{} \n▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲ ▲", getRemoteAddr(req), getBrowser(req), getCookie(req));
     }
 
-    private static String getCookie(HttpServletRequest req) {
+    @AfterReturning("@annotation(piglin.swapswap.global.annotation.SwapLog)")
+    public void swapLogAfterReturning() {
+
+        MDC.clear();
+    }
+
+    @AfterThrowing(value = "@annotation(piglin.swapswap.global.annotation.SwapLog)", throwing = "exception")
+    public void swapLogAfterThrowing(Exception exception) {
+
+        log.error("errorCause - ", exception.getCause());
+        MDC.clear();
+    }
+
+    private String getCookie(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         StringBuilder cookieDetail = new StringBuilder();
 
@@ -41,7 +65,7 @@ public class LogAspect {
         return cookieDetail.toString();
     }
 
-    public static String getRemoteAddr(HttpServletRequest request) {
+    public String getRemoteAddr(HttpServletRequest request) {
         String ip = null;
         ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -71,7 +95,7 @@ public class LogAspect {
         return ip;
     }
 
-    public static String getBrowser(HttpServletRequest request) {
+    public String getBrowser(HttpServletRequest request) {
         // 에이전트
         String agent = request.getHeader("User-Agent");
         // 브라우져 구분

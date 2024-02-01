@@ -24,6 +24,7 @@ public enum ErrorCode {
     NO_AUTHORIZATION_EXCEPTION(400, "접근 권한이 없습니다"),
     MISMATCHED_PASSWORD_EXCEPTION(401, "비밀번호가 일치하지 않습니다."),
     FAILED_LOGIN_EXCEPTION(401, "닉네임 또는 패스워드를 확인해주세요."),
+    FAILED_DELETE_MEMBER_CAUSE_SWAP_MONEY(400, "스왑 머니를 전부 출금 후 다시 진행해주세요."),
 
     // 이메일 인증
     MISMATCHED_AUTH_CODE_EXCEPTION(401, "인증번호가 일치하지 않습니다."),
@@ -39,6 +40,7 @@ public enum ErrorCode {
     UP_IS_NEED_ONE_DAY(400, "게시된지 하루, 업 한지 하루 이상 된 게시글만 업 할 수 있습니다."),
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
     NO_MORE_POST_LIST(400, "더이상 불러올 게시글이 없습니다."),
+    CAN_NOT_UP_CAUSE_POST_DEAL_STATUS_IS_NOT_REQUESTED(400, "거래가 진행 중이거나 완료된 게시글은 업 할 수 없습니다."),
 
     // 채팅
     NOT_FOUND_CHATROOM_EXCEPTION(401, "채팅방을 찾을 수 없습니다."),
@@ -50,7 +52,7 @@ public enum ErrorCode {
     NOT_FOUND_COUPON_EXCEPTION(401, "쿠폰을 찾을 수 없습니다."),
     INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
 
-    //거래
+    // 거래
     CAN_NOT_UPDATE_ALLOW_STATUS(401, "수정 할 수 없는 상태입니다."),
     NOT_FOUND_DEAL_EXCEPTION(401, "거래를 찾을 수 없습니다."),
     REQUEST_ONLY_DIFFERENT_USER_EXCEPTION(401, "자신의 게시물에는 거래요청을 할 수 없습니다."),
@@ -62,8 +64,10 @@ public enum ErrorCode {
     IS_NOT_IMAGE(400, "이미지 파일만 업로드 할 수 있습니다."),
     FAIL_UPLOAD(400, "이미지 업로드에 실패했습니다."),
     POST_IMAGE_MAX_SIZE(400, "이미지는 최대 10장만 업로드 할 수 있습니다."),
-    POST_IMAGE_MIN_SIZE(400, "이미지를 최소 1장 업로드 해야합니다.");
+    POST_IMAGE_MIN_SIZE(400, "이미지를 최소 1장 업로드 해야합니다."),
 
+    // 알림
+    NOT_EXIST_NOTIFICATION(400, "존재하지 않는 알림입니다.");
 
     private final int status;
 

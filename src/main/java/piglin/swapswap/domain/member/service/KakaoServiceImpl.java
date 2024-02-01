@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
@@ -32,11 +32,12 @@ import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.domain.wallet.entity.Wallet;
 import piglin.swapswap.domain.wallet.service.WalletService;
 import piglin.swapswap.domain.wallethistory.service.WalletHistoryService;
+import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.jwt.JwtUtil;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-@Log4j2
 public class KakaoServiceImpl implements SocialService {
 
     @Value("${kakao.client.id}")
@@ -55,9 +56,11 @@ public class KakaoServiceImpl implements SocialService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
+    @SwapLog
     @Transactional
     public String kakaoLogin(String code) throws Exception {
 
+        log.info("\nkakaoLogin");
         String accessToken = getToken(code);
         SocialUserInfo kakaoUserInfo = getUser(accessToken);
         Member kakaoMember = registerUserIfNeeded(kakaoUserInfo);
@@ -142,7 +145,7 @@ public class KakaoServiceImpl implements SocialService {
             nickname = randomAdjective.getAdjective() + randomAnimalName.getName() + UUID.randomUUID().toString().substring(0, 4);
         }
 
-        log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
+        log.info("\n사용자 닉네임: {} | 사용자 이메일: {}", nickname, email);
 
         return SocialUserInfo.createSocialUserInfo(id, nickname, email);
     }
@@ -154,16 +157,21 @@ public class KakaoServiceImpl implements SocialService {
     }
 
     public Member registerUserIfNeeded(SocialUserInfo kakaoUserInfo) {
+
         String kakaoEmail = kakaoUserInfo.email();
 
         return memberRepository.findByEmail(kakaoEmail)
                 .map(existingMember -> {
                     if (isWithdrawnMember(existingMember)) {
+                        log.info("\nreRegisterMember");
                         reRegisterAssociatedEntities(existingMember);
+                        return existingMember;
                     }
+                    log.info("\nnormalMember");
                     return existingMember;
                 })
                 .orElseGet(() -> {
+                    log.info("\nnewMember");
                     Wallet savedWallet = walletService.createWallet();
                     return memberRepository.save(
                             MemberMapper.createMember(kakaoUserInfo, savedWallet));

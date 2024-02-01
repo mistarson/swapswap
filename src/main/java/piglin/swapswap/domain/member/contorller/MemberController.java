@@ -21,11 +21,10 @@ import piglin.swapswap.domain.member.service.KakaoServiceImpl;
 import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.domain.member.service.MemberService;
-import piglin.swapswap.domain.post.dto.response.PostListDetailResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostListResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.annotation.HttpRequestLog;
 import piglin.swapswap.global.jwt.JwtCookieManager;
 
 @Slf4j
@@ -41,13 +40,16 @@ public class MemberController {
 
     private final MemberCouponService memberCouponService;
 
+    @HttpRequestLog
     @GetMapping("/login/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) {
+    public String kakaoLogin(
+            @RequestParam String code,
+            HttpServletResponse response
+    ) {
 
         try {
             String accessToken = kakaoServiceImpl.kakaoLogin(code);
             JwtCookieManager.addJwtToCookie(accessToken, response);
-
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -56,25 +58,55 @@ public class MemberController {
     }
 
     @GetMapping("/members/logout")
-    public String logout(HttpServletResponse response) {
+    public String logout(
+            HttpServletResponse response
+    ) {
+
         JwtCookieManager.expireTokenCookie(response);
 
         return "redirect:/";
     }
 
+    @HttpRequestLog
     @ResponseBody
     @PatchMapping("/members/nickname")
-    public ResponseEntity<?> updateNickname(@AuthMember Member member,
-            @Valid @RequestBody MemberNicknameDto requestDto) {
+    public ResponseEntity<?> updateNickname(
+            @AuthMember Member member,
+            @Valid @RequestBody MemberNicknameDto requestDto
+    ) {
 
         memberService.updateNickname(member, requestDto);
 
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/myPage")
+    public String myPage() {
+
+        return "member/myPage";
+    }
+
+    @GetMapping("/editProfile")
+    public String editProfile() {
+
+        return "member/editProfile";
+    }
+
+    @GetMapping("/unregister")
+    public String unregister(@AuthMember Member member, Model model) {
+
+        model.addAttribute("currentSwapMoney", memberService.getMySwapMoney(member.getId()));
+
+        return "member/unregister";
+    }
+
+    @HttpRequestLog
     @ResponseBody
     @DeleteMapping("/members")
-    public ResponseEntity<?> unregister(@AuthMember Member member, HttpServletResponse response) {
+    public ResponseEntity<?> unregister(
+            @AuthMember Member member,
+            HttpServletResponse response
+    ) {
 
         memberService.deleteMember(member);
         JwtCookieManager.expireTokenCookie(response);
@@ -83,49 +115,68 @@ public class MemberController {
     }
 
     @GetMapping("/members/coupon")
-    public String getMyCouponList(@AuthMember Member member, Model model) {
+    public String getMyCouponList(
+            @AuthMember Member member,
+            Model model
+    ) {
 
         List<MyCouponGetResponseDto> myCouponGetResponseDtoList = memberCouponService.getMycouponList(
                 member);
+
         model.addAttribute("myCouponGetResponseDtoList", myCouponGetResponseDtoList);
 
         return "member/myCouponList";
     }
 
     @GetMapping("/members/swap-money")
-    public String getMySwapMoney(@AuthMember Member member, Model model) {
+    public String getMySwapMoney(
+            @AuthMember Member member,
+            Model model
+    ) {
 
         Long mySwapMoney = memberService.getMySwapMoney(member.getId());
+
         model.addAttribute("mySwapMoney", mySwapMoney);
 
         return "member/mySwapMoney";
     }
 
     @GetMapping("/members/favorites")
-    public String getMyFavoriteList(@AuthMember Member member,
-            @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
+    public String getMyFavoriteList(
+            @AuthMember Member member,
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            Model model
+    ) {
 
         PostListResponseDto responseDtoList = postService.getMyFavoritePostList(
                 member, cursorTime);
+
         model.addAttribute("postListResponseDto", responseDtoList);
 
         return "post/postFavoriteList";
     }
 
     @GetMapping("/members/favorites/more")
-    public String getMyFavoriteListMore(@AuthMember Member member, LocalDateTime cursorTime,
-            Model model) {
+    public String getMyFavoriteListMore(
+            @AuthMember Member member,
+            LocalDateTime cursorTime,
+            Model model
+    ) {
 
         PostListResponseDto responseDtoList = postService.getMyFavoritePostList(
                 member, cursorTime);
+
         model.addAttribute("postListResponseDto", responseDtoList);
 
         return "post/postListFragment";
     }
 
     @GetMapping("/members/posts")
-    public String getMyPostList(@AuthMember Member member,
-            @RequestParam(required = false) LocalDateTime cursorTime, Model model) {
+    public String getMyPostList(
+            @AuthMember Member member,
+            @RequestParam(required = false) LocalDateTime cursorTime,
+            Model model
+    ) {
 
         PostListResponseDto responseDtoList = postService.getMyPostList(member,
                 cursorTime);
@@ -136,8 +187,11 @@ public class MemberController {
     }
 
     @GetMapping("/members/posts/more")
-    public String getMyPostListMore(@AuthMember Member member, LocalDateTime cursorTime,
-            Model model) {
+    public String getMyPostListMore(
+            @AuthMember Member member,
+            LocalDateTime cursorTime,
+            Model model
+    ) {
 
         PostListResponseDto responseDtoList = postService.getMyPostList(member,
                 cursorTime);
@@ -149,8 +203,12 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/members/checkNickname")
-    public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
+    public ResponseEntity<?> checkNickname(
+            @RequestParam String nickname
+    ) {
+
         boolean nicknameExists = memberService.checkNicknameExists(nickname);
+
         return ResponseEntity.ok(nicknameExists);
     }
 }
