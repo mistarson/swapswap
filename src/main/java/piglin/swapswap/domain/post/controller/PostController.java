@@ -24,6 +24,7 @@ import piglin.swapswap.domain.post.dto.response.PostGetResponseDto;
 import piglin.swapswap.domain.post.dto.response.PostSimpleResponseDto;
 import piglin.swapswap.domain.post.service.PostService;
 import piglin.swapswap.global.annotation.AuthMember;
+import piglin.swapswap.global.annotation.HttpRequestLog;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @HttpRequestLog
     @PostMapping("/posts/write")
     public String createPost(
             @Valid @ModelAttribute PostCreateRequestDto requestDto,
@@ -117,6 +119,7 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    @HttpRequestLog
     @PutMapping("/posts/{postId}/write")
     public String updatePost(
             @PathVariable Long postId,
