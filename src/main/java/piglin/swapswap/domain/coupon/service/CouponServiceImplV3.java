@@ -3,6 +3,8 @@ package piglin.swapswap.domain.coupon.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import piglin.swapswap.domain.coupon.dto.request.CouponCreateRequestDto;
@@ -13,18 +15,20 @@ import piglin.swapswap.domain.coupon.repository.CouponRepository;
 import piglin.swapswap.domain.coupon.validator.CouponValidator;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Slf4j
 @Service
+@Primary
 @RequiredArgsConstructor
-public class CouponServiceImplV2 implements CouponService {
+public class CouponServiceImplV3 implements CouponService{
 
     private final CouponRepository couponRepository;
 
     private final MemberCouponService memberCouponService;
+
+    private final RedisTemplate<String, Integer> redisTemplate;
 
     @Override
     public Long createCoupon(CouponCreateRequestDto couponCreateRequestDto) {
@@ -35,6 +39,8 @@ public class CouponServiceImplV2 implements CouponService {
 
         Coupon savedCoupon = couponRepository.save(coupon);
 
+        redisTemplate.opsForValue().set(coupon.getName(), 0);
+
         return savedCoupon.getId();
     }
 
@@ -44,32 +50,36 @@ public class CouponServiceImplV2 implements CouponService {
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
 
-        return coupon.getCount();
+        int couponNumber = redisTemplate.opsForValue().get(coupon.getName());
+
+        return coupon.getCount() - couponNumber;
     }
 
     @Override
-    @SwapLog
     @Transactional
     public void issueEventCoupon(Long couponId, Member member) {
 
         log.info("\ncouponIssueStart - Member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
                 TransactionSynchronizationManager.isActualTransactionActive());
 
-        Coupon coupon = couponRepository.findByIdWithPessimisticLock(couponId)
+        Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
         log.info("\ncouponName: {} | couponType: {} | couponCountBeforeIssue: {}", coupon.getName(), coupon.getCouponType(), coupon.getCount());
+        int couponNumber = redisTemplate.opsForValue().get(coupon.getName());
 
-        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon));
-        if (issueCouponPossible(coupon)) {
+        redisTemplate.opsForValue().increment(coupon.getName());
+
+        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon.getCount(), 0L));
+        if (issueCouponPossible(coupon.getCount(), 0L)) {
             memberCouponService.saveMemberCoupon(member, coupon);
             coupon.issueCoupon();
             log.info("\ncouponCountAfterIssue: {}", coupon.getCount());
         }
     }
 
-    public boolean issueCouponPossible(Coupon coupon) {
+    public boolean issueCouponPossible(int couponCount, Long couponNumber) {
 
-        return coupon.getCount() > 0;
+        return couponCount >= couponNumber;
     }
 
     @Override
