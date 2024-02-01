@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import piglin.swapswap.domain.bill.service.BillService;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.service.MemberService;
-import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
 import piglin.swapswap.global.annotation.AuthMember;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
@@ -43,7 +40,6 @@ public class DealController {
         model.addAttribute("secondMemberId", secondMemberId);
         model.addAttribute("secondMemberName", memberName);
         model.addAttribute("memberId", member.getId());
-
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
                 null, null, null, null, null));
 
