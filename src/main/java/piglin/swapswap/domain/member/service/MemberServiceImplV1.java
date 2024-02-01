@@ -42,13 +42,13 @@ public class MemberServiceImplV1 implements MemberService {
         log.info("\nupdateNickname - memberId: {} | memberEmail: {} | memberCurrentNickname: {} | memberNicknameWillBe: {}",
                 member.getId(), member.getEmail(), member.getNickname(), requestDto.nickname());
 
-        Member isNotInTransactionMember = getMember(member.getId());
+        Member memberInTransaction = getMember(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.ALREADY_EXIST_USER_NAME_EXCEPTION);
         }
 
-        isNotInTransactionMember.updateMember(requestDto.nickname());
+        memberInTransaction.updateMember(requestDto.nickname());
 
         log.info("\nmemberChangedNickname: {}", member.getNickname());
     }
