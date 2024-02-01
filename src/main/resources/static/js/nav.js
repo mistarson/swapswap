@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function csCenter() {
 
   Swal.fire({
-    title : '서비스 준비중입니다',
+    title: '서비스 준비중입니다',
     confirmButtonColor: '#00AADC'
   })
 }
@@ -124,15 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeBtn = modal.querySelector('.close');
   const deleteAllBtn = modal.querySelector('#deleteAllNotificationsBtn');
 
-
-
-  link.addEventListener('click', function (event) {
-    event.preventDefault();
-    modal.style.display = 'block';
-    fetchNotifications();
-    displayNotifications();
-  });
-
   closeBtn.addEventListener('click', function () {
     modal.style.display = 'none';
   });
@@ -143,6 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
   if (getToken()) {
+
+    link.addEventListener('click', function (event) {
+      event.preventDefault();
+      modal.style.display = 'block';
+      fetchNotifications();
+      displayNotifications();
+    });
+
     subscribeToNotifications();
     getCountOfUnreadNotifications();
   }
@@ -161,10 +160,6 @@ function subscribeToNotifications() {
 
   eventSource.onmessage = function (event) {
     const notificationData = JSON.parse(event.data);
-
-    if (notificationData.toString().includes("EventStream Created")) {
-      return;
-    }
 
     checkNotificationPermission().then(granted => {
       if (granted) {
@@ -194,6 +189,7 @@ function checkNotificationPermission() {
     }
   });
 }
+
 function showNotification(data) {
   const notification = new Notification('', {
     body: data.content
