@@ -124,15 +124,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const closeBtn = modal.querySelector('.close');
   const deleteAllBtn = modal.querySelector('#deleteAllNotificationsBtn');
 
-  if (getToken()) {
-    subscribeToNotifications();
-    getCountOfUnreadNotifications();
-  }
+
 
   link.addEventListener('click', function (event) {
     event.preventDefault();
     modal.style.display = 'block';
-    fetchAndDisplayNotifications();
+    fetchNotifications();
+    displayNotifications();
   });
 
   closeBtn.addEventListener('click', function () {
@@ -144,7 +142,10 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.style.display = 'none';
     }
   });
-
+  if (getToken()) {
+    subscribeToNotifications();
+    getCountOfUnreadNotifications();
+  }
   deleteAllBtn.addEventListener('click', function () {
     deleteAllNotifications();
   });
@@ -173,18 +174,13 @@ function subscribeToNotifications() {
         console.log('알림 권한이 거부되었습니다');
       }
     });
-    fetchAndDisplayNotifications();
+    fetchNotifications();
   };
 
   eventSource.onerror = function (event) {
     console.error("EventSource error:", event);
     eventSource.close();
   };
-}
-
-function fetchAndDisplayNotifications() {
-  fetchNotifications();
-  // getCountOfUnreadNotifications();
 }
 
 function checkNotificationPermission() {
