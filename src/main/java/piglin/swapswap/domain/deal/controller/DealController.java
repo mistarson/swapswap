@@ -30,15 +30,15 @@ public class DealController {
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,
-            @RequestParam Long secondMemberId,
+            @RequestParam Long receiveMemberId,
             @RequestParam String memberName) {
 
-        if (member.getId().equals(secondMemberId)) {
+        if (member.getId().equals(receiveMemberId)) {
             throw new BusinessException(ErrorCode.REQUEST_ONLY_DIFFERENT_USER_EXCEPTION);
         }
 
-        model.addAttribute("secondMemberId", secondMemberId);
-        model.addAttribute("secondMemberName", memberName);
+        model.addAttribute("receiveMemberId", receiveMemberId);
+        model.addAttribute("receiveMemberName", memberName);
         model.addAttribute("memberId", member.getId());
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
                 null, null, null, null, null));
@@ -51,7 +51,7 @@ public class DealController {
     public ResponseEntity<?> createDeal(@AuthMember Member member,
             @Valid @RequestBody DealCreateRequestDto requestDto) {
 
-        if (requestDto.firstPostIdList().isEmpty() && requestDto.secondPostIdList().isEmpty()) {
+        if (requestDto.requestPostIdList().isEmpty() && requestDto.receivePostIdList().isEmpty()) {
             throw new InvalidDealRequestException(ErrorCode.BOTH_POST_ID_LIST_EMPTY_EXCEPTION);
         }
 
@@ -95,5 +95,15 @@ public class DealController {
         model.addAttribute("memberId", member.getId());
 
         return "deal/dealRequestDeal";
+    }
+
+    @GetMapping("/history")
+    public String getDealHistory(@AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealHistoryResponseDto", dealService.getDealHistoryList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealHistory";
     }
 }

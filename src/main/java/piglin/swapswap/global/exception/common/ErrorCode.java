@@ -62,6 +62,7 @@ public enum ErrorCode {
     CAN_NOT_UPDATE_CAUSE_DEAL_IS_NOT_REQUESTED(401, "이미 거래가 진행돼서 수정 할 수 없습니다."),
     DUPLICATE_COUPON_TYPE_EXCEPTION(400, "같은 타입의 쿠폰은 중복 사용이 불가능합니다."),
     UNAUTHORIZED_MODIFY_DEAL_EXCEPTION(400, "해당 거래 내용을 수정할 권한이 없습니다."),
+    NOT_CONTAIN_DEAL_MEMBER_EXCEPTION(400, "자신이 포함된 거래만 볼수 있습니다."),
 
     // Bill
     NOT_FOUND_BILL_EXCEPTION(404, "거래 명세서를 찾을 수 없습니다"),

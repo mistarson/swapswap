@@ -25,12 +25,12 @@ public class DealWalletServiceImplV1 implements DealWalletService {
 
         DealWallet dealWallet = DealWalletMapper.setDealWallet(deal, null, null);
 
-        if (deal.getFirstMemberbill().getMember().getId().equals(member.getId())) {
-            dealWallet.updateFirstSwapMoney(totalFee);
+        if (deal.getRequestMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateRequestMemberSwapMoney(totalFee);
         }
 
-        if (deal.getSecondMemberbill().getMember().getId().equals(member.getId())) {
-            dealWallet.updateSecondSwapMoney(totalFee);
+        if (deal.getReceiveMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateReceiveMemberSwapMoney(totalFee);
         }
 
         walletService.withdrawSwapMoney(totalFee, HistoryType.TEMPORARY_WITHDRAW, member.getId());
@@ -52,11 +52,11 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
                 .orElseThrow(DealWalletNotFoundException::new);
 
-        if (deal.getFirstMemberbill().getMember().getId().equals(member.getId())) {
-            dealWallet.updateFirstSwapMoney(totalFee);
+        if (deal.getRequestMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateRequestMemberSwapMoney(totalFee);
         }
-        if (deal.getSecondMemberbill().getMember().getId().equals(member.getId())) {
-            dealWallet.updateSecondSwapMoney(totalFee);
+        if (deal.getReceiveMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateReceiveMemberSwapMoney(totalFee);
         }
 
         walletService.withdrawSwapMoney(totalFee, HistoryType.TEMPORARY_WITHDRAW, member.getId());
@@ -68,15 +68,15 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
                 .orElseThrow(DealWalletNotFoundException::new);
 
-        if (dealWallet.getFirstSwapMoney() != null) {
-            Long firstMemberTotalFee = dealWallet.getFirstSwapMoney() - deal.getFirstMemberbill().getCommission();
-            walletService.depositSwapMoney(firstMemberTotalFee,
-                    HistoryType.DEAL_DEPOSIT, deal.getSecondMemberbill().getMember().getId());
+        if (dealWallet.getRequestMemberSwapMoney() != null) {
+            Long requestMemberTotalFee = dealWallet.getRequestMemberSwapMoney() - deal.getRequestMemberbill().getCommission();
+            walletService.depositSwapMoney(requestMemberTotalFee,
+                    HistoryType.DEAL_DEPOSIT, deal.getReceiveMemberbill().getMember().getId());
         }
-        if (dealWallet.getSecondSwapMoney() != null) {
-            Long secondMemberTotalFee = dealWallet.getSecondSwapMoney() - deal.getSecondMemberbill().getCommission();
-            walletService.depositSwapMoney(secondMemberTotalFee,
-                    HistoryType.DEAL_DEPOSIT, deal.getFirstMemberbill().getMember().getId());
+        if (dealWallet.getReceiveMemberSwapMoney() != null) {
+            Long receiveMemberTotalFee = dealWallet.getReceiveMemberSwapMoney() - deal.getReceiveMemberbill().getCommission();
+            walletService.depositSwapMoney(receiveMemberTotalFee,
+                    HistoryType.DEAL_DEPOSIT, deal.getRequestMemberbill().getMember().getId());
         }
     }
 
@@ -86,13 +86,13 @@ public class DealWalletServiceImplV1 implements DealWalletService {
         DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
                 .orElseThrow(DealWalletNotFoundException::new);
 
-        if (dealWallet.getFirstSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(),
-                    HistoryType.CANCEL_WITHDRAW, deal.getFirstMemberbill().getMember().getId());
+        if (dealWallet.getRequestMemberSwapMoney() != null) {
+            walletService.depositSwapMoney(dealWallet.getRequestMemberSwapMoney(),
+                    HistoryType.CANCEL_WITHDRAW, deal.getRequestMemberbill().getMember().getId());
         }
-        if (dealWallet.getSecondSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
-                    HistoryType.CANCEL_WITHDRAW, deal.getSecondMemberbill().getMember().getId());
+        if (dealWallet.getReceiveMemberSwapMoney() != null) {
+            walletService.depositSwapMoney(dealWallet.getReceiveMemberSwapMoney(),
+                    HistoryType.CANCEL_WITHDRAW, deal.getReceiveMemberbill().getMember().getId());
         }
 
         dealWalletRepository.delete(dealWallet);

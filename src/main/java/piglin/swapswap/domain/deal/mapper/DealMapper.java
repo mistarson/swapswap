@@ -8,16 +8,17 @@ import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 
 public class DealMapper {
 
-    public static Deal createDeal(Bill firstMemberbill, Bill secondMemberbill) {
+    public static Deal createDeal(Bill requestMemberbill, Bill receiveMemberbill) {
 
         return Deal.builder()
                 .dealStatus(DealStatus.REQUESTED)
-                .firstMemberbill(firstMemberbill)
-                .secondMemberbill(secondMemberbill)
+                .requestMemberbill(requestMemberbill)
+                .receiveMemberbill(receiveMemberbill)
                 .build();
     }
 
@@ -25,7 +26,7 @@ public class DealMapper {
 
         return myRequestDealList.stream().map(deal -> DealGetRequestDto.builder()
                 .dealId(deal.getId())
-                .secondMemberNickname(deal.getSecondMemberbill().getMember().getNickname())
+                .receiveMemberNickname(deal.getReceiveMemberbill().getMember().getNickname())
                 .dealStatus(deal.getDealStatus())
                 .build()).toList();
     }
@@ -35,7 +36,7 @@ public class DealMapper {
 
         return myReceiveDealList.stream().map(deal -> DealGetReceiveDto.builder()
                 .dealId(deal.getId())
-                .firstMemberNickname(deal.getFirstMemberbill().getMember().getNickname())
+                .requestMemberNickname(deal.getRequestMemberbill().getMember().getNickname())
                 .dealStatus(deal.getDealStatus())
                 .build()).toList();
     }
@@ -47,32 +48,44 @@ public class DealMapper {
             List<BillCouponResponseDto> requestBillCouponDtoList,
             List<BillCouponResponseDto> receiveBillCouponDtoList) {
 
-        Bill firstMemberBill = deal.getFirstMemberbill();
-        Bill secondMemberBill = deal.getSecondMemberbill();
+        Bill requestMemberBill = deal.getRequestMemberbill();
+        Bill receiveMemberBill = deal.getReceiveMemberbill();
 
         return DealDetailResponseDto.builder()
                 .id(deal.getId())
                 .dealStatus(deal.getDealStatus())
-                .firstMemberBillId(firstMemberBill.getId())
-                .secondMemberBillId(secondMemberBill.getId())
-                .firstMemberId(firstMemberBill.getMember().getId())
-                .secondMemberId(secondMemberBill.getMember().getId())
-                .firstMemberNickname(firstMemberBill.getMember().getNickname())
-                .secondMemberNickname(secondMemberBill.getMember().getNickname())
-                .firstDealPostList(requestBillPostListDto)
-                .secondDealPostList(receiveBillPostListDto)
-                .firstExtraFee(deal.getFirstMemberbill().getExtrafee())
-                .secondExtraFee(deal.getSecondMemberbill().getExtrafee())
-                .firstAllow(deal.getFirstMemberbill().getIsAllowed())
-                .secondAllow(deal.getSecondMemberbill().getIsAllowed())
-                .firstTake(deal.getFirstMemberbill().getIsTaked())
-                .secondTake(deal.getSecondMemberbill().getIsTaked())
-                .useSwapMoneyFirstMember(deal.getFirstMemberbill().getIsSwapMoneyUsed())
-                .useSwapMoneySecondMember(deal.getSecondMemberbill().getIsSwapMoneyUsed())
-                .firstMemberCommission(deal.getFirstMemberbill().getCommission())
-                .secondMemberCommission(deal.getSecondMemberbill().getCommission())
-                .firstCouponList(requestBillCouponDtoList)
-                .secondCouponList(receiveBillCouponDtoList)
+                .requestMemberBillId(requestMemberBill.getId())
+                .receiveMemberBillId(receiveMemberBill.getId())
+                .requestMemberId(requestMemberBill.getMember().getId())
+                .receiveMemberId(receiveMemberBill.getMember().getId())
+                .requestMemberNickname(requestMemberBill.getMember().getNickname())
+                .receiveMemberNickname(receiveMemberBill.getMember().getNickname())
+                .requestDealPostList(requestBillPostListDto)
+                .receiveDealPostList(receiveBillPostListDto)
+                .requestMemberExtraFee(deal.getRequestMemberbill().getExtrafee())
+                .receiveMemberExtraFee(deal.getReceiveMemberbill().getExtrafee())
+                .requestAllow(deal.getRequestMemberbill().getIsAllowed())
+                .receiveAllow(deal.getReceiveMemberbill().getIsAllowed())
+                .requestTake(deal.getRequestMemberbill().getIsTaked())
+                .receiveTake(deal.getReceiveMemberbill().getIsTaked())
+                .useSwapMoneyRequestMember(deal.getRequestMemberbill().getIsSwapMoneyUsed())
+                .useSwapMoneyReceiveMember(deal.getReceiveMemberbill().getIsSwapMoneyUsed())
+                .requestMemberCommission(deal.getRequestMemberbill().getCommission())
+                .receiveMemberCommission(deal.getReceiveMemberbill().getCommission())
+                .requestCouponList(requestBillCouponDtoList)
+                .receiveCouponList(receiveBillCouponDtoList)
                 .build();
+    }
+
+    public static List<DealHistoryResponseDto> getDealHistory(List<Deal> dealList) {
+
+        return dealList.stream().map(deal ->
+                        DealHistoryResponseDto.builder()
+                                .id(deal.getId())
+                                .dealStatus(deal.getDealStatus())
+                                .createdTime(deal.getCreatedTime())
+                                .completedDealTime(deal.getCompletedDealTime())
+                                .build())
+                .toList();
     }
 }

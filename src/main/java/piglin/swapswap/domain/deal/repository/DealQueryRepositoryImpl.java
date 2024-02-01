@@ -25,54 +25,75 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public List<Deal> findAllMyRequestDeal(Long memberId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
-        QMember firstMember = new QMember("firstMember");
-        QMember secondMember = new QMember("secondMember");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
+        QMember requestMember = new QMember("requestMember");
+        QMember receiveMember = new QMember("receiveMember");
 
         return queryFactory
                 .selectFrom(deal)
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
-                .join(firstMemberBill.member, firstMember).fetchJoin()
-                .join(secondMemberBill.member, secondMember).fetchJoin()
-                .where(firstMember.id.eq(memberId))
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
+                .join(requestMemberBill.member, requestMember).fetchJoin()
+                .join(receiveMemberBill.member, receiveMember).fetchJoin()
+                .where(requestMember.id.eq(memberId))
                 .fetch();
     }
 
     @Override
     public List<Deal> findAllMyReceiveDeal(Long memberId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
-        QMember firstMember = new QMember("firstMember");
-        QMember secondMember = new QMember("secondMember");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
+        QMember requestMember = new QMember("requestMember");
+        QMember receiveMember = new QMember("receiveMember");
 
         return  queryFactory
                 .selectFrom(deal)
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
-                .join(firstMemberBill.member, firstMember).fetchJoin()
-                .join(secondMemberBill.member, secondMember).fetchJoin()
-                .where(secondMember.id.eq(memberId))
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
+                .join(requestMemberBill.member, requestMember).fetchJoin()
+                .join(receiveMemberBill.member, receiveMember).fetchJoin()
+                .where(receiveMember.id.eq(memberId))
+                .fetch();
+    }
+
+    @Override
+    public List<Deal> findAllMyDeal(Long memberId) {
+
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
+        QMember requestMember = new QMember("requestMember");
+        QMember receiveMember = new QMember("receiveMember");
+
+        return queryFactory
+                .selectFrom(deal)
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
+                .join(requestMemberBill.member, requestMember).fetchJoin()
+                .join(receiveMemberBill.member, receiveMember).fetchJoin()
+                .where(
+                        requestMember.id.eq(memberId)
+                        .or(receiveMember.id.eq(memberId))
+                )
                 .fetch();
     }
 
     @Override
     public Optional<Deal> findDealByIdWithBillAndMember(Long dealId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
-        QMember firstMember = new QMember("firstMember");
-        QMember secondMember = new QMember("secondMember");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
+        QMember requestMember = new QMember("requestMember");
+        QMember receiveMember = new QMember("receiveMember");
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(deal)
                 .where(deal.id.eq(dealId))
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
-                .join(firstMemberBill.member, firstMember).fetchJoin()
-                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
+                .join(requestMemberBill.member, requestMember).fetchJoin()
+                .join(receiveMemberBill.member, receiveMember).fetchJoin()
                 .fetchOne());
     }
 
@@ -88,51 +109,51 @@ public class DealQueryRepositoryImpl implements DealQueryRepository {
     @Override
     public Optional<Deal> findDealByIdWithBill(Long dealId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(deal)
                 .where(deal.id.eq(dealId))
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
                 .fetchOne());
     }
 
     @Override
     public Optional<Deal> findByBillIdWithBillAndMember(Long billId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
-        QMember firstMember = new QMember("firstMember");
-        QMember secondMember = new QMember("secondMember");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
+        QMember requestMember = new QMember("requestMember");
+        QMember receiveMember = new QMember("receiveMember");
 
         return Optional.ofNullable(queryFactory
                 .selectFrom(deal)
                 .where(billIdEq(billId))
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
-                .join(firstMemberBill.member, firstMember).fetchJoin()
-                .join(secondMemberBill.member, secondMember).fetchJoin()
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
+                .join(requestMemberBill.member, requestMember).fetchJoin()
+                .join(receiveMemberBill.member, receiveMember).fetchJoin()
                 .fetchFirst());
     }
 
     @Override
     public Optional<Deal> findByBillIdWithBill(Long billId) {
 
-        QBill firstMemberBill = new QBill("firstMemberBill");
-        QBill secondMemberBill = new QBill("secondMemberBill");
+        QBill requestMemberBill = new QBill("requestMemberBill");
+        QBill receiveMemberBill = new QBill("receiveMemberBill");
 
         return Optional.ofNullable(queryFactory.select(deal)
                 .from(deal)
                 .where(billIdEq(billId))
-                .join(deal.firstMemberbill, firstMemberBill).fetchJoin()
-                .join(deal.secondMemberbill, secondMemberBill).fetchJoin()
+                .join(deal.requestMemberbill, requestMemberBill).fetchJoin()
+                .join(deal.receiveMemberbill, receiveMemberBill).fetchJoin()
                 .fetchFirst());
     }
 
     private BooleanExpression billIdEq(Long billId) {
 
-        return deal.firstMemberbill.id.eq(billId).or(deal.secondMemberbill.id.eq(billId));
+        return deal.requestMemberbill.id.eq(billId).or(deal.receiveMemberbill.id.eq(billId));
     }
 }

@@ -1,6 +1,5 @@
 package piglin.swapswap.domain.billcoupon.repository;
 
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import piglin.swapswap.domain.billcoupon.entity.BillCoupon;
 

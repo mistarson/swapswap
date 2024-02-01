@@ -4,8 +4,10 @@ import lombok.Builder;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 
 @Builder
-public record DealGetRequestDto(Long dealId,
-                                String secondMemberNickname,
-                                DealStatus dealStatus) {
+public record DealGetRequestDto(
+        Long dealId,
+        String receiveMemberNickname,
+        DealStatus dealStatus
+) {
 
 }

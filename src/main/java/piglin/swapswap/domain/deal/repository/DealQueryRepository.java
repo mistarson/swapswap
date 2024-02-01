@@ -10,6 +10,8 @@ public interface DealQueryRepository {
 
     List<Deal> findAllMyReceiveDeal(Long memberId);
 
+    List<Deal> findAllMyDeal(Long memberId);
+
     Optional<Deal> findDealByIdWithBillAndMember(Long dealId);
 
     Optional<Deal> findDealByIdWithBill(Long dealId);

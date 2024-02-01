@@ -6,7 +6,7 @@ import piglin.swapswap.domain.deal.constant.DealStatus;
 @Builder
 public record DealGetReceiveDto(
         Long dealId,
-        String firstMemberNickname,
+        String requestMemberNickname,
         DealStatus dealStatus
 ) {
 

@@ -16,6 +16,7 @@ import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
@@ -42,19 +43,19 @@ public class DealServiceImplV1 implements DealService {
     @Transactional
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
 
-        Bill firstMemberBill = billService.createBill(member, requestDto.firstExtraFee(),
-                requestDto.firstPostIdList());
+        Bill requestMemberBill = billService.createBill(member, requestDto.requestMemberExtraFee(),
+                requestDto.requestPostIdList());
 
-        Member secondMember = memberService.getMember(requestDto.secondMemberId());
+        Member receiveMember = memberService.getMember(requestDto.receiveMemberId());
 
-        Bill secondMemberBill = billService.createBill(secondMember, requestDto.secondExtraFee(),
-                requestDto.secondPostIdList());
+        Bill receiveMemberBill = billService.createBill(receiveMember, requestDto.receiveMemberExtraFee(),
+                requestDto.receivePostIdList());
 
-        Deal deal = DealMapper.createDeal(firstMemberBill, secondMemberBill);
+        Deal deal = DealMapper.createDeal(requestMemberBill, receiveMemberBill);
 
         String Url = "http://swapswap.shop/deals/" + deal.getId();
-        String content = secondMember.getNickname()+"님! 거래 요청이 왔어요!";
-        notificationService.send(secondMember, NotificationType.DEAL,content,Url);
+        String content = receiveMember.getNickname()+"님! 거래 요청이 왔어요!";
+        notificationService.send(receiveMember, NotificationType.DEAL,content,Url);
 
         dealRepository.save(deal);
 
@@ -84,8 +85,13 @@ public class DealServiceImplV1 implements DealService {
                 () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
         );
 
-        Bill requestMemberBill = deal.getFirstMemberbill();
-        Bill receiveMemberBill = deal.getSecondMemberbill();
+        Bill requestMemberBill = deal.getRequestMemberbill();
+        Bill receiveMemberBill = deal.getReceiveMemberbill();
+
+        if (!requestMemberBill.getMember().getId().equals(member.getId())
+                &&!receiveMemberBill.getMember().getId().equals(member.getId())) {
+            throw new BusinessException(ErrorCode.NOT_CONTAIN_DEAL_MEMBER_EXCEPTION);
+        }
 
         List<BillPostResponseDto> requestBillPostDtoList = billPostService.getBillPostDtoList(
                 requestMemberBill);
@@ -107,7 +113,7 @@ public class DealServiceImplV1 implements DealService {
 
         Deal deal = getDealByBillIdWithBill(billId);
 
-        if(deal.getFirstMemberbill().getIsAllowed() && deal.getSecondMemberbill().getIsAllowed()) {
+        if(deal.getRequestMemberbill().getIsAllowed() && deal.getReceiveMemberbill().getIsAllowed()) {
 
             deal.updateDealStatus(DealStatus.DEALING);
         }
@@ -119,14 +125,23 @@ public class DealServiceImplV1 implements DealService {
 
         Deal deal = getDealByBillIdWithBill(billId);
 
-        if(deal.getFirstMemberbill().getIsTaked() && deal.getSecondMemberbill().getIsTaked()) {
+        if(deal.getRequestMemberbill().getIsTaked() && deal.getReceiveMemberbill().getIsTaked()) {
 
             deal.updateDealStatus(DealStatus.COMPLETED);
+            deal.completedTime();
 
             if(dealWalletService.existDealWalletByDealId(deal.getId())) {
                 dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
             }
         }
+    }
+
+    @Override
+    public List<DealHistoryResponseDto> getDealHistoryList(Long memberId) {
+
+        List<Deal> myAllDealList = dealRepository.findAllMyDeal(memberId);
+
+        return DealMapper.getDealHistory(myAllDealList);
     }
 
     @Override
@@ -154,5 +169,4 @@ public class DealServiceImplV1 implements DealService {
                 () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
         );
     }
-
 }

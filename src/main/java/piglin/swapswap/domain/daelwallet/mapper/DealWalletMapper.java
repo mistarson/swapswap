@@ -5,12 +5,12 @@ import piglin.swapswap.domain.deal.entity.Deal;
 
 public class DealWalletMapper {
 
-    public static DealWallet setDealWallet(Deal deal, Long firstSwapMoney, Long secondSwapMoney) {
+    public static DealWallet setDealWallet(Deal deal, Long RequestMemberSwapMoney, Long ReceiveMemberSwapMoney) {
 
         return DealWallet.builder()
                 .deal(deal)
-                .firstSwapMoney(firstSwapMoney)
-                .secondSwapMoney(secondSwapMoney)
+                .RequestMemberSwapMoney(RequestMemberSwapMoney)
+                .ReceiveMemberSwapMoney(ReceiveMemberSwapMoney)
                 .build();
     }
 

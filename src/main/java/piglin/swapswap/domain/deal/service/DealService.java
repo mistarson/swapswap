@@ -5,6 +5,7 @@ import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetReceiveDto;
 import piglin.swapswap.domain.deal.dto.response.DealGetRequestDto;
+import piglin.swapswap.domain.deal.dto.response.DealHistoryResponseDto;
 import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.Member;
 
@@ -27,4 +28,6 @@ public interface DealService {
     Deal getDealByBillIdWithBill(Long billId);
 
     Deal getDealByBillIdWithBillAndMember(Long billId);
+
+    List<DealHistoryResponseDto> getDealHistoryList(Long memberId);
 }

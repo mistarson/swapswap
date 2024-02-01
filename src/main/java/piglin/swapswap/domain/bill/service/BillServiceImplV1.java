@@ -126,10 +126,10 @@ public class BillServiceImplV1 implements BillService {
     @Override
     public void validateUpdateBill(Deal deal, Long billId, Member member) {
 
-        Long firstMemberId = deal.getFirstMemberbill().getMember().getId();
-        Long secondMemberId = deal.getSecondMemberbill().getMember().getId();
+        Long requestMemberId = deal.getRequestMemberbill().getMember().getId();
+        Long receiveMemberId = deal.getReceiveMemberbill().getMember().getId();
 
-        if (!firstMemberId.equals(member.getId()) && !secondMemberId.equals(member.getId())) {
+        if (!requestMemberId.equals(member.getId()) && !receiveMemberId.equals(member.getId())) {
             throw new UnauthorizedModifyException(ErrorCode.UNAUTHORIZED_MODIFY_DEAL_EXCEPTION);
         }
 
@@ -139,11 +139,11 @@ public class BillServiceImplV1 implements BillService {
 
         Bill bill = null;
 
-        if (deal.getFirstMemberbill().getId().equals(billId)) {
-            bill = deal.getFirstMemberbill();
+        if (deal.getRequestMemberbill().getId().equals(billId)) {
+            bill = deal.getRequestMemberbill();
         }
-        if (deal.getSecondMemberbill().getId().equals(billId)) {
-            bill = deal.getSecondMemberbill();
+        if (deal.getReceiveMemberbill().getId().equals(billId)) {
+            bill = deal.getReceiveMemberbill();
         }
 
         if (bill.getIsAllowed()) {
