@@ -119,7 +119,7 @@ public class BillController {
             @PathVariable Long billId,
             @AuthMember Member member) {
 
-        billFacade.updateBillTake(billId, member);
+        billService.updateBillTake(billId, member);
         dealService.bothTakeThenChangeCompleted(billId);
 
         return ResponseEntity.ok().build();

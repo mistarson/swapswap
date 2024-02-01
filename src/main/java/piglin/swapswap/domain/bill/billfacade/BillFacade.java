@@ -62,10 +62,4 @@ public class BillFacade {
         billPostService.deleteAllByBill(bill);
         billPostService.createBillPost(bill, requestDto.postIdList());
     }
-
-    @Transactional
-    public void updateBillTake(Long billId, Member member) {
-
-        billService.updateBillTake(billId, member);
-    }
 }
