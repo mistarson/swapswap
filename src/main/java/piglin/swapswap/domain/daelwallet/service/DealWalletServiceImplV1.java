@@ -69,11 +69,13 @@ public class DealWalletServiceImplV1 implements DealWalletService {
                 .orElseThrow(DealWalletNotFoundException::new);
 
         if (dealWallet.getFirstSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(),
+            Long firstMemberTotalFee = dealWallet.getFirstSwapMoney() - deal.getFirstMemberbill().getCommission();
+            walletService.depositSwapMoney(firstMemberTotalFee,
                     HistoryType.DEAL_DEPOSIT, deal.getSecondMemberbill().getMember().getId());
         }
         if (dealWallet.getSecondSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
+            Long secondMemberTotalFee = dealWallet.getSecondSwapMoney() - deal.getSecondMemberbill().getCommission();
+            walletService.depositSwapMoney(secondMemberTotalFee,
                     HistoryType.DEAL_DEPOSIT, deal.getFirstMemberbill().getMember().getId());
         }
     }
