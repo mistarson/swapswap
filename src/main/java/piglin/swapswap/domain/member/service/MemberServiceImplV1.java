@@ -41,13 +41,15 @@ public class MemberServiceImplV1 implements MemberService {
 
         log.info("\nupdateNickname - memberId: {} | memberEmail: {} | memberCurrentNickname: {} | memberNicknameWillBe: {}",
                 member.getId(), member.getEmail(), member.getNickname(), requestDto.nickname());
-        checkMemberExists(member.getId());
+
+        Member memberInTransaction = getMember(member.getId());
 
         if (memberRepository.existsByNicknameAndIsDeletedIsFalse(requestDto.nickname())) {
             throw new BusinessException(ErrorCode.ALREADY_EXIST_USER_NAME_EXCEPTION);
         }
 
-        member.updateMember(requestDto.nickname());
+        memberInTransaction.updateMember(requestDto.nickname());
+
         log.info("\nmemberChangedNickname: {}", member.getNickname());
     }
 
@@ -124,12 +126,5 @@ public class MemberServiceImplV1 implements MemberService {
     public List<Member> getMembers(List<Long> memberIds) {
 
         return memberRepository.findByIdIn(memberIds);
-    }
-
-    public void checkMemberExists(Long memberId) {
-
-        if (!memberRepository.existsByIdAndIsDeletedIsFalse(memberId)) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_USER_EXCEPTION);
-        }
     }
 }
