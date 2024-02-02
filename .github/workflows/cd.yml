@@ -11,8 +11,8 @@ jobs:
     name: Deploy
     runs-on: [ self-hosted, label-development ]
     steps:
-      - name: Docker run
+      - name: Docker-compose run
         run: |
-          docker compose down
-          docker compose pull
-          docker compose up -d
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
