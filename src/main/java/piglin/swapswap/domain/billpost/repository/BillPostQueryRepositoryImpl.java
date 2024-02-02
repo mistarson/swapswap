@@ -8,7 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import piglin.swapswap.domain.bill.entity.Bill;
-import piglin.swapswap.domain.billpost.entity.QBillPost;
 import piglin.swapswap.domain.post.entity.Post;
 
 public class BillPostQueryRepositoryImpl implements BillPostQueryRepository {

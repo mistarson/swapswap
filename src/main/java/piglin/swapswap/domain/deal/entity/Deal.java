@@ -9,10 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,13 +38,13 @@ public class Deal extends BaseTime {
     @Column
     private LocalDateTime completedDealTime;
 
-    @JoinColumn(name = "first_member_bill_id")
+    @JoinColumn(name = "request_member_bill_id")
     @OneToOne(fetch = FetchType.LAZY)
-    private Bill firstMemberbill;
+    private Bill requestMemberbill;
 
-    @JoinColumn(name = "second_member_bill_id")
+    @JoinColumn(name = "receive_member_bill_id")
     @OneToOne(fetch = FetchType.LAZY)
-    private Bill secondMemberbill;
+    private Bill receiveMemberbill;
 
     public void updateDealStatus(DealStatus dealStatus) {
 

@@ -13,44 +13,44 @@ public record DealDetailResponseDto(
 
     DealStatus dealStatus,
 
-    Long firstMemberBillId,
+    Long requestMemberBillId,
 
-    Long secondMemberBillId,
+    Long receiveMemberBillId,
 
-    Long firstMemberId,
+    Long requestMemberId,
 
-    Long secondMemberId,
+    Long receiveMemberId,
 
-    String firstMemberNickname,
+    String requestMemberNickname,
 
-    String secondMemberNickname,
+    String receiveMemberNickname,
 
-    List<BillPostResponseDto> firstDealPostList,
+    List<BillPostResponseDto> requestDealPostList,
 
-    List<BillPostResponseDto> secondDealPostList,
+    List<BillPostResponseDto> receiveDealPostList,
 
-    Long firstExtraFee,
+    Long requestMemberExtraFee,
 
-    Long secondExtraFee,
+    Long receiveMemberExtraFee,
 
-    Boolean firstAllow,
+    Boolean requestAllow,
 
-    Boolean secondAllow,
+    Boolean receiveAllow,
 
-    Boolean firstTake,
+    Boolean requestTake,
 
-    Boolean secondTake,
+    Boolean receiveTake,
 
-    Boolean useSwapMoneyFirstMember,
+    Boolean useSwapMoneyRequestMember,
 
-    Boolean useSwapMoneySecondMember,
+    Boolean useSwapMoneyReceiveMember,
 
-    Long firstMemberCommission,
+    Long requestMemberCommission,
 
-    Long secondMemberCommission,
+    Long receiveMemberCommission,
 
-    List<BillCouponResponseDto> firstCouponList,
+    List<BillCouponResponseDto> requestCouponList,
 
-    List<BillCouponResponseDto> secondCouponList
+    List<BillCouponResponseDto> receiveCouponList
     ) {
 }

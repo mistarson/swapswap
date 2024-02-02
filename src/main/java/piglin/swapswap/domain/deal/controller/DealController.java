@@ -17,9 +17,6 @@ import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
-import piglin.swapswap.global.exception.common.BusinessException;
-import piglin.swapswap.global.exception.common.ErrorCode;
-import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,15 +27,13 @@ public class DealController {
 
     @GetMapping("/request")
     public String createDealForm(Model model, @AuthMember Member member,
-            @RequestParam Long secondMemberId,
+            @RequestParam Long receiveMemberId,
             @RequestParam String memberName) {
 
-        if (member.getId().equals(secondMemberId)) {
-            throw new BusinessException(ErrorCode.REQUEST_ONLY_DIFFERENT_USER_EXCEPTION);
-        }
+            dealService.isDifferentMember(member, receiveMemberId);
 
-        model.addAttribute("secondMemberId", secondMemberId);
-        model.addAttribute("secondMemberName", memberName);
+        model.addAttribute("receiveMemberId", receiveMemberId);
+        model.addAttribute("receiveMemberName", memberName);
         model.addAttribute("memberId", member.getId());
         model.addAttribute("dealCreateRequestDto", new DealCreateRequestDto(
                 null, null, null, null, null));
@@ -50,10 +45,6 @@ public class DealController {
     @PostMapping
     public ResponseEntity<?> createDeal(@AuthMember Member member,
             @Valid @RequestBody DealCreateRequestDto requestDto) {
-
-        if (requestDto.firstPostIdList().isEmpty() && requestDto.secondPostIdList().isEmpty()) {
-            throw new InvalidDealRequestException(ErrorCode.BOTH_POST_ID_LIST_EMPTY_EXCEPTION);
-        }
 
         Long dealId = dealService.createDeal(member, requestDto);
 
@@ -95,5 +86,15 @@ public class DealController {
         model.addAttribute("memberId", member.getId());
 
         return "deal/dealRequestDeal";
+    }
+
+    @GetMapping("/history")
+    public String getDealHistory(@AuthMember Member member,
+            Model model) {
+
+        model.addAttribute("dealHistoryResponseDto", dealService.getDealHistoryList(member.getId()));
+        model.addAttribute("memberNickname", member.getNickname());
+
+        return "deal/dealHistory";
     }
 }
