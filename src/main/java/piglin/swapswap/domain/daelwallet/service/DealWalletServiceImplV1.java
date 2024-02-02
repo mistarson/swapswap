@@ -10,6 +10,7 @@ import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.wallet.service.WalletService;
 import piglin.swapswap.domain.wallethistory.constant.HistoryType;
+import piglin.swapswap.global.exception.dealwallet.DealWalletNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,110 +21,80 @@ public class DealWalletServiceImplV1 implements DealWalletService {
 
     @Override
     @Transactional
-    public void createDealWallet(Deal deal, Member member, Long swapMoney) {
+    public void createDealWallet(Deal deal, Member member, Long totalFee) {
 
         DealWallet dealWallet = DealWalletMapper.setDealWallet(deal, null, null);
 
-        if (deal.getFirstUserId().equals(member.getId())) {
-            dealWallet.updateFirstSwapMoney(swapMoney);
+        if (deal.getRequestMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateRequestMemberSwapMoney(totalFee);
         }
 
-        if (deal.getSecondUserId().equals(member.getId())) {
-            dealWallet.updateSecondSwapMoney(swapMoney);
+        if (deal.getReceiveMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateReceiveMemberSwapMoney(totalFee);
         }
 
-        walletService.withdrawSwapMoney(swapMoney, HistoryType.DEAL_WITHDRAW, member.getId());
+        walletService.withdrawSwapMoney(totalFee, HistoryType.TEMPORARY_WITHDRAW, member.getId());
 
         dealWalletRepository.save(dealWallet);
     }
 
     @Override
-    public void updateDealWallet(Deal deal, Member member, Long swapMoney) {
+    @Transactional
+    public boolean existDealWalletByDealId(Long dealId) {
 
-        DealWallet dealWallet = findDealWalletByDeal(deal);
-
-        if (deal.getFirstUserId().equals(member.getId())) {
-            dealWallet.updateFirstSwapMoney(swapMoney);
-        }
-
-        if (deal.getSecondUserId().equals(member.getId())) {
-            dealWallet.updateSecondSwapMoney(swapMoney);
-        }
-
-        walletService.withdrawSwapMoney(swapMoney, HistoryType.DEAL_WITHDRAW, member.getId());
+        return dealWalletRepository.existsByDealId(dealId);
     }
 
     @Override
-    public void withdrawMemberSwapMoneyAtUpdate(Deal deal, Member member) {
+    @Transactional
+    public void updateDealWallet(Deal deal, Member member, Long totalFee) {
 
-        DealWallet dealWallet = findDealWalletByDeal(deal);
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(DealWalletNotFoundException::new);
 
-        Long swapMoney = 0L;
-
-        if (deal.getFirstUserId().equals(member.getId())) {
-            if (dealWallet.getFirstSwapMoney() != null) {
-                swapMoney = dealWallet.getFirstSwapMoney();
-            }
-            dealWallet.updateFirstSwapMoney(null);
+        if (deal.getRequestMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateRequestMemberSwapMoney(totalFee);
+        }
+        if (deal.getReceiveMemberbill().getMember().getId().equals(member.getId())) {
+            dealWallet.updateReceiveMemberSwapMoney(totalFee);
         }
 
-        if (deal.getSecondUserId().equals(member.getId())) {
-            if (dealWallet.getSecondSwapMoney() != null) {
-                swapMoney = dealWallet.getSecondSwapMoney();
-            }
-            dealWallet.updateSecondSwapMoney(null);
-        }
-
-        if(!(swapMoney == 0L)) {
-            walletService.depositSwapMoney(swapMoney, HistoryType.DEAL_DEPOSIT, member.getId());
-        }
+        walletService.withdrawSwapMoney(totalFee, HistoryType.TEMPORARY_WITHDRAW, member.getId());
     }
 
     @Override
     public void withdrawMemberSwapMoneyAtComplete(Deal deal) {
 
-        DealWallet dealWallet = findDealWalletByDeal(deal);
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(DealWalletNotFoundException::new);
 
-        if (dealWallet.getFirstSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
-                    deal.getSecondUserId());
+        if (dealWallet.getRequestMemberSwapMoney() != null) {
+            Long requestMemberTotalFee = dealWallet.getRequestMemberSwapMoney() - deal.getRequestMemberbill().getCommission();
+            walletService.depositSwapMoney(requestMemberTotalFee,
+                    HistoryType.DEAL_DEPOSIT, deal.getReceiveMemberbill().getMember().getId());
         }
-        if (dealWallet.getSecondSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
-                    HistoryType.DEAL_DEPOSIT, deal.getFirstUserId());
+        if (dealWallet.getReceiveMemberSwapMoney() != null) {
+            Long receiveMemberTotalFee = dealWallet.getReceiveMemberSwapMoney() - deal.getReceiveMemberbill().getCommission();
+            walletService.depositSwapMoney(receiveMemberTotalFee,
+                    HistoryType.DEAL_DEPOSIT, deal.getRequestMemberbill().getMember().getId());
         }
     }
 
     @Override
-    public void withdrawMemberSwapMoneyAtDealUpdate(Deal deal) {
+    public void rollbackTemporarySwapMoney(Deal deal) {
 
-        DealWallet dealWallet = getDealWallet(deal);
+        DealWallet dealWallet = dealWalletRepository.findByDealId(deal.getId())
+                .orElseThrow(DealWalletNotFoundException::new);
 
-        if (dealWallet.getFirstSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getFirstSwapMoney(), HistoryType.DEAL_DEPOSIT,
-                    deal.getFirstUserId());
+        if (dealWallet.getRequestMemberSwapMoney() != null) {
+            walletService.depositSwapMoney(dealWallet.getRequestMemberSwapMoney(),
+                    HistoryType.CANCEL_WITHDRAW, deal.getRequestMemberbill().getMember().getId());
         }
-        if (dealWallet.getSecondSwapMoney() != null) {
-            walletService.depositSwapMoney(dealWallet.getSecondSwapMoney(),
-                    HistoryType.DEAL_DEPOSIT, deal.getSecondUserId());
+        if (dealWallet.getReceiveMemberSwapMoney() != null) {
+            walletService.depositSwapMoney(dealWallet.getReceiveMemberSwapMoney(),
+                    HistoryType.CANCEL_WITHDRAW, deal.getReceiveMemberbill().getMember().getId());
         }
 
         dealWalletRepository.delete(dealWallet);
-    }
-
-    @Override
-    public Boolean existsDealWallet(Long dealId) {
-
-        return dealWalletRepository.existsByDealId(dealId);
-    }
-
-    private DealWallet getDealWallet(Deal deal) {
-        return findDealWalletByDeal(deal);
-    }
-
-    private DealWallet findDealWalletByDeal(Deal deal) {
-
-        return dealWalletRepository.findByDealId(deal.getId())
-                .orElseThrow(() -> new RuntimeException(""));
     }
 }
