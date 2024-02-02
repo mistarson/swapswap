@@ -2,7 +2,6 @@ package piglin.swapswap.domain.post.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.post.dto.request.PostCreateRequestDto;
