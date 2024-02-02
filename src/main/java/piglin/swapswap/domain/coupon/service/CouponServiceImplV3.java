@@ -65,14 +65,12 @@ public class CouponServiceImplV3 implements CouponService{
         Coupon coupon = couponRepository.findById(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
         log.info("\ncouponName: {} | couponType: {} | couponCountBeforeIssue: {}", coupon.getName(), coupon.getCouponType(), coupon.getCount());
-        int couponNumber = redisTemplate.opsForValue().get(coupon.getName());
 
-        redisTemplate.opsForValue().increment(coupon.getName());
+        Long couponNumber = redisTemplate.opsForValue().increment(coupon.getName());
 
-        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon.getCount(), 0L));
-        if (issueCouponPossible(coupon.getCount(), 0L)) {
+        log.info("\nissueCouponPossible: {}", issueCouponPossible(coupon.getCount(), couponNumber));
+        if (issueCouponPossible(coupon.getCount(), couponNumber)) {
             memberCouponService.saveMemberCoupon(member, coupon);
-            coupon.issueCoupon();
             log.info("\ncouponCountAfterIssue: {}", coupon.getCount());
         }
     }

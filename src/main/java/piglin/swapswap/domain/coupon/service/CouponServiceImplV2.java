@@ -13,7 +13,6 @@ import piglin.swapswap.domain.coupon.repository.CouponRepository;
 import piglin.swapswap.domain.coupon.validator.CouponValidator;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -48,7 +47,6 @@ public class CouponServiceImplV2 implements CouponService {
     }
 
     @Override
-    @SwapLog
     @Transactional
     public void issueEventCoupon(Long couponId, Member member) {
 
