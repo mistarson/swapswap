@@ -14,6 +14,7 @@ import piglin.swapswap.domain.billcoupon.mapper.BillCouponMapper;
 import piglin.swapswap.domain.billcoupon.repository.BillCouponRepository;
 import piglin.swapswap.domain.coupon.constant.CouponType;
 import piglin.swapswap.domain.billcoupon.dto.RedeemCouponRequestDto;
+import piglin.swapswap.domain.coupon.entity.Coupon;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.entity.MemberCoupon;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
@@ -46,9 +47,7 @@ public class BillCouponServiceImplV1 implements BillCouponService {
     @Override
     public List<BillCouponResponseDto> getBillCouponDtoList(Bill bill) {
 
-        List<MemberCoupon> memberCouponList = billCouponRepository.findMemberCouponFromBillCouponByBill(bill);
-
-        return BillCouponMapper.toBillCouponResponseDtoList(memberCouponList);
+        return billCouponRepository.findMemberCouponFromBillCouponByBill(bill);
     }
 
     @Override
@@ -90,13 +89,13 @@ public class BillCouponServiceImplV1 implements BillCouponService {
         Set<CouponType> duplicateCouponTypeSet = new HashSet<>();
 
         for (Long memberCouponId : selectedCouponIdList) {
-            MemberCoupon memberCoupon = memberCouponService.getMemberCouponById(memberCouponId);
+            MemberCoupon memberCoupon = memberCouponService.getMemberCouponWithCouponByMemberCouponId(memberCouponId);
 
             if (!memberCoupon.getMember().getId().equals(memberId)) {
                 throw new InvalidDealRequestException(ErrorCode.IS_NOT_MY_COUPON);
             }
 
-            CouponType couponType = memberCoupon.getCouponType();
+            CouponType couponType = memberCoupon.getCoupon().getCouponType();
             if (duplicateCouponTypeSet.contains(couponType)) {
                 throw new DuplicateCouponTypeException();
             }
@@ -108,10 +107,11 @@ public class BillCouponServiceImplV1 implements BillCouponService {
 
         int commissionDiscountPercent = 0;
         for (Long memberCouponId : selectedCouponIdList) {
-            MemberCoupon memberCoupon = memberCouponService.getMemberCouponById(memberCouponId);
+            MemberCoupon memberCoupon = memberCouponService.getMemberCouponWithCouponById(memberCouponId);
+            Coupon coupon = memberCoupon.getCoupon();
 
-            switch (memberCoupon.getCouponType()) {
-                case FEE -> commissionDiscountPercent += getCommissionDiscountPercent(memberCoupon);
+            switch (coupon.getCouponType()) {
+                case FEE -> commissionDiscountPercent += getCommissionDiscountPercent(coupon);
             }
             memberCoupon.useCoupon();
             billCouponRepository.save(BillCouponMapper.createBillCoupon(bill, memberCoupon));
@@ -120,8 +120,8 @@ public class BillCouponServiceImplV1 implements BillCouponService {
         bill.discountCommission(commissionDiscountPercent);
     }
 
-    public int getCommissionDiscountPercent(MemberCoupon memberCoupon) {
+    public int getCommissionDiscountPercent(Coupon coupon) {
 
-        return memberCoupon.getDiscountPercentage();
+        return coupon.getDiscountPercentage();
     }
 }

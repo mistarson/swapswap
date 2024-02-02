@@ -12,7 +12,7 @@ public class BillCouponMapper {
             List<MemberCoupon> memberCouponList) {
 
         return memberCouponList.stream().map(memberCoupon -> BillCouponResponseDto.builder()
-                .name(memberCoupon.getName())
+                .name(memberCoupon.getCoupon().getName())
                 .build()).toList();
     }
 

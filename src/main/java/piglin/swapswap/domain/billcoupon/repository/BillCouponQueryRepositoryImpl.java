@@ -1,14 +1,18 @@
 package piglin.swapswap.domain.billcoupon.repository;
 
 import static piglin.swapswap.domain.billcoupon.entity.QBillCoupon.billCoupon;
+import static piglin.swapswap.domain.coupon.entity.QCoupon.coupon;
 import static piglin.swapswap.domain.membercoupon.entity.QMemberCoupon.memberCoupon;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import piglin.swapswap.domain.bill.entity.Bill;
+import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
 import piglin.swapswap.domain.billcoupon.entity.BillCoupon;
+import piglin.swapswap.domain.coupon.entity.QCoupon;
 import piglin.swapswap.domain.membercoupon.entity.MemberCoupon;
 
 public class BillCouponQueryRepositoryImpl implements BillCouponQueryRepository {
@@ -24,11 +28,13 @@ public class BillCouponQueryRepositoryImpl implements BillCouponQueryRepository 
     }
 
     @Override
-    public List<MemberCoupon> findMemberCouponFromBillCouponByBill(Bill bill) {
+    public List<BillCouponResponseDto> findMemberCouponFromBillCouponByBill(Bill bill) {
 
         return queryFactory
-                .select(memberCoupon)
+                .select(Projections.constructor(BillCouponResponseDto.class, coupon.name))
                 .from(billCoupon)
+                .join(billCoupon.memberCoupon, memberCoupon)
+                .join(memberCoupon.coupon, coupon)
                 .where(billCoupon.bill.eq(bill))
                 .fetch();
     }
