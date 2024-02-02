@@ -3,6 +3,8 @@ package piglin.swapswap;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
@@ -30,7 +32,7 @@ public class TCIntegrationTest {
             ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
-        public void initialize(ConfigurableApplicationContext applicationContext) {
+        public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
             Map<String, String> properties = new HashMap<>();
 
             setDatabaseProperties(properties);
@@ -51,8 +53,8 @@ public class TCIntegrationTest {
         private void setRedisProperties(Map<String, String> properties) {
             String redisHost = DOCKER_COMPOSE.getServiceHost("redis", 6379);
             Integer redisPort = DOCKER_COMPOSE.getServicePort("redis", 6379);
-            properties.put("spring.redis.host", redisHost);
-            properties.put("spring.redis.port", redisPort.toString());
+            properties.put("spring.data.redis.host", redisHost);
+            properties.put("spring.data.redis.port", redisPort.toString());
         }
     }
 
