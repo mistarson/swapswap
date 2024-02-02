@@ -23,6 +23,8 @@ public interface DealService {
 
     void bothTakeThenChangeCompleted(Long billId);
 
+    void isDifferentMember(Member member, Long receiveMemberId);
+
     Long getDealIdByBillId(Long billId);
 
     Deal getDealByBillIdWithBill(Long billId);

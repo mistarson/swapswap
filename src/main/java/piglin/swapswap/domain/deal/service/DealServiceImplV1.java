@@ -26,6 +26,7 @@ import piglin.swapswap.domain.notification.constant.NotificationType;
 import piglin.swapswap.domain.notification.service.NotificationService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,10 @@ public class DealServiceImplV1 implements DealService {
     @Override
     @Transactional
     public Long createDeal(Member member, DealCreateRequestDto requestDto) {
+
+        if (requestDto.requestPostIdList().isEmpty() && requestDto.receivePostIdList().isEmpty()) {
+            throw new InvalidDealRequestException(ErrorCode.BOTH_POST_ID_LIST_EMPTY_EXCEPTION);
+        }
 
         Bill requestMemberBill = billService.createBill(member, requestDto.requestMemberExtraFee(),
                 requestDto.requestPostIdList());
@@ -168,5 +173,13 @@ public class DealServiceImplV1 implements DealService {
         return dealRepository.findByBillIdWithBillAndMember(billId).orElseThrow(
                 () -> new BusinessException(ErrorCode.NOT_FOUND_DEAL_EXCEPTION)
         );
+    }
+
+    @Override
+    public void isDifferentMember(Member member, Long receiveMemberId) {
+
+        if (member.getId().equals(receiveMemberId)) {
+            throw new BusinessException(ErrorCode.REQUEST_ONLY_DIFFERENT_USER_EXCEPTION);
+        }
     }
 }

@@ -33,9 +33,7 @@ public class DealController {
             @RequestParam Long receiveMemberId,
             @RequestParam String memberName) {
 
-        if (member.getId().equals(receiveMemberId)) {
-            throw new BusinessException(ErrorCode.REQUEST_ONLY_DIFFERENT_USER_EXCEPTION);
-        }
+            dealService.isDifferentMember(member, receiveMemberId);
 
         model.addAttribute("receiveMemberId", receiveMemberId);
         model.addAttribute("receiveMemberName", memberName);
@@ -50,10 +48,6 @@ public class DealController {
     @PostMapping
     public ResponseEntity<?> createDeal(@AuthMember Member member,
             @Valid @RequestBody DealCreateRequestDto requestDto) {
-
-        if (requestDto.requestPostIdList().isEmpty() && requestDto.receivePostIdList().isEmpty()) {
-            throw new InvalidDealRequestException(ErrorCode.BOTH_POST_ID_LIST_EMPTY_EXCEPTION);
-        }
 
         Long dealId = dealService.createDeal(member, requestDto);
 
