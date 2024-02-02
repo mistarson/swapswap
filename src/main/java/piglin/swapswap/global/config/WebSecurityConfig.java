@@ -73,6 +73,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers("/posts/write").authenticated()
+                        .requestMatchers("/posts/*/write").authenticated()
                         .requestMatchers("/posts/*/favorite").authenticated()
                         .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
                         .requestMatchers(whiteList).permitAll()

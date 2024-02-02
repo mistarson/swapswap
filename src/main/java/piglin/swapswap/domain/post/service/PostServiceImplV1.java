@@ -28,6 +28,7 @@ import piglin.swapswap.domain.post.event.DeleteImageUrlMapEvent;
 import piglin.swapswap.domain.post.mapper.PostMapper;
 import piglin.swapswap.domain.post.repository.PostRepository;
 import piglin.swapswap.global.annotation.SwapLog;
+import piglin.swapswap.global.exception.ajax.AjaxRequestException;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 import piglin.swapswap.global.exception.post.PostNotFoundException;
@@ -100,10 +101,6 @@ public class PostServiceImplV1 implements PostService {
                 member.getId(), member.getEmail(), postId, requestDto.title(), requestDto.content());
         Post post = findPost(postId);
 
-        if (member == null) {
-            throw new BusinessException(ErrorCode.WRITE_ONLY_USER);
-        }
-
         checkPostWriter(member, post);
         checkImageUrlListSize(requestDto.imageUrlList());
 
@@ -166,6 +163,7 @@ public class PostServiceImplV1 implements PostService {
         Post post = findPost(postId);
         checkPostWriter(member, post);
         checkModifiedUpTime(post);
+        checkPostDealStatus(post);
 
         post.upPost();
     }
@@ -219,6 +217,14 @@ public class PostServiceImplV1 implements PostService {
         return createPostListResponseDtoWithIsLast(postList);
     }
 
+    private void checkPostDealStatus(Post post) {
+
+        if (!post.getDealStatus().equals(DealStatus.REQUESTED)) {
+
+            throw new AjaxRequestException(ErrorCode.CAN_NOT_UP_CAUSE_POST_DEAL_STATUS_IS_NOT_REQUESTED);
+        }
+    }
+
     @Override
     public Post getPost(Long postId){
         return postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow(PostNotFoundException::new);
@@ -242,7 +248,7 @@ public class PostServiceImplV1 implements PostService {
     private void checkModifiedUpTime(Post post) {
 
         if (post.getModifiedUpTime().plusDays(1).isAfter(LocalDateTime.now())) {
-            throw new BusinessException(ErrorCode.UP_IS_NEED_ONE_DAY);
+            throw new AjaxRequestException(ErrorCode.UP_IS_NEED_ONE_DAY);
         }
     }
 

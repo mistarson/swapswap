@@ -41,6 +41,7 @@ public enum ErrorCode {
     POST_ALREADY_DELETED(400, "이미 지워진 게시글입니다"),
     NO_MORE_POST_LIST(400, "더이상 불러올 게시글이 없습니다."),
     ALERADY_DELING_POST_EXCEPTION(400, "이미 진행 중인 게시글입니다."),
+    CAN_NOT_UP_CAUSE_POST_DEAL_STATUS_IS_NOT_REQUESTED(400, "거래가 진행 중이거나 완료된 게시글은 업 할 수 없습니다."),
 
     // 채팅
     NOT_FOUND_CHATROOM_EXCEPTION(401, "채팅방을 찾을 수 없습니다."),

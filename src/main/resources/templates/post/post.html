@@ -189,6 +189,14 @@
           contentType: 'application/json; charset=utf-8',
           success: function () {
             location.reload()
+          },
+          error: function (xhr) {
+            var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : xhr.responseText;
+            Swal.fire({
+              title: '알림',
+              text: errorMessage,
+              icon: 'error'
+            });
           }
         });
       } else {
