@@ -186,23 +186,6 @@ public class PostServiceImplV1 implements PostService {
     }
 
     @Override
-    public List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(
-            Map<Integer, Long> postIdList) {
-
-        List<PostSimpleResponseDto> responseDtoList = new ArrayList<>();
-        for (int i = 0; i < postIdList.size(); i++) {
-
-            Long postId = postIdList.get(i);
-
-            Post post = findPost(postId);
-
-            responseDtoList.add(PostMapper.getPostSimpleInfoListByPost(post));
-        }
-
-        return responseDtoList;
-    }
-
-    @Override
     public void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus) {
 
         postRepository.updatePostListStatus(postIdList, dealStatus);

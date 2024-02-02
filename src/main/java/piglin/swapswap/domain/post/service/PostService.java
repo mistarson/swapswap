@@ -87,9 +87,6 @@ public interface PostService {
      * @param member 업 할 게시글의 작성자인지 예외처리 해주기 위해 받는 멤버입니다.
      */
 
-
-    Post getPost(Long postId);
-
     void upPost(Long postId, Member member);
 
     /**
@@ -110,8 +107,6 @@ public interface PostService {
 
     List<PostSimpleResponseDto> getPostSimpleInfoList(Long memberId);
 
-    List<PostSimpleResponseDto> getPostSimpleInfoListByPostIdList(Map<Integer, Long> postIdList);
-
     void updatePostStatusByPostIdList(List<Long> postIdList, DealStatus dealStatus);
 
     List<Post> findByMemberId(Long memberId);
@@ -119,4 +114,6 @@ public interface PostService {
     void deleteAllPostByMember(Member loginMember);
 
     void reRegisterPostByMember(Member loginMember);
+
+    Post getPost(Long postId);
 }
