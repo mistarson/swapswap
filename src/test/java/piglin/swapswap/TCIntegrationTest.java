@@ -18,6 +18,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 @ContextConfiguration(initializers = TCIntegrationTest.IntegrationTestInitializer.class)
 public class TCIntegrationTest {
 
+
     private static final DockerComposeContainer<?> DOCKER_COMPOSE =
             new DockerComposeContainer<>(new File("src/test/resources/docker_compose.yml"))
                     .withExposedService("mysql", 3306, Wait.forLogMessage(".*ready for connections.*", 1))
