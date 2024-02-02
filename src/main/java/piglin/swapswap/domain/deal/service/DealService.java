@@ -20,6 +20,8 @@ public interface DealService {
 
     void bothAllowThenChangeDealing(Long billId);
 
+    void bothTakeThenChangeCompleted(Long billId);
+
     Long getDealIdByBillId(Long billId);
 
     Deal getDealByBillIdWithBill(Long billId);

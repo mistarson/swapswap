@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import piglin.swapswap.domain.bill.billfacade.BillFacade;
 import piglin.swapswap.domain.bill.service.BillService;
 import piglin.swapswap.domain.bill.dto.request.BillUpdateRequestDto;
@@ -74,6 +75,7 @@ public class BillController {
     ) {
 
         billFacade.updateBillAllowTrueWithSwapPay(billId, member);
+        dealService.bothAllowThenChangeDealing(billId);
 
         return ResponseEntity.ok("결제 성공!");
     }
@@ -107,6 +109,18 @@ public class BillController {
             @PathVariable Long memberId, @RequestBody BillUpdateRequestDto requestDto){
 
         billFacade.updateBill(member, billId, memberId, requestDto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ResponseBody
+    @PatchMapping("/{billId}/take")
+    public ResponseEntity<?> takeDeal(
+            @PathVariable Long billId,
+            @AuthMember Member member) {
+
+        billService.updateBillTake(billId, member);
+        dealService.bothTakeThenChangeCompleted(billId);
 
         return ResponseEntity.ok().build();
     }

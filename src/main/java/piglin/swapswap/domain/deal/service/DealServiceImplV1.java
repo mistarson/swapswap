@@ -10,6 +10,7 @@ import piglin.swapswap.domain.billcoupon.dto.BillCouponResponseDto;
 import piglin.swapswap.domain.billcoupon.service.BillCouponService;
 import piglin.swapswap.domain.billpost.dto.BillPostResponseDto;
 import piglin.swapswap.domain.billpost.service.BillPostService;
+import piglin.swapswap.domain.daelwallet.service.DealWalletService;
 import piglin.swapswap.domain.deal.constant.DealStatus;
 import piglin.swapswap.domain.deal.dto.request.DealCreateRequestDto;
 import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
@@ -19,11 +20,9 @@ import piglin.swapswap.domain.deal.entity.Deal;
 import piglin.swapswap.domain.deal.mapper.DealMapper;
 import piglin.swapswap.domain.deal.repository.DealRepository;
 import piglin.swapswap.domain.member.entity.Member;
-import piglin.swapswap.domain.member.repository.MemberRepository;
+import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.domain.notification.constant.NotificationType;
 import piglin.swapswap.domain.notification.service.NotificationService;
-import piglin.swapswap.domain.post.service.PostService;
-import piglin.swapswap.domain.member.service.MemberService;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
@@ -37,6 +36,7 @@ public class DealServiceImplV1 implements DealService {
     private final BillCouponService billCouponService;
     private final MemberService memberService;
     private final NotificationService notificationService;
+    private final DealWalletService dealWalletService;
 
     @Override
     @Transactional
@@ -110,6 +110,22 @@ public class DealServiceImplV1 implements DealService {
         if(deal.getFirstMemberbill().getIsAllowed() && deal.getSecondMemberbill().getIsAllowed()) {
 
             deal.updateDealStatus(DealStatus.DEALING);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void bothTakeThenChangeCompleted(Long billId) {
+
+        Deal deal = getDealByBillIdWithBill(billId);
+
+        if(deal.getFirstMemberbill().getIsTaked() && deal.getSecondMemberbill().getIsTaked()) {
+
+            deal.updateDealStatus(DealStatus.COMPLETED);
+            deal.completedTime();
+            if(dealWalletService.existDealWalletByDealId(deal.getId())) {
+                dealWalletService.withdrawMemberSwapMoneyAtComplete(deal);
+            }
         }
     }
 

@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +55,11 @@ public class Bill extends BaseTime {
     public void updateUsedSwapMoney() {
 
         isSwapMoneyUsed = !isSwapMoneyUsed;
+    }
+
+    public void updateTake() {
+
+        isTaked = true;
     }
 
     public void discountCommission(int commissionDiscountPercent) {
