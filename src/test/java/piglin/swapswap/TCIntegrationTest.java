@@ -45,6 +45,7 @@ public class TCIntegrationTest {
             properties.put("spring.datasource.url", "jdbc:mysql://" + rdbmsHost + ":" + rdbmsPort + "/swapswap");
             properties.put("spring.datasource.username", "root");
             properties.put("spring.datasource.password", "password");
+
         }
 
         private void setRedisProperties(Map<String, String> properties) {
