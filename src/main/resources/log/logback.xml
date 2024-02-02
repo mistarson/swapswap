@@ -14,7 +14,7 @@
   </springProfile>
 
   <springProfile name="local">
-    <root level="debug">
+    <root level="info">
       <appender-ref ref="LOCAL_CONSOLE"/>
     </root>
   </springProfile>
