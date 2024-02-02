@@ -13,15 +13,13 @@ import piglin.swapswap.domain.coupon.repository.CouponRepository;
 import piglin.swapswap.domain.coupon.validator.CouponValidator;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.domain.membercoupon.service.MemberCouponService;
-import piglin.swapswap.global.annotation.Retry;
-import piglin.swapswap.global.annotation.SwapLog;
 import piglin.swapswap.global.exception.common.BusinessException;
 import piglin.swapswap.global.exception.common.ErrorCode;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CouponServiceImplV1 implements CouponService {
+public class CouponServiceImplV2 implements CouponService {
 
     private final CouponRepository couponRepository;
 
@@ -48,16 +46,14 @@ public class CouponServiceImplV1 implements CouponService {
         return coupon.getCount();
     }
 
-    @Retry
-    @SwapLog
     @Override
     @Transactional
     public void issueEventCoupon(Long couponId, Member member) {
 
-        log.info("\ncouponIssue - member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
+        log.info("\ncouponIssueStart - Member: {} | couponId: {} | transactionActive: {}", member.getEmail(), couponId,
                 TransactionSynchronizationManager.isActualTransactionActive());
 
-        Coupon coupon = couponRepository.findByIdWithOptimisticLock(couponId)
+        Coupon coupon = couponRepository.findByIdWithPessimisticLock(couponId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
         log.info("\ncouponName: {} | couponType: {} | couponCountBeforeIssue: {}", coupon.getName(), coupon.getCouponType(), coupon.getCount());
 

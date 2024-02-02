@@ -52,6 +52,7 @@ public enum ErrorCode {
     INVALID_EXPIRED_TIME_EXCEPTION(401, "만료 시간은 현재 시간보다 이전 시간일 수 없습니다."),
     NOT_FOUND_COUPON_EXCEPTION(401, "쿠폰을 찾을 수 없습니다."),
     INVALID_COUPON_EXCEPTION(401, "이미 모두 소진된 쿠폰입니다."),
+    NOT_FOUND_MEMBER_COUPON_EXCEPTION(400, "해당 쿠폰을 소지하고 있지 않습니다."),
 
     // 거래
     BOTH_POST_ID_LIST_EMPTY_EXCEPTION(400, "두명의 사용자 중 적어도 한명의 사용자는 물건을 등록해야 합니다."),

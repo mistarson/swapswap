@@ -1,6 +1,7 @@
 package piglin.swapswap.domain.membercoupon.service;
 
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,12 @@ import piglin.swapswap.domain.membercoupon.dto.response.MyCouponGetResponseDto;
 import piglin.swapswap.domain.membercoupon.entity.MemberCoupon;
 import piglin.swapswap.domain.membercoupon.mapper.MemberCouponMapper;
 import piglin.swapswap.domain.membercoupon.repository.MemberCouponRepository;
-import piglin.swapswap.global.exception.common.BusinessException;
-import piglin.swapswap.global.exception.common.ErrorCode;
+import piglin.swapswap.global.exception.membercoupon.MemberCouponNotFoundException;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MemberCouponServiceImplV1 implements MemberCouponService{
+public class MemberCouponServiceImplV1 implements MemberCouponService {
 
     private final MemberCouponRepository memberCouponRepository;
 
@@ -25,14 +25,15 @@ public class MemberCouponServiceImplV1 implements MemberCouponService{
 
         MemberCoupon memberCoupon = MemberCouponMapper.createMemberCoupon(member, coupon);
         log.info("\nmemberCouponSave - member: {}, memberCouponName: {}, memberCouponType: {}",
-                memberCoupon.getMember().getEmail(), memberCoupon.getName(), memberCoupon.getCouponType());
+                memberCoupon.getMember().getEmail(), memberCoupon.getCoupon().getName(), memberCoupon.getCoupon().getCouponType());
+
         memberCouponRepository.save(memberCoupon);
     }
 
     @Override
     public List<MyCouponGetResponseDto> getMycouponList(Member member) {
 
-        List<MemberCoupon> memberCouponList = memberCouponRepository.findAllByMemberIdAndIsUsedIsFalse(
+        List<MemberCoupon> memberCouponList = memberCouponRepository.findAllByMemberIdAndIsUsedIsFalseWithCoupon(
                 member.getId());
 
         return MemberCouponMapper.memberCouponListToMyCouponResponseDtoList(memberCouponList);
@@ -48,23 +49,22 @@ public class MemberCouponServiceImplV1 implements MemberCouponService{
     }
 
     @Override
-    public MemberCoupon getMemberCouponById(Long memberCouponId) {
+    public Long getCountByCouponId(Long couponId) {
 
-        return  memberCouponRepository.findByIdAndIsUsedFalse(memberCouponId).orElseThrow(
-                () -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION)
-        );
+        return memberCouponRepository.countByCouponId(couponId);
     }
 
     @Override
-    public void deleteMemberCoupon(MemberCoupon memberCoupon) {
-
-        memberCouponRepository.delete(memberCoupon);
+    public MemberCoupon getMemberCouponWithCouponById(Long memberCouponId) {
+        return memberCouponRepository.findByIdAndIsUsedIsFalseWithCoupon(memberCouponId)
+                .orElseThrow(MemberCouponNotFoundException::new);
     }
 
     @Override
-    public MemberCoupon getMemberCouponByIdWithMember(Long memberCouponId) {
+    public MemberCoupon getMemberCouponWithCouponByMemberCouponId(Long memberCouponId) {
 
-        return memberCouponRepository.findByIdAndIsUserIsFalseWithMember(memberCouponId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COUPON_EXCEPTION));
+        return memberCouponRepository.findByMemberCouponIdAndIsUsedIsFalseWithCoupon(memberCouponId)
+                .orElseThrow(MemberCouponNotFoundException::new);
     }
+
 }

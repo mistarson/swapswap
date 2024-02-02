@@ -12,13 +12,13 @@ public interface MemberCouponService {
 
     List<MyCouponGetResponseDto> getMycouponList(Member member);
 
-    MemberCoupon getMemberCouponById(Long memberCouponId);
+    MemberCoupon getMemberCouponWithCouponById(Long memberCouponId);
 
-    void deleteMemberCoupon(MemberCoupon memberCoupon);
-
-    MemberCoupon getMemberCouponByIdWithMember(Long memberCouponId);
+    MemberCoupon getMemberCouponWithCouponByMemberCouponId(Long couponId);
 
     void deleteAllMemberCouponByMember(Member loginMember);
 
     void reRegisterCouponByMember(Member loginMember);
+
+    Long getCountByCouponId(Long couponId);
 }
