@@ -7,7 +7,6 @@ services:
       - 3306
     environment:
       MYSQL_DATABASE: swapswap
-      MYSQL_ROOT_PASSWORD: password
 
   redis:
     image: redis:6
