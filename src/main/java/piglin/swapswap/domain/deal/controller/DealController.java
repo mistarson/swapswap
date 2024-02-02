@@ -17,9 +17,6 @@ import piglin.swapswap.domain.deal.dto.response.DealDetailResponseDto;
 import piglin.swapswap.domain.deal.service.DealService;
 import piglin.swapswap.domain.member.entity.Member;
 import piglin.swapswap.global.annotation.AuthMember;
-import piglin.swapswap.global.exception.common.BusinessException;
-import piglin.swapswap.global.exception.common.ErrorCode;
-import piglin.swapswap.global.exception.deal.InvalidDealRequestException;
 
 @Controller
 @RequiredArgsConstructor
