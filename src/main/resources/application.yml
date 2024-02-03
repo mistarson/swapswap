@@ -3,4 +3,4 @@ spring:
     default: prod
 
 logging:
-  config: classpath:log/logback.xml
+  config: classpath:log/logback-spring.xml
