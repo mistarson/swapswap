@@ -3,8 +3,28 @@
   <conversionRule conversionWord="clr"
     converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
 
-  <include resource="./log/appender/logback-local-console-appender.xml" />
-  <include resource="./log/appender/logback-prod-console-appender.xml" />
+  <appender name="LOCAL_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%clr(%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%ex
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="PROD_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%clr(%d{[yyyy-MM-dd HH:mm:ss]}){yellow} [%35thread] [traceId=%X{traceId}] %clr(%-5level) %50logger{36} - %clr(%msg){blue}%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>./log/swapswap.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{[yyyy-MM-dd HH:mm:ss]} [%35thread] [traceId=%X{traceId}] %-5level %50logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
   <springProfile name="prod">
     <root level="info">
