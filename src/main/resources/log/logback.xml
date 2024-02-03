@@ -13,8 +13,8 @@
     </root>
   </springProfile>
 
-  <springProfile name="prod">
-    <root level="info">
+  <springProfile name="local">
+    <root level="debug">
       <appender-ref ref="LOCAL_CONSOLE"/>
     </root>
   </springProfile>
